@@ -2,9 +2,20 @@
   "Id": "9f832399-4887-46b0-8f21-2ee284f538e2",
   "GameObjects": [
     {
+      "Id": "c155d476-e3e0-4db6-832b-8bc2675a5ff2",
+      "Name": "Manager",
+      "Position": "-79.17239,54.31364,-161.3666",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "Manager"
+        }
+      ]
+    },
+    {
       "Id": "bfc59c12-1ed2-4f91-8956-a95a315eac3c",
       "Name": "Sun",
-      "Rotation": "-0.0729315,0.4822396,0.1305433,0.8631827",
+      "Rotation": "0.2628342,-0.6741447,-0.2507316,-0.6431024",
       "Tags": "light_directional,light",
       "Enabled": true,
       "Components": [
@@ -69,9 +80,9 @@
     },
     {
       "Id": "3c2490ef-54a0-49bb-8f13-490e40aa51d1",
-      "Name": "Cube",
-      "Position": "9.000001,-21.79997,0",
-      "Scale": "0.5,0.5,0.5",
+      "Name": "middle_line",
+      "Position": "0,0,-4.446377",
+      "Scale": "0.015,10,0.2",
       "Enabled": true,
       "Components": [
         {
@@ -81,106 +92,14 @@
           "MaterialOverride": "materials/default.vmat",
           "Model": "models/dev/box.vmdl",
           "RenderType": "On",
-          "Tint": "1,0,0.93333,1"
-        },
-        {
-          "__type": "BoxCollider",
-          "Center": "0,0,0",
-          "IsTrigger": false,
-          "Scale": "50,50,50",
-          "Static": false,
-          "Surface": null
-        },
-        {
-          "__type": "Rigidbody",
-          "AngularDamping": 0,
-          "Gravity": true,
-          "LinearDamping": 0,
-          "Locking": {},
-          "MassOverride": 0,
-          "RigidbodyFlags": 0,
-          "StartAsleep": false
-        }
-      ]
-    },
-    {
-      "Id": "523e3e8f-a4ec-4ec1-af9a-d86ffc9c17e1",
-      "Name": "Cube (1)",
-      "Position": "40.81348,46.97572,14.40159",
-      "Rotation": "0.00000001819328,-0.00000000000000008235059,0.3052325,0.952278",
-      "Scale": "0.5632889,0.5632889,0.5632889",
-      "Enabled": true,
-      "Components": [
-        {
-          "__type": "ModelRenderer",
-          "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
-          "MaterialOverride": "materials/default.vmat",
-          "Model": "models/dev/box.vmdl",
-          "RenderType": "On",
-          "Tint": "1,0,0.93333,1"
-        },
-        {
-          "__type": "BoxCollider",
-          "Center": "0,0,0",
-          "IsTrigger": false,
-          "Scale": "50,50,50",
-          "Static": false,
-          "Surface": null
-        },
-        {
-          "__type": "Rigidbody",
-          "AngularDamping": 0,
-          "Gravity": true,
-          "LinearDamping": 0,
-          "Locking": {},
-          "MassOverride": 0,
-          "RigidbodyFlags": 0,
-          "StartAsleep": false
-        }
-      ]
-    },
-    {
-      "Id": "5b483a09-bbf2-4949-98c7-a73b789d0ee7",
-      "Name": "Cube (2)",
-      "Position": "49.53707,34.08896,43.67614",
-      "Rotation": "0.00000001819328,-0.00000000000000008235059,0.3052325,0.952278",
-      "Scale": "0.5632889,0.5632889,0.5632889",
-      "Enabled": true,
-      "Components": [
-        {
-          "__type": "ModelRenderer",
-          "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
-          "MaterialOverride": "materials/default.vmat",
-          "Model": "models/dev/box.vmdl",
-          "RenderType": "On",
-          "Tint": "1,0,0.93333,1"
-        },
-        {
-          "__type": "BoxCollider",
-          "Center": "0,0,0",
-          "IsTrigger": false,
-          "Scale": "50,50,50",
-          "Static": false,
-          "Surface": null
-        },
-        {
-          "__type": "Rigidbody",
-          "AngularDamping": 0,
-          "Gravity": true,
-          "LinearDamping": 0,
-          "Locking": {},
-          "MassOverride": 0,
-          "RigidbodyFlags": 0,
-          "StartAsleep": false
+          "Tint": "1,1,1,1"
         }
       ]
     },
     {
       "Id": "3ee1c9f4-07be-4e0b-8b23-67bee2d8ec8a",
       "Name": "Camera",
-      "Position": "0,0,450",
+      "Position": "0,0,400",
       "Rotation": "-0.5,0.5,0.5,0.5",
       "Enabled": true,
       "Components": [
@@ -191,7 +110,7 @@
           "FieldOfView": 60,
           "IsMainCamera": true,
           "Orthographic": true,
-          "OrthographicHeight": 250,
+          "OrthographicHeight": 235,
           "Priority": 1,
           "RenderExcludeTags": "",
           "RenderTags": "",
@@ -260,10 +179,11 @@
           }
         },
         {
-          "__type": "SphereCollider",
-          "Center": "0,0,0",
-          "IsTrigger": false,
+          "__type": "CapsuleCollider",
+          "End": "0,0,65",
+          "IsTrigger": true,
           "Radius": 7,
+          "Start": "0,0,0",
           "Static": false,
           "Surface": null
         }
@@ -272,9 +192,8 @@
         {
           "Id": "8da789a1-49cf-43ef-b94a-9aa42e563973",
           "Name": "hitbox_visible",
-          "Position": "0,0,0",
+          "Position": "0,0,104.2001",
           "Scale": "0.2,0.2,0.2",
-          "Enabled": true,
           "Components": [
             {
               "__type": "ModelRenderer",
@@ -282,8 +201,8 @@
               "MaterialGroup": null,
               "MaterialOverride": null,
               "Model": "models/dev/sphere.vmdl",
-              "RenderType": "On",
-              "Tint": "1,0.0186,0.0186,0.6"
+              "RenderType": "Off",
+              "Tint": "1,0.0186,0.0186,0.78"
             }
           ]
         },
@@ -327,6 +246,35 @@
           ]
         }
       ]
+    },
+    {
+      "Id": "9765ce11-844b-4b34-b2a2-693e4e10a9fd",
+      "Name": "ball",
+      "Position": "0,0,50",
+      "Scale": "0.25,0.25,0.25",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "ModelRenderer",
+          "BodyGroups": 18446744073709551615,
+          "MaterialGroup": null,
+          "MaterialOverride": null,
+          "Model": "models/dev/sphere.vmdl",
+          "RenderType": "On",
+          "Tint": "0,1,0,1"
+        },
+        {
+          "__type": "SphereCollider",
+          "Center": "0,0,0",
+          "IsTrigger": true,
+          "Radius": 32,
+          "Static": false,
+          "Surface": null
+        },
+        {
+          "__type": "Ball"
+        }
+      ]
     }
   ],
   "SceneProperties": {
@@ -352,6 +300,6 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-02-19T20:32:03.5094335-08:00",
+  "LastSaved": "2024-02-20T13:26:34.2983334-08:00",
   "__references": []
 }
