@@ -2,7 +2,7 @@ using Sandbox;
 
 public class Ball : Component
 {
-	[Sync] public int PlayerNum { get; set; }
+	public int PlayerNum { get; set; }
 
 	public Vector2 Velocity { get; set; }
 
@@ -72,5 +72,12 @@ public class Ball : Component
 		{
 			Velocity = Velocity.WithY( -MathF.Abs( Velocity.y ) );
 		}
+	}
+
+	[Broadcast]
+	public void SetPlayerNum(int playerNum )
+	{
+		PlayerNum = playerNum;
+		Components.Get<ModelRenderer>().Tint = playerNum == 0 ? Manager.Instance.ColorPlayer0 : Manager.Instance.ColorPlayer1;
 	}
 }

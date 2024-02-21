@@ -5,10 +5,21 @@
       "Id": "c155d476-e3e0-4db6-832b-8bc2675a5ff2",
       "Name": "Manager",
       "Position": "-79.17239,54.31364,-161.3666",
+      "Networked": true,
       "Enabled": true,
       "Components": [
         {
-          "__type": "Manager"
+          "__type": "Manager",
+          "BallPrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/ball.prefab"
+          },
+          "ColorPlayer0": "0.01961,0.01961,1,1",
+          "ColorPlayer1": "0.01961,1,0.01961,1",
+          "PlayerPrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/player.prefab"
+          }
         }
       ]
     },
@@ -159,122 +170,6 @@
           "Scale": 0.2
         }
       ]
-    },
-    {
-      "Id": "4715a900-9424-4749-923b-1efb1a8d756f",
-      "Name": "Player",
-      "Position": "67.89995,0,0",
-      "Enabled": true,
-      "Components": [
-        {
-          "__type": "PlayerController",
-          "Animator": {
-            "_type": "component",
-            "go": "bb1a956d-a580-4db3-8b65-33fea9d16d77",
-            "component_type": "CitizenAnimationHelper"
-          },
-          "Model": {
-            "_type": "gameobject",
-            "go": "bb1a956d-a580-4db3-8b65-33fea9d16d77"
-          }
-        },
-        {
-          "__type": "CapsuleCollider",
-          "End": "0,0,65",
-          "IsTrigger": true,
-          "Radius": 7,
-          "Start": "0,0,0",
-          "Static": false,
-          "Surface": null
-        }
-      ],
-      "Children": [
-        {
-          "Id": "8da789a1-49cf-43ef-b94a-9aa42e563973",
-          "Name": "hitbox_visible",
-          "Position": "0,0,104.2001",
-          "Scale": "0.2,0.2,0.2",
-          "Components": [
-            {
-              "__type": "ModelRenderer",
-              "BodyGroups": 18446744073709551615,
-              "MaterialGroup": null,
-              "MaterialOverride": null,
-              "Model": "models/dev/sphere.vmdl",
-              "RenderType": "Off",
-              "Tint": "1,0.0186,0.0186,0.78"
-            }
-          ]
-        },
-        {
-          "Id": "bb1a956d-a580-4db3-8b65-33fea9d16d77",
-          "Name": "model",
-          "Position": "0,0,0",
-          "Enabled": true,
-          "Components": [
-            {
-              "__type": "SkinnedModelRenderer",
-              "AnimationGraph": null,
-              "BodyGroups": 341,
-              "BoneMergeTarget": null,
-              "CreateBoneObjects": false,
-              "MaterialGroup": null,
-              "MaterialOverride": null,
-              "Model": "models/citizen/citizen.vmdl",
-              "RenderType": "On",
-              "Tint": "1,1,1,1"
-            },
-            {
-              "__type": "CitizenAnimationHelper",
-              "BodyWeight": 1,
-              "EyeSource": null,
-              "EyesWeight": 1,
-              "HeadWeight": 1,
-              "Height": 1,
-              "IkLeftFoot": null,
-              "IkLeftHand": null,
-              "IkRightFoot": null,
-              "IkRightHand": null,
-              "LookAt": null,
-              "LookAtEnabled": false,
-              "Target": {
-                "_type": "component",
-                "go": "bb1a956d-a580-4db3-8b65-33fea9d16d77",
-                "component_type": "SkinnedModelRenderer"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Id": "9765ce11-844b-4b34-b2a2-693e4e10a9fd",
-      "Name": "ball",
-      "Position": "0,0,50",
-      "Scale": "0.25,0.25,0.25",
-      "Enabled": true,
-      "Components": [
-        {
-          "__type": "ModelRenderer",
-          "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
-          "MaterialOverride": null,
-          "Model": "models/dev/sphere.vmdl",
-          "RenderType": "On",
-          "Tint": "0,1,0,1"
-        },
-        {
-          "__type": "SphereCollider",
-          "Center": "0,0,0",
-          "IsTrigger": true,
-          "Radius": 32,
-          "Static": false,
-          "Surface": null
-        },
-        {
-          "__type": "Ball"
-        }
-      ]
     }
   ],
   "SceneProperties": {
@@ -300,6 +195,6 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-02-20T13:26:34.2983334-08:00",
+  "LastSaved": "2024-02-20T18:23:08.9944272-08:00",
   "__references": []
 }
