@@ -77,7 +77,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		//}
 	}
 
-	public void SpawnBall(Vector2 pos, Vector2 velocity, int playerNum)
+	public void SpawnBall(Vector2 pos, Vector2 velocity, int playerNum, int creatorNum)
 	{
 		var ballObj = BallPrefab.Clone( new Vector3(pos.x, pos.y, BALL_HEIGHT ) );
 		var ball = ballObj.Components.Get<Ball>();
@@ -86,10 +86,12 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		ball.SetPlayerNum( playerNum );
 
-		var connection = GetConnection( playerNum );
-		Log.Info( $"SpawnBall - connection: {connection}" );
+		//Log.Info( $"SpawnBall - connection: {connection}" );
 
-		ballObj.NetworkSpawn( connection );
+		ballObj.NetworkSpawn( GetConnection( creatorNum ) );
+
+		//int side = pos.x > 0f ? 1 : 0;
+		//ballObj.NetworkSpawn(GetConnection(side));
 	}
 
 	void SetPlayer(int playerNum, Guid id)

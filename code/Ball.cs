@@ -3,24 +3,30 @@ using Sandbox;
 public class Ball : Component
 {
 	public int PlayerNum { get; set; }
+	//[Sync] public int CurrentSide { get; set; }
 
-	public Vector2 Velocity { get; set; }
+	[Sync] public Vector2 Velocity { get; set; }
 
 	protected override void OnStart()
 	{
 		base.OnStart();
+
+		if ( IsProxy )
+			return;
 
 		Velocity = (new Vector2( Game.Random.Float( -1f, 1f ), Game.Random.Float( -1f, 1f ) )).Normal * 100f;
 	}
 
 	protected override void OnUpdate()
 	{
-		
-	}
+		//if(Network.OwnerConnection != null)
+		//{
+		//	Gizmo.Draw.Color = Color.Black.WithAlpha( 0.75f );
+		//	Gizmo.Draw.Text( $"{Network.OwnerConnection.DisplayName}", new global::Transform( Transform.Position ) );
 
-	protected override void OnFixedUpdate()
-	{
-		base.OnFixedUpdate();
+		//	Gizmo.Draw.Color = Color.White.WithAlpha( 0.75f );
+		//	Gizmo.Draw.Text( $"{Network.OwnerConnection.DisplayName}", new global::Transform( Transform.Position + new Vector3(0f, 1f, 1f)) );
+		//}
 
 		if ( IsProxy )
 			return;
@@ -28,7 +34,25 @@ public class Ball : Component
 		Transform.Position += (Vector3)Velocity * Time.Delta;
 
 		CheckBounds();
+
+		//if(CurrentSide == 0 && Transform.Position.x > 0f)
+		//{
+		//	SetSide( 1 );
+		//}
+		//else if(CurrentSide == 1 && Transform.Position.x < 0f)
+		//{
+		//	SetSide( 0 );
+		//}
 	}
+
+	//protected override void OnFixedUpdate()
+	//{
+	//	base.OnFixedUpdate();
+
+	//	if ( IsProxy )
+	//		return;
+		
+	//}
 
 	void CheckBounds()
 	{
@@ -79,5 +103,28 @@ public class Ball : Component
 	{
 		PlayerNum = playerNum;
 		Components.Get<ModelRenderer>().Tint = playerNum == 0 ? Manager.Instance.ColorPlayer0 : Manager.Instance.ColorPlayer1;
+	}
+
+	//public void SetSide(int side)
+	//{
+	//	if(CurrentSide == side) 
+	//		return;
+
+	//	CurrentSide = side;
+
+	//	var connection = Manager.Instance.GetConnection( side );
+	//	if( connection != null )
+	//	{
+	//		Network.AssignOwnership( connection );
+	//	}
+	//}
+
+	[Broadcast]
+	public void HitPlayer(Guid hitPlayerId)
+	{
+		if ( IsProxy )
+			return;
+
+		GameObject.Destroy();
 	}
 }

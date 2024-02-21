@@ -1,6 +1,7 @@
 using Sandbox;
 using Sandbox.Citizen;
 using Sandbox.UI;
+using System.Reflection.Metadata;
 
 public class PlayerController : Component, Component.ITriggerListener
 {
@@ -19,41 +20,57 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	[Sync] public bool IsDead { get; set; }
 
+	[Sync] public int HP { get; set; }
+	public int MaxHP { get; set; } = 3;
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
 
 		Ragdoll = Components.GetInDescendantsOrSelf<RagdollController>();
+		HP = MaxHP;
 	}
 
-	//public void Respawn()
-	//{
-	//	if ( IsProxy )
-	//		return;
+	public void Respawn()
+	{
+		if ( IsProxy )
+			return;
 
-	//	Ragdoll.Unragdoll();
-	//	MoveToSpawnPoint();
-	//	LifeState = LifeState.Alive;
-	//	Health = MaxHealth;
-	//}
+		Ragdoll.Unragdoll();
+		//MoveToSpawnPoint();
+		IsDead = false;
+		HP = MaxHP;
+	}
 
 	protected override void OnUpdate()
 	{
+		Gizmo.Draw.Color = Color.White.WithAlpha( 0.75f );
+		Gizmo.Draw.Text( $"{HP}", new global::Transform( Transform.Position ) );
+
 		if ( IsDead )
+		{
+			if ( Input.Pressed( "Jump" ) )
+			{
+				Respawn();
+			}
+
 			return;
+		}
 
 		Animator.WithVelocity( Velocity * (Velocity.y > 0f ? 0.7f : 0.6f));
+
+		Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( PlayerNum == 0 ? 0f : 180f ), 5f * Time.Delta );
 
 		if ( IsProxy )
 			return;
 
 		if( Input.Pressed( "attack1" ) )
 		{
-			Manager.Instance.SpawnBall( Pos2D + ForwardVec2D * 25f, ForwardVec2D * 100f, PlayerNum );
+			Manager.Instance.SpawnBall( Pos2D + ForwardVec2D * 25f, ForwardVec2D * 100f, PlayerNum, PlayerNum );
 		}
 		if ( Input.Pressed( "attack2" ) )
 		{
-			Manager.Instance.SpawnBall( Pos2D + ForwardVec2D * 25f, ForwardVec2D * 100f, OpponentPlayerNum );
+			Manager.Instance.SpawnBall( Pos2D + ForwardVec2D * 25f, ForwardVec2D * 100f, OpponentPlayerNum, PlayerNum );
 		}
 	}
 
@@ -63,8 +80,6 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		if ( IsDead )
 			return;
-
-		Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( PlayerNum == 0 ? 0f : 180f ), 5f * Time.Delta );
 
 		if ( IsProxy )
 			return;
@@ -97,6 +112,9 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public void OnTriggerEnter( Collider other )
 	{
+		if ( IsProxy )
+			return;
+
 		if(other.GameObject.Tags.Has("ball"))
 		{
 			var ball = other.Components.Get<Ball>();
@@ -108,26 +126,32 @@ public class PlayerController : Component, Component.ITriggerListener
 			else
 			{
 				TakeDamage( ball.Velocity * 0.025f );
+				ball.HitPlayer( GameObject.Id );
 			}
 		}
 	}
 
 	public void OnTriggerExit( Collider other )
 	{
-		
+		if ( IsProxy )
+			return;
+
 	}
 
-	[Broadcast]
-	public void TakeDamage(Vector2 force)
-	{
-		Die( force );
-	}
-
-	public void Die(Vector3 force)
+	public void TakeDamage( Vector2 force )
 	{
 		if ( IsDead )
 			return;
 
+		HP--;
+
+		if ( HP <= 0 )
+			Die( force );
+	}
+
+	[Broadcast]
+	public void Die(Vector3 force)
+	{
 		Ragdoll.Ragdoll( Transform.Position + Vector3.Up * 100f, force );
 
 		if ( IsProxy )
