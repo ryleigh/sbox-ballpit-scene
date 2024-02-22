@@ -68,6 +68,12 @@ public sealed class Manager : Component, Component.INetworkListener
 			SetPlayer( 1, playerObj.Id );
 			player.PlayerNum = 1;
 		}
+		else
+		{
+			player.IsSpectator = true;
+		}
+
+		player.IsSpectator = true;
 
 		playerObj.NetworkSpawn( channel );
 
