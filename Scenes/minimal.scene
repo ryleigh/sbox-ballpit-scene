@@ -20,6 +20,16 @@
             "_type": "gameobject",
             "prefab": "prefabs/player.prefab"
           }
+        },
+        {
+          "__type": "ScreenPanel",
+          "AutoScreenScale": true,
+          "Opacity": 1,
+          "Scale": 1,
+          "ZIndex": 100
+        },
+        {
+          "__type": "Hud"
         }
       ]
     },
@@ -77,7 +87,7 @@
           "MaterialOverride": "materials/default.vmat",
           "Model": "models/dev/plane.vmdl",
           "RenderType": "On",
-          "Tint": "0.36744,0.12305,0.32671,1"
+          "Tint": "0.41058,0.41395,0.37352,1"
         },
         {
           "__type": "BoxCollider",
@@ -92,7 +102,7 @@
     {
       "Id": "63c8989c-3142-4b73-8966-1a8f68902970",
       "Name": "ground_2",
-      "Position": "117.302,-0.05786896,1",
+      "Position": "128,-0.05786896,1",
       "Scale": "2.338768,2.437423,1",
       "Enabled": true,
       "Components": [
@@ -110,7 +120,7 @@
     {
       "Id": "06f0daeb-00a6-4572-8ec7-75d54d735b6a",
       "Name": "ground_1",
-      "Position": "-117.3024,-0.05786896,1",
+      "Position": "-128,-0.05786896,1",
       "Scale": "2.338768,2.438,1",
       "Enabled": true,
       "Components": [
@@ -200,7 +210,25 @@
     {
       "Id": "3c2490ef-54a0-49bb-8f13-490e40aa51d1",
       "Name": "middle_line",
-      "Position": "0,0,-4.446377",
+      "Position": "-11,0,-4.5",
+      "Scale": "0.015,4.9,0.2",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "ModelRenderer",
+          "BodyGroups": 18446744073709551615,
+          "MaterialGroup": null,
+          "MaterialOverride": "materials/default.vmat",
+          "Model": "models/dev/box.vmdl",
+          "RenderType": "Off",
+          "Tint": "1,1,1,1"
+        }
+      ]
+    },
+    {
+      "Id": "e772f55c-4f22-49c2-939f-db86e1829670",
+      "Name": "middle_line (1)",
+      "Position": "11,0,-4.5",
       "Scale": "0.015,4.9,0.2",
       "Enabled": true,
       "Components": [
@@ -382,6 +410,27 @@
           "Surface": null
         }
       ]
+    },
+    {
+      "Id": "f233e7d1-dc91-4bc0-88ac-7003c697d4cd",
+      "Name": "dispenser",
+      "Position": "0,113,40",
+      "Scale": "0.3207256,0.3652692,0.7030009",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "ModelRenderer",
+          "BodyGroups": 18446744073709551615,
+          "MaterialGroup": null,
+          "MaterialOverride": null,
+          "Model": "models/dev/box.vmdl",
+          "RenderType": "On",
+          "Tint": "0.15349,0.05354,0.05354,1"
+        },
+        {
+          "__type": "Dispenser"
+        }
+      ]
     }
   ],
   "SceneProperties": {
@@ -407,6 +456,6 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-02-21T19:07:26.4130846-08:00",
+  "LastSaved": "2024-02-22T00:56:49.8621305-08:00",
   "__references": []
 }

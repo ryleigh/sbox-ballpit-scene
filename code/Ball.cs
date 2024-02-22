@@ -14,7 +14,7 @@ public class Ball : Component
 		if ( IsProxy )
 			return;
 
-		Velocity = (new Vector2( Game.Random.Float( -1f, 1f ), Game.Random.Float( -1f, 1f ) )).Normal * 100f;
+		//Velocity = (new Vector2( Game.Random.Float( -1f, 1f ), Game.Random.Float( -1f, 1f ) )).Normal * 100f;
 	}
 
 	protected override void OnUpdate()

@@ -2,7 +2,7 @@ using Sandbox;
 
 public sealed class Dispenser : Component
 {
-	public const float HEIGHT = 40f;
+	public const float HEIGHT = 50f;
 	private Vector3 _topPos;
 	private Vector3 _botPos;
 
@@ -13,6 +13,11 @@ public sealed class Dispenser : Component
 
 	public bool IsWaveActive { get; private set; }
 	public TimeSince TimeSinceWaveEnded { get; private set; }
+	public TimeSince TimeSinceShoot { get; private set; }
+
+	private const float SHOOT_THRESHOLD = 113f;
+
+	public int ShotNum { get; private set; }
 
 	protected override void OnStart()
 	{
@@ -37,8 +42,22 @@ public sealed class Dispenser : Component
 		if( IsWaveActive )
 		{
 			Transform.Position = Transform.Position.WithY( Transform.Position.y + Speed * (IsGoingUp ? 1f : -1f) * Time.Delta );
+			var y = Transform.Position.y;
 
-			if((IsGoingUp && Transform.Position.y > _topPos.y) || (!IsGoingUp && Transform.Position.y < _botPos.y))
+
+			if( y < SHOOT_THRESHOLD && y > -SHOOT_THRESHOLD )
+			{
+				if ( TimeSinceShoot > 0.25f )
+				{
+					var vel = new Vector2( 1f, 0f ) * 100f;
+					int owner = ShotNum % 2 == 0 ? 0 : 1;
+					Manager.Instance.SpawnBall( (Vector2)Transform.Position, vel, owner, owner );
+					TimeSinceShoot = 0f;
+					ShotNum++;
+				}
+			}
+
+			if((IsGoingUp && y > _topPos.y) || (!IsGoingUp && y < _botPos.y))
 			{
 				WaveFinished();
 			}
@@ -57,6 +76,8 @@ public sealed class Dispenser : Component
 	{
 		Transform.Position = IsGoingUp ? _botPos : _topPos;
 		IsWaveActive = true;
+		TimeSinceShoot = 0f;
+		ShotNum = 0;
 	}
 
 	public void WaveFinished()
