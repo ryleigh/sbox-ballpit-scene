@@ -3,6 +3,8 @@
 @inherits PanelComponent
 
 <root>
+	<div class="pointer"></div>
+
 	@if(Manager.Instance.DoesPlayerExist0)
 	{
 		<div class="player_name_0">@(Manager.Instance.GetConnection(0).DisplayName)</div>
@@ -16,11 +18,8 @@
 
 @code
 {
-
-	[Property, TextArea] public string MyStringValue { get; set; } = "Hello World!";
-
-	/// <summary>
-	/// the hash determines if the system should be rebuilt. If it changes, it will be rebuilt
-	/// </summary>
-	protected override int BuildHash() => System.HashCode.Combine( MyStringValue );
+	protected override int BuildHash()
+	{
+		return 0;
+	}
 }

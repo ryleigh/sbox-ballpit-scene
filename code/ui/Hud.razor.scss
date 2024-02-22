@@ -8,6 +8,10 @@ Hud {
 	justify-content: center;
 	align-items: center;
 
+	.pointer {
+		pointer-events: all;
+	}
+
 	.player_name_0 {
 		position: absolute;
 		left: 100px;

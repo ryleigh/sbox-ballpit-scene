@@ -14,7 +14,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public Color ColorPlayer1 { get; set; }
 
 	public const float X_FAR = 228f;
-	public const float X_CLOSE = 14f;
+	public const float X_CLOSE = 21f;
 
 	public const float Y_LIMIT = 110.3f;
 
@@ -25,14 +25,13 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Sync] public bool DoesPlayerExist0 { get; set; }
 	[Sync] public bool DoesPlayerExist1 { get; set; }
 
+	[Sync] public int RoundNum { get; private set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
 
 		Instance = this;
-
-		if ( Networking.IsHost )
-			Network.TakeOwnership();
 	}
 
 	protected override void OnStart()
@@ -41,6 +40,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		{
 			GameNetworkSystem.CreateLobby();
 		}
+
+		if ( Networking.IsHost )
+			Network.TakeOwnership();
 	}
 
 	public void OnActive( Connection channel )
@@ -102,7 +104,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			str += $"\n";
 		}
 		Gizmo.Draw.Color = Color.White;
-		Gizmo.Draw.ScreenText( str, new Vector2(5f, 5f), size: 14, flags: TextFlag.Left);
+		Gizmo.Draw.ScreenText( str, new Vector2(5f, 5f), size: 12, flags: TextFlag.Left);
 	}
 
 	public void SpawnBall(Vector2 pos, Vector2 velocity, int playerNum, int creatorNum)
