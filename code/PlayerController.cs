@@ -92,8 +92,6 @@ public class PlayerController : Component, Component.ITriggerListener
 
 			CheckBoundsPlaying();
 		}
-
-		
 	}
 
 	protected override void OnFixedUpdate()
@@ -140,9 +138,13 @@ public class PlayerController : Component, Component.ITriggerListener
 			var yDiff = y < 0f ? y - yBotWall : yTopWall - y;
 
 			if(xDiff < yDiff)
+			{
 				Transform.Position = Transform.Position.WithX( x < 0f ? xLeftWall : xRightWall );
+			}
 			else
+			{
 				Transform.Position = Transform.Position.WithY( y < 0f ? yBotWall : yTopWall );
+			}
 		}
 
 		var xMin = -256f;

@@ -1,0 +1,30 @@
+Hud {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	//background-color: #444;
+	justify-content: center;
+	align-items: center;
+
+	.player_name_0 {
+		position: absolute;
+		left: 100px;
+		bottom: 35px;
+		text-align: left;
+		font-size: 32px;
+		font-family: Poppins;
+		color: #0000aa;
+	}
+
+	.player_name_1 {
+		position: absolute;
+		right: 100px;
+		bottom: 35px;
+		text-align: right;
+		font-size: 32px;
+		font-family: Poppins;
+		color: #006600;
+	}
+}

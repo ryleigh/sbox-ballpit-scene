@@ -13,7 +13,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public Color ColorPlayer0 { get; set; }
 	[Property] public Color ColorPlayer1 { get; set; }
 
-	public const float X_FAR = 225.8f;
+	public const float X_FAR = 228f;
 	public const float X_CLOSE = 14f;
 
 	public const float Y_LIMIT = 110.3f;
@@ -72,8 +72,6 @@ public sealed class Manager : Component, Component.INetworkListener
 		{
 			player.IsSpectator = true;
 		}
-
-		player.IsSpectator = true;
 
 		playerObj.NetworkSpawn( channel );
 
