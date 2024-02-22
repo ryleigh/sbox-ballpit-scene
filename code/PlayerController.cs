@@ -112,7 +112,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public void OnTriggerEnter( Collider other )
 	{
-		if ( IsProxy )
+		if ( IsProxy || IsDead )
 			return;
 
 		if(other.GameObject.Tags.Has("ball"))

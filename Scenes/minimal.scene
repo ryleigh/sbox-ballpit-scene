@@ -66,8 +66,8 @@
     },
     {
       "Id": "6ad70641-3c6c-4402-9c85-9a4969af4764",
-      "Name": "Plane",
-      "Scale": "5,5,5",
+      "Name": "ground",
+      "Scale": "5.3333,3.000001,5",
       "Enabled": true,
       "Components": [
         {
@@ -77,7 +77,7 @@
           "MaterialOverride": "materials/default.vmat",
           "Model": "models/dev/plane.vmdl",
           "RenderType": "On",
-          "Tint": "0.45769,0.47442,0.33099,1"
+          "Tint": "0.36744,0.12305,0.32671,1"
         },
         {
           "__type": "BoxCollider",
@@ -90,10 +90,118 @@
       ]
     },
     {
+      "Id": "63c8989c-3142-4b73-8966-1a8f68902970",
+      "Name": "ground_2",
+      "Position": "117.302,-0.05786896,1",
+      "Scale": "2.338768,2.437423,1",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "ModelRenderer",
+          "BodyGroups": 18446744073709551615,
+          "MaterialGroup": null,
+          "MaterialOverride": "materials/default.vmat",
+          "Model": "models/dev/plane.vmdl",
+          "RenderType": "Off",
+          "Tint": "0.14018,0.50233,0.20658,1"
+        }
+      ]
+    },
+    {
+      "Id": "06f0daeb-00a6-4572-8ec7-75d54d735b6a",
+      "Name": "ground_1",
+      "Position": "-117.3024,-0.05786896,1",
+      "Scale": "2.338768,2.438,1",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "ModelRenderer",
+          "BodyGroups": 18446744073709551615,
+          "MaterialGroup": null,
+          "MaterialOverride": "materials/default.vmat",
+          "Model": "models/dev/plane.vmdl",
+          "RenderType": "Off",
+          "Tint": "0.2133,0.24049,0.53953,1"
+        }
+      ]
+    },
+    {
+      "Id": "3c1bff51-07c9-4229-88d3-b2fa65222b6f",
+      "Name": "bleachers",
+      "Position": "-284.4013,-0.05786896,80",
+      "Scale": "0.9561952,2.973863,1",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "ModelRenderer",
+          "BodyGroups": 18446744073709551615,
+          "MaterialGroup": null,
+          "MaterialOverride": "materials/default.vmat",
+          "Model": "models/dev/plane.vmdl",
+          "RenderType": "Off",
+          "Tint": "0.63878,0.65581,0.45144,1"
+        }
+      ]
+    },
+    {
+      "Id": "45cf1ed1-1383-41de-bb95-ed23733d24c2",
+      "Name": "bleachers (1)",
+      "Position": "284.401,-0.05786896,80",
+      "Scale": "0.9561952,2.973863,1",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "ModelRenderer",
+          "BodyGroups": 18446744073709551615,
+          "MaterialGroup": null,
+          "MaterialOverride": "materials/default.vmat",
+          "Model": "models/dev/plane.vmdl",
+          "RenderType": "Off",
+          "Tint": "0.63878,0.65581,0.45144,1"
+        }
+      ]
+    },
+    {
+      "Id": "03f432b7-49ab-4841-98eb-26875137ade5",
+      "Name": "bleachers (2)",
+      "Position": "0,164.9621,80",
+      "Scale": "5.890082,0.8153919,1",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "ModelRenderer",
+          "BodyGroups": 18446744073709551615,
+          "MaterialGroup": null,
+          "MaterialOverride": "materials/default.vmat",
+          "Model": "models/dev/plane.vmdl",
+          "RenderType": "Off",
+          "Tint": "0.63878,0.65581,0.45144,1"
+        }
+      ]
+    },
+    {
+      "Id": "e317f223-9408-4249-8b5d-d75ed94f617d",
+      "Name": "bleachers (3)",
+      "Position": "0,-164.962,80",
+      "Scale": "5.890082,0.8153919,1",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "ModelRenderer",
+          "BodyGroups": 18446744073709551615,
+          "MaterialGroup": null,
+          "MaterialOverride": "materials/default.vmat",
+          "Model": "models/dev/plane.vmdl",
+          "RenderType": "Off",
+          "Tint": "0.63878,0.65581,0.45144,1"
+        }
+      ]
+    },
+    {
       "Id": "3c2490ef-54a0-49bb-8f13-490e40aa51d1",
       "Name": "middle_line",
       "Position": "0,0,-4.446377",
-      "Scale": "0.015,10,0.2",
+      "Scale": "0.015,4.9,0.2",
       "Enabled": true,
       "Components": [
         {
@@ -102,7 +210,7 @@
           "MaterialGroup": null,
           "MaterialOverride": "materials/default.vmat",
           "Model": "models/dev/box.vmdl",
-          "RenderType": "On",
+          "RenderType": "Off",
           "Tint": "1,1,1,1"
         }
       ]
@@ -121,7 +229,7 @@
           "FieldOfView": 60,
           "IsMainCamera": true,
           "Orthographic": true,
-          "OrthographicHeight": 235,
+          "OrthographicHeight": 294.89996,
           "Priority": 1,
           "RenderExcludeTags": "",
           "RenderTags": "",
@@ -174,8 +282,8 @@
     {
       "Id": "244b9dbc-1bfc-433b-83d8-c98806a4ef57",
       "Name": "wall",
-      "Position": "-213.9399,0,0",
-      "Scale": "0.2,10,3",
+      "Position": "-235,0,0",
+      "Scale": "0.05,4.95,3",
       "Enabled": true,
       "Components": [
         {
@@ -185,7 +293,7 @@
           "MaterialOverride": null,
           "Model": "models/dev/box.vmdl",
           "RenderType": "Off",
-          "Tint": "1,1,1,1"
+          "Tint": "0,0,0,1"
         },
         {
           "__type": "BoxCollider",
@@ -200,8 +308,8 @@
     {
       "Id": "adeed76a-8fe9-490b-a503-186c2fd7b006",
       "Name": "wall (1)",
-      "Position": "213.9642,0,0",
-      "Scale": "0.2,10,3",
+      "Position": "235,0,0",
+      "Scale": "0.05,4.95,3",
       "Enabled": true,
       "Components": [
         {
@@ -211,7 +319,7 @@
           "MaterialOverride": null,
           "Model": "models/dev/box.vmdl",
           "RenderType": "Off",
-          "Tint": "1,1,1,1"
+          "Tint": "0,0,0,1"
         },
         {
           "__type": "BoxCollider",
@@ -227,7 +335,7 @@
       "Id": "7337425d-603a-4591-9fe0-fee4b34d8939",
       "Name": "wall (2)",
       "Position": "0,-122.8541,0",
-      "Scale": "10,0.2,3",
+      "Scale": "9.45,0.05,3",
       "Enabled": true,
       "Components": [
         {
@@ -237,7 +345,7 @@
           "MaterialOverride": null,
           "Model": "models/dev/box.vmdl",
           "RenderType": "Off",
-          "Tint": "1,1,1,1"
+          "Tint": "0,0,0,1"
         },
         {
           "__type": "BoxCollider",
@@ -253,7 +361,7 @@
       "Id": "84da3e36-97bc-4c95-b72b-2c94165916b9",
       "Name": "wall (3)",
       "Position": "0,122.854,0",
-      "Scale": "10,0.2,3",
+      "Scale": "9.45,0.05,3",
       "Enabled": true,
       "Components": [
         {
@@ -263,7 +371,7 @@
           "MaterialOverride": null,
           "Model": "models/dev/box.vmdl",
           "RenderType": "Off",
-          "Tint": "1,1,1,1"
+          "Tint": "0,0,0,1"
         },
         {
           "__type": "BoxCollider",
@@ -299,6 +407,6 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-02-21T00:56:35.0063039-08:00",
+  "LastSaved": "2024-02-21T18:34:45.6834088-08:00",
   "__references": []
 }

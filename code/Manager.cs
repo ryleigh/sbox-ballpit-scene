@@ -1,4 +1,4 @@
-using Sandbox;
+﻿using Sandbox;
 using Sandbox.Network;
 using System.Diagnostics.Metrics;
 using System.Threading.Channels;
@@ -13,10 +13,10 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public Color ColorPlayer0 { get; set; }
 	[Property] public Color ColorPlayer1 { get; set; }
 
-	public const float X_FAR = 203f;
+	public const float X_FAR = 225.8f;
 	public const float X_CLOSE = 14f;
 
-	public const float Y_LIMIT = 103.7f;
+	public const float Y_LIMIT = 110.3f;
 
 	public const float BALL_HEIGHT = 50f;
 
@@ -75,6 +75,30 @@ public sealed class Manager : Component, Component.INetworkListener
 		//{
 		//	CopterGameManager.Instance.HostConnected();
 		//}
+	}
+
+	protected override void OnUpdate()
+	{
+		base.OnUpdate();
+
+		string str = "";
+		foreach(var player in Scene.GetAllComponents<PlayerController>())
+		{
+			str += $"{player.Network.OwnerConnection.DisplayName}";
+			str += $"{(player.Network.IsOwner ? " (local)" : "")}";
+			str += $"{(player.Network.OwnerConnection.IsHost ? " (host)" : "")}";
+			str += $"{(player.IsDead ? " 💀" : "")}";
+
+			if (DoesPlayerExist0 && player.GameObject.Id == PlayerId0)
+				str += $" ..... PLAYER 0";
+
+			if ( DoesPlayerExist1 && player.GameObject.Id == PlayerId1 )
+				str += $" ..... PLAYER 1";
+
+			str += $"\n";
+		}
+		Gizmo.Draw.Color = Color.White;
+		Gizmo.Draw.ScreenText( str, new Vector2(5f, 5f), size: 14, flags: TextFlag.Left);
 	}
 
 	public void SpawnBall(Vector2 pos, Vector2 velocity, int playerNum, int creatorNum)
