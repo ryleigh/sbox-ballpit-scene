@@ -164,7 +164,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		{
 			var ball = other.Components.Get<Ball>();
 
-			if(ball.PlayerNum == PlayerNum)
+			if(ball.IsActive && ball.PlayerNum == PlayerNum)
 			{
 				HitOwnBall( ball );
 			}

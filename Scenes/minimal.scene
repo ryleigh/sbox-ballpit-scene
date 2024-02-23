@@ -14,8 +14,8 @@
             "_type": "gameobject",
             "prefab": "prefabs/ball.prefab"
           },
-          "ColorPlayer0": "0.01961,0.01961,1,1",
-          "ColorPlayer1": "0.01961,1,0.01961,1",
+          "ColorPlayer0": "0,0,0.73333,1",
+          "ColorPlayer1": "0,0.6,0,1",
           "PlayerPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/player.prefab"
@@ -461,6 +461,6 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-02-23T13:34:30.9077065-08:00",
+  "LastSaved": "2024-02-23T14:02:12.1357043-08:00",
   "__references": []
 }

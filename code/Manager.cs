@@ -12,8 +12,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject PlayerPrefab { get; set; }
 	[Property] public GameObject BallPrefab { get; set; }
 
-	[Property] public Color ColorPlayer0 { get; set; }
-	[Property] public Color ColorPlayer1 { get; set; }
+	[Property, Sync] public Color ColorPlayer0 { get; set; }
+	[Property, Sync] public Color ColorPlayer1 { get; set; }
 
 	public const float X_FAR = 228f;
 	public const float X_CLOSE = 21f;
@@ -71,7 +71,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public void OnActive( Connection channel )
 	{
-		Log.Info( $"Player '{channel.DisplayName}' is becoming active (local = {channel == Connection.Local}) (host = {channel.IsHost})" );
+		//Log.Info( $"Player '{channel.DisplayName}' is becoming active (local = {channel == Connection.Local}) (host = {channel.IsHost})" );
 
 		var playerObj = PlayerPrefab.Clone( Vector3.Zero );
 		var player = playerObj.Components.Get<PlayerController>();
@@ -158,6 +158,12 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		IsRoundActive = false;
 		_timeSinceRoundFinished = 0f;
+
+		foreach(var ball in Scene.GetAllComponents<Ball>())
+		{
+			if ( ball.IsActive )
+				ball.Despawn();
+		}
 	}
 
 	void StartNewRound()
@@ -166,9 +172,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		IsRoundActive = true;
 		Dispenser.StartWave();
 
-		if ( Player0 != null && !Player0.IsDead )
+		if ( Player0 != null && Player0.IsDead )
 			Player0.Respawn();
-		if ( Player1 != null && !Player1.IsDead )
+		if ( Player1 != null && Player1.IsDead )
 			Player1.Respawn();
 	}
 
@@ -179,11 +185,12 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		ball.Velocity = velocity;
 
-		ball.SetPlayerNum( playerNum );
-
 		//Log.Info( $"SpawnBall - connection: {connection}" );
 
-		ballObj.NetworkSpawn( GetConnection( playerNum ) );
+		//ballObj.NetworkSpawn( GetConnection( playerNum ) );
+		ballObj.NetworkSpawn();
+
+		ball.SetPlayerNum( playerNum );
 
 		//int side = pos.x > 0f ? 1 : 0;
 		//ballObj.NetworkSpawn(GetConnection(side));
@@ -196,14 +203,14 @@ public sealed class Manager : Component, Component.INetworkListener
 			Player0 = player;
 			PlayerId0 = player.GameObject.Id;
 			DoesPlayerExist0 = true;
-			Log.Info( $"Setting player 0: {player.GameObject.Id}" );
+			//Log.Info( $"Setting player 0: {player.GameObject.Id}" );
 		}
 		else if(playerNum == 1)
 		{
 			Player1 = player;
 			PlayerId1 = player.GameObject.Id;
 			DoesPlayerExist1 = true;
-			Log.Info( $"Setting player 1: {player.GameObject.Id}" );
+			//Log.Info( $"Setting player 1: {player.GameObject.Id}" );
 		}
 	}
 

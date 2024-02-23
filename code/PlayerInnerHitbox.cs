@@ -18,7 +18,7 @@ public class PlayerInnerHitbox : Component, Component.ITriggerListener
 		{
 			var ball = other.Components.Get<Ball>();
 
-			if ( ball.PlayerNum != Player.PlayerNum )
+			if ( ball.IsActive && ball.PlayerNum != Player.PlayerNum )
 			{
 				Player.HitOpponentBall( ball );
 			}

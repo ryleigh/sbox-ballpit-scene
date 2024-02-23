@@ -6,10 +6,16 @@ public class Ball : Component
 	//[Sync] public int CurrentSide { get; set; }
 
 	[Sync] public Vector2 Velocity { get; set; }
-	public Color Color { get; private set; }
+	[Property, Sync, Hide] public Color Color { get; private set; }
 
 	//public HighlightOutline HighlightOutline { get; private set; }
 	public ModelRenderer ModelRenderer { get; private set; }
+
+	[Sync] public bool IsActive { get; set; }
+
+	public bool IsDespawning { get; private set; }
+	public TimeSince TimeSinceDespawnStart { get; private set; }
+	private float _despawnTime = 3f;
 
 	protected override void OnAwake()
 	{
@@ -23,6 +29,8 @@ public class Ball : Component
 	{
 		base.OnStart();
 
+		IsActive = true;
+
 		if ( IsProxy )
 			return;
 
@@ -31,18 +39,22 @@ public class Ball : Component
 
 	protected override void OnUpdate()
 	{
-		//if(Network.OwnerConnection != null)
-		//{
-		//	Gizmo.Draw.Color = Color.Black.WithAlpha( 0.75f );
-		//	Gizmo.Draw.Text( $"{Network.OwnerConnection.DisplayName}", new global::Transform( Transform.Position ) );
+		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.75f );
+		//Gizmo.Draw.Text( $"{Color}", new global::Transform( Transform.Position + new Vector3(0f, 1f, 1f)) );
 
-		//	Gizmo.Draw.Color = Color.White.WithAlpha( 0.75f );
-		//	Gizmo.Draw.Text( $"{Network.OwnerConnection.DisplayName}", new global::Transform( Transform.Position + new Vector3(0f, 1f, 1f)) );
-		//}
-
-		if(ModelRenderer != null)
+		if ( IsDespawning)
 		{
-			ModelRenderer.Tint = Color.WithAlpha( Utils.Map( Utils.FastSin( PlayerNum * 16f + Time.Now * 8f ), -1f, 1f, 0.8f, 1.2f, EasingType.SineInOut ) );
+			if ( ModelRenderer != null )
+			{
+				ModelRenderer.Tint = Color.Lerp( Color, Color.WithAlpha(0f), Utils.Map(TimeSinceDespawnStart, 0f, _despawnTime, 0f, 1f) );
+			}
+		}
+		else
+		{
+			Transform.Position += (Vector3)Velocity * Time.Delta;
+
+			if ( ModelRenderer != null )
+				ModelRenderer.Tint = Color.WithAlpha( Utils.Map( Utils.FastSin( PlayerNum * 16f + Time.Now * 8f ), -1f, 1f, 0.8f, 1.2f, EasingType.SineInOut ) );
 		}
 
 		//if(HighlightOutline != null)
@@ -51,7 +63,14 @@ public class Ball : Component
 		if ( IsProxy )
 			return;
 
-		Transform.Position += (Vector3)Velocity * Time.Delta;
+		if ( IsDespawning )
+		{
+			if ( TimeSinceDespawnStart > _despawnTime )
+			{
+				GameObject.Destroy();
+				return;
+			}
+		}
 
 		CheckBounds();
 
@@ -153,5 +172,20 @@ public class Ball : Component
 			return;
 
 		GameObject.Destroy();
+	}
+
+	[Broadcast]
+	public void Despawn()
+	{
+		if(!IsActive)
+			return;
+
+		IsDespawning = true;
+		TimeSinceDespawnStart = 0f;
+
+		if ( IsProxy )
+			return;
+
+		IsActive = false;
 	}
 }

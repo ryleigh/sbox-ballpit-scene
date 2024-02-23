@@ -40,7 +40,7 @@ public sealed class Dispenser : Component
 		if( IsWaveActive )
 		{
 			if ( !Manager.Instance.IsRoundActive )
-				Speed *= (1f + 5f * Time.Delta);
+				Speed *= (1f + 2.5f * Time.Delta);
 
 			Transform.Position = Transform.Position.WithY( Transform.Position.y + Speed * (IsGoingUp ? 1f : -1f) * Time.Delta );
 			var y = Transform.Position.y;
