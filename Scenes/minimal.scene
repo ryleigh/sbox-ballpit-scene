@@ -304,6 +304,10 @@
         {
           "__type": "Sharpen",
           "Scale": 0.2
+        },
+        {
+          "__type": "Highlight",
+          "__enabled": false
         }
       ]
     },
@@ -416,6 +420,7 @@
       "Name": "dispenser",
       "Position": "0,113,40",
       "Scale": "0.3207256,0.3652692,0.7030009",
+      "Networked": true,
       "Enabled": true,
       "Components": [
         {
@@ -456,6 +461,6 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-02-22T18:14:25.6926321-08:00",
+  "LastSaved": "2024-02-23T13:34:30.9077065-08:00",
   "__references": []
 }

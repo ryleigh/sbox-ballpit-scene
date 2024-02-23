@@ -8,6 +8,17 @@ public class Ball : Component
 	[Sync] public Vector2 Velocity { get; set; }
 	public Color Color { get; private set; }
 
+	//public HighlightOutline HighlightOutline { get; private set; }
+	public ModelRenderer ModelRenderer { get; private set; }
+
+	protected override void OnAwake()
+	{
+		base.OnAwake();
+
+		//HighlightOutline = Components.Get<HighlightOutline>();
+		ModelRenderer = Components.Get<ModelRenderer>();
+	}
+
 	protected override void OnStart()
 	{
 		base.OnStart();
@@ -29,7 +40,13 @@ public class Ball : Component
 		//	Gizmo.Draw.Text( $"{Network.OwnerConnection.DisplayName}", new global::Transform( Transform.Position + new Vector3(0f, 1f, 1f)) );
 		//}
 
-		Components.Get<ModelRenderer>().Tint = Color.WithAlpha( Utils.Map( Utils.FastSin( PlayerNum * 16f + Time.Now * 8f ), -1f, 1f, 0.6f, 1f, EasingType.QuadOut) );
+		if(ModelRenderer != null)
+		{
+			ModelRenderer.Tint = Color.WithAlpha( Utils.Map( Utils.FastSin( PlayerNum * 16f + Time.Now * 8f ), -1f, 1f, 0.8f, 1.2f, EasingType.SineInOut ) );
+		}
+
+		//if(HighlightOutline != null)
+		//	HighlightOutline.Width = 0.2f + Utils.FastSin(Time.Now * 16f) * 0.05f;
 
 		if ( IsProxy )
 			return;
@@ -108,6 +125,11 @@ public class Ball : Component
 
 		Color = playerNum == 0 ? Manager.Instance.ColorPlayer0 : Manager.Instance.ColorPlayer1;
 		Components.Get<ModelRenderer>().Tint = Color;
+
+		//var highlightOutline = Components.Get<HighlightOutline>();
+		//highlightOutline.Width = 0.2f;
+		//highlightOutline.Color = Color;
+		//highlightOutline.InsideColor = Color.WithAlpha( 0.75f );
 	}
 
 	//public void SetSide(int side)

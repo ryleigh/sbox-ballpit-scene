@@ -24,6 +24,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	public int MaxHP { get; set; } = 3;
 
 	[Sync] public bool IsSpectator { get; set; }
+	[Sync] public int Score { get; set; }
 
 	protected override void OnAwake()
 	{
@@ -33,31 +34,10 @@ public class PlayerController : Component, Component.ITriggerListener
 		HP = MaxHP;
 	}
 
-	public void Respawn()
-	{
-		if ( IsProxy )
-			return;
-
-		Ragdoll.Unragdoll();
-		//MoveToSpawnPoint();
-		IsDead = false;
-		HP = MaxHP;
-	}
-
 	protected override void OnUpdate()
 	{
-		Gizmo.Draw.Color = Color.White.WithAlpha( 0.75f );
-		Gizmo.Draw.Text( $"{HP}", new global::Transform( Transform.Position ) );
-
-		if ( IsDead )
-		{
-			if ( Input.Pressed( "Jump" ) )
-			{
-				Respawn();
-			}
-
-			return;
-		}
+		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.75f );
+		//Gizmo.Draw.Text( $"{HP}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity * (Velocity.y > 0f ? 0.7f : 0.6f));
 
@@ -218,11 +198,25 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Broadcast]
 	public void Die(Vector3 force)
 	{
-		Ragdoll.Ragdoll( Transform.Position + Vector3.Up * 100f, force );
-
 		if ( IsProxy )
 			return;
 
+		Ragdoll.Ragdoll( Transform.Position + Vector3.Up * 100f, force );
+
 		IsDead = true;
+
+		Manager.Instance.PlayerDied( GameObject.Id );
+	}
+
+	[Broadcast]
+	public void Respawn()
+	{
+		if ( IsProxy )
+			return;
+
+		Ragdoll.Unragdoll();
+		//MoveToSpawnPoint();
+		IsDead = false;
+		HP = MaxHP;
 	}
 }

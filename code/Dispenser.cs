@@ -29,8 +29,6 @@ public sealed class Dispenser : Component
 		_topPos = new Vector3( 0f, 160f, HEIGHT );
 		_botPos = new Vector3( 0f, -160f, HEIGHT );
 
-		Speed = 40f;
-
 		StartWave();
 	}
 
@@ -41,11 +39,13 @@ public sealed class Dispenser : Component
 
 		if( IsWaveActive )
 		{
+			if ( !Manager.Instance.IsRoundActive )
+				Speed *= (1f + 5f * Time.Delta);
+
 			Transform.Position = Transform.Position.WithY( Transform.Position.y + Speed * (IsGoingUp ? 1f : -1f) * Time.Delta );
 			var y = Transform.Position.y;
 
-
-			if( y < SHOOT_THRESHOLD && y > -SHOOT_THRESHOLD )
+			if( y < SHOOT_THRESHOLD && y > -SHOOT_THRESHOLD && Manager.Instance.IsRoundActive )
 			{
 				if ( TimeSinceShoot > 0.25f )
 				{
@@ -66,9 +66,8 @@ public sealed class Dispenser : Component
 		}
 		else
 		{
-			if( TimeSinceWaveEnded > 1f)
+			if( TimeSinceWaveEnded > 1f && Manager.Instance.IsRoundActive )
 			{
-				IsGoingUp = !IsGoingUp;
 				StartWave();
 			}
 		}
@@ -76,10 +75,13 @@ public sealed class Dispenser : Component
 
 	public void StartWave()
 	{
+		IsGoingUp = !IsGoingUp;
 		Transform.Position = IsGoingUp ? _botPos : _topPos;
 		IsWaveActive = true;
 		TimeSinceShoot = 0f;
 		ShotNum = 0;
+
+		Speed = 40f;
 	}
 
 	public void WaveFinished()

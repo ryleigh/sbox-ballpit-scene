@@ -12,6 +12,14 @@ Hud {
 		pointer-events: all;
 	}
 
+	.round_display {
+		position: absolute;
+		font-size: 30px;
+		font-family: Poppins;
+		color: #ffffff;
+		bottom: 25px;
+	}
+
 	.bottom_row {
 		position: absolute;
 		width: 40%;

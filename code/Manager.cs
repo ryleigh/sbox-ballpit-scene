@@ -1,6 +1,8 @@
 ﻿using Sandbox;
 using Sandbox.Network;
 using System.Diagnostics.Metrics;
+using System.IO;
+using System.Numerics;
 using System.Threading.Channels;
 
 public sealed class Manager : Component, Component.INetworkListener
@@ -18,8 +20,11 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public const float Y_LIMIT = 110.3f;
 
-	public const float BALL_HEIGHT = 50f;
+	public const float BALL_HEIGHT_0 = 55f;
+	public const float BALL_HEIGHT_1 = 45f;
 
+	public PlayerController Player0 { get; set; }
+	public PlayerController Player1 { get; set; }
 	[Sync] public Guid PlayerId0 { get; set; }
 	[Sync] public Guid PlayerId1 { get; set; }
 	[Sync] public bool DoesPlayerExist0 { get; set; }
@@ -27,11 +32,25 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	[Sync] public int RoundNum { get; private set; }
 
+	[Sync] public bool IsRoundActive { get; private set; }
+	private TimeSince _timeSinceRoundFinished;
+
+	public Vector3 OriginalCameraPos { get; private set; }
+	public Rotation OriginalCameraRot { get; private set; }
+
+	public Dispenser Dispenser { get; private set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
 
 		Instance = this;
+
+		var camera = Scene.GetAllComponents<CameraComponent>().FirstOrDefault();
+		OriginalCameraPos = camera.Transform.Position;
+		OriginalCameraRot = camera.Transform.Rotation;
+
+		Dispenser = Scene.GetAllComponents<Dispenser>().FirstOrDefault();
 	}
 
 	protected override void OnStart()
@@ -43,6 +62,11 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		if ( Networking.IsHost )
 			Network.TakeOwnership();
+
+		if ( IsProxy )
+			return;
+
+		IsRoundActive = true;
 	}
 
 	public void OnActive( Connection channel )
@@ -62,12 +86,12 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		if ( !DoesPlayerExist0 )
 		{
-			SetPlayer( 0, playerObj.Id );
+			SetPlayer( 0, player );
 			player.PlayerNum = 0;
 		}
 		else if ( !DoesPlayerExist1 )
 		{
-			SetPlayer( 1, playerObj.Id );
+			SetPlayer( 1, player );
 			player.PlayerNum = 1;
 		}
 		else
@@ -87,15 +111,25 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		base.OnUpdate();
 
+		DebugDisplay();
+
+		if(!IsRoundActive && _timeSinceRoundFinished > 5f)
+		{
+			StartNewRound();
+		}
+	}
+
+	void DebugDisplay()
+	{
 		string str = "";
-		foreach(var player in Scene.GetAllComponents<PlayerController>())
+		foreach ( var player in Scene.GetAllComponents<PlayerController>() )
 		{
 			str += $"{player.Network.OwnerConnection.DisplayName}";
 			str += $"{(player.Network.IsOwner ? " (local)" : "")}";
 			str += $"{(player.Network.OwnerConnection.IsHost ? " (host)" : "")}";
 			str += $"{(player.IsDead ? " 💀" : "")}";
 
-			if (DoesPlayerExist0 && player.GameObject.Id == PlayerId0)
+			if ( DoesPlayerExist0 && player.GameObject.Id == PlayerId0 )
 				str += $" ..... PLAYER 0";
 
 			if ( DoesPlayerExist1 && player.GameObject.Id == PlayerId1 )
@@ -104,12 +138,43 @@ public sealed class Manager : Component, Component.INetworkListener
 			str += $"\n";
 		}
 		Gizmo.Draw.Color = Color.White;
-		Gizmo.Draw.ScreenText( str, new Vector2(5f, 5f), size: 12, flags: TextFlag.Left);
+		Gizmo.Draw.ScreenText( str, new Vector2( 5f, 5f ), size: 12, flags: TextFlag.Left );
+	}
+
+	[Broadcast]
+	public void PlayerDied(Guid id)
+	{
+		if ( IsProxy )
+			return;
+
+		var playerObj = Scene.Directory.FindByGuid( id );
+		if(playerObj != null)
+		{
+			var player = playerObj.Components.Get<PlayerController>();
+			var otherPlayer = GetPlayer( GetOtherPlayerNum( player.PlayerNum ) );
+			if ( otherPlayer != null )
+				otherPlayer.Score++;
+		}
+
+		IsRoundActive = false;
+		_timeSinceRoundFinished = 0f;
+	}
+
+	void StartNewRound()
+	{
+		RoundNum++;
+		IsRoundActive = true;
+		Dispenser.StartWave();
+
+		if ( Player0 != null && !Player0.IsDead )
+			Player0.Respawn();
+		if ( Player1 != null && !Player1.IsDead )
+			Player1.Respawn();
 	}
 
 	public void SpawnBall(Vector2 pos, Vector2 velocity, int playerNum)
 	{
-		var ballObj = BallPrefab.Clone( new Vector3(pos.x, pos.y, BALL_HEIGHT ) );
+		var ballObj = BallPrefab.Clone( new Vector3(pos.x, pos.y, playerNum == 0 ? BALL_HEIGHT_0 : BALL_HEIGHT_1 ) );
 		var ball = ballObj.Components.Get<Ball>();
 
 		ball.Velocity = velocity;
@@ -124,19 +189,21 @@ public sealed class Manager : Component, Component.INetworkListener
 		//ballObj.NetworkSpawn(GetConnection(side));
 	}
 
-	void SetPlayer(int playerNum, Guid id)
+	void SetPlayer(int playerNum, PlayerController player )
 	{
 		if (playerNum == 0 )
 		{
-			PlayerId0 = id;
+			Player0 = player;
+			PlayerId0 = player.GameObject.Id;
 			DoesPlayerExist0 = true;
-			Log.Info( $"Setting player 0: {id}" );
+			Log.Info( $"Setting player 0: {player.GameObject.Id}" );
 		}
 		else if(playerNum == 1)
 		{
-			PlayerId1 = id;
+			Player1 = player;
+			PlayerId1 = player.GameObject.Id;
 			DoesPlayerExist1 = true;
-			Log.Info( $"Setting player 1: {id}" );
+			Log.Info( $"Setting player 1: {player.GameObject.Id}" );
 		}
 	}
 
@@ -158,6 +225,11 @@ public sealed class Manager : Component, Component.INetworkListener
 			return Scene.Directory.FindByGuid( PlayerId1 ).Components.Get<PlayerController>();
 
 		return null;
+	}
+
+	public static int GetOtherPlayerNum(int playerNum)
+	{
+		return playerNum == 0 ? 1 : 0;
 	}
 
 	public void OnDisconnected( Connection channel )

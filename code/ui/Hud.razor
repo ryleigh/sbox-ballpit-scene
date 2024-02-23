@@ -5,12 +5,14 @@
 <root>
 	<div class="pointer"></div>
 
+	<var class="round_display" style="opacity:@(Manager.Instance.IsRoundActive ? 1f : 0.3f);">@($"Round {Manager.Instance.RoundNum + 1}")</var>
+
 	@if(Manager.Instance.DoesPlayerExist0)
 	{
 		var player0 = Manager.Instance.GetPlayer(0);
 
 		<div class="bottom_row" style="left: 100px; bottom: 45px; flex-direction: row;">
-			<div class="player_name" style="color: #0000aa;">@(Manager.Instance.GetConnection(0).DisplayName)</div>
+			<div class="player_name" style="color: #0000aa;">@($"{Manager.Instance.GetConnection(0).DisplayName} - {player0.Score}")</div>
 		</div>
 
 		<div class="bottom_row" style="left: 100px; bottom: 10px; flex-direction: row;">
@@ -26,7 +28,7 @@
 		var player1 = Manager.Instance.GetPlayer(0);
 
 		<div class="bottom_row" style="right: 100px; bottom: 45px; flex-direction: row-reverse;">
-			<div class="player_name">@(Manager.Instance.GetConnection(0).DisplayName)</div>
+			<div class="player_name">@($"{Manager.Instance.GetConnection(0).DisplayName} - {player1.Score}")</div>
 		</div>
 
 		<div class="bottom_row" style="right: 100px; bottom: 10px; flex-direction: row-reverse;">
@@ -53,14 +55,16 @@
 
 	protected override int BuildHash()
 	{
-		var player0 = Manager.Instance.GetPlayer(0);
-		var player1 = Manager.Instance.GetPlayer(1);
-		var playerName0 = Manager.Instance.GetConnection(0)?.DisplayName ?? "";
-		var playerName1 = Manager.Instance.GetConnection(1)?.DisplayName ?? "";
+		var manager = Manager.Instance;
+		var player0 = manager.GetPlayer(0);
+		var player1 = manager.GetPlayer(1);
+		var playerName0 = manager.GetConnection(0)?.DisplayName ?? "";
+		var playerName1 = manager.GetConnection(1)?.DisplayName ?? "";
 		var hp0 = player0?.HP ?? 0;
 		var hp1 = player1?.HP ?? 0;
+		var score0 = player0?.Score ?? 0;
+		var score1 = player1?.Score ?? 0;
 
-
-		return HashCode.Combine(playerName0, playerName1, hp0, hp1);
+		return HashCode.Combine(playerName0, playerName1, hp0, hp1, score0, score1, manager.RoundNum);
 	}
 }

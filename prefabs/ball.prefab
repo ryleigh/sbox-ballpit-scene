@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "Id": "aa703b9b-06a0-41a7-a929-6cbc6c09328d",
+    "Id": "820283b8-3725-4da8-9c2b-92da36e4e663",
     "Name": "ball",
     "Scale": "0.25,0.25,0.25",
     "Tags": "ball",
@@ -13,7 +13,7 @@
         "MaterialOverride": null,
         "Model": "models/dev/sphere.vmdl",
         "RenderType": "On",
-        "Tint": "0,1,0,1"
+        "Tint": "0,2,0,1"
       },
       {
         "__type": "SphereCollider",
@@ -28,12 +28,13 @@
       },
       {
         "__type": "HighlightOutline",
-        "Color": "0.44,0.69,1,1",
+        "__enabled": false,
+        "Color": "1,1,1,1",
         "InsideColor": "0,0,0,0",
         "InsideObscuredColor": "0,0,0,0",
         "Material": null,
         "ObscuredColor": "0,0,0,0",
-        "Width": 5.849984
+        "Width": 0.25
       }
     ],
     "Children": []
