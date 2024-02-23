@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "Id": "60d84b23-fab6-41b0-bd5d-154d41b0e5ba",
+    "Id": "72798490-aaa3-4978-b954-9541bf2ddcab",
     "Name": "player",
     "Tags": "player",
     "Enabled": true,
@@ -9,12 +9,12 @@
         "__type": "PlayerController",
         "Animator": {
           "_type": "component",
-          "go": "678288d4-804f-485c-bb55-6deaa9723c66",
+          "go": "849b76fd-6c82-408f-b2c2-57514bc67db6",
           "component_type": "CitizenAnimationHelper"
         },
         "Model": {
           "_type": "gameobject",
-          "go": "678288d4-804f-485c-bb55-6deaa9723c66"
+          "go": "849b76fd-6c82-408f-b2c2-57514bc67db6"
         }
       },
       {
@@ -30,31 +30,14 @@
         "__type": "RagdollController",
         "Physics": {
           "_type": "component",
-          "go": "678288d4-804f-485c-bb55-6deaa9723c66",
+          "go": "849b76fd-6c82-408f-b2c2-57514bc67db6",
           "component_type": "ModelPhysics"
         }
       }
     ],
     "Children": [
       {
-        "Id": "a203b215-a026-4173-803d-b5d35ff11759",
-        "Name": "hitbox_visible",
-        "Position": "0,0,104.2001",
-        "Scale": "0.2,0.2,0.2",
-        "Components": [
-          {
-            "__type": "ModelRenderer",
-            "BodyGroups": 18446744073709551615,
-            "MaterialGroup": null,
-            "MaterialOverride": null,
-            "Model": "models/dev/sphere.vmdl",
-            "RenderType": "Off",
-            "Tint": "1,0.0186,0.0186,0.78"
-          }
-        ]
-      },
-      {
-        "Id": "678288d4-804f-485c-bb55-6deaa9723c66",
+        "Id": "849b76fd-6c82-408f-b2c2-57514bc67db6",
         "Name": "model",
         "Enabled": true,
         "Components": [
@@ -85,7 +68,7 @@
             "LookAtEnabled": false,
             "Target": {
               "_type": "component",
-              "go": "678288d4-804f-485c-bb55-6deaa9723c66",
+              "go": "849b76fd-6c82-408f-b2c2-57514bc67db6",
               "component_type": "SkinnedModelRenderer"
             }
           },
@@ -96,10 +79,34 @@
             "Model": "models/citizen/citizen.vmdl",
             "Renderer": {
               "_type": "component",
-              "go": "678288d4-804f-485c-bb55-6deaa9723c66",
+              "go": "849b76fd-6c82-408f-b2c2-57514bc67db6",
               "component_type": "SkinnedModelRenderer"
             },
             "RigidbodyFlags": 0
+          }
+        ]
+      },
+      {
+        "Id": "2e95bd62-1e8f-42bc-bca8-68b8613650de",
+        "Name": "inner_hitbox",
+        "Enabled": true,
+        "Components": [
+          {
+            "__type": "PlayerInnerHitbox",
+            "Player": {
+              "_type": "component",
+              "go": "72798490-aaa3-4978-b954-9541bf2ddcab",
+              "component_type": "PlayerController"
+            }
+          },
+          {
+            "__type": "CapsuleCollider",
+            "End": "0,0,65",
+            "IsTrigger": true,
+            "Radius": 1.2,
+            "Start": "0,0,0",
+            "Static": false,
+            "Surface": null
           }
         ]
       }

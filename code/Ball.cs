@@ -6,6 +6,7 @@ public class Ball : Component
 	//[Sync] public int CurrentSide { get; set; }
 
 	[Sync] public Vector2 Velocity { get; set; }
+	public Color Color { get; private set; }
 
 	protected override void OnStart()
 	{
@@ -27,6 +28,8 @@ public class Ball : Component
 		//	Gizmo.Draw.Color = Color.White.WithAlpha( 0.75f );
 		//	Gizmo.Draw.Text( $"{Network.OwnerConnection.DisplayName}", new global::Transform( Transform.Position + new Vector3(0f, 1f, 1f)) );
 		//}
+
+		Components.Get<ModelRenderer>().Tint = Color.WithAlpha( Utils.Map( Utils.FastSin( PlayerNum * 16f + Time.Now * 8f ), -1f, 1f, 0.6f, 1f, EasingType.QuadOut) );
 
 		if ( IsProxy )
 			return;
@@ -102,7 +105,9 @@ public class Ball : Component
 	public void SetPlayerNum(int playerNum )
 	{
 		PlayerNum = playerNum;
-		Components.Get<ModelRenderer>().Tint = playerNum == 0 ? Manager.Instance.ColorPlayer0 : Manager.Instance.ColorPlayer1;
+
+		Color = playerNum == 0 ? Manager.Instance.ColorPlayer0 : Manager.Instance.ColorPlayer1;
+		Components.Get<ModelRenderer>().Tint = Color;
 	}
 
 	//public void SetSide(int side)

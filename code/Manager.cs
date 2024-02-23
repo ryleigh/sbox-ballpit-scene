@@ -107,7 +107,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		Gizmo.Draw.ScreenText( str, new Vector2(5f, 5f), size: 12, flags: TextFlag.Left);
 	}
 
-	public void SpawnBall(Vector2 pos, Vector2 velocity, int playerNum, int creatorNum)
+	public void SpawnBall(Vector2 pos, Vector2 velocity, int playerNum)
 	{
 		var ballObj = BallPrefab.Clone( new Vector3(pos.x, pos.y, BALL_HEIGHT ) );
 		var ball = ballObj.Components.Get<Ball>();
@@ -118,7 +118,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		//Log.Info( $"SpawnBall - connection: {connection}" );
 
-		ballObj.NetworkSpawn( GetConnection( creatorNum ) );
+		ballObj.NetworkSpawn( GetConnection( playerNum ) );
 
 		//int side = pos.x > 0f ? 1 : 0;
 		//ballObj.NetworkSpawn(GetConnection(side));

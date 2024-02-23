@@ -83,11 +83,11 @@ public class PlayerController : Component, Component.ITriggerListener
 		{
 			if ( Input.Pressed( "attack1" ) )
 			{
-				Manager.Instance.SpawnBall( Pos2D + ForwardVec2D * 25f, ForwardVec2D * 100f, PlayerNum, PlayerNum );
+				//Manager.Instance.SpawnBall( Pos2D + ForwardVec2D * 25f, ForwardVec2D * 100f, PlayerNum, PlayerNum );
 			}
 			if ( Input.Pressed( "attack2" ) )
 			{
-				Manager.Instance.SpawnBall( Pos2D + ForwardVec2D * 25f, ForwardVec2D * 100f, OpponentPlayerNum, PlayerNum );
+				//Manager.Instance.SpawnBall( Pos2D + ForwardVec2D * 25f, ForwardVec2D * 100f, OpponentPlayerNum, PlayerNum );
 			}
 
 			CheckBoundsPlaying();
@@ -163,6 +163,18 @@ public class PlayerController : Component, Component.ITriggerListener
 			Transform.Position = Transform.Position.WithY( yMax );
 	}
 
+	public void HitOwnBall( Ball ball )
+	{
+		// this doesn't need to be an RPC since we own our own balls... i think...
+		ball.Velocity = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal * ball.Velocity.Length;
+	}
+
+	public void HitOpponentBall( Ball ball )
+	{
+		TakeDamage( ball.Velocity * 0.025f );
+		ball.HitPlayer( GameObject.Id );
+	}
+
 	public void OnTriggerEnter( Collider other )
 	{
 		if ( IsProxy || IsDead || IsSpectator )
@@ -174,12 +186,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 			if(ball.PlayerNum == PlayerNum)
 			{
-				ball.Velocity = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal * ball.Velocity.Length;
-			}
-			else
-			{
-				TakeDamage( ball.Velocity * 0.025f );
-				ball.HitPlayer( GameObject.Id );
+				HitOwnBall( ball );
 			}
 		}
 	}
@@ -191,9 +198,15 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	}
 
+	[Broadcast]
 	public void TakeDamage( Vector2 force )
 	{
 		if ( IsDead )
+			return;
+
+		// todo: flash, sfx, etc
+
+		if(IsProxy)
 			return;
 
 		HP--;
