@@ -150,6 +150,16 @@ public sealed class Manager : Component, Component.INetworkListener
 		return null;
 	}
 
+	public PlayerController GetPlayer(int playerNum)
+	{
+		if(playerNum == 0 && DoesPlayerExist0)
+			return Scene.Directory.FindByGuid( PlayerId0 ).Components.Get<PlayerController>();
+		else if(playerNum == 1 && DoesPlayerExist1)
+			return Scene.Directory.FindByGuid( PlayerId1 ).Components.Get<PlayerController>();
+
+		return null;
+	}
+
 	public void OnDisconnected( Connection channel )
 	{
 		Log.Info( $"OnDisconnected: {channel.DisplayName}" );

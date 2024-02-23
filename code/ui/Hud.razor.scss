@@ -12,23 +12,21 @@ Hud {
 		pointer-events: all;
 	}
 
-	.player_name_0 {
+	.bottom_row {
 		position: absolute;
-		left: 100px;
-		bottom: 35px;
-		text-align: left;
-		font-size: 32px;
-		font-family: Poppins;
-		color: #0000aa;
+		width: 40%;
+		//background-color: #00ff0033;
 	}
 
-	.player_name_1 {
-		position: absolute;
-		right: 100px;
-		bottom: 35px;
-		text-align: right;
-		font-size: 32px;
+	.player_name {
+		font-size: 25px;
 		font-family: Poppins;
-		color: #006600;
+		//background-color: #00665511;
+	}
+
+	.player_hp {
+		font-size: 25px;
+		color: #ffffff;
+		//background-color: #0000ff11;
 	}
 }
