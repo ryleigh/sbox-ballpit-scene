@@ -39,8 +39,8 @@ public class Ball : Component
 
 	protected override void OnUpdate()
 	{
-		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.75f );
-		//Gizmo.Draw.Text( $"{Color}", new global::Transform( Transform.Position + new Vector3(0f, 1f, 1f)) );
+		//Gizmo.Draw.Color = Color.White;
+		//Gizmo.Draw.Text( $"{PlayerNum}", new global::Transform( Transform.Position + new Vector3(0f, 1f, 1f)) );
 
 		if ( IsDespawning)
 		{
@@ -53,8 +53,8 @@ public class Ball : Component
 		{
 			Transform.Position += (Vector3)Velocity * Time.Delta;
 
-			if ( ModelRenderer != null )
-				ModelRenderer.Tint = Color.WithAlpha( Utils.Map( Utils.FastSin( PlayerNum * 16f + Time.Now * 8f ), -1f, 1f, 0.8f, 1.2f, EasingType.SineInOut ) );
+			//if ( ModelRenderer != null )
+			//	ModelRenderer.Tint = Color.WithAlpha( Utils.Map( Utils.FastSin( PlayerNum * 16f + Time.Now * 8f ), -1f, 1f, 0.8f, 1.2f, EasingType.SineInOut ) );
 		}
 
 		//if(HighlightOutline != null)
@@ -187,5 +187,14 @@ public class Ball : Component
 			return;
 
 		IsActive = false;
+	}
+
+	[Broadcast]
+	public void HitByPlayer(Vector2 direction)
+	{
+		if(IsProxy)
+			return;
+
+		Velocity = direction * Velocity.Length;
 	}
 }

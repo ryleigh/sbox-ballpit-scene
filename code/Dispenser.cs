@@ -40,7 +40,7 @@ public sealed class Dispenser : Component
 		if( IsWaveActive )
 		{
 			if ( !Manager.Instance.IsRoundActive )
-				Speed *= (1f + 2.5f * Time.Delta);
+				Speed *= (1f + 1.5f * Time.Delta);
 
 			Transform.Position = Transform.Position.WithY( Transform.Position.y + Speed * (IsGoingUp ? 1f : -1f) * Time.Delta );
 			var y = Transform.Position.y;
@@ -49,7 +49,7 @@ public sealed class Dispenser : Component
 			{
 				if ( TimeSinceShoot > 0.25f )
 				{
-					var speed = 100f;
+					var speed = 90f;
 
 					Manager.Instance.SpawnBall( (Vector2)Transform.Position, new Vector2( 1f, 0f ) * speed, playerNum: ShotNum % 2 == 0 ? 0 : 1 );
 					Manager.Instance.SpawnBall( (Vector2)Transform.Position, new Vector2( -1f, 0f ) * speed, playerNum: ShotNum % 2 == 0 ? 1 : 0 );

@@ -1,6 +1,7 @@
 using Sandbox;
 using Sandbox.Citizen;
 using Sandbox.UI;
+using System.Numerics;
 using System.Reflection.Metadata;
 
 public class PlayerController : Component, Component.ITriggerListener
@@ -24,7 +25,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	public int MaxHP { get; set; } = 3;
 
 	[Sync] public bool IsSpectator { get; set; }
-	[Sync] public int Score { get; set; }
+	[Sync] public int Score { get; private set; }
 
 	protected override void OnAwake()
 	{
@@ -37,7 +38,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	protected override void OnUpdate()
 	{
 		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.75f );
-		//Gizmo.Draw.Text( $"{HP}", new global::Transform( Transform.Position ) );
+		//Gizmo.Draw.Text( $"{PlayerNum}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity * (Velocity.y > 0f ? 0.7f : 0.6f));
 
@@ -145,8 +146,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public void HitOwnBall( Ball ball )
 	{
-		// this doesn't need to be an RPC since we own our own balls... i think...
-		ball.Velocity = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal * ball.Velocity.Length;
+		ball.HitByPlayer( direction: ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal );
 	}
 
 	public void HitOpponentBall( Ball ball )
@@ -164,7 +164,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		{
 			var ball = other.Components.Get<Ball>();
 
-			if(ball.IsActive && ball.PlayerNum == PlayerNum)
+			if (ball.IsActive && ball.PlayerNum == PlayerNum)
 			{
 				HitOwnBall( ball );
 			}
@@ -192,7 +192,13 @@ public class PlayerController : Component, Component.ITriggerListener
 		HP--;
 
 		if ( HP <= 0 )
+		{
 			Die( force );
+		}
+		else
+		{
+			Manager.Instance.PlayerHit(GameObject.Id);
+		}
 	}
 
 	[Broadcast]
@@ -214,9 +220,22 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( IsProxy )
 			return;
 
-		Ragdoll.Unragdoll();
-		//MoveToSpawnPoint();
-		IsDead = false;
+		if(IsDead)
+		{
+			Ragdoll.Unragdoll();
+			//MoveToSpawnPoint();
+			IsDead = false;
+		}
+		
 		HP = MaxHP;
+	}
+
+	[Broadcast]
+	public void IncrementScore()
+	{
+		if ( IsProxy )
+			return;
+
+		Score++;
 	}
 }

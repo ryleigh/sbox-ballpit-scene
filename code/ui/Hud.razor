@@ -12,7 +12,7 @@
 		var player0 = Manager.Instance.GetPlayer(0);
 
 		<div class="bottom_row" style="left: 100px; bottom: 45px; flex-direction: row;">
-			<div class="player_name" style="color: #0000aa;">@($"{Manager.Instance.GetConnection(0).DisplayName} - {player0.Score}")</div>
+			<div class="player_name" style="color: #0000aa;">@($"{Manager.Instance.GetConnection(0).DisplayName} (score: {player0.Score})")</div>
 		</div>
 
 		<div class="bottom_row" style="left: 100px; bottom: 10px; flex-direction: row;">
@@ -23,12 +23,12 @@
 		</div>
 	}
 	
-	@if(Manager.Instance.DoesPlayerExist0)
+	@if(Manager.Instance.DoesPlayerExist1)
 	{
-		var player1 = Manager.Instance.GetPlayer(0);
+		var player1 = Manager.Instance.GetPlayer(1);
 
 		<div class="bottom_row" style="right: 100px; bottom: 45px; flex-direction: row-reverse;">
-			<div class="player_name">@($"{Manager.Instance.GetConnection(0).DisplayName} - {player1.Score}")</div>
+			<div class="player_name">@($"{Manager.Instance.GetConnection(1).DisplayName} (score: {player1.Score})")</div>
 		</div>
 
 		<div class="bottom_row" style="right: 100px; bottom: 10px; flex-direction: row-reverse;">

@@ -113,7 +113,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		DebugDisplay();
 
-		if(!IsRoundActive && _timeSinceRoundFinished > 5f)
+		if(!IsRoundActive && _timeSinceRoundFinished > 4f)
 		{
 			StartNewRound();
 		}
@@ -153,7 +153,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			var player = playerObj.Components.Get<PlayerController>();
 			var otherPlayer = GetPlayer( GetOtherPlayerNum( player.PlayerNum ) );
 			if ( otherPlayer != null )
-				otherPlayer.Score++;
+				otherPlayer.IncrementScore();
 		}
 
 		IsRoundActive = false;
@@ -172,10 +172,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		IsRoundActive = true;
 		Dispenser.StartWave();
 
-		if ( Player0 != null && Player0.IsDead )
-			Player0.Respawn();
-		if ( Player1 != null && Player1.IsDead )
-			Player1.Respawn();
+		Player0?.Respawn();
+		Player1?.Respawn();
 	}
 
 	public void SpawnBall(Vector2 pos, Vector2 velocity, int playerNum)
@@ -212,6 +210,15 @@ public sealed class Manager : Component, Component.INetworkListener
 			DoesPlayerExist1 = true;
 			//Log.Info( $"Setting player 1: {player.GameObject.Id}" );
 		}
+	}
+
+	[Broadcast]
+	public void PlayerHit( Guid id )
+	{
+		if ( IsProxy )
+			return;
+
+		Scene.TimeScale = 0.1f;
 	}
 
 	public Connection GetConnection(int playerNum)
