@@ -5,7 +5,7 @@
 <root>
 	<div class="pointer"></div>
 
-	<var class="round_display" style="opacity:@(Manager.Instance.IsRoundActive ? 1f : 0.3f);">@($"Round {Manager.Instance.RoundNum + 1}")</var>
+	<var class="round_display" style="opacity:@(Manager.Instance.GamePhase == GamePhase.RoundActive ? 1f : 0.3f);">@($"Round {Manager.Instance.RoundNum + 1}")</var>
 
 	@if(Manager.Instance.DoesPlayerExist0)
 	{

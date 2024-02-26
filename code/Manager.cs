@@ -5,6 +5,8 @@ using System.IO;
 using System.Numerics;
 using System.Threading.Channels;
 
+public enum GamePhase { RoundActive, RoundFinished, BuyPhase }
+
 public sealed class Manager : Component, Component.INetworkListener
 {
 	public static Manager Instance { get; private set; }
@@ -32,8 +34,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	[Sync] public int RoundNum { get; private set; }
 
-	[Sync] public bool IsRoundActive { get; private set; }
-	private TimeSince _timeSinceRoundFinished;
+	[Sync] public GamePhase GamePhase { get; private set; }
+	[Sync] public TimeSince TimeSincePhaseChange { get; private set; }
 
 	public Vector3 OriginalCameraPos { get; private set; }
 	public Rotation OriginalCameraRot { get; private set; }
@@ -45,6 +47,9 @@ public sealed class Manager : Component, Component.INetworkListener
 	private float _slowmoTimeScale;
 	private RealTimeSince _realTimeSinceSlowmoStarted;
 	private EasingType _slowmoEasingType;
+
+	public const float ROUND_FINISHED_DELAY = 4f;
+	public float BuyPhaseDuration { get; private set; } = 30f;
 
 	protected override void OnAwake()
 	{
@@ -72,7 +77,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( IsProxy )
 			return;
 
-		IsRoundActive = true;
+		GamePhase = GamePhase.RoundActive;
 	}
 
 	public void OnActive( Connection channel )
@@ -131,15 +136,30 @@ public sealed class Manager : Component, Component.INetworkListener
 				Scene.TimeScale = Utils.Map( _realTimeSinceSlowmoStarted, 0f, _slowmoTime, _slowmoTimeScale, 1f, _slowmoEasingType );
 			}
 		}
-		
-		if (!IsRoundActive && _timeSinceRoundFinished > 4f)
+
+		if ( IsProxy )
+			return;
+
+		switch (GamePhase)
 		{
-			StartNewRound();
+			case GamePhase.RoundActive:
+				break;
+			case GamePhase.RoundFinished:
+				if ( TimeSincePhaseChange > ROUND_FINISHED_DELAY )
+					StartBuyPhase();
+				break;
+			case GamePhase.BuyPhase:
+				if ( TimeSincePhaseChange > BuyPhaseDuration )
+					FinishBuyPhase();
+				break;
 		}
 	}
 
 	void DebugDisplay()
 	{
+		Gizmo.Draw.Color = Color.White;
+		Gizmo.Draw.Text( $"{GamePhase}\nTimeSincePhaseChange: {MathF.Floor(TimeSincePhaseChange)}", new global::Transform( Vector3.Zero ) );
+
 		string str = "";
 		foreach ( var player in Scene.GetAllComponents<PlayerController>() )
 		{
@@ -165,25 +185,30 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		Slowmo( 0.125f, 2f, EasingType.SineOut );
 
-		_timeSinceRoundFinished = 0f;
+		TimeSincePhaseChange = 0f;
 
 		if ( IsProxy )
 			return;
 
 		var playerObj = Scene.Directory.FindByGuid( id );
-		if(playerObj != null)
+		if ( playerObj != null )
 		{
 			var player = playerObj.Components.Get<PlayerController>();
 			player.AddScoreAndMoney( score: 0, money: 5 );
 
 			var otherPlayer = GetPlayer( GetOtherPlayerNum( player.PlayerNum ) );
 			if ( otherPlayer != null )
-				otherPlayer.AddScoreAndMoney(score: 1, money: 10);
+				otherPlayer.AddScoreAndMoney( score: 1, money: 10 );
 		}
 
-		IsRoundActive = false;
+		FinishRound();
+	}
 
-		foreach(var ball in Scene.GetAllComponents<Ball>())
+	void FinishRound()
+	{
+		GamePhase = GamePhase.RoundFinished;
+
+		foreach ( var ball in Scene.GetAllComponents<Ball>() )
 		{
 			if ( ball.IsActive )
 				ball.Despawn();
@@ -193,11 +218,24 @@ public sealed class Manager : Component, Component.INetworkListener
 	void StartNewRound()
 	{
 		RoundNum++;
-		IsRoundActive = true;
+		GamePhase = GamePhase.RoundActive;
+		TimeSincePhaseChange = 0f;
+
 		Dispenser.StartWave();
 
 		Player0?.Respawn();
 		Player1?.Respawn();
+	}
+
+	void StartBuyPhase()
+	{
+		GamePhase = GamePhase.BuyPhase;
+		TimeSincePhaseChange = 0f;
+	}
+
+	void FinishBuyPhase()
+	{
+		StartNewRound();
 	}
 
 	public void SpawnBall(Vector2 pos, Vector2 velocity, int playerNum)

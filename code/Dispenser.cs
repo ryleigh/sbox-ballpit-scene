@@ -34,21 +34,21 @@ public sealed class Dispenser : Component
 
 	protected override void OnUpdate()
 	{
-		Gizmo.Draw.Color = Color.White;
-		Gizmo.Draw.Text( $"{Transform.Position}", new global::Transform( Vector3.Zero ) );
+		//Gizmo.Draw.Color = Color.White;
+		//Gizmo.Draw.Text( $"{Transform.Position}", new global::Transform( Vector3.Zero ) );
 
 		if ( IsProxy )
 			return;
 
 		if( IsWaveActive )
 		{
-			if ( !Manager.Instance.IsRoundActive )
+			if ( Manager.Instance.GamePhase != GamePhase.RoundActive )
 				Speed *= (1f + 1.5f * Time.Delta);
 
 			Transform.Position = Transform.Position.WithY( Transform.Position.y + Speed * (IsGoingUp ? 1f : -1f) * Time.Delta );
 			var y = Transform.Position.y;
 
-			if( y < SHOOT_THRESHOLD && y > -SHOOT_THRESHOLD && Manager.Instance.IsRoundActive )
+			if( y < SHOOT_THRESHOLD && y > -SHOOT_THRESHOLD && Manager.Instance.GamePhase == GamePhase.RoundActive )
 			{
 				if ( TimeSinceShoot > 0.25f )
 				{
@@ -69,7 +69,7 @@ public sealed class Dispenser : Component
 		}
 		else
 		{
-			if( TimeSinceWaveEnded > 1f && Manager.Instance.IsRoundActive )
+			if( TimeSinceWaveEnded > 1f && Manager.Instance.GamePhase == GamePhase.RoundActive )
 			{
 				StartWave();
 			}
