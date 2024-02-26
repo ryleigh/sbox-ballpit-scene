@@ -20,8 +20,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public const float Y_LIMIT = 110.3f;
 
-	public const float BALL_HEIGHT_0 = 55f;
-	public const float BALL_HEIGHT_1 = 45f;
+	public const float BALL_HEIGHT_SELF = 45f;
+	public const float BALL_HEIGHT_OPPONENT = 55f;
 
 	public PlayerController Player0 { get; set; }
 	public PlayerController Player1 { get; set; }
@@ -199,7 +199,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public void SpawnBall(Vector2 pos, Vector2 velocity, int playerNum)
 	{
-		var ballObj = BallPrefab.Clone( new Vector3(pos.x, pos.y, playerNum == 0 ? BALL_HEIGHT_0 : BALL_HEIGHT_1 ) );
+		var height = (playerNum == 0 && pos.x > 0f || playerNum == 1 && pos.x < 0f) ? BALL_HEIGHT_OPPONENT : BALL_HEIGHT_SELF;
+		var ballObj = BallPrefab.Clone( new Vector3(pos.x, pos.y, height ) );
 		var ball = ballObj.Components.Get<Ball>();
 
 		ball.Velocity = velocity;
