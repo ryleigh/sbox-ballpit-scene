@@ -165,6 +165,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		Slowmo( 0.125f, 2f, EasingType.SineOut );
 
+		_timeSinceRoundFinished = 0f;
+
 		if ( IsProxy )
 			return;
 
@@ -180,7 +182,6 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 
 		IsRoundActive = false;
-		_timeSinceRoundFinished = 0f;
 
 		foreach(var ball in Scene.GetAllComponents<Ball>())
 		{
