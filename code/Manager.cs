@@ -40,6 +40,12 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public Dispenser Dispenser { get; private set; }
 
+	public bool IsSlowmo { get; set; }
+	private float _slowmoTime;
+	private float _slowmoTimeScale;
+	private RealTimeSince _realTimeSinceSlowmoStarted;
+	private EasingType _slowmoEasingType;
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -113,7 +119,20 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		DebugDisplay();
 
-		if(!IsRoundActive && _timeSinceRoundFinished > 4f)
+		if(IsSlowmo)
+		{
+			if(_realTimeSinceSlowmoStarted > _slowmoTime)
+			{
+				IsSlowmo = false;
+				Scene.TimeScale = 1f;
+			}
+			else
+			{
+				Scene.TimeScale = Utils.Map( _realTimeSinceSlowmoStarted, 0f, _slowmoTime, _slowmoTimeScale, 1f, _slowmoEasingType );
+			}
+		}
+		
+		if (!IsRoundActive && _timeSinceRoundFinished > 4f)
 		{
 			StartNewRound();
 		}
@@ -144,6 +163,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Broadcast]
 	public void PlayerDied(Guid id)
 	{
+		Slowmo( 0.01f, 2f, EasingType.SineOut );
+
 		if ( IsProxy )
 			return;
 
@@ -215,10 +236,11 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Broadcast]
 	public void PlayerHit( Guid id )
 	{
+		Slowmo(0.025f, 1f, EasingType.SineOut);
+
 		if ( IsProxy )
 			return;
 
-		Scene.TimeScale = 0.1f;
 	}
 
 	public Connection GetConnection(int playerNum)
@@ -249,5 +271,16 @@ public sealed class Manager : Component, Component.INetworkListener
 	public void OnDisconnected( Connection channel )
 	{
 		Log.Info( $"OnDisconnected: {channel.DisplayName}" );
+	}
+
+	public void Slowmo(float timeScale, float time, EasingType easingType)
+	{
+		IsSlowmo = true;
+		Scene.TimeScale = timeScale;
+
+		_slowmoTime = time;
+		_slowmoTimeScale = timeScale;
+		_realTimeSinceSlowmoStarted = 0f;
+		_slowmoEasingType = easingType;
 	}
 }
