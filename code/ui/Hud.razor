@@ -12,7 +12,7 @@
 		var player0 = Manager.Instance.GetPlayer(0);
 
 		<div class="bottom_row" style="left: 100px; bottom: 45px; flex-direction: row;">
-			<div class="player_name" style="color: #0000aa;">@($"{Manager.Instance.GetConnection(0).DisplayName} (score: {player0.Score})")</div>
+			<div class="player_name" style="color: #0000aa;">@($"{Manager.Instance.GetConnection(0).DisplayName} 🏆{player0.Score} 💲{player0.Money}")</div>
 		</div>
 
 		<div class="bottom_row" style="left: 100px; bottom: 10px; flex-direction: row;">
@@ -28,7 +28,7 @@
 		var player1 = Manager.Instance.GetPlayer(1);
 
 		<div class="bottom_row" style="right: 100px; bottom: 45px; flex-direction: row-reverse;">
-			<div class="player_name">@($"{Manager.Instance.GetConnection(1).DisplayName} (score: {player1.Score})")</div>
+			<div class="player_name" style="color: #007700;">@($"{Manager.Instance.GetConnection(1).DisplayName} 🏆{player1.Score} 💲{player1.Money}")</div>
 		</div>
 
 		<div class="bottom_row" style="right: 100px; bottom: 10px; flex-direction: row-reverse;">

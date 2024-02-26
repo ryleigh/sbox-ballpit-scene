@@ -11,7 +11,7 @@ public sealed class Dispenser : Component
 
 	[Sync] public int WaveNum { get; private set; }
 
-	public bool IsWaveActive { get; private set; }
+	[Sync] public bool IsWaveActive { get; private set; }
 	public TimeSince TimeSinceWaveEnded { get; private set; }
 	public TimeSince TimeSinceShoot { get; private set; }
 
@@ -34,6 +34,9 @@ public sealed class Dispenser : Component
 
 	protected override void OnUpdate()
 	{
+		Gizmo.Draw.Color = Color.White;
+		Gizmo.Draw.Text( $"IsWaveActive: {IsWaveActive} Manager.Instance.IsRoundActive: {Manager.Instance.IsRoundActive}", new global::Transform( Vector3.Zero ) );
+
 		if ( IsProxy )
 			return;
 

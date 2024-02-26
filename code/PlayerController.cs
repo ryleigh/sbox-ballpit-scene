@@ -26,6 +26,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	[Sync] public bool IsSpectator { get; set; }
 	[Sync] public int Score { get; private set; }
+	[Sync] public int Money { get; private set; }
 
 	protected override void OnAwake()
 	{
@@ -231,11 +232,12 @@ public class PlayerController : Component, Component.ITriggerListener
 	}
 
 	[Broadcast]
-	public void IncrementScore()
+	public void AddScoreAndMoney(int score, int money)
 	{
 		if ( IsProxy )
 			return;
 
-		Score++;
+		Score += score;
+		Money += money;
 	}
 }

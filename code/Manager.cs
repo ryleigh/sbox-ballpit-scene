@@ -163,7 +163,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Broadcast]
 	public void PlayerDied(Guid id)
 	{
-		Slowmo( 0.01f, 2f, EasingType.SineOut );
+		Slowmo( 0.125f, 2f, EasingType.SineOut );
 
 		if ( IsProxy )
 			return;
@@ -172,9 +172,11 @@ public sealed class Manager : Component, Component.INetworkListener
 		if(playerObj != null)
 		{
 			var player = playerObj.Components.Get<PlayerController>();
+			player.AddScoreAndMoney( score: 0, money: 5 );
+
 			var otherPlayer = GetPlayer( GetOtherPlayerNum( player.PlayerNum ) );
 			if ( otherPlayer != null )
-				otherPlayer.IncrementScore();
+				otherPlayer.AddScoreAndMoney(score: 1, money: 10);
 		}
 
 		IsRoundActive = false;

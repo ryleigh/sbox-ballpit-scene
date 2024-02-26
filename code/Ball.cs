@@ -2,7 +2,7 @@ using Sandbox;
 
 public class Ball : Component
 {
-	public int PlayerNum { get; set; }
+	[Sync] public int PlayerNum { get; set; }
 	//[Sync] public int CurrentSide { get; set; }
 
 	[Sync] public Vector2 Velocity { get; set; }
@@ -44,10 +44,11 @@ public class Ball : Component
 
 		if ( IsDespawning)
 		{
+			Velocity *= (1f - 3f * Time.Delta);
+			Transform.Position += (Vector3)Velocity * Time.Delta;
+
 			if ( ModelRenderer != null )
-			{
 				ModelRenderer.Tint = Color.Lerp( Color, Color.WithAlpha(0f), Utils.Map(TimeSinceDespawnStart, 0f, _despawnTime, 0f, 1f) );
-			}
 		}
 		else
 		{
@@ -55,6 +56,9 @@ public class Ball : Component
 
 			var height = (PlayerNum == 0 && Transform.Position.x > 0f || PlayerNum == 1 && Transform.Position.x < 0f) ? Manager.BALL_HEIGHT_OPPONENT : Manager.BALL_HEIGHT_SELF;
 			Transform.Position = Transform.Position.WithZ( height );
+
+			if ( ModelRenderer != null )
+				ModelRenderer.Tint = Color;
 
 			//if ( ModelRenderer != null )
 			//	ModelRenderer.Tint = Color.WithAlpha( Utils.Map( Utils.FastSin( PlayerNum * 16f + Time.Now * 8f ), -1f, 1f, 0.8f, 1.2f, EasingType.SineInOut ) );
@@ -134,10 +138,15 @@ public class Ball : Component
 	[Broadcast]
 	public void SetPlayerNum(int playerNum )
 	{
+		if ( IsProxy )
+			return;
+
 		PlayerNum = playerNum;
 
-		Color = playerNum == 0 ? Manager.Instance.ColorPlayer0 : Manager.Instance.ColorPlayer1;
-		Components.Get<ModelRenderer>().Tint = Color;
+		Color = (playerNum == 0 ? Manager.Instance.ColorPlayer0 : Manager.Instance.ColorPlayer1);
+		//Log.Info( $"Color: {Color} Manager.Instance.ColorPlayer0: {Manager.Instance.ColorPlayer0} Manager.Instance.ColorPlayer1: {Manager.Instance.ColorPlayer1} IsProxy: {IsProxy}" );
+
+		//Components.Get<ModelRenderer>().Tint = Color;
 
 		//var highlightOutline = Components.Get<HighlightOutline>();
 		//highlightOutline.Width = 0.2f;
