@@ -34,9 +34,6 @@ public sealed class Dispenser : Component
 
 	protected override void OnUpdate()
 	{
-		//Gizmo.Draw.Color = Color.White;
-		//Gizmo.Draw.Text( $"{Transform.Position}", new global::Transform( Vector3.Zero ) );
-
 		if ( IsProxy )
 			return;
 

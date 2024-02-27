@@ -19,6 +19,10 @@
           "PlayerPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/player.prefab"
+          },
+          "SkipButtonPrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/skip_button.prefab"
           }
         },
         {
@@ -488,6 +492,62 @@
           "__type": "Dispenser"
         }
       ]
+    },
+    {
+      "Id": "60be70c3-92ae-4ca7-b5ab-9ac756ad6b88",
+      "Name": "item",
+      "Position": "-186.9338,0,0",
+      "Scale": "0.5,0.5,0.5",
+      "Tags": "item",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "ModelRenderer",
+          "BodyGroups": 18446744073709551615,
+          "MaterialGroup": null,
+          "MaterialOverride": null,
+          "Model": "models/dev/box.vmdl",
+          "RenderType": "On",
+          "Tint": "0,0.21705,0.81395,1"
+        },
+        {
+          "__type": "BoxCollider",
+          "Center": "0,0,0",
+          "IsTrigger": true,
+          "Scale": "50,50,50",
+          "Static": false,
+          "Surface": null
+        },
+        {
+          "__type": "ShopItem"
+        }
+      ],
+      "Children": [
+        {
+          "Id": "93faf456-00df-41c6-a82b-9c9d30f3a51e",
+          "Name": "World",
+          "Position": "0,0,42",
+          "Rotation": "-0.4999999,-0.5,-0.5,0.5000001",
+          "Enabled": true,
+          "Components": [
+            {
+              "__type": "WorldPanel",
+              "HorizontalAlign": "Center",
+              "LookAtCamera": false,
+              "PanelSize": "800,800",
+              "RenderScale": 5,
+              "VerticalAlign": "Center"
+            },
+            {
+              "__type": "ShopItemLabel",
+              "TargetObject": {
+                "_type": "gameobject",
+                "go": "60be70c3-92ae-4ca7-b5ab-9ac756ad6b88"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "SceneProperties": {
@@ -513,6 +573,6 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-02-23T22:03:50.1647359-08:00",
+  "LastSaved": "2024-02-26T17:39:00.5775832-08:00",
   "__references": []
 }

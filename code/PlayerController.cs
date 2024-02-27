@@ -170,6 +170,21 @@ public class PlayerController : Component, Component.ITriggerListener
 				HitOwnBall( ball );
 			}
 		}
+		else if(other.GameObject.Tags.Has("item") && Manager.Instance.TimeSincePhaseChange > 2f)
+		{
+			var item = other.Components.Get<ShopItem>();
+
+			if(item.Price <= Money)
+			{
+				item.GameObject.Destroy();
+				Money -= item.Price;
+			}
+		}
+		else if ( other.GameObject.Tags.Has( "skip_button" ) && Manager.Instance.TimeSincePhaseChange > 2f )
+		{
+			other.GameObject.Destroy();
+			Manager.Instance.SkipButtonHit();
+		}
 	}
 
 	public void OnTriggerExit( Collider other )

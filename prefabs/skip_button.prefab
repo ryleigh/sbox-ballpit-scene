@@ -1,0 +1,58 @@
+{
+  "RootObject": {
+    "Id": "021af9bf-c6ae-4442-9b66-a171b1e3e439",
+    "Name": "skip_button",
+    "Scale": "0.5,0.5,0.5",
+    "Tags": "skip_button",
+    "Enabled": true,
+    "Components": [
+      {
+        "__type": "ModelRenderer",
+        "BodyGroups": 18446744073709551615,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Model": "models/dev/box.vmdl",
+        "RenderType": "On",
+        "Tint": "0.11163,0.11163,0.11163,1"
+      },
+      {
+        "__type": "BoxCollider",
+        "Center": "0,0,0",
+        "IsTrigger": true,
+        "Scale": "50,50,50",
+        "Static": false,
+        "Surface": null
+      },
+      {
+        "__type": "SkipButton"
+      }
+    ],
+    "Children": [
+      {
+        "Id": "a96b7040-4a79-4fd8-8d59-df890a4003eb",
+        "Name": "World",
+        "Position": "0,0,42",
+        "Rotation": "-0.4999999,-0.5,-0.5,0.5000001",
+        "Enabled": true,
+        "Components": [
+          {
+            "__type": "WorldPanel",
+            "HorizontalAlign": "Center",
+            "LookAtCamera": false,
+            "PanelSize": "800,800",
+            "RenderScale": 5,
+            "VerticalAlign": "Center"
+          },
+          {
+            "__type": "SkipButtonLabel",
+            "TargetObject": null
+          }
+        ]
+      }
+    ]
+  },
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "__references": []
+}

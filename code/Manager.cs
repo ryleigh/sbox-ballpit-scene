@@ -13,6 +13,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	[Property] public GameObject PlayerPrefab { get; set; }
 	[Property] public GameObject BallPrefab { get; set; }
+	[Property] public GameObject SkipButtonPrefab { get; set; }
 
 	[Property, Sync] public Color ColorPlayer0 { get; set; }
 	[Property, Sync] public Color ColorPlayer1 { get; set; }
@@ -36,6 +37,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	[Sync] public GamePhase GamePhase { get; private set; }
 	[Sync] public TimeSince TimeSincePhaseChange { get; private set; }
+	private int _numBuyPhaseSkips;
 
 	public Vector3 OriginalCameraPos { get; private set; }
 	public Rotation OriginalCameraRot { get; private set; }
@@ -222,20 +224,53 @@ public sealed class Manager : Component, Component.INetworkListener
 		TimeSincePhaseChange = 0f;
 
 		Dispenser.StartWave();
-
-		Player0?.Respawn();
-		Player1?.Respawn();
 	}
 
 	void StartBuyPhase()
 	{
 		GamePhase = GamePhase.BuyPhase;
 		TimeSincePhaseChange = 0f;
+
+		Player0?.Respawn();
+		Player1?.Respawn();
+
+		if ( IsProxy )
+			return;
+
+		_numBuyPhaseSkips = 0;
+
+		if ( DoesPlayerExist0 )
+			CreateSkipButton( 0 );
+		if ( DoesPlayerExist1 )
+			CreateSkipButton( 1 );
+	}
+
+	void CreateSkipButton(int playerNum)
+	{
+		var skipButtonObj = SkipButtonPrefab.Clone( new Vector3( 30f * (playerNum == 0 ? -1f : 1f), 103f, 0f ) );
+		skipButtonObj.NetworkSpawn( GetConnection( playerNum ) );
 	}
 
 	void FinishBuyPhase()
 	{
+		foreach(var skipButton in Scene.GetAllComponents<SkipButton>() )
+			skipButton.DestroyButton();
+
 		StartNewRound();
+	}
+
+	[Broadcast]
+	public void SkipButtonHit()
+	{
+		if ( IsProxy || GamePhase != GamePhase.BuyPhase )
+			return;
+
+		_numBuyPhaseSkips++;
+
+		if(_numBuyPhaseSkips >= 2)
+		{
+			FinishBuyPhase();
+		}
 	}
 
 	public void SpawnBall(Vector2 pos, Vector2 velocity, int playerNum)

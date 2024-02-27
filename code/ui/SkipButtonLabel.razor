@@ -1,0 +1,14 @@
+@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+
+<root>
+	<div class="title">Skip</div>
+</root>
+
+@code
+{
+	[Property] public GameObject TargetObject { get; set; }
+
+	protected override int BuildHash() => System.HashCode.Combine(TargetObject);
+}
