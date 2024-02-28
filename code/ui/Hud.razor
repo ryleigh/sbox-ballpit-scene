@@ -21,6 +21,16 @@
 				<div class="player_hp" style="opacity:@(player0.HP > i ? 1f : 0.15f);">@(player0.HP > i ? "❤️" : "🖤")</div>
 			}
 		</div>
+
+		<div class="upgrades_passive" style="left: 10px; bottom: 60px; flex-direction: column-reverse;">
+			@foreach(var pair in player0.Upgrades)
+			{
+				var upgradeType = pair.Key;
+				var level = pair.Value;
+
+				<UpgradeIcon UpgradeType=@upgradeType Level=@level />
+			}
+		</div>
 	}
 	
 	@if(Manager.Instance.DoesPlayerExist1)
@@ -64,7 +74,12 @@
 		var hp1 = player1?.HP ?? 0;
 		var score0 = player0?.Score ?? 0;
 		var score1 = player1?.Score ?? 0;
+		var upgrades0 = player0?.GetUpgradeHash() ?? 0;
+		var upgrades1 = player1?.GetUpgradeHash() ?? 0;
 
-		return HashCode.Combine(playerName0, playerName1, hp0, hp1, score0, score1, manager.RoundNum);
+		return HashCode.Combine(
+			HashCode.Combine(playerName0, playerName1, hp0, hp1, score0, score1), 
+			HashCode.Combine(upgrades0, upgrades1, manager.RoundNum)
+		);
 	}
 }

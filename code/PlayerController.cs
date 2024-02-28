@@ -4,6 +4,8 @@ using Sandbox.UI;
 using System.Numerics;
 using System.Reflection.Metadata;
 
+public enum UpgradeType { MoveSpeed, BallBounceSpeed, }
+
 public class PlayerController : Component, Component.ITriggerListener
 {
 	[Property] public CitizenAnimationHelper Animator { get; set; }
@@ -15,7 +17,6 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	[Sync] public Vector2 Velocity { get; set; }
 
-	public float WalkSpeed { get; set; } = 95f;
 	public Vector2 Pos2D => (Vector2)Transform.Position;
 	public Vector2 ForwardVec2D => PlayerNum == 0 ? new Vector2( 1f, 0f ) : new Vector2( -1f, 0f );
 
@@ -28,6 +29,9 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Sync] public int Score { get; private set; }
 	[Sync] public int Money { get; private set; }
 
+	[Sync] public NetDictionary<UpgradeType, int> Upgrades { get; set; } = new();
+	public const int MAX_UPGRADE_LEVEL = 10;
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -36,10 +40,19 @@ public class PlayerController : Component, Component.ITriggerListener
 		HP = MaxHP;
 	}
 
+	protected override void OnStart()
+	{
+		base.OnStart();
+
+		if ( IsProxy )
+			return;
+
+	}
+
 	protected override void OnUpdate()
 	{
-		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.75f );
-		//Gizmo.Draw.Text( $"{PlayerNum}", new global::Transform( Transform.Position ) );
+		Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
+		Gizmo.Draw.Text( $"{GetUpgradeLevel(UpgradeType.MoveSpeed)}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity * (Velocity.y > 0f ? 0.7f : 0.6f));
 
@@ -51,12 +64,16 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( IsProxy )
 			return;
 
-		var wishMoveDir = new Vector2( -Input.AnalogMove.y, Input.AnalogMove.x ).Normal;
+		if(!IsDead)
+		{
+			var wishMoveDir = new Vector2( -Input.AnalogMove.y, Input.AnalogMove.x ).Normal;
 
-		Velocity = Utils.DynamicEaseTo( Velocity, wishMoveDir * WalkSpeed, 0.2f, Time.Delta );
-		Transform.Position += (Vector3)Velocity * Time.Delta;
-		Transform.Position = Transform.Position.WithZ( IsSpectator ? 80f : 0f );
-
+			float moveSpeed = Utils.Map( GetUpgradeLevel( UpgradeType.MoveSpeed ), 0, 10, 90f, 125f, EasingType.SineOut );
+			Velocity = Utils.DynamicEaseTo( Velocity, wishMoveDir * moveSpeed, 0.2f, Time.Delta );
+			Transform.Position += (Vector3)Velocity * Time.Delta;
+			Transform.Position = Transform.Position.WithZ( IsSpectator ? 80f : 0f );
+		}
+		
 		if ( IsSpectator )
 		{
 			CheckBoundsSpectator();
@@ -168,6 +185,8 @@ public class PlayerController : Component, Component.ITriggerListener
 			if (ball.IsActive && ball.PlayerNum == PlayerNum)
 			{
 				HitOwnBall( ball );
+
+				AdjustUpgradeLevel( UpgradeType.MoveSpeed, 1 );
 			}
 		}
 		else if(other.GameObject.Tags.Has("item") && Manager.Instance.TimeSincePhaseChange > 2f)
@@ -226,6 +245,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		Ragdoll.Ragdoll( Transform.Position + Vector3.Up * 100f, force );
 
 		IsDead = true;
+		Velocity = Vector2.Zero;
 
 		Manager.Instance.PlayerDied( GameObject.Id );
 	}
@@ -254,5 +274,41 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		Score += score;
 		Money += money;
+	}
+
+	public int GetUpgradeLevel(UpgradeType upgradeType)
+	{
+		if(Upgrades.ContainsKey(upgradeType))
+			return Upgrades[upgradeType];
+
+		return 0;
+	}
+
+	[Broadcast]
+	public void AdjustUpgradeLevel(UpgradeType upgradeType, int amount)
+	{
+		if( Upgrades.ContainsKey(upgradeType) )
+			Upgrades[upgradeType] = Math.Min( Upgrades[upgradeType] + amount, MAX_UPGRADE_LEVEL );
+		else
+			Upgrades.Add(upgradeType, Math.Min( amount, MAX_UPGRADE_LEVEL ) );
+	}
+
+	[Broadcast]
+	public void SetUpgradeLevel( UpgradeType upgradeType, int amount )
+	{
+		if ( Upgrades.ContainsKey( upgradeType ) )
+			Upgrades[upgradeType] = Math.Min( Upgrades[upgradeType] + amount, MAX_UPGRADE_LEVEL );
+		else
+			Upgrades.Add( upgradeType, Math.Min( amount, MAX_UPGRADE_LEVEL ) );
+	}
+
+	public int GetUpgradeHash()
+	{
+		int hash = 0;
+
+		foreach ( var upgrade in Upgrades )
+			hash += upgrade.Value;
+
+		return hash;
 	}
 }

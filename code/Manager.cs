@@ -347,6 +347,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public void OnDisconnected( Connection channel )
 	{
+		// todo:
+
 		Log.Info( $"OnDisconnected: {channel.DisplayName}" );
 	}
 
