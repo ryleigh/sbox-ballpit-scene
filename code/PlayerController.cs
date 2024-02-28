@@ -287,7 +287,10 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Broadcast]
 	public void AdjustUpgradeLevel(UpgradeType upgradeType, int amount)
 	{
-		if( Upgrades.ContainsKey(upgradeType) )
+		if ( IsProxy )
+			return;
+
+		if ( Upgrades.ContainsKey(upgradeType) )
 			Upgrades[upgradeType] = Math.Min( Upgrades[upgradeType] + amount, MAX_UPGRADE_LEVEL );
 		else
 			Upgrades.Add(upgradeType, Math.Min( amount, MAX_UPGRADE_LEVEL ) );
@@ -296,6 +299,9 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Broadcast]
 	public void SetUpgradeLevel( UpgradeType upgradeType, int amount )
 	{
+		if( IsProxy ) 
+			return;
+
 		if ( Upgrades.ContainsKey( upgradeType ) )
 			Upgrades[upgradeType] = Math.Min( Upgrades[upgradeType] + amount, MAX_UPGRADE_LEVEL );
 		else

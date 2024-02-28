@@ -3,12 +3,26 @@
 @inherits PanelComponent
 
 <root>
-	<div class="title">Test</div>
+	@if(TargetObject == null || ShopItem == null)
+	{
+		return;
+	}
+
+	<div class="title">@($"{ShopItem.UpgradeType}\n{ShopItem.NumLevels}\n${ShopItem.Price}")</div>
 </root>
 
 @code
 {
 	[Property] public GameObject TargetObject { get; set; }
+	public ShopItem ShopItem { get; private set; }
 
-	protected override int BuildHash() => System.HashCode.Combine(TargetObject);
+	protected override void OnUpdate()
+	{
+		ShopItem = TargetObject?.Components.Get<ShopItem>() ?? null;
+	}
+
+	protected override int BuildHash() 
+	{
+		return System.HashCode.Combine(TargetObject, ShopItem.UpgradeType, ShopItem.NumLevels, ShopItem.Price);
+	}
 }

@@ -14,6 +14,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject PlayerPrefab { get; set; }
 	[Property] public GameObject BallPrefab { get; set; }
 	[Property] public GameObject SkipButtonPrefab { get; set; }
+	[Property] public GameObject ShopItemPrefab { get; set; }
 
 	[Property, Sync] public Color ColorPlayer0 { get; set; }
 	[Property, Sync] public Color ColorPlayer1 { get; set; }
@@ -240,23 +241,40 @@ public sealed class Manager : Component, Component.INetworkListener
 		_numBuyPhaseSkips = 0;
 
 		if ( DoesPlayerExist0 )
+		{
 			CreateSkipButton( 0 );
+			CreateShopIem( 0, new Vector2( -215f, 0f ), UpgradeType.MoveSpeed, 1, 4 );
+		}
+
 		if ( DoesPlayerExist1 )
+		{
 			CreateSkipButton( 1 );
+			CreateShopIem( 1, new Vector2( 215f, 0f ), UpgradeType.MoveSpeed, 1, 4 );
+		}
 	}
 
-	void CreateSkipButton(int playerNum)
+	void FinishBuyPhase()
+	{
+		foreach ( var skipButton in Scene.GetAllComponents<SkipButton>() )
+			skipButton.DestroyButton();
+
+		foreach ( var shopItem in Scene.GetAllComponents<ShopItem>() )
+			shopItem.DestroyButton();
+
+		StartNewRound();
+	}
+
+	void CreateSkipButton( int playerNum )
 	{
 		var skipButtonObj = SkipButtonPrefab.Clone( new Vector3( 30f * (playerNum == 0 ? -1f : 1f), 103f, 0f ) );
 		skipButtonObj.NetworkSpawn( GetConnection( playerNum ) );
 	}
 
-	void FinishBuyPhase()
+	void CreateShopIem( int playerNum, Vector2 pos, UpgradeType upgradeType, int numLevels, int price )
 	{
-		foreach(var skipButton in Scene.GetAllComponents<SkipButton>() )
-			skipButton.DestroyButton();
-
-		StartNewRound();
+		var shopItemObj = ShopItemPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
+		shopItemObj.NetworkSpawn( GetConnection( playerNum ) );
+		shopItemObj.Components.Get<ShopItem>().Init( upgradeType, numLevels, price );
 	}
 
 	[Broadcast]

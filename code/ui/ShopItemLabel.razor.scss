@@ -8,12 +8,13 @@ ShopItemLabel
 	background-color: #ff0000;
 	justify-content: center;
 	align-items: center;
-	font-weight: bold;
-	border-radius: 2px;
+	//font-weight: bold;
+	border-radius: 0px;
+	white-space: pre;
 
 	.title
 	{
-		font-size: 20px;
+		font-size: 12px;
 		font-family: Poppins;
 		color: #fff;
 	}
