@@ -5,7 +5,11 @@
 <root>
 	<div class="pointer"></div>
 
-	<var class="round_display" style="opacity:@(Manager.Instance.GamePhase == GamePhase.RoundActive ? 1f : 0.3f);">@($"Round {Manager.Instance.RoundNum + 1}")</var>
+	@{
+		var roundLabel = (Manager.Instance.GamePhase == GamePhase.BuyPhase) ? $"Buy Phase ({MathX.FloorToInt(Manager.Instance.BuyPhaseDuration - Manager.Instance.TimeSincePhaseChange)})" : $"Round {Manager.Instance.RoundNum + 1}";
+	}
+
+	<var class="round_display" style="opacity:@(Manager.Instance.GamePhase == GamePhase.RoundActive ? 1f : 0.7f);">@(roundLabel)</var>
 
 	@if(Manager.Instance.DoesPlayerExist0)
 	{
@@ -74,12 +78,16 @@
 		var hp1 = player1?.HP ?? 0;
 		var score0 = player0?.Score ?? 0;
 		var score1 = player1?.Score ?? 0;
+		var money0 = player0?.Money ?? 0;
+		var money1 = player1?.Money ?? 0;
 		var upgrades0 = player0?.GetUpgradeHash() ?? 0;
 		var upgrades1 = player1?.GetUpgradeHash() ?? 0;
+		var buyPhaseTimer = manager.GamePhase == GamePhase.BuyPhase ? MathX.FloorToInt(Manager.Instance.BuyPhaseDuration - Manager.Instance.TimeSincePhaseChange) : 0;
 
 		return HashCode.Combine(
 			HashCode.Combine(playerName0, playerName1, hp0, hp1, score0, score1), 
-			HashCode.Combine(upgrades0, upgrades1, manager.RoundNum)
+			HashCode.Combine(money0, money1, upgrades0, upgrades1, manager.RoundNum),
+			HashCode.Combine(manager.GamePhase, buyPhaseTimer)
 		);
 	}
 }

@@ -34,6 +34,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Sync] public bool DoesPlayerExist0 { get; set; }
 	[Sync] public bool DoesPlayerExist1 { get; set; }
 
+	public int NumActivePlayers => (DoesPlayerExist0 ? 1 : 0) + (DoesPlayerExist1 ? 1 : 0);
+
 	[Sync] public int RoundNum { get; private set; }
 
 	[Sync] public GamePhase GamePhase { get; private set; }
@@ -285,7 +287,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		_numBuyPhaseSkips++;
 
-		if(_numBuyPhaseSkips >= 2)
+		if( _numBuyPhaseSkips >= NumActivePlayers )
 		{
 			FinishBuyPhase();
 		}

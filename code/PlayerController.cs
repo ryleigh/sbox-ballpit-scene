@@ -185,8 +185,6 @@ public class PlayerController : Component, Component.ITriggerListener
 			if (ball.IsActive && ball.PlayerNum == PlayerNum)
 			{
 				HitOwnBall( ball );
-
-				AdjustUpgradeLevel( UpgradeType.MoveSpeed, 1 );
 			}
 		}
 		else if(other.GameObject.Tags.Has("item") && Manager.Instance.TimeSincePhaseChange > 2f)
@@ -195,8 +193,10 @@ public class PlayerController : Component, Component.ITriggerListener
 
 			if(item.Price <= Money)
 			{
-				item.GameObject.Destroy();
 				Money -= item.Price;
+				AdjustUpgradeLevel( item.UpgradeType, item.NumLevels );
+
+				item.GameObject.Destroy();
 			}
 		}
 		else if ( other.GameObject.Tags.Has( "skip_button" ) && Manager.Instance.TimeSincePhaseChange > 2f )
