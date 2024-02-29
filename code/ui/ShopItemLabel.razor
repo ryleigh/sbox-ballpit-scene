@@ -8,11 +8,17 @@
 		return;
 	}
 
-	<div class="title">@($"{ShopItem.UpgradeType}\n${ShopItem.Price}")</div>
+	<div class="title">@($"{Globals.GetNameForUpgrade(ShopItem.UpgradeType)}\n${ShopItem.Price}")</div>
 
 	@if(ShopItem.NumLevels > 1) 
 	{
 		<div class="level" style="right: 0px; top: 0px;">@($"{ShopItem.NumLevels}")</div>
+	}
+
+	@if(Manager.Instance.HoveredObject == TargetObject)
+	{
+		var pos = Scene.Camera.PointToScreenNormal(TargetObject.Transform.Position);
+		<div class="overlay" style="left:@(pos.x); top:@(pos.y);"></div>
 	}
 </root>
 
@@ -28,6 +34,6 @@
 
 	protected override int BuildHash() 
 	{
-		return System.HashCode.Combine(TargetObject, ShopItem.UpgradeType, ShopItem.NumLevels, ShopItem.Price);
+		return System.HashCode.Combine(TargetObject, ShopItem.UpgradeType, ShopItem.NumLevels, ShopItem.Price, Manager.Instance.HoveredObject);
 	}
 }

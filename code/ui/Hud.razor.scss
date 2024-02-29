@@ -45,4 +45,14 @@ Hud {
 		height: 80%;
 		background-color: #0000ff11;
 	}
+
+	.item_description {
+		position: absolute;
+		width: 200px;
+		height: 80px;
+		background-color: #00000088;
+		font-size: 16px;
+		color: #ffffff;
+		padding: 4px;
+	}
 }

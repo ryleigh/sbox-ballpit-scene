@@ -4,7 +4,7 @@ using Sandbox.UI;
 using System.Numerics;
 using System.Reflection.Metadata;
 
-public enum UpgradeType { MoveSpeed, BallBounceSpeed, }
+public enum UpgradeType { None, MoveSpeed, BallBounceSpeed, }
 
 public class PlayerController : Component, Component.ITriggerListener
 {

@@ -38,6 +38,9 @@
         },
         {
           "__type": "Hud"
+        },
+        {
+          "__type": "ItemDisplay"
         }
       ]
     },
@@ -521,6 +524,6 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-02-28T17:45:55.9211505-08:00",
+  "LastSaved": "2024-02-28T20:23:23.2825939-08:00",
   "__references": []
 }

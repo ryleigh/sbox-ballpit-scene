@@ -52,6 +52,15 @@
 			}
 		</div>
 	}
+
+	@if(Manager.Instance.HoveredObject.Tags.Has("item"))
+	{
+		var pos = Scene.Camera.PointToScreenNormal(Manager.Instance.HoveredObject.Transform.Position);
+
+		<div class="item_description" style="left:@(pos.x * 100f + (pos.x < 0.5f ? 3f : -13.5f))%; top:@(pos.y * 100f - 4f)%;">
+			@(Globals.GetDescriptionForUpgrade(Manager.Instance.HoveredObject.Components.Get<ShopItem>().UpgradeType))
+		</div>
+	}
 </root>
 
 @code
@@ -87,7 +96,7 @@
 		return HashCode.Combine(
 			HashCode.Combine(playerName0, playerName1, hp0, hp1, score0, score1), 
 			HashCode.Combine(money0, money1, upgrades0, upgrades1, manager.RoundNum),
-			HashCode.Combine(manager.GamePhase, buyPhaseTimer)
+			HashCode.Combine(manager.GamePhase, buyPhaseTimer, Manager.Instance.HoveredObject)
 		);
 	}
 }
