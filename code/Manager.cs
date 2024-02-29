@@ -54,7 +54,9 @@ public sealed class Manager : Component, Component.INetworkListener
 	private EasingType _slowmoEasingType;
 
 	public const float ROUND_FINISHED_DELAY = 4f;
-	public float BuyPhaseDuration { get; private set; } = 30f;
+	public float BuyPhaseDuration { get; private set; } = 930f;
+
+	public GameObject HoveredObject { get; private set; }
 
 	protected override void OnAwake()
 	{
@@ -129,7 +131,11 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		DebugDisplay();
 
-		if(IsSlowmo)
+		Gizmo.Draw.Color = Color.White;
+		//Gizmo.Draw.Text( $"{GamePhase}\nTimeSincePhaseChange: {MathF.Floor( TimeSincePhaseChange )}", new global::Transform( Vector3.Zero ) );
+		Gizmo.Draw.Text( $"MousePos: {Mouse.Position}\nHit GameObject: {(HoveredObject?.Name ?? "")}", new global::Transform( Vector3.Zero ) );
+
+		if (IsSlowmo)
 		{
 			if(_realTimeSinceSlowmoStarted > _slowmoTime)
 			{
@@ -158,13 +164,19 @@ public sealed class Manager : Component, Component.INetworkListener
 					FinishBuyPhase();
 				break;
 		}
+
+
+		HoveredObject = null;
+		var camera = Scene.GetAllComponents<CameraComponent>().FirstOrDefault();
+		var tr = Scene.Trace.Ray( camera.ScreenPixelToRay( Mouse.Position ), 1000f ).HitTriggers().Run();
+		if(tr.Hit)
+		{
+			HoveredObject = tr.GameObject;
+		}
 	}
 
 	void DebugDisplay()
 	{
-		Gizmo.Draw.Color = Color.White;
-		Gizmo.Draw.Text( $"{GamePhase}\nTimeSincePhaseChange: {MathF.Floor(TimeSincePhaseChange)}", new global::Transform( Vector3.Zero ) );
-
 		string str = "";
 		foreach ( var player in Scene.GetAllComponents<PlayerController>() )
 		{

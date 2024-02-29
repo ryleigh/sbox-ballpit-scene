@@ -496,15 +496,6 @@
           "__type": "Dispenser"
         }
       ]
-    },
-    {
-      "Id": "c46237f3-f895-44af-b15d-a3c1d6ca8c8c",
-      "Name": "shop_item",
-      "Position": "-48.90218,28.85712,13",
-      "Scale": "0.5,0.5,0.5",
-      "Tags": "item",
-      "Enabled": true,
-      "__Prefab": "prefabs/shop_item.prefab"
     }
   ],
   "SceneProperties": {
@@ -530,6 +521,6 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-02-28T13:57:02.4870137-08:00",
+  "LastSaved": "2024-02-28T17:45:55.9211505-08:00",
   "__references": []
 }

@@ -8,7 +8,12 @@
 		return;
 	}
 
-	<div class="title">@($"{ShopItem.UpgradeType}\n{ShopItem.NumLevels}\n${ShopItem.Price}")</div>
+	<div class="title">@($"{ShopItem.UpgradeType}\n${ShopItem.Price}")</div>
+
+	@if(ShopItem.NumLevels > 1) 
+	{
+		<div class="level" style="right: 0px; top: 0px;">@($"{ShopItem.NumLevels}")</div>
+	}
 </root>
 
 @code
