@@ -148,6 +148,14 @@ public sealed class Manager : Component, Component.INetworkListener
 			}
 		}
 
+		HoveredObject = null;
+		var camera = Scene.GetAllComponents<CameraComponent>().FirstOrDefault();
+		var tr = Scene.Trace.Ray( camera.ScreenPixelToRay( Mouse.Position ), 1000f ).HitTriggers().Run();
+		if ( tr.Hit )
+		{
+			HoveredObject = tr.GameObject;
+		}
+
 		if ( IsProxy )
 			return;
 
@@ -163,15 +171,6 @@ public sealed class Manager : Component, Component.INetworkListener
 				if ( TimeSincePhaseChange > BuyPhaseDuration )
 					FinishBuyPhase();
 				break;
-		}
-
-
-		HoveredObject = null;
-		var camera = Scene.GetAllComponents<CameraComponent>().FirstOrDefault();
-		var tr = Scene.Trace.Ray( camera.ScreenPixelToRay( Mouse.Position ), 1000f ).HitTriggers().Run();
-		if(tr.Hit)
-		{
-			HoveredObject = tr.GameObject;
 		}
 	}
 
