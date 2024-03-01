@@ -74,6 +74,15 @@
 			@(Globals.GetDescriptionForUpgrade(Manager.Instance.HoveredObject.Components.Get<ShopItem>().UpgradeType))
 		</div>
 	}
+
+	@{
+		var localPlayer = Manager.Instance.GetLocalPlayer();
+	}
+
+	@if(localPlayer != null && !localPlayer.IsSpectator)
+	{
+		<div class="leave_button" onclick=@(() => LeaveButtonClicked() )>Leave</div>
+	}
 </root>
 
 @code
@@ -111,5 +120,14 @@
 			HashCode.Combine(money0, money1, upgrades0, upgrades1, manager.RoundNum),
 			HashCode.Combine(manager.GamePhase, buyPhaseTimer, Manager.Instance.HoveredObject)
 		);
+	}
+
+	void LeaveButtonClicked()
+	{
+		var localPlayer = Manager.Instance.GetLocalPlayer();
+		if(localPlayer != null && !localPlayer.IsSpectator)
+		{
+			Manager.Instance.PlayerForfeited(localPlayer.GameObject.Id);
+		}
 	}
 }

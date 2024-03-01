@@ -410,7 +410,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			StopCurrentMatch();
 		}
 
-		Log.Info( $"Player1: {Player1}, GetConnection(1): {GetConnection( 1 )}, channel 1? {(GetConnection(1) == channel)}" );
+		Log.Info( $"Player1: {Player1}, (1GetConnection): {GetConnection( 1 )}, channel 1? {(GetConnection(1) == channel)}" );
 
 		// check if active players still exist, and stop match if one of them left
 		// if spectators exist, fill the spot with one of them who has played the least matches
@@ -456,5 +456,46 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		foreach ( var shopItem in Scene.GetAllComponents<ShopItem>() )
 			shopItem.DestroyButton();
+	}
+
+	public PlayerController GetLocalPlayer()
+	{
+		foreach ( var player in Scene.GetAllComponents<PlayerController>() )
+		{
+			if ( player.Network.IsOwner )
+				return player;
+		}
+
+		return null;
+	}
+
+	[Broadcast]
+	public void PlayerForfeited(Guid id)
+	{
+		if(IsProxy)
+			return;
+
+		if(DoesPlayerExist0 && PlayerId0 == id)
+		{
+			Player0.IsSpectator = true;
+
+			DoesPlayerExist0 = false;
+			Player0 = null;
+			PlayerId0 = Guid.Empty;
+
+			if ( GamePhase != GamePhase.WaitingForPlayers )
+				StopCurrentMatch();
+		}
+		else if ( DoesPlayerExist1 && PlayerId1 == id )
+		{
+			Player1.IsSpectator = true;
+
+			DoesPlayerExist1 = false;
+			Player1 = null;
+			PlayerId1 = Guid.Empty;
+
+			if ( GamePhase != GamePhase.WaitingForPlayers )
+				StopCurrentMatch();
+		}
 	}
 }
