@@ -30,10 +30,12 @@
 	{
 		var player0 = manager.GetPlayer(0);
 
+		// NAME
 		<div class="bottom_row" style="left: 100px; bottom: 45px; flex-direction: row;">
 			<div class="player_name" style="color: #0000aa;">@($"{manager.GetConnection(0).DisplayName} 🏆{player0.Score} 💲{player0.Money}")</div>
 		</div>
 
+		// HP
 		<div class="bottom_row" style="left: 100px; bottom: 10px; flex-direction: row;">
 			@for(int i = 0; i < player0.MaxHP; i++)
 			{
@@ -41,6 +43,7 @@
 			}
 		</div>
 
+		// PASSIVE UPGRADES
 		<div class="upgrades_passive" style="left: 10px; bottom: 60px; flex-direction: column-reverse;">
 			@foreach(var pair in player0.Upgrades)
 			{
@@ -53,6 +56,7 @@
 			}
 		</div>
 
+		// ACTIVE UPGRADES
 		<div class="upgrades_active" style="left: 360px; bottom: 10px; flex-direction: row;">
 			@foreach(var pair in player0.Upgrades)
 			{
@@ -70,10 +74,12 @@
 	{
 		var player1 = manager.GetPlayer(1);
 
+		// NAME
 		<div class="bottom_row" style="right: 100px; bottom: 45px; flex-direction: row-reverse;">
 			<div class="player_name" style="color: #007700;">@($"{manager.GetConnection(1).DisplayName} 🏆{player1.Score} 💲{player1.Money}")</div>
 		</div>
 
+		// HP
 		<div class="bottom_row" style="right: 100px; bottom: 10px; flex-direction: row-reverse;">
 			@for(int i = 0; i < player1.MaxHP; i++)
 			{
@@ -81,16 +87,31 @@
 			}
 		</div>
 
+		// PASSIVE UPGRADES
+		<div class="upgrades_passive" style="right: 10px; bottom: 60px; flex-direction: column-reverse;">
+			@foreach(var pair in player1.Upgrades)
+			{
+				var upgradeType = pair.Key;
+				if(Globals.IsUpgradePassive(upgradeType))
+				{
+					var level = pair.Value;
+					<UpgradeIcon UpgradeType=@upgradeType Level=@level />	
+				}
+			}
+		</div>
 
-
-
-
-
-
-
-
-
-
+		// ACTIVE UPGRADES
+		<div class="upgrades_active" style="right: 360px; bottom: 10px; flex-direction: row;">
+			@foreach(var pair in player1.Upgrades)
+			{
+				var upgradeType = pair.Key;
+				if(!Globals.IsUpgradePassive(upgradeType))
+				{
+					var level = pair.Value;
+					<UpgradeIcon UpgradeType=@upgradeType Level=@level />	
+				}
+			}
+		</div>
 	}
 
 	@if(manager.HoveredObject != null && manager.HoveredObject.Tags.Has("item"))
