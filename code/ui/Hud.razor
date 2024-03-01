@@ -45,9 +45,23 @@
 			@foreach(var pair in player0.Upgrades)
 			{
 				var upgradeType = pair.Key;
-				var level = pair.Value;
+				if(Globals.IsUpgradePassive(upgradeType))
+				{
+					var level = pair.Value;
+					<UpgradeIcon UpgradeType=@upgradeType Level=@level />	
+				}
+			}
+		</div>
 
-				<UpgradeIcon UpgradeType=@upgradeType Level=@level />
+		<div class="upgrades_active" style="left: 360px; bottom: 10px; flex-direction: row;">
+			@foreach(var pair in player0.Upgrades)
+			{
+				var upgradeType = pair.Key;
+				if(!Globals.IsUpgradePassive(upgradeType))
+				{
+					var level = pair.Value;
+					<UpgradeIcon UpgradeType=@upgradeType Level=@level />	
+				}
 			}
 		</div>
 	}
@@ -66,6 +80,17 @@
 				<div class="player_hp" style="opacity:@(player1.HP > i ? 1f : 0.15f);">@(player1.HP > i ? "❤️" : "🖤")</div>
 			}
 		</div>
+
+
+
+
+
+
+
+
+
+
+
 	}
 
 	@if(manager.HoveredObject != null && manager.HoveredObject.Tags.Has("item"))
@@ -79,7 +104,7 @@
 
 	@if(manager.HoveredUpgradeType != UpgradeType.None)
 	{
-		 Log.Info($"{manager.HoveredUpgradeType} - {Mouse.Position}");
+		//Log.Info($"{manager.HoveredUpgradeType} - {Mouse.Position}");
 
 		<div class="item_description" style="left:@(Mouse.Position.x)px; top:@(Mouse.Position.y)px;">
 			@(Globals.GetDescriptionForUpgrade(manager.HoveredUpgradeType))

@@ -20,7 +20,7 @@
 	@if(Manager.Instance.HoveredObject == TargetObject)
 	{
 		var pos = Scene.Camera.PointToScreenNormal(TargetObject.Transform.Position);
-		<div class="overlay" style="left:@(pos.x); top:@(pos.y);"></div>
+		<div class="overlay" style="left:@(pos.x + 10)px; top:@(pos.y + 10)px;"></div>
 	}
 </root>
 

@@ -1,8 +1,7 @@
 {
   "RootObject": {
-    "Id": "60be70c3-92ae-4ca7-b5ab-9ac756ad6b88",
+    "Id": "23d839dd-8c8f-47d7-9055-820540de2bd1",
     "Name": "shop_item",
-    "Position": "-186.9338,0,0",
     "Scale": "0.5,0.5,0.5",
     "Tags": "item",
     "Enabled": true,
@@ -30,9 +29,9 @@
     ],
     "Children": [
       {
-        "Id": "93faf456-00df-41c6-a82b-9c9d30f3a51e",
+        "Id": "fd3d61f4-a67a-4fd7-bbe0-dcd7b0279f05",
         "Name": "World",
-        "Position": "0,0,42",
+        "Position": "0,0,26",
         "Rotation": "-0.4999999,-0.5,-0.5,0.5000001",
         "Enabled": true,
         "Components": [
@@ -40,7 +39,7 @@
             "__type": "WorldPanel",
             "HorizontalAlign": "Center",
             "LookAtCamera": false,
-            "PanelSize": "800,800",
+            "PanelSize": "1000,1000",
             "RenderScale": 5,
             "VerticalAlign": "Center"
           },
@@ -48,7 +47,7 @@
             "__type": "ShopItemLabel",
             "TargetObject": {
               "_type": "gameobject",
-              "go": "60be70c3-92ae-4ca7-b5ab-9ac756ad6b88"
+              "go": "23d839dd-8c8f-47d7-9055-820540de2bd1"
             }
           }
         ]

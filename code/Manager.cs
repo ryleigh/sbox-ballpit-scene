@@ -125,6 +125,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		playerObj.NetworkSpawn( channel );
 
 		player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 1 );
+		player.AdjustUpgradeLevel( UpgradeType.ShootBalls, 2 );
 
 		//if ( channel.IsHost )
 		//{
