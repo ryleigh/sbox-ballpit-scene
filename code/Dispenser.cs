@@ -21,7 +21,7 @@ public sealed class Dispenser : Component
 
 	protected override void OnStart()
 	{
-		base.OnAwake();
+		base.OnStart();
 
 		if ( IsProxy )
 			return;
@@ -29,7 +29,10 @@ public sealed class Dispenser : Component
 		_topPos = new Vector3( 0f, 160f, HEIGHT );
 		_botPos = new Vector3( 0f, -160f, HEIGHT );
 
-		StartWave();
+		IsGoingUp = Game.Random.Int( 0, 1 ) == 0;
+		Transform.Position = IsGoingUp ? _botPos : _topPos;
+
+		//StartWave();
 	}
 
 	protected override void OnUpdate()

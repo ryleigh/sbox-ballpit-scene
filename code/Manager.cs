@@ -5,7 +5,7 @@ using System.IO;
 using System.Numerics;
 using System.Threading.Channels;
 
-public enum GamePhase { RoundActive, RoundFinished, BuyPhase }
+public enum GamePhase { WaitingForPlayers, RoundActive, RoundFinished, BuyPhase }
 
 public sealed class Manager : Component, Component.INetworkListener
 {
@@ -54,7 +54,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	private EasingType _slowmoEasingType;
 
 	public const float ROUND_FINISHED_DELAY = 4f;
-	public float BuyPhaseDuration { get; private set; } = 930f;
+	public float BuyPhaseDuration { get; private set; } = 30f;
 
 	public GameObject HoveredObject { get; private set; }
 
@@ -84,7 +84,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( IsProxy )
 			return;
 
-		GamePhase = GamePhase.RoundActive;
+		GamePhase = GamePhase.WaitingForPlayers;
 	}
 
 	public void OnActive( Connection channel )
@@ -131,9 +131,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		DebugDisplay();
 
-		Gizmo.Draw.Color = Color.White;
+		//Gizmo.Draw.Color = Color.White;
 		//Gizmo.Draw.Text( $"{GamePhase}\nTimeSincePhaseChange: {MathF.Floor( TimeSincePhaseChange )}", new global::Transform( Vector3.Zero ) );
-		Gizmo.Draw.Text( $"MousePos: {Mouse.Position}\nHit GameObject: {(HoveredObject?.Name ?? "")}", new global::Transform( Vector3.Zero ) );
 
 		if (IsSlowmo)
 		{
@@ -161,6 +160,12 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		switch (GamePhase)
 		{
+			case GamePhase.WaitingForPlayers:
+				if(DoesPlayerExist0 && DoesPlayerExist1)
+				{
+					StartNewMatch();
+				}
+				break;
 			case GamePhase.RoundActive:
 				break;
 			case GamePhase.RoundFinished:
@@ -220,15 +225,13 @@ public sealed class Manager : Component, Component.INetworkListener
 		FinishRound();
 	}
 
-	void FinishRound()
+	void StartNewMatch()
 	{
-		GamePhase = GamePhase.RoundFinished;
+		RoundNum = 0;
+		Player0?.StartNewMatch();
+		Player1?.StartNewMatch();
 
-		foreach ( var ball in Scene.GetAllComponents<Ball>() )
-		{
-			if ( ball.IsActive )
-				ball.Despawn();
-		}
+		StartNewRound();
 	}
 
 	void StartNewRound()
@@ -238,6 +241,13 @@ public sealed class Manager : Component, Component.INetworkListener
 		TimeSincePhaseChange = 0f;
 
 		Dispenser.StartWave();
+	}
+
+	void FinishRound()
+	{
+		GamePhase = GamePhase.RoundFinished;
+
+		DestroyBalls();
 	}
 
 	void StartBuyPhase()
@@ -268,11 +278,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void FinishBuyPhase()
 	{
-		foreach ( var skipButton in Scene.GetAllComponents<SkipButton>() )
-			skipButton.DestroyButton();
-
-		foreach ( var shopItem in Scene.GetAllComponents<ShopItem>() )
-			shopItem.DestroyButton();
+		DestroyShopStuff();
 
 		StartNewRound();
 	}
@@ -348,7 +354,6 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		if ( IsProxy )
 			return;
-
 	}
 
 	public Connection GetConnection(int playerNum)
@@ -378,9 +383,50 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public void OnDisconnected( Connection channel )
 	{
-		// todo:
+		if(IsProxy)
+			return;
 
-		Log.Info( $"OnDisconnected: {channel.DisplayName}" );
+		Log.Info( $"OnDisconnected: {channel.DisplayName} (local = {channel == Connection.Local}) (host = {channel.IsHost})" );
+
+		bool activePlayerLeft = false;
+
+		if ( DoesPlayerExist0 && channel == GetConnection( 0 ) )
+		{
+			DoesPlayerExist0 = false;
+			Player0 = null;
+			PlayerId0 = Guid.Empty;
+			activePlayerLeft = true;
+		}
+		else if (DoesPlayerExist1 && channel == GetConnection( 1 ) )
+		{
+			DoesPlayerExist1 = false;
+			Player1 = null;
+			PlayerId1 = Guid.Empty;
+			activePlayerLeft = true;
+		}
+
+		if( activePlayerLeft )
+		{
+			StopCurrentMatch();
+		}
+
+		Log.Info( $"Player1: {Player1}, GetConnection(1): {GetConnection( 1 )}, channel 1? {(GetConnection(1) == channel)}" );
+
+		// check if active players still exist, and stop match if one of them left
+		// if spectators exist, fill the spot with one of them who has played the least matches
+	}
+
+	void StopCurrentMatch()
+	{
+		Log.Info( $"StopCurrentMatch" );
+
+		Player0?.Respawn();
+		Player1?.Respawn();
+
+		DestroyBalls();
+		DestroyShopStuff();
+
+		GamePhase = GamePhase.WaitingForPlayers;
 	}
 
 	public void Slowmo(float timeScale, float time, EasingType easingType)
@@ -392,5 +438,23 @@ public sealed class Manager : Component, Component.INetworkListener
 		_slowmoTimeScale = timeScale;
 		_realTimeSinceSlowmoStarted = 0f;
 		_slowmoEasingType = easingType;
+	}
+
+	void DestroyBalls()
+	{
+		foreach ( var ball in Scene.GetAllComponents<Ball>() )
+		{
+			if ( ball.IsActive )
+				ball.Despawn();
+		}
+	}
+
+	void DestroyShopStuff()
+	{
+		foreach ( var skipButton in Scene.GetAllComponents<SkipButton>() )
+			skipButton.DestroyButton();
+
+		foreach ( var shopItem in Scene.GetAllComponents<ShopItem>() )
+			shopItem.DestroyButton();
 	}
 }

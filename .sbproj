@@ -1,7 +1,7 @@
 {
   "Title": "Ball Pit",
   "Type": "game",
-  "Org": "local",
+  "Org": "facepunch",
   "Ident": "ballpit",
   "Tags": null,
   "Schema": 1,

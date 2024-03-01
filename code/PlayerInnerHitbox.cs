@@ -11,7 +11,7 @@ public class PlayerInnerHitbox : Component, Component.ITriggerListener
 
 	public void OnTriggerEnter( Collider other )
 	{
-		if ( IsProxy || Player.IsDead || Player.IsSpectator )
+		if ( IsProxy || Player.IsDead || Player.IsSpectator || Manager.Instance.GamePhase != GamePhase.RoundActive )
 			return;
 
 		if ( other.GameObject.Tags.Has( "ball" ) )

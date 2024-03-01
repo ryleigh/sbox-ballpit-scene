@@ -6,7 +6,20 @@
 	<div class="pointer"></div>
 
 	@{
-		var roundLabel = (Manager.Instance.GamePhase == GamePhase.BuyPhase) ? $"Buy Phase ({MathX.FloorToInt(Manager.Instance.BuyPhaseDuration - Manager.Instance.TimeSincePhaseChange)})" : $"Round {Manager.Instance.RoundNum + 1}";
+		var roundLabel = "";
+		switch(Manager.Instance.GamePhase)
+		{
+			case GamePhase.WaitingForPlayers:
+				roundLabel = "Waiting for players...";
+				break;
+			case GamePhase.RoundActive:
+			case GamePhase.RoundFinished:
+				roundLabel = $"Round {Manager.Instance.RoundNum + 1}";
+				break;
+			case GamePhase.BuyPhase:
+				roundLabel = $"Buy Phase ({MathX.FloorToInt(Manager.Instance.BuyPhaseDuration - Manager.Instance.TimeSincePhaseChange)})";
+				break;
+		}
 	}
 
 	<var class="round_display" style="opacity:@(Manager.Instance.GamePhase == GamePhase.RoundActive ? 1f : 0.7f);">@(roundLabel)</var>
@@ -53,7 +66,7 @@
 		</div>
 	}
 
-	@if(Manager.Instance.HoveredObject.Tags.Has("item"))
+	@if(Manager.Instance.HoveredObject != null && Manager.Instance.HoveredObject.Tags.Has("item"))
 	{
 		var pos = Scene.Camera.PointToScreenNormal(Manager.Instance.HoveredObject.Transform.Position);
 

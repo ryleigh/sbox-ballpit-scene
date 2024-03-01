@@ -51,8 +51,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	protected override void OnUpdate()
 	{
-		Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
-		Gizmo.Draw.Text( $"{GetUpgradeLevel(UpgradeType.MoveSpeed)}", new global::Transform( Transform.Position ) );
+		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
+		//Gizmo.Draw.Text( $"{GetUpgradeLevel(UpgradeType.MoveSpeed)}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity * (Velocity.y > 0f ? 0.7f : 0.6f));
 
@@ -175,7 +175,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public void OnTriggerEnter( Collider other )
 	{
-		if ( IsProxy || IsDead || IsSpectator )
+		if ( IsProxy || IsDead || IsSpectator || Manager.Instance.GamePhase != GamePhase.RoundActive )
 			return;
 
 		if(other.GameObject.Tags.Has("ball"))
@@ -306,6 +306,17 @@ public class PlayerController : Component, Component.ITriggerListener
 			Upgrades[upgradeType] = Math.Min( Upgrades[upgradeType] + amount, MAX_UPGRADE_LEVEL );
 		else
 			Upgrades.Add( upgradeType, Math.Min( amount, MAX_UPGRADE_LEVEL ) );
+	}
+
+	[Broadcast]
+	public void StartNewMatch()
+	{
+		if ( IsProxy )
+			return;
+
+		Score = 0;
+		Money = 0;
+		HP = MaxHP;
 	}
 
 	public int GetUpgradeHash()
