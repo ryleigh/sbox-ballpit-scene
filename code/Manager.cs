@@ -54,7 +54,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	private EasingType _slowmoEasingType;
 
 	public const float ROUND_FINISHED_DELAY = 4f;
-	public float BuyPhaseDuration { get; private set; } = 30f;
+	public float BuyPhaseDuration { get; private set; } = 930f;
 
 	public GameObject HoveredObject { get; private set; }
 
@@ -85,6 +85,8 @@ public sealed class Manager : Component, Component.INetworkListener
 			return;
 
 		GamePhase = GamePhase.WaitingForPlayers;
+
+		StartNewMatch();
 	}
 
 	public void OnActive( Connection channel )

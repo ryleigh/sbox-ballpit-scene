@@ -8,7 +8,9 @@
 		return;
 	}
 
-	<div class="title">@($"{Globals.GetNameForUpgrade(ShopItem.UpgradeType)}\n${ShopItem.Price}")</div>
+	<div class="bg" style="background-image: url(@($"materials/icons/{Globals.GetIconForUpgrade(ShopItem.UpgradeType)}.png"));"></div>
+
+	<div class="price">@($"${ShopItem.Price}")</div>
 
 	@if(ShopItem.NumLevels > 1) 
 	{

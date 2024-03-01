@@ -175,10 +175,10 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public void OnTriggerEnter( Collider other )
 	{
-		if ( IsProxy || IsDead || IsSpectator || Manager.Instance.GamePhase != GamePhase.RoundActive )
+		if ( IsProxy || IsDead || IsSpectator )
 			return;
 
-		if(other.GameObject.Tags.Has("ball"))
+		if(other.GameObject.Tags.Has("ball") && Manager.Instance.GamePhase == GamePhase.RoundActive )
 		{
 			var ball = other.Components.Get<Ball>();
 
@@ -187,7 +187,7 @@ public class PlayerController : Component, Component.ITriggerListener
 				HitOwnBall( ball );
 			}
 		}
-		else if(other.GameObject.Tags.Has("item") && Manager.Instance.TimeSincePhaseChange > 2f)
+		else if(other.GameObject.Tags.Has("item") && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 2f)
 		{
 			var item = other.Components.Get<ShopItem>();
 
@@ -199,7 +199,7 @@ public class PlayerController : Component, Component.ITriggerListener
 				item.GameObject.Destroy();
 			}
 		}
-		else if ( other.GameObject.Tags.Has( "skip_button" ) && Manager.Instance.TimeSincePhaseChange > 2f )
+		else if ( other.GameObject.Tags.Has( "skip_button" ) && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 2f )
 		{
 			other.GameObject.Destroy();
 			Manager.Instance.SkipButtonHit();

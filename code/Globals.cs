@@ -24,4 +24,14 @@ public class Globals
 			case UpgradeType.BallBounceSpeed: return "Increase speed of your balls when you bounce them.";
 		}
 	}
+
+	public static string GetIconForUpgrade( UpgradeType upgradeType )
+	{
+		switch ( upgradeType )
+		{
+			case UpgradeType.None: default: return "";
+			case UpgradeType.MoveSpeed: return "movespeed";
+			case UpgradeType.BallBounceSpeed: return "shoot";
+		}
+	}
 }
