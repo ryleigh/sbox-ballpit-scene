@@ -3,6 +3,8 @@ global using System;
 global using System.Collections.Generic;
 global using System.Linq;
 
+public enum UpgradeType { None, MoveSpeed, BallBounceSpeed, }
+
 public class Globals
 {
 	public static string GetNameForUpgrade(UpgradeType upgradeType)

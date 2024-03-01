@@ -6,30 +6,32 @@
 	<div class="pointer"></div>
 
 	@{
+		var manager = Manager.Instance;
+
 		var roundLabel = "";
-		switch(Manager.Instance.GamePhase)
+		switch(manager.GamePhase)
 		{
 			case GamePhase.WaitingForPlayers:
 				roundLabel = "Waiting for players...";
 				break;
 			case GamePhase.RoundActive:
 			case GamePhase.RoundFinished:
-				roundLabel = $"Round {Manager.Instance.RoundNum + 1}";
+				roundLabel = $"Round {manager.RoundNum + 1}";
 				break;
 			case GamePhase.BuyPhase:
-				roundLabel = $"Buy Phase ({MathX.FloorToInt(Manager.Instance.BuyPhaseDuration - Manager.Instance.TimeSincePhaseChange)})";
+				roundLabel = $"Buy Phase ({MathX.FloorToInt(manager.BuyPhaseDuration - manager.TimeSincePhaseChange)})";
 				break;
 		}
 	}
 
-	<var class="round_display" style="opacity:@(Manager.Instance.GamePhase == GamePhase.RoundActive ? 1f : 0.7f);">@(roundLabel)</var>
+	<var class="round_display" style="opacity:@(manager.GamePhase == GamePhase.RoundActive ? 1f : 0.7f);">@(roundLabel)</var>
 
-	@if(Manager.Instance.DoesPlayerExist0)
+	@if(manager.DoesPlayerExist0)
 	{
-		var player0 = Manager.Instance.GetPlayer(0);
+		var player0 = manager.GetPlayer(0);
 
 		<div class="bottom_row" style="left: 100px; bottom: 45px; flex-direction: row;">
-			<div class="player_name" style="color: #0000aa;">@($"{Manager.Instance.GetConnection(0).DisplayName} 🏆{player0.Score} 💲{player0.Money}")</div>
+			<div class="player_name" style="color: #0000aa;">@($"{manager.GetConnection(0).DisplayName} 🏆{player0.Score} 💲{player0.Money}")</div>
 		</div>
 
 		<div class="bottom_row" style="left: 100px; bottom: 10px; flex-direction: row;">
@@ -50,12 +52,12 @@
 		</div>
 	}
 	
-	@if(Manager.Instance.DoesPlayerExist1)
+	@if(manager.DoesPlayerExist1)
 	{
-		var player1 = Manager.Instance.GetPlayer(1);
+		var player1 = manager.GetPlayer(1);
 
 		<div class="bottom_row" style="right: 100px; bottom: 45px; flex-direction: row-reverse;">
-			<div class="player_name" style="color: #007700;">@($"{Manager.Instance.GetConnection(1).DisplayName} 🏆{player1.Score} 💲{player1.Money}")</div>
+			<div class="player_name" style="color: #007700;">@($"{manager.GetConnection(1).DisplayName} 🏆{player1.Score} 💲{player1.Money}")</div>
 		</div>
 
 		<div class="bottom_row" style="right: 100px; bottom: 10px; flex-direction: row-reverse;">
@@ -66,17 +68,26 @@
 		</div>
 	}
 
-	@if(Manager.Instance.HoveredObject != null && Manager.Instance.HoveredObject.Tags.Has("item"))
+	@if(manager.HoveredObject != null && manager.HoveredObject.Tags.Has("item"))
 	{
-		var pos = Scene.Camera.PointToScreenNormal(Manager.Instance.HoveredObject.Transform.Position);
+		var pos = Scene.Camera.PointToScreenNormal(manager.HoveredObject.Transform.Position);
 
 		<div class="item_description" style="left:@(pos.x * 100f + (pos.x < 0.5f ? 3f : -13.5f))%; top:@(pos.y * 100f - 4f)%;">
-			@(Globals.GetDescriptionForUpgrade(Manager.Instance.HoveredObject.Components.Get<ShopItem>().UpgradeType))
+			@(Globals.GetDescriptionForUpgrade(manager.HoveredObject.Components.Get<ShopItem>().UpgradeType))
+		</div>
+	}
+
+	@if(manager.HoveredUpgradeType != UpgradeType.None)
+	{
+		 Log.Info($"{manager.HoveredUpgradeType} - {Mouse.Position}");
+
+		<div class="item_description" style="left:@(Mouse.Position.x)px; top:@(Mouse.Position.y)px;">
+			@(Globals.GetDescriptionForUpgrade(manager.HoveredUpgradeType))
 		</div>
 	}
 
 	@{
-		var localPlayer = Manager.Instance.GetLocalPlayer();
+		var localPlayer = manager.GetLocalPlayer();
 	}
 
 	@if(localPlayer != null && !localPlayer.IsSpectator)
@@ -98,6 +109,15 @@
 		Instance = this;
 	}
 
+	void LeaveButtonClicked()
+	{
+		var localPlayer = Manager.Instance.GetLocalPlayer();
+		if(localPlayer != null && !localPlayer.IsSpectator)
+		{
+			Manager.Instance.PlayerForfeited(localPlayer.GameObject.Id);
+		}
+	}
+
 	protected override int BuildHash()
 	{
 		var manager = Manager.Instance;
@@ -113,21 +133,13 @@
 		var money1 = player1?.Money ?? 0;
 		var upgrades0 = player0?.GetUpgradeHash() ?? 0;
 		var upgrades1 = player1?.GetUpgradeHash() ?? 0;
-		var buyPhaseTimer = manager.GamePhase == GamePhase.BuyPhase ? MathX.FloorToInt(Manager.Instance.BuyPhaseDuration - Manager.Instance.TimeSincePhaseChange) : 0;
+		var buyPhaseTimer = manager.GamePhase == GamePhase.BuyPhase ? MathX.FloorToInt(manager.BuyPhaseDuration - manager.TimeSincePhaseChange) : 0;
+		var mouseHoverUpgradePos = manager.HoveredUpgradeType != UpgradeType.None ? Mouse.Position : Vector2.Zero;
 
 		return HashCode.Combine(
-			HashCode.Combine(playerName0, playerName1, hp0, hp1, score0, score1), 
+			HashCode.Combine(playerName0, playerName1, hp0, hp1, score0, score1),
 			HashCode.Combine(money0, money1, upgrades0, upgrades1, manager.RoundNum),
-			HashCode.Combine(manager.GamePhase, buyPhaseTimer, Manager.Instance.HoveredObject)
+			HashCode.Combine(manager.GamePhase, buyPhaseTimer, manager.HoveredObject, mouseHoverUpgradePos)
 		);
-	}
-
-	void LeaveButtonClicked()
-	{
-		var localPlayer = Manager.Instance.GetLocalPlayer();
-		if(localPlayer != null && !localPlayer.IsSpectator)
-		{
-			Manager.Instance.PlayerForfeited(localPlayer.GameObject.Id);
-		}
 	}
 }

@@ -12,6 +12,7 @@
 		align-items: center;
 		font-weight: bold;
 		border-radius: 2px;
+		pointer-events: all;
 		
 		.bg {
 			position: absolute;
@@ -19,6 +20,7 @@
 			height: 100%;
 			aspect-ratio: 1;
 			background-size: cover;
+			pointer-events: none;
 		}
 
 		.level {
@@ -33,6 +35,7 @@
 			text-align: center;
 			justify-content: center;
 			align-items: center;
+			pointer-events: none;
 		}
 	}
 </style>
@@ -48,4 +51,15 @@
 	public int Level { get; set; }
 
 	protected override int BuildHash() => System.HashCode.Combine(Time.Now);
+
+	protected override void OnMouseOver(MousePanelEvent e)
+	{
+		Manager.Instance.HoveredUpgradeType = UpgradeType;
+		// Manager.Instance.HoveredUpgradePos = new Vector2(Position.x, Position.y);
+	}
+
+	protected override void OnMouseOut(MousePanelEvent e)
+	{
+		Manager.Instance.HoveredUpgradeType = UpgradeType.None;
+	}
 }

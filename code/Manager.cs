@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using Sandbox.Network;
+using Sandbox.UI;
 using System.Diagnostics.Metrics;
 using System.IO;
 using System.Numerics;
@@ -57,6 +58,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	public float BuyPhaseDuration { get; private set; } = 930f;
 
 	public GameObject HoveredObject { get; private set; }
+	public UpgradeType HoveredUpgradeType { get; set; }
+	public Vector2 HoveredUpgradePos { get; set; }
 
 	protected override void OnAwake()
 	{
@@ -120,6 +123,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 
 		playerObj.NetworkSpawn( channel );
+
+		player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 1 );
 
 		//if ( channel.IsHost )
 		//{
