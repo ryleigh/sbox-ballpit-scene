@@ -80,7 +80,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		}
 		else
 		{
-			if(Input.Pressed("Jump"))
+			if(Manager.Instance.GamePhase == GamePhase.RoundActive && Input.Pressed("Jump"))
 			{
 				TryUseItem();
 			}
@@ -349,5 +349,23 @@ public class PlayerController : Component, Component.ITriggerListener
 			hash += upgrade.Value;
 
 		return hash;
+	}
+
+	[Broadcast]
+	public void SetPlayerNum( int playerNum )
+	{
+		if ( IsProxy )
+			return;
+
+		PlayerNum = playerNum;
+	}
+
+	[Broadcast]
+	public void SetSpectator( bool isSpectator )
+	{
+		if ( IsProxy )
+			return;
+
+		IsSpectator = isSpectator;
 	}
 }

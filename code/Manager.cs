@@ -89,7 +89,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		GamePhase = GamePhase.WaitingForPlayers;
 
-		StartNewMatch();
+		//StartNewMatch();
 	}
 
 	public void OnActive( Connection channel )
@@ -109,12 +109,16 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		if ( !DoesPlayerExist0 )
 		{
-			SetPlayer( 0, player );
+			Player0 = player;
+			PlayerId0 = player.GameObject.Id;
+			DoesPlayerExist0 = true;
 			player.PlayerNum = 0;
 		}
 		else if ( !DoesPlayerExist1 )
 		{
-			SetPlayer( 1, player );
+			Player1 = player;
+			PlayerId1 = player.GameObject.Id;
+			DoesPlayerExist1 = true;
 			player.PlayerNum = 1;
 		}
 		else
@@ -337,21 +341,37 @@ public sealed class Manager : Component, Component.INetworkListener
 		//ballObj.NetworkSpawn(GetConnection(side));
 	}
 
-	void SetPlayer(int playerNum, PlayerController player )
+	[Broadcast]
+	public void SetPlayerActive(int playerNum, Guid id)
 	{
-		if (playerNum == 0 )
+		if(IsProxy)
+			return;
+
+		if ( (DoesPlayerExist0 && PlayerId0 == id) || (DoesPlayerExist0 && PlayerId0 == id) )
+			return;
+
+		if ( (playerNum == 0 && DoesPlayerExist0) || (playerNum == 1 && DoesPlayerExist1) )
+			return;
+
+		var playerObj = Scene.Directory.FindByGuid( id );
+		if ( playerObj == null )
+			return;
+
+		var player = playerObj.Components.Get<PlayerController>();
+		player.SetPlayerNum( playerNum );
+		player.SetSpectator( false );
+
+		if ( playerNum == 0 )
 		{
 			Player0 = player;
-			PlayerId0 = player.GameObject.Id;
+			PlayerId0 = id;
 			DoesPlayerExist0 = true;
-			//Log.Info( $"Setting player 0: {player.GameObject.Id}" );
 		}
-		else if(playerNum == 1)
+		else if ( playerNum == 1 )
 		{
 			Player1 = player;
-			PlayerId1 = player.GameObject.Id;
+			PlayerId1 = id;
 			DoesPlayerExist1 = true;
-			//Log.Info( $"Setting player 1: {player.GameObject.Id}" );
 		}
 	}
 
@@ -485,7 +505,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		if(DoesPlayerExist0 && PlayerId0 == id)
 		{
-			Player0.IsSpectator = true;
+			Player0.SetSpectator( true );
 
 			DoesPlayerExist0 = false;
 			Player0 = null;
@@ -496,7 +516,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 		else if ( DoesPlayerExist1 && PlayerId1 == id )
 		{
-			Player1.IsSpectator = true;
+			Player1.SetSpectator( true );
 
 			DoesPlayerExist1 = false;
 			Player1 = null;

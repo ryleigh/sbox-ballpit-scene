@@ -142,10 +142,27 @@
 		var localPlayer = manager.GetLocalPlayer();
 	}
 
-	@if(localPlayer != null && !localPlayer.IsSpectator)
+	@if(localPlayer != null)
 	{
-		<div class="leave_button" onclick=@(() => LeaveButtonClicked() )>Leave</div>
+		if(localPlayer.IsSpectator)
+		{
+			@if(!manager.DoesPlayerExist0)
+			{
+				<div class="join_button" style="left: 400px; bottom: 450px;" onclick=@(() => JoinButtonClicked(0) )>Join</div>
+			}
+
+			@if(!manager.DoesPlayerExist1)
+			{
+				<div class="join_button" style="right: 400px; bottom: 450px;" onclick=@(() => JoinButtonClicked(1) )>Join</div>
+			}
+		}
+		else
+		{
+			<div class="leave_button" onclick=@(() => LeaveButtonClicked() )>Forfeit</div>
+		}
 	}
+
+	
 </root>
 
 @code
@@ -168,6 +185,12 @@
 		{
 			Manager.Instance.PlayerForfeited(localPlayer.GameObject.Id);
 		}
+	}
+
+	void JoinButtonClicked(int playerNum)
+	{
+		var localPlayer = Manager.Instance.GetLocalPlayer();
+		Manager.Instance.SetPlayerActive(playerNum, localPlayer.GameObject.Id);
 	}
 
 	protected override int BuildHash()
