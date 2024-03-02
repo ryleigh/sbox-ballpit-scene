@@ -64,7 +64,10 @@
 				if(!Globals.IsUpgradePassive(upgradeType))
 				{
 					var level = pair.Value;
-					<UpgradeIcon UpgradeType=@upgradeType Level=@level />	
+					if(level > 0)
+					{
+						<UpgradeIcon UpgradeType=@upgradeType Level=@level />		
+					}
 				}
 			}
 		</div>
@@ -108,7 +111,10 @@
 				if(!Globals.IsUpgradePassive(upgradeType))
 				{
 					var level = pair.Value;
-					<UpgradeIcon UpgradeType=@upgradeType Level=@level />	
+					if(level > 0)
+					{
+						<UpgradeIcon UpgradeType=@upgradeType Level=@level />		
+					}
 				}
 			}
 		</div>

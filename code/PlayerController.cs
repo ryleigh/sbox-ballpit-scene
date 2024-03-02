@@ -30,6 +30,8 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Sync] public NetDictionary<UpgradeType, int> Upgrades { get; set; } = new();
 	public const int MAX_UPGRADE_LEVEL = 10;
 
+	[Sync] public UpgradeType SelectedUpgradeType { get; set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -50,7 +52,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	protected override void OnUpdate()
 	{
 		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
-		//Gizmo.Draw.Text( $"{GetUpgradeLevel(UpgradeType.MoveSpeed)}", new global::Transform( Transform.Position ) );
+		//Gizmo.Draw.Text( $"{SelectedUpgradeType}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity * (Velocity.y > 0f ? 0.7f : 0.6f));
 
@@ -78,17 +80,28 @@ public class PlayerController : Component, Component.ITriggerListener
 		}
 		else
 		{
-			if ( Input.Pressed( "attack1" ) )
+			if(Input.Pressed("Jump"))
 			{
-				//Manager.Instance.SpawnBall( Pos2D + ForwardVec2D * 25f, ForwardVec2D * 100f, PlayerNum, PlayerNum );
-			}
-			if ( Input.Pressed( "attack2" ) )
-			{
-				//Manager.Instance.SpawnBall( Pos2D + ForwardVec2D * 25f, ForwardVec2D * 100f, OpponentPlayerNum, PlayerNum );
+				TryUseItem();
 			}
 
 			CheckBoundsPlaying();
 		}
+	}
+
+	void TryUseItem()
+	{
+		switch(SelectedUpgradeType)
+		{
+			case UpgradeType.None: default:
+				break;
+			case UpgradeType.ShootBalls:
+				Manager.Instance.SpawnBall( Pos2D + ForwardVec2D * 25f, ForwardVec2D * 100f, PlayerNum );
+				break;
+		}
+
+		if ( SelectedUpgradeType != UpgradeType.None )
+			AdjustUpgradeLevel( SelectedUpgradeType, -1 );
 	}
 
 	protected override void OnFixedUpdate()
@@ -292,6 +305,17 @@ public class PlayerController : Component, Component.ITriggerListener
 			Upgrades[upgradeType] = Math.Min( Upgrades[upgradeType] + amount, MAX_UPGRADE_LEVEL );
 		else
 			Upgrades.Add(upgradeType, Math.Min( amount, MAX_UPGRADE_LEVEL ) );
+
+		if ( Upgrades[upgradeType] <= 0 )
+		{
+			Upgrades.Remove( upgradeType );
+
+			if ( SelectedUpgradeType == upgradeType )
+				SelectedUpgradeType = UpgradeType.None;
+		}
+
+		if ( amount > 0 && !Globals.IsUpgradePassive( upgradeType ) && SelectedUpgradeType == UpgradeType.None )
+			SelectedUpgradeType = upgradeType;
 	}
 
 	[Broadcast]
