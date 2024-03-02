@@ -96,7 +96,15 @@ public class PlayerController : Component, Component.ITriggerListener
 			case UpgradeType.None: default:
 				break;
 			case UpgradeType.ShootBalls:
-				Manager.Instance.SpawnBall( Pos2D + ForwardVec2D * 25f, ForwardVec2D * 100f, PlayerNum );
+				var currDegrees = -30f;
+				for(int i = 0; i < 5; i++)
+				{
+					var forwardDegrees = Utils.VectorToDegrees( ForwardVec2D );
+					var vec = Utils.DegreesToVector( currDegrees + forwardDegrees );
+					Manager.Instance.SpawnBall( Pos2D + vec * 25f, vec * 100f, PlayerNum );
+					currDegrees += 15f;
+				}
+
 				break;
 		}
 
@@ -192,7 +200,6 @@ public class PlayerController : Component, Component.ITriggerListener
 		if(other.GameObject.Tags.Has("ball") && Manager.Instance.GamePhase == GamePhase.RoundActive )
 		{
 			var ball = other.Components.Get<Ball>();
-
 			if (ball.IsActive && ball.PlayerNum == PlayerNum)
 			{
 				HitOwnBall( ball );
@@ -201,7 +208,6 @@ public class PlayerController : Component, Component.ITriggerListener
 		else if(other.GameObject.Tags.Has("item") && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 2f)
 		{
 			var item = other.Components.Get<ShopItem>();
-
 			if(item.Price <= Money)
 			{
 				Money -= item.Price;

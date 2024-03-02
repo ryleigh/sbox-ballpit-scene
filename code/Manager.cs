@@ -55,7 +55,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	private EasingType _slowmoEasingType;
 
 	public const float ROUND_FINISHED_DELAY = 4f;
-	public float BuyPhaseDuration { get; private set; } = 930f;
+	public float BuyPhaseDuration { get; private set; } = 30f;
 
 	public GameObject HoveredObject { get; private set; }
 	public UpgradeType HoveredUpgradeType { get; set; }
@@ -89,7 +89,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		GamePhase = GamePhase.WaitingForPlayers;
 
-		//StartNewMatch();
+		StartNewMatch();
 	}
 
 	public void OnActive( Connection channel )
@@ -128,8 +128,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		playerObj.NetworkSpawn( channel );
 
-		player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 1 );
-		player.AdjustUpgradeLevel( UpgradeType.ShootBalls, 2 );
+		//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 1 );
+		player.AdjustUpgradeLevel( UpgradeType.ShootBalls, 3 );
 
 		//if ( channel.IsHost )
 		//{
@@ -278,13 +278,15 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( DoesPlayerExist0 )
 		{
 			CreateSkipButton( 0 );
-			CreateShopIem( 0, new Vector2( -215f, 0f ), UpgradeType.MoveSpeed, 1, 4 );
+			CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, 1, 3 );
+			CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.ShootBalls, 2, 4 );
 		}
 
 		if ( DoesPlayerExist1 )
 		{
 			CreateSkipButton( 1 );
-			CreateShopIem( 1, new Vector2( 215f, 0f ), UpgradeType.MoveSpeed, 1, 4 );
+			CreateShopItem( 1, new Vector2( 215f, -20f ), UpgradeType.MoveSpeed, 1, 3 );
+			CreateShopItem( 1, new Vector2( 215f, 20f ), UpgradeType.ShootBalls, 2, 4 );
 		}
 	}
 
@@ -301,7 +303,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		skipButtonObj.NetworkSpawn( GetConnection( playerNum ) );
 	}
 
-	void CreateShopIem( int playerNum, Vector2 pos, UpgradeType upgradeType, int numLevels, int price )
+	void CreateShopItem( int playerNum, Vector2 pos, UpgradeType upgradeType, int numLevels, int price )
 	{
 		var shopItemObj = ShopItemPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
 		shopItemObj.NetworkSpawn( GetConnection( playerNum ) );
