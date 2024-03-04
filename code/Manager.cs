@@ -89,7 +89,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		GamePhase = GamePhase.WaitingForPlayers;
 
-		StartNewMatch();
+		//StartNewMatch();
 	}
 
 	public void OnActive( Connection channel )
@@ -128,7 +128,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		playerObj.NetworkSpawn( channel );
 
-		//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 1 );
+		player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 1 );
 		player.AdjustUpgradeLevel( UpgradeType.ShootBalls, 3 );
 
 		//if ( channel.IsHost )

@@ -52,7 +52,12 @@ public class Ball : Component
 		}
 		else
 		{
+
+
+			// todo: don't do this if IsProxy=true?
 			Transform.Position += (Vector3)Velocity * Time.Delta;
+
+
 
 			var height = (PlayerNum == 0 && Transform.Position.x > 0f || PlayerNum == 1 && Transform.Position.x < 0f) ? Manager.BALL_HEIGHT_OPPONENT : Manager.BALL_HEIGHT_SELF;
 			Transform.Position = Transform.Position.WithZ( height );

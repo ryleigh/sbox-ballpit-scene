@@ -101,7 +101,8 @@ public class PlayerController : Component, Component.ITriggerListener
 				{
 					var forwardDegrees = Utils.VectorToDegrees( ForwardVec2D );
 					var vec = Utils.DegreesToVector( currDegrees + forwardDegrees );
-					Manager.Instance.SpawnBall( Pos2D + vec * 25f, vec * 100f, PlayerNum );
+					var speed = 85f;
+					Manager.Instance.SpawnBall( Pos2D + vec * 25f, vec * speed, PlayerNum );
 					currDegrees += 15f;
 				}
 
@@ -372,6 +373,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( IsProxy )
 			return;
 
+		Respawn();
 		IsSpectator = isSpectator;
 	}
 }

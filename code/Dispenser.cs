@@ -52,7 +52,7 @@ public sealed class Dispenser : Component
 			{
 				if ( TimeSinceShoot > 0.25f )
 				{
-					var speed = 90f;
+					var speed = 85f;
 
 					Manager.Instance.SpawnBall( (Vector2)Transform.Position, new Vector2( 1f, 0f ) * speed, playerNum: ShotNum % 2 == 0 ? 0 : 1 );
 					Manager.Instance.SpawnBall( (Vector2)Transform.Position, new Vector2( -1f, 0f ) * speed, playerNum: ShotNum % 2 == 0 ? 1 : 0 );
