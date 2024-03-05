@@ -10,6 +10,8 @@ ChatOutput {
 	font-size: 20px;
 	font-family: Poppins;
 	gap: 10px;
+	//transform: scale( 1 );
+	//transition: all 0.1s ease-out;
 
 	.output {
 		flex-grow: 1;
@@ -22,7 +24,7 @@ ChatOutput {
 			//background-color: #222d;
 			padding: 4px;
 			gap: 10px;
-			text-shadow: 2px 2px 2px #000a;
+			text-shadow: 2px 2px 2px #000000aa;
 			align-items: center;
 			border-radius: 20px;
 			background-color: #00000044;

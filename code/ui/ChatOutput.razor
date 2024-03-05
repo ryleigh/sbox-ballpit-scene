@@ -3,12 +3,25 @@
 @inherits PanelComponent
 
 <root>
-	<div class="output">
-		@foreach(var entry in Entries)
+	<div class="output" style="justify-content: @(_showOnBottom ? "flex-start" : "flex-end");">
+		@if(_showOnBottom)
 		{
-			<div class="chat_entry" style="opacity:@(Utils.Map(entry.timeSinceAdded, 0f, 12f, 1f, 0f));">
-				<div class="message" style="opacity:@(Utils.Map(entry.timeSinceAdded, 0f, 12f, 1f, 0f));">@entry.message</div>
-			</div>
+			@for(int i = Entries.Count - 1; i >= 0; i--)
+			{
+				var entry = Entries[i];
+				<div class="chat_entry" style="opacity:@(Utils.Map(entry.timeSinceAdded, 0f, 12f, 1f, 0f));">
+					<div class="message" style="font-size:@(Utils.Map(entry.timeSinceAdded, 0f, 0.5f, 35f, 20f, EasingType.QuadOut));">@entry.message</div>
+				</div>
+			}
+		}
+		else
+		{
+			@foreach(var entry in Entries)
+			{
+				<div class="chat_entry" style="opacity:@(Utils.Map(entry.timeSinceAdded, 0f, 12f, 1f, 0f));">
+					<div class="message" style="font-size:@(Utils.Map(entry.timeSinceAdded, 0f, 0.5f, 35f, 20f, EasingType.QuadOut));">@entry.message</div>
+				</div>
+			}
 		}
 	</div>
 </root>
@@ -18,6 +31,8 @@
 	public record Entry(string message, RealTimeSince timeSinceAdded);
 	List<Entry> Entries = new();
 
+	bool _showOnBottom;
+
 	protected override void OnUpdate()
 	{
 		// Panel.AcceptsFocus = false;
@@ -25,6 +40,25 @@
 		if(Entries.RemoveAll(x => x.timeSinceAdded > 12f) > 0)
 		{
 			StateHasChanged();
+		}
+
+		var x = GameObject.Transform.Parent.Transform.Position.x;
+		if(x < -245f)
+			GameObject.Transform.LocalPosition = GameObject.Transform.LocalPosition.WithX(Utils.Map(x, -245f, -256f, 0f, 10f));
+		else if(x > 245f)
+			GameObject.Transform.LocalPosition = GameObject.Transform.LocalPosition.WithX(Utils.Map(x, 245f, 256f, 0f, -10f));
+		else
+			GameObject.Transform.LocalPosition = GameObject.Transform.LocalPosition.WithX(0f);
+
+		if(!_showOnBottom && GameObject.Transform.Parent.Transform.Position.y > 120f)
+		{
+			_showOnBottom = true;
+			GameObject.Transform.LocalPosition = GameObject.Transform.LocalPosition.WithY(-25f);
+		}
+		else if(_showOnBottom && GameObject.Transform.Parent.Transform.Position.y < 105f)
+		{
+			_showOnBottom = false;
+			GameObject.Transform.LocalPosition = GameObject.Transform.LocalPosition.WithY(25f);
 		}
 	}
 

@@ -30,6 +30,22 @@
 		{
 			// Log.Info($"{InputBox.TextLength}");
 		}
+
+		var x = GameObject.Transform.Parent.Transform.Position.x;
+		if(x < -245f)
+			GameObject.Transform.LocalPosition = GameObject.Transform.LocalPosition.WithX(Utils.Map(x, -245f, -256f, 0f, 15f));
+		else if(x > 245f)
+			GameObject.Transform.LocalPosition = GameObject.Transform.LocalPosition.WithX(Utils.Map(x, 245f, 256f, 0f, -15f));
+		else
+			GameObject.Transform.LocalPosition = GameObject.Transform.LocalPosition.WithX(0f);
+
+		var y = GameObject.Transform.Parent.Transform.Position.y;
+		if(y < -120f)
+			GameObject.Transform.LocalPosition = GameObject.Transform.LocalPosition.WithY(Utils.Map(y, -120f, -141f, -20f, 0f));
+		else if(y > 120f)
+			GameObject.Transform.LocalPosition = GameObject.Transform.LocalPosition.WithY(Utils.Map(y, 120f, 141f, 20f, 0f));
+		else
+			GameObject.Transform.LocalPosition = GameObject.Transform.LocalPosition.WithY(0f);
 	}
 
 	void ChatFinished()
@@ -51,6 +67,9 @@
 	/// </summary>
 	protected override int BuildHash()
 	{
-		return System.HashCode.Combine(InputBox.HasFocus, InputBox?.Text ?? "");
+		if (InputBox is null)
+			return 0;
+
+		return System.HashCode.Combine(InputBox.HasFocus, InputBox.Text);
 	}
 }
