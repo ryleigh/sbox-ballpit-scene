@@ -1,0 +1,51 @@
+@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+
+<root>
+	<div class="output">
+		@foreach(var entry in Entries)
+		{
+			<div class="chat_entry" style="opacity:@(Utils.Map(entry.timeSinceAdded, 0f, 12f, 1f, 0f));">
+				<div class="message" style="opacity:@(Utils.Map(entry.timeSinceAdded, 0f, 12f, 1f, 0f));">@entry.message</div>
+			</div>
+		}
+	</div>
+</root>
+
+@code
+{
+	public record Entry(string message, RealTimeSince timeSinceAdded);
+	List<Entry> Entries = new();
+
+	protected override void OnUpdate()
+	{
+		// Panel.AcceptsFocus = false;
+
+		if(Entries.RemoveAll(x => x.timeSinceAdded > 12f) > 0)
+		{
+			StateHasChanged();
+		}
+	}
+
+	[Broadcast]
+	public void AddText(string message)
+	{
+		message = message.Truncate(300);
+
+		if(string.IsNullOrWhiteSpace(message))
+			return;
+
+		Entries.Add(new Entry(message, 0.0f));
+
+		if (Entries.Count > 5)
+			Entries.RemoveAt(0);
+
+		StateHasChanged();
+	}
+
+	protected override int BuildHash()
+	{
+		return System.HashCode.Combine(Entries.Count > 0 ? Time.Now : 0);
+	}
+}

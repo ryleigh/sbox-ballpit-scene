@@ -29,10 +29,12 @@
 	@if(manager.DoesPlayerExist0)
 	{
 		var player0 = manager.GetPlayer(0);
+		var connection0 = manager.GetConnection(0);
 
 		// NAME
 		<div class="bottom_row" style="left: 100px; bottom: 45px; flex-direction: row;">
-			<div class="player_name" style="color: #0000aa;">@($"{manager.GetConnection(0).DisplayName} 🏆{player0.Score} 💲{player0.Money}")</div>
+			<div class="player_avatar" style="background-image: url( avatar:@connection0.SteamId )"></div>
+			<div class="player_name" style="color: #0000aa;">@($"{connection0.DisplayName} 🏆{player0.Score} 💲{player0.Money}")</div>
 		</div>
 
 		// HP

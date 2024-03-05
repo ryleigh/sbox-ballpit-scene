@@ -1,0 +1,56 @@
+@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+
+<root>
+	<div class="input">
+		<TextEntry @ref="InputBox" onsubmit="@ChatFinished"></TextEntry>
+	</div>
+</root>
+
+@code
+{
+	TextEntry InputBox;
+
+	protected override void OnUpdate()
+	{
+		if (InputBox is null)
+			return;
+
+		Panel.AcceptsFocus = false;
+
+		if ( Input.Pressed( "Chat" ) )
+		{
+			InputBox.Focus();
+		}
+
+		SetClass( "open", InputBox.HasFocus );
+
+		if(InputBox.HasFocus)
+		{
+			// Log.Info($"{InputBox.TextLength}");
+		}
+	}
+
+	void ChatFinished()
+	{
+		var text = InputBox.Text;
+		InputBox.Text = "";
+
+		if (string.IsNullOrWhiteSpace(text))
+			return;
+
+		// Log.Info($"{text}");
+		// AddText( text );
+		var chatOutput = GameObject.Parent.Components.GetInDescendants<ChatOutput>();
+		chatOutput.AddText(text);
+	}
+
+	/// <summary>
+	/// the hash determines if the system should be rebuilt. If it changes, it will be rebuilt
+	/// </summary>
+	protected override int BuildHash()
+	{
+		return System.HashCode.Combine(InputBox.HasFocus, InputBox?.Text ?? "");
+	}
+}

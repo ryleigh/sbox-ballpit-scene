@@ -33,6 +33,15 @@ Hud {
 		//background-color: #00665511;
 	}
 
+	.player_avatar {
+		width: 32px;
+		height: 32px;
+		background-position: center;
+		background-size: cover;
+		border-radius: 10px;
+		margin-right: 4px;
+	}
+
 	.player_hp {
 		font-size: 25px;
 		color: #ffffff;
