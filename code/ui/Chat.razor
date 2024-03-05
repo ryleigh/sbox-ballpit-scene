@@ -14,7 +14,7 @@
 
 	protected override void OnUpdate()
 	{
-		if (InputBox is null)
+		if (InputBox is null || IsProxy)
 			return;
 
 		Panel.AcceptsFocus = false;

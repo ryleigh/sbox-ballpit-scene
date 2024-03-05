@@ -121,7 +121,7 @@
             "__type": "WorldPanel",
             "HorizontalAlign": "Center",
             "LookAtCamera": false,
-            "PanelSize": "512,200",
+            "PanelSize": "700,200",
             "RenderScale": 2,
             "VerticalAlign": "Center"
           },
@@ -141,7 +141,7 @@
             "__type": "WorldPanel",
             "HorizontalAlign": "Center",
             "LookAtCamera": false,
-            "PanelSize": "512,512",
+            "PanelSize": "700,512",
             "RenderScale": 2,
             "VerticalAlign": "Center"
           },
