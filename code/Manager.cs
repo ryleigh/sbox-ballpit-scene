@@ -89,6 +89,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		GamePhase = GamePhase.WaitingForPlayers;
 
+		CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, 1, 3 );
+
 		//StartNewMatch();
 	}
 
@@ -144,7 +146,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		DebugDisplay();
 
 		//Gizmo.Draw.Color = Color.White;
-		//Gizmo.Draw.Text( $"{GamePhase}\nTimeSincePhaseChange: {MathF.Floor( TimeSincePhaseChange )}", new global::Transform( Vector3.Zero ) );
+		//Gizmo.Draw.Text( $"{HoveredObject}", new global::Transform( Vector3.Zero ) );
 
 		if (IsSlowmo)
 		{

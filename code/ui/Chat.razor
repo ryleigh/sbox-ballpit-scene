@@ -45,7 +45,7 @@
 		else if(y > 120f)
 			GameObject.Transform.LocalPosition = GameObject.Transform.LocalPosition.WithY(Utils.Map(y, 120f, 141f, 20f, 0f));
 		else
-			GameObject.Transform.LocalPosition = GameObject.Transform.LocalPosition.WithY(0f);
+			GameObject.Transform.LocalPosition = GameObject.Transform.LocalPosition.WithY(-20f);
 	}
 
 	void ChatFinished()

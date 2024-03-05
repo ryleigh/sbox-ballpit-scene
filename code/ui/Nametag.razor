@@ -1,0 +1,24 @@
+@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+
+<root style="opacity:@(Manager.Instance.HoveredObject == GameObject.Parent ? 1f : 0f);">
+	@{
+		var owner = GameObject.Network.OwnerConnection;
+	}
+
+	<div class="avatar" style="background-image: url( avatar:@owner.SteamId )"></div>
+	<div class="title">@(owner.DisplayName.Length > 16 ? owner.DisplayName.Substring(0, 16) : owner.DisplayName)</div>
+</root>
+
+@code
+{
+	protected override void OnUpdate()
+	{
+		base.OnUpdate();
+
+		SetClass("hidden", Manager.Instance.HoveredObject != GameObject.Parent);
+	}
+
+	protected override int BuildHash() => System.HashCode.Combine(Manager.Instance.HoveredObject);
+}

@@ -122,13 +122,16 @@
 		</div>
 	}
 
-	@if(manager.HoveredObject != null && manager.HoveredObject.Tags.Has("item"))
+	@if(manager.HoveredObject != null)
 	{
-		var pos = Scene.Camera.PointToScreenNormal(manager.HoveredObject.Transform.Position);
+		if(manager.HoveredObject.Tags.Has("item"))
+		{
+			var pos = Scene.Camera.PointToScreenNormal(manager.HoveredObject.Transform.Position);
 
-		<div class="item_description" style="left:@(pos.x * 100f + (pos.x < 0.5f ? 3f : -13.5f))%; top:@(pos.y * 100f - 4f)%;">
-			@(Globals.GetDescriptionForUpgrade(manager.HoveredObject.Components.Get<ShopItem>().UpgradeType))
-		</div>
+			<div class="item_description" style="left:@(pos.x * 100f + (pos.x < 0.5f ? 3f : -13.5f))%; top:@(pos.y * 100f - 4f)%;">
+				@(Globals.GetDescriptionForUpgrade(manager.HoveredObject.Components.Get<ShopItem>().UpgradeType))
+			</div>
+		}
 	}
 
 	@if(manager.HoveredUpgradeType != UpgradeType.None)
