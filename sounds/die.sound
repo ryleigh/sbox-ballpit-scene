@@ -1,0 +1,18 @@
+{
+  "UI": false,
+  "Volume": "1.00,1.00,0",
+  "Pitch": "0.90,1.25,1",
+  "Decibels": 75,
+  "SelectionMode": "Random",
+  "Sounds": [
+    "sounds/die1.vsnd",
+    "sounds/die2.vsnd",
+    "sounds/die3.vsnd",
+    "sounds/die4.vsnd",
+    "sounds/die5.vsnd"
+  ],
+  "Occlusion": true,
+  "OcclusionRadius": 64,
+  "DistanceAttenuation": true,
+  "__references": []
+}

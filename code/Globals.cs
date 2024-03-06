@@ -7,6 +7,7 @@ public enum UpgradeType { None, MoveSpeed, ShootBalls, }
 
 public class Globals
 {
+	public const float SFX_HEIGHT = 200f;
 	public static string GetNameForUpgrade(UpgradeType upgradeType)
 	{
 		switch(upgradeType)

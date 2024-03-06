@@ -182,9 +182,10 @@ public class PlayerController : Component, Component.ITriggerListener
 			Transform.Position = Transform.Position.WithY( yMax );
 	}
 
-	public void HitOwnBall( Ball ball )
+	[Broadcast]
+	public void HitOwnBall( Vector2 pos )
 	{
-		ball.HitByPlayer( direction: ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal );
+		Sound.Play( "impact-thump", new Vector3(pos.x, pos.y, Globals.SFX_HEIGHT ) );
 	}
 
 	public void HitOpponentBall( Ball ball )
@@ -203,7 +204,8 @@ public class PlayerController : Component, Component.ITriggerListener
 			var ball = other.Components.Get<Ball>();
 			if (ball.IsActive && ball.PlayerNum == PlayerNum)
 			{
-				HitOwnBall( ball );
+				ball.HitByPlayer( direction: ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal );
+				HitOwnBall( (Vector2)ball.Transform.Position );
 			}
 		}
 		else if(other.GameObject.Tags.Has("item") && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 2f)
@@ -237,9 +239,12 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( IsDead )
 			return;
 
-		// todo: flash, sfx, etc
+		if(HP > 1)
+			Sound.Play( "hurt", Transform.Position.WithZ( Globals.SFX_HEIGHT ) );
+		else
+			Sound.Play( "die", Transform.Position.WithZ( Globals.SFX_HEIGHT ) );
 
-		if(IsProxy)
+		if (IsProxy)
 			return;
 
 		HP--;

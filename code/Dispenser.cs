@@ -57,6 +57,8 @@ public sealed class Dispenser : Component
 					Manager.Instance.SpawnBall( (Vector2)Transform.Position, new Vector2( 1f, 0f ) * speed, playerNum: ShotNum % 2 == 0 ? 0 : 1 );
 					Manager.Instance.SpawnBall( (Vector2)Transform.Position, new Vector2( -1f, 0f ) * speed, playerNum: ShotNum % 2 == 0 ? 1 : 0 );
 
+					PlayShootEffects();
+
 					TimeSinceShoot = 0f;
 					ShotNum++;
 				}
@@ -74,6 +76,12 @@ public sealed class Dispenser : Component
 				StartWave();
 			}
 		}
+	}
+
+	[Broadcast]
+	public void PlayShootEffects()
+	{
+		Sound.Play( "shoot-enemy-default-light", Transform.Position.WithZ(Globals.SFX_HEIGHT) );
 	}
 
 	public void StartWave()

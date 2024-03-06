@@ -89,9 +89,9 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		GamePhase = GamePhase.WaitingForPlayers;
 
-		CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, 1, 3 );
+		//CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, 1, 3 );
 
-		//StartNewMatch();
+		StartNewMatch();
 	}
 
 	public void OnActive( Connection channel )
@@ -130,8 +130,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		playerObj.NetworkSpawn( channel );
 
-		player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 1 );
-		player.AdjustUpgradeLevel( UpgradeType.ShootBalls, 3 );
+		//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 1 );
+		//player.AdjustUpgradeLevel( UpgradeType.ShootBalls, 3 );
 
 		//if ( channel.IsHost )
 		//{

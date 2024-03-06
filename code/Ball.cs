@@ -107,11 +107,12 @@ public class Ball : Component
 		{
 			if ( PlayerNum == 0 )
 			{
-				GameObject.Destroy();
+				EnterGutter();
 				return;
 			}
 			else
 			{
+				HitBarrier();
 				Transform.Position = Transform.Position.WithX( xMin );
 				Velocity = Velocity.WithX( MathF.Abs( Velocity.x ) );
 			}
@@ -120,12 +121,13 @@ public class Ball : Component
 		{
 			if ( PlayerNum == 0 )
 			{
+				HitBarrier();
 				Transform.Position = Transform.Position.WithX( xMax );
 				Velocity = Velocity.WithX( -MathF.Abs( Velocity.x ) );
 			}
 			else
 			{
-				GameObject.Destroy();
+				EnterGutter();
 				return;
 			}
 		}
@@ -180,6 +182,23 @@ public class Ball : Component
 			return;
 
 		GameObject.Destroy();
+	}
+
+	[Broadcast]
+	public void EnterGutter()
+	{
+		Sound.Play( "claw-firework-explode", Transform.Position.WithZ(Globals.SFX_HEIGHT) );
+
+		if ( IsProxy )
+			return;
+
+		GameObject.Destroy();
+	}
+
+	[Broadcast]
+	public void HitBarrier()
+	{
+		Sound.Play( "frame-bounce", Transform.Position.WithZ(Globals.SFX_HEIGHT) );
 	}
 
 	[Broadcast]
