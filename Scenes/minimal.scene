@@ -10,6 +10,14 @@
       "Components": [
         {
           "__type": "Manager",
+          "BallExplosionParticles": {
+            "_type": "gameobject",
+            "prefab": "effects/ball_explosion_particles.prefab"
+          },
+          "BallGutterParticles": {
+            "_type": "gameobject",
+            "prefab": "effects/ball_gutter_particles.prefab"
+          },
           "BallPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/ball.prefab"
@@ -521,6 +529,6 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-03-06T00:37:03.4754633-08:00",
+  "LastSaved": "2024-03-06T06:02:18.354435-08:00",
   "__references": []
 }

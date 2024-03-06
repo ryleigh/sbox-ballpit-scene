@@ -16,6 +16,7 @@ public class Ball : Component
 	public bool IsDespawning { get; private set; }
 	public TimeSince TimeSinceDespawnStart { get; private set; }
 	private float _despawnTime = 3f;
+	private bool _moveWhileDespawning = true;
 
 	protected override void OnAwake()
 	{
@@ -44,8 +45,11 @@ public class Ball : Component
 
 		if ( IsDespawning)
 		{
-			Velocity *= (1f - 3f * Time.Delta);
-			Transform.Position += (Vector3)Velocity * Time.Delta;
+			if( _moveWhileDespawning )
+			{
+				Velocity *= (1f - 3f * Time.Delta);
+				Transform.Position += (Vector3)Velocity * Time.Delta;
+			}
 
 			if ( ModelRenderer != null )
 				ModelRenderer.Tint = Color.Lerp( Color, Color.WithAlpha(0f), Utils.Map(TimeSinceDespawnStart, 0f, _despawnTime, 0f, 1f) );
@@ -178,16 +182,30 @@ public class Ball : Component
 	[Broadcast]
 	public void HitPlayer(Guid hitPlayerId)
 	{
+		if ( !IsActive )
+			return;
+
+		Manager.Instance.CreateBallExplosionParticles( Transform.Position, PlayerNum );
+
+		IsDespawning = true;
+		TimeSinceDespawnStart = 0f;
+		_despawnTime = 0.1f;
+		_moveWhileDespawning = false;
+
 		if ( IsProxy )
 			return;
 
-		GameObject.Destroy();
+		//GameObject.Destroy();
+
+		IsActive = false;
 	}
 
 	[Broadcast]
 	public void EnterGutter()
 	{
 		Sound.Play( "claw-firework-explode", Transform.Position.WithZ(Globals.SFX_HEIGHT) );
+
+		Manager.Instance.CreateBallGutterParticles( Transform.Position, PlayerNum );
 
 		if ( IsProxy )
 			return;

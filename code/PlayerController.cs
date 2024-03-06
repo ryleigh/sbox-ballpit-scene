@@ -190,8 +190,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public void HitOpponentBall( Ball ball )
 	{
-		TakeDamage( ball.Velocity * 0.025f );
 		ball.HitPlayer( GameObject.Id );
+		TakeDamage( ball.Velocity * 0.025f );
 	}
 
 	public void OnTriggerEnter( Collider other )

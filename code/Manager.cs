@@ -16,6 +16,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject BallPrefab { get; set; }
 	[Property] public GameObject SkipButtonPrefab { get; set; }
 	[Property] public GameObject ShopItemPrefab { get; set; }
+	[Property] public GameObject BallExplosionParticles { get; set; }
+	[Property] public GameObject BallGutterParticles { get; set; }
 
 	[Property, Sync] public Color ColorPlayer0 { get; set; }
 	[Property, Sync] public Color ColorPlayer1 { get; set; }
@@ -529,5 +531,21 @@ public sealed class Manager : Component, Component.INetworkListener
 			if ( GamePhase != GamePhase.WaitingForPlayers )
 				StopCurrentMatch();
 		}
+	}
+
+	public void CreateBallExplosionParticles(Vector3 pos, int playerNum )
+	{
+		var explosionObj = BallExplosionParticles.Clone( pos );
+		var particleEffect = explosionObj.Components.Get<ParticleEffect>();
+		particleEffect.Tint = playerNum == 0 ? Color.Blue : Color.Green;
+	}
+
+	public void CreateBallGutterParticles( Vector3 pos, int playerNum )
+	{
+		pos += new Vector3( Game.Random.Float(25f, 40f) * (playerNum == 0 ? -1f : 1f), 0f, 0f );
+		var particleObj = BallGutterParticles.Clone( pos );
+		var particleEffect = particleObj.Components.Get<ParticleEffect>();
+		particleEffect.Tint = playerNum == 0 ? Color.Blue : Color.Green;
+		particleObj.Transform.Rotation = Rotation.LookAt(new Vector3( playerNum == 0 ? 1f : -1f, 0f, 0f));
 	}
 }
