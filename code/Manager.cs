@@ -6,7 +6,7 @@ using System.IO;
 using System.Numerics;
 using System.Threading.Channels;
 
-public enum GamePhase { WaitingForPlayers, RoundActive, RoundFinished, BuyPhase }
+public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, RoundFinished, BuyPhase }
 
 public sealed class Manager : Component, Component.INetworkListener
 {
@@ -45,6 +45,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Sync] public TimeSince TimeSincePhaseChange { get; private set; }
 	private int _numBuyPhaseSkips;
 
+	public const float START_NEW_MATCH_DELAY = 5f;
+
 	public Vector3 OriginalCameraPos { get; private set; }
 	public Rotation OriginalCameraRot { get; private set; }
 
@@ -55,7 +57,6 @@ public sealed class Manager : Component, Component.INetworkListener
 	private float _slowmoTimeScale;
 	private RealTimeSince _realTimeSinceSlowmoStarted;
 	private EasingType _slowmoEasingType;
-
 	public const float ROUND_FINISHED_DELAY = 4f;
 	public float BuyPhaseDuration { get; private set; } = 30f;
 
@@ -182,6 +183,10 @@ public sealed class Manager : Component, Component.INetworkListener
 					StartNewMatch();
 				}
 				break;
+			case GamePhase.StartingNewMatch:
+				if ( TimeSincePhaseChange > START_NEW_MATCH_DELAY )
+					StartNewRound();
+				break;
 			case GamePhase.RoundActive:
 				break;
 			case GamePhase.RoundFinished:
@@ -247,7 +252,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		Player0?.StartNewMatch();
 		Player1?.StartNewMatch();
 
-		StartNewRound();
+		GamePhase = GamePhase.StartingNewMatch;
+		TimeSincePhaseChange = 0f;
 	}
 
 	void StartNewRound()

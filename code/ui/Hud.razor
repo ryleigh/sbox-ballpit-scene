@@ -14,6 +14,9 @@
 			case GamePhase.WaitingForPlayers:
 				roundLabel = "Waiting for players...";
 				break;
+			case GamePhase.StartingNewMatch:
+				roundLabel = $"Starting match in {MathX.CeilToInt(Manager.START_NEW_MATCH_DELAY - manager.TimeSincePhaseChange)}...";
+				break;
 			case GamePhase.RoundActive:
 			case GamePhase.RoundFinished:
 				roundLabel = $"Round {manager.RoundNum + 1}";
@@ -214,12 +217,13 @@
 		var upgrades0 = player0?.GetUpgradeHash() ?? 0;
 		var upgrades1 = player1?.GetUpgradeHash() ?? 0;
 		var buyPhaseTimer = manager.GamePhase == GamePhase.BuyPhase ? MathX.FloorToInt(manager.BuyPhaseDuration - manager.TimeSincePhaseChange) : 0;
+		var newMatchTimer = manager.GamePhase == GamePhase.StartingNewMatch ? MathX.CeilToInt(Manager.START_NEW_MATCH_DELAY - manager.TimeSincePhaseChange) : 0;
 		var mouseHoverUpgradePos = manager.HoveredUpgradeType != UpgradeType.None ? Mouse.Position : Vector2.Zero;
 
 		return HashCode.Combine(
 			HashCode.Combine(playerName0, playerName1, hp0, hp1, score0, score1),
 			HashCode.Combine(money0, money1, upgrades0, upgrades1, manager.RoundNum),
-			HashCode.Combine(manager.GamePhase, buyPhaseTimer, manager.HoveredObject, mouseHoverUpgradePos)
+			HashCode.Combine(manager.GamePhase, buyPhaseTimer, newMatchTimer, manager.HoveredObject, mouseHoverUpgradePos)
 		);
 	}
 }
