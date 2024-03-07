@@ -95,6 +95,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, 1, 3 );
 
 		StartNewMatch();
+		StartNewRound();
 	}
 
 	public void OnActive( Connection channel )

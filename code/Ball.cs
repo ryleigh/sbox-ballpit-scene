@@ -18,6 +18,12 @@ public class Ball : Component
 	private float _despawnTime = 3f;
 	private bool _moveWhileDespawning = true;
 
+	public bool IsWobbling { get; set; }
+	public TimeSince TimeSinceWobble { get; private set; }
+	private float _wobbleTime = 0.5f;
+
+	private Vector3 _localScaleStart;
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -32,6 +38,8 @@ public class Ball : Component
 
 		IsActive = true;
 
+		_localScaleStart = Transform.LocalScale;
+
 		if ( IsProxy )
 			return;
 
@@ -41,7 +49,22 @@ public class Ball : Component
 	protected override void OnUpdate()
 	{
 		//Gizmo.Draw.Color = Color.White;
-		//Gizmo.Draw.Text( $"{PlayerNum}", new global::Transform( Transform.Position + new Vector3(0f, 1f, 1f)) );
+		//Gizmo.Draw.Text( $"{IsWobbling}", new global::Transform( Transform.Position + new Vector3(0f, 1f, 1f)) );
+
+		if(IsWobbling)
+		{
+			if(TimeSinceWobble >  _wobbleTime)
+			{
+				IsWobbling = false;
+				Transform.LocalScale = _localScaleStart;
+			}
+			else
+			{
+				float amount = Utils.Map( TimeSinceWobble, 0f, _wobbleTime, 0.1f, 0f, EasingType.QuadOut );
+				var targetScale = new Vector3( _localScaleStart.x + Game.Random.Float( -amount, amount ), _localScaleStart.y + Game.Random.Float( -amount, amount ), _localScaleStart.z + Game.Random.Float( -amount, amount ) );
+				Transform.LocalScale = Vector3.Lerp( Transform.LocalScale, targetScale, Time.Delta * 100f );
+			}
+		}
 
 		if ( IsDespawning)
 		{
@@ -235,8 +258,11 @@ public class Ball : Component
 	}
 
 	[Broadcast]
-	public void HitByPlayer(Vector2 direction)
+	public void BumpedByPlayer(Vector2 direction)
 	{
+		IsWobbling = true;
+		TimeSinceWobble = 0f;
+
 		if(IsProxy)
 			return;
 

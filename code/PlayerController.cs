@@ -204,7 +204,7 @@ public class PlayerController : Component, Component.ITriggerListener
 			var ball = other.Components.Get<Ball>();
 			if (ball.IsActive && ball.PlayerNum == PlayerNum)
 			{
-				ball.HitByPlayer( direction: ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal );
+				ball.BumpedByPlayer( direction: ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal );
 				HitOwnBall( (Vector2)ball.Transform.Position );
 			}
 		}
