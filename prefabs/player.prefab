@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "Id": "04e122e3-526d-4306-ada5-f1a2c6398175",
+    "Id": "4b866e08-08b3-475a-abd5-1d946195f62b",
     "Name": "player",
     "Tags": "player",
     "Enabled": true,
@@ -9,12 +9,12 @@
         "__type": "PlayerController",
         "Animator": {
           "_type": "component",
-          "go": "7c03a52a-15d6-4457-b7e0-8cc273bdf7bc",
+          "go": "8009782c-2ad8-44cd-b496-cb5f4d91ebe4",
           "component_type": "CitizenAnimationHelper"
         },
         "Model": {
           "_type": "gameobject",
-          "go": "7c03a52a-15d6-4457-b7e0-8cc273bdf7bc"
+          "go": "8009782c-2ad8-44cd-b496-cb5f4d91ebe4"
         }
       },
       {
@@ -30,14 +30,14 @@
         "__type": "RagdollController",
         "Physics": {
           "_type": "component",
-          "go": "7c03a52a-15d6-4457-b7e0-8cc273bdf7bc",
+          "go": "8009782c-2ad8-44cd-b496-cb5f4d91ebe4",
           "component_type": "ModelPhysics"
         }
       }
     ],
     "Children": [
       {
-        "Id": "7c03a52a-15d6-4457-b7e0-8cc273bdf7bc",
+        "Id": "8009782c-2ad8-44cd-b496-cb5f4d91ebe4",
         "Name": "model",
         "Enabled": true,
         "Components": [
@@ -68,7 +68,7 @@
             "LookAtEnabled": false,
             "Target": {
               "_type": "component",
-              "go": "7c03a52a-15d6-4457-b7e0-8cc273bdf7bc",
+              "go": "8009782c-2ad8-44cd-b496-cb5f4d91ebe4",
               "component_type": "SkinnedModelRenderer"
             }
           },
@@ -79,7 +79,7 @@
             "Model": "models/citizen/citizen.vmdl",
             "Renderer": {
               "_type": "component",
-              "go": "7c03a52a-15d6-4457-b7e0-8cc273bdf7bc",
+              "go": "8009782c-2ad8-44cd-b496-cb5f4d91ebe4",
               "component_type": "SkinnedModelRenderer"
             },
             "RigidbodyFlags": 0
@@ -87,7 +87,7 @@
         ]
       },
       {
-        "Id": "9a0b8023-2be7-4b03-90ab-b79eee1ab15d",
+        "Id": "0bcaaacf-cb78-4221-98a7-95d8feebc3e6",
         "Name": "inner_hitbox",
         "Enabled": true,
         "Components": [
@@ -95,7 +95,7 @@
             "__type": "PlayerInnerHitbox",
             "Player": {
               "_type": "component",
-              "go": "04e122e3-526d-4306-ada5-f1a2c6398175",
+              "go": "4b866e08-08b3-475a-abd5-1d946195f62b",
               "component_type": "PlayerController"
             }
           },
@@ -111,7 +111,7 @@
         ]
       },
       {
-        "Id": "63ededad-6187-43d0-8548-5365db456658",
+        "Id": "fe5fbbd0-9e74-4ec1-a609-faec074dfd3f",
         "Name": "chat",
         "Position": "0,-20,100",
         "Rotation": "-0.5,-0.5,-0.5,0.5",
@@ -131,7 +131,7 @@
         ]
       },
       {
-        "Id": "ddceaed5-76c3-45c3-bb19-0f09be267898",
+        "Id": "d1417621-a51a-4950-b1fb-ac0f15b5aa3e",
         "Name": "chat_output",
         "Position": "0,25,100",
         "Rotation": "-0.5,-0.5,-0.5,0.5",
@@ -151,7 +151,7 @@
         ]
       },
       {
-        "Id": "fe2fcfce-57ef-4393-91f8-95f93f4f5d27",
+        "Id": "6a70f5ed-528a-49b4-a2d1-c51c2722c508",
         "Name": "nametag",
         "Position": "0,-20,100",
         "Rotation": "-0.5,-0.5,-0.5,0.5",

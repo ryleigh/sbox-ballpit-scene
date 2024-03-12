@@ -51,8 +51,12 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	protected override void OnUpdate()
 	{
+		var str = "";
+		foreach ( var other in Components.Get<Collider>().Touching )
+			str += $"{other.GameObject.Name}\n";
+
 		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
-		//Gizmo.Draw.Text( $"{SelectedUpgradeType}", new global::Transform( Transform.Position ) );
+		//Gizmo.Draw.Text( $"{str}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity * (Velocity.y > 0f ? 0.7f : 0.6f));
 
@@ -76,6 +80,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		
 		if ( IsSpectator )
 		{
+			CheckCollisionWithPlayers();
 			CheckBoundsSpectator();
 		}
 		else
@@ -182,6 +187,24 @@ public class PlayerController : Component, Component.ITriggerListener
 			Transform.Position = Transform.Position.WithY( yMax );
 	}
 
+	void CheckCollisionWithPlayers()
+	{
+		foreach ( var player in Scene.GetAllComponents<PlayerController>() )
+		{
+			if ( player == this )
+				continue;
+
+			var radius = player.Components.Get<CapsuleCollider>().Radius;
+			if((player.Transform.Position - Transform.Position).LengthSquared < MathF.Pow(radius * 2f, 2f))
+			{
+				Vector3 dir = (Transform.Position - player.Transform.Position).Normal.WithZ( 0f );
+				float percent = Utils.Map( (player.Transform.Position - Transform.Position).Length, 0f, radius * 2f, 1f, 0f );
+
+				Transform.Position += dir * percent * 500f * Time.Delta;
+			}
+		}
+	}
+
 	[Broadcast]
 	public void HitOwnBall( Vector2 pos )
 	{
@@ -201,6 +224,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		if(other.GameObject.Tags.Has("ball") && Manager.Instance.GamePhase == GamePhase.RoundActive )
 		{
+			//Log.Info( $"OnTriggerEnter {other.GameObject.Name} time: {Time.Now}" );
+
 			var ball = other.Components.Get<Ball>();
 			if (ball.IsActive && ball.PlayerNum == PlayerNum)
 			{
@@ -216,18 +241,28 @@ public class PlayerController : Component, Component.ITriggerListener
 				Money -= item.Price;
 				AdjustUpgradeLevel( item.UpgradeType, item.NumLevels );
 
+				BuyItem(success: true);
+
 				item.GameObject.Destroy();
+			}
+			else
+			{
+				BuyItem( success: false );
 			}
 		}
 		else if ( other.GameObject.Tags.Has( "skip_button" ) && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 2f )
 		{
 			other.GameObject.Destroy();
 			Manager.Instance.SkipButtonHit();
+
+			HitSkipButton();
 		}
 	}
 
 	public void OnTriggerExit( Collider other )
 	{
+		//Log.Info( $"OnTriggerExit {other.GameObject.Name} time: {Time.Now}" );
+
 		if ( IsProxy )
 			return;
 
@@ -305,6 +340,26 @@ public class PlayerController : Component, Component.ITriggerListener
 			return Upgrades[upgradeType];
 
 		return 0;
+	}
+
+	[Broadcast]
+	public void HitSkipButton()
+	{
+		var sfx = Sound.Play( "bubble", Transform.Position );
+		if(sfx != null)
+		{
+			sfx.Pitch = 0.6f;
+		}
+	}
+
+	[Broadcast]
+	public void BuyItem( bool success )
+	{
+		var sfx = Sound.Play( "bubble", Transform.Position );
+		if ( sfx != null )
+		{
+			sfx.Pitch = success ? 1.2f : 0.4f;
+		}
 	}
 
 	[Broadcast]

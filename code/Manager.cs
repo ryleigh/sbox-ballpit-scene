@@ -357,17 +357,21 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Broadcast]
 	public void SetPlayerActive(int playerNum, Guid id)
 	{
-		if(IsProxy)
+		var playerObj = Scene.Directory.FindByGuid( id );
+		if ( playerObj == null )
+			return;
+
+		var sfx = Sound.Play( "bubble", playerObj.Transform.Position );
+		if ( sfx != null )
+			sfx.Pitch = 1.1f;
+
+		if (IsProxy)
 			return;
 
 		if ( (DoesPlayerExist0 && PlayerId0 == id) || (DoesPlayerExist0 && PlayerId0 == id) )
 			return;
 
 		if ( (playerNum == 0 && DoesPlayerExist0) || (playerNum == 1 && DoesPlayerExist1) )
-			return;
-
-		var playerObj = Scene.Directory.FindByGuid( id );
-		if ( playerObj == null )
 			return;
 
 		var player = playerObj.Components.Get<PlayerController>();
@@ -513,7 +517,15 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Broadcast]
 	public void PlayerForfeited(Guid id)
 	{
-		if(IsProxy)
+		var playerObj = Scene.Directory.FindByGuid( id );
+		if ( playerObj != null )
+		{
+			var sfx = Sound.Play( "bubble", playerObj.Transform.Position );
+			if ( sfx != null )
+				sfx.Pitch = 0.7f;
+		}
+
+		if (IsProxy)
 			return;
 
 		if(DoesPlayerExist0 && PlayerId0 == id)
