@@ -30,6 +30,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	public const float BALL_HEIGHT_SELF = 45f;
 	public const float BALL_HEIGHT_OPPONENT = 55f;
 
+	public const float SPECTATOR_HEIGHT = 80f;
+
 	public PlayerController Player0 { get; set; }
 	public PlayerController Player1 { get; set; }
 	[Sync] public Guid PlayerId0 { get; set; }
@@ -357,14 +359,6 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Broadcast]
 	public void SetPlayerActive(int playerNum, Guid id)
 	{
-		var playerObj = Scene.Directory.FindByGuid( id );
-		if ( playerObj == null )
-			return;
-
-		var sfx = Sound.Play( "bubble", playerObj.Transform.Position );
-		if ( sfx != null )
-			sfx.Pitch = 1.1f;
-
 		if (IsProxy)
 			return;
 
@@ -372,6 +366,10 @@ public sealed class Manager : Component, Component.INetworkListener
 			return;
 
 		if ( (playerNum == 0 && DoesPlayerExist0) || (playerNum == 1 && DoesPlayerExist1) )
+			return;
+
+		var playerObj = Scene.Directory.FindByGuid( id );
+		if ( playerObj == null )
 			return;
 
 		var player = playerObj.Components.Get<PlayerController>();
@@ -515,6 +513,23 @@ public sealed class Manager : Component, Component.INetworkListener
 	}
 
 	[Broadcast]
+	public void PlayerHitJoinButton( int playerNum, Guid id )
+	{
+		var playerObj = Scene.Directory.FindByGuid( id );
+		if ( playerObj == null )
+			return;
+
+		var sfx = Sound.Play( "bubble", playerObj.Transform.Position );
+		if ( sfx != null )
+			sfx.Pitch = 1.1f;
+
+		SetPlayerActive( playerNum, id );
+
+		var targetPos = new Vector3( 114f * (playerNum == 0 ? -1f : 1f), 0f, 0f);
+		playerObj.Components.Get<PlayerController>().Jump( targetPos );
+	}
+
+	[Broadcast]
 	public void PlayerForfeited(Guid id)
 	{
 		var playerObj = Scene.Directory.FindByGuid( id );
@@ -528,10 +543,15 @@ public sealed class Manager : Component, Component.INetworkListener
 		if (IsProxy)
 			return;
 
-		if(DoesPlayerExist0 && PlayerId0 == id)
-		{
-			Player0.SetSpectator( true );
+		var player = playerObj.Components.Get<PlayerController>();
+		player.SetSpectator( true );
 
+		player.Transform.Position = player.Transform.Position.WithZ( SPECTATOR_HEIGHT );
+		var targetPos = player.GetClosestSpectatorPos( player.Transform.Position );
+		playerObj.Components.Get<PlayerController>().Jump( targetPos );
+
+		if (DoesPlayerExist0 && PlayerId0 == id)
+		{
 			DoesPlayerExist0 = false;
 			Player0 = null;
 			PlayerId0 = Guid.Empty;
@@ -541,8 +561,6 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 		else if ( DoesPlayerExist1 && PlayerId1 == id )
 		{
-			Player1.SetSpectator( true );
-
 			DoesPlayerExist1 = false;
 			Player1 = null;
 			PlayerId1 = Guid.Empty;

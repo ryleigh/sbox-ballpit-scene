@@ -19,6 +19,11 @@ public class PlayerController : Component, Component.ITriggerListener
 	public Vector2 ForwardVec2D => PlayerNum == 0 ? new Vector2( 1f, 0f ) : new Vector2( -1f, 0f );
 
 	[Sync] public bool IsDead { get; set; }
+	[Sync] public bool IsJumping { get; set; }
+	private Vector3 _jumpStartPos;
+	private Vector3 _jumpTargetPos;
+	private TimeSince _timeSinceJump;
+	private float _jumpTime;
 
 	[Sync] public int HP { get; set; }
 	public int MaxHP { get; set; } = 3;
@@ -51,41 +56,62 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	protected override void OnUpdate()
 	{
-		var str = "";
-		foreach ( var other in Components.Get<Collider>().Touching )
-			str += $"{other.GameObject.Name}\n";
+		//var str = "";
+		//foreach ( var other in Components.Get<Collider>().Touching )
+		//	str += $"{other.GameObject.Name}\n";
 
 		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
 		//Gizmo.Draw.Text( $"{str}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity * (Velocity.y > 0f ? 0.7f : 0.6f));
 
-		if(IsSpectator)
-			Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( Utils.VectorToDegrees(Velocity) ), Velocity.Length * 0.2f * Time.Delta );
-		else
-			Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( PlayerNum == 0 ? 0f : 180f ), 5f * Time.Delta );
+		if(!IsJumping)
+		{
+			if ( IsSpectator )
+				Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( Utils.VectorToDegrees( Velocity ) ), Velocity.Length * 0.2f * Time.Delta );
+			else
+				Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( PlayerNum == 0 ? 0f : 180f ), 5f * Time.Delta );
+		}
 
 		if ( IsProxy )
 			return;
 
-		if(!IsDead)
+		if(IsJumping)
+		{
+			if(_timeSinceJump > _jumpTime)
+			{
+				IsJumping = false;
+				Transform.Position = _jumpTargetPos;
+				Model.Transform.LocalScale = Vector3.One;
+			}
+			else
+			{
+				var progress = Utils.Map( _timeSinceJump, 0f, _jumpTime, 0f, 1f, EasingType.QuadInOut );
+				Transform.Position = Vector3.Lerp( _jumpStartPos, _jumpTargetPos, progress );
+				Model.Transform.LocalScale = Vector3.One * Utils.MapReturn(progress, 0f, 1f, 1f, 1.6f, EasingType.Linear);
+			}
+
+			return;
+		}
+
+		if ( !IsDead )
 		{
 			var wishMoveDir = new Vector2( -Input.AnalogMove.y, Input.AnalogMove.x ).Normal;
 
 			float moveSpeed = Utils.Map( GetUpgradeLevel( UpgradeType.MoveSpeed ), 0, 10, 90f, 125f, EasingType.SineOut );
 			Velocity = Utils.DynamicEaseTo( Velocity, wishMoveDir * moveSpeed, 0.2f, Time.Delta );
 			Transform.Position += (Vector3)Velocity * Time.Delta;
-			Transform.Position = Transform.Position.WithZ( IsSpectator ? 80f : 0f );
+			Transform.Position = Transform.Position.WithZ( IsSpectator ? Manager.SPECTATOR_HEIGHT : 0f );
 		}
-		
+
 		if ( IsSpectator )
 		{
 			CheckCollisionWithPlayers();
-			CheckBoundsSpectator();
+			Transform.Position = GetClosestSpectatorPos( Transform.Position );
 		}
 		else
 		{
-			if(Manager.Instance.GamePhase == GamePhase.RoundActive && Input.Pressed("Jump"))
+			if ( Manager.Instance.GamePhase == GamePhase.RoundActive && Input.Pressed( "Jump" ) )
 			{
 				TryUseItem();
 			}
@@ -146,28 +172,25 @@ public class PlayerController : Component, Component.ITriggerListener
 			Transform.Position = Transform.Position.WithY( yMax );
 	}
 
-	void CheckBoundsSpectator()
+	public Vector3 GetClosestSpectatorPos(Vector3 pos)
 	{
 		var xLeftWall = -245f;
 		var xRightWall = -xLeftWall;
 		var yBotWall = -131f;
 		var yTopWall = -yBotWall;
 
-		var x = Transform.Position.x;
-		var y = Transform.Position.y;
-
-		if( x > xLeftWall && x < xRightWall && y > yBotWall && y < yTopWall )
+		if ( pos.x > xLeftWall && pos.x < xRightWall && pos.y > yBotWall && pos.y < yTopWall )
 		{
-			var xDiff = x < 0f ? x - xLeftWall : xRightWall - x;
-			var yDiff = y < 0f ? y - yBotWall : yTopWall - y;
+			var xDiff = pos.x < 0f ? pos.x - xLeftWall : xRightWall - pos.x;
+			var yDiff = pos.y < 0f ? pos.y - yBotWall : yTopWall - pos.y;
 
-			if(xDiff < yDiff)
+			if ( xDiff < yDiff )
 			{
-				Transform.Position = Transform.Position.WithX( x < 0f ? xLeftWall : xRightWall );
+				pos = pos.WithX( pos.x < 0f ? xLeftWall : xRightWall );
 			}
 			else
 			{
-				Transform.Position = Transform.Position.WithY( y < 0f ? yBotWall : yTopWall );
+				pos = pos.WithY( pos.y < 0f ? yBotWall : yTopWall );
 			}
 		}
 
@@ -176,15 +199,17 @@ public class PlayerController : Component, Component.ITriggerListener
 		var yMin = -141f;
 		var yMax = -yMin;
 
-		if ( Transform.Position.x < xMin )
-			Transform.Position = Transform.Position.WithX( xMin );
-		else if ( Transform.Position.x > xMax )
-			Transform.Position = Transform.Position.WithX( xMax );
+		if ( pos.x < xMin )
+			pos = pos.WithX( xMin );
+		else if ( pos.x > xMax )
+			pos = pos.WithX(xMax);
 
-		if ( Transform.Position.y < yMin )
-			Transform.Position = Transform.Position.WithY( yMin );
-		else if ( Transform.Position.y > yMax )
-			Transform.Position = Transform.Position.WithY( yMax );
+		if ( pos.y < yMin )
+			pos = pos.WithY(yMin);
+		else if ( pos.y > yMax )
+			pos = pos.WithY(yMax);
+
+		return pos;
 	}
 
 	void CheckCollisionWithPlayers()
@@ -435,5 +460,20 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		Respawn();
 		IsSpectator = isSpectator;
+	}
+
+	[Broadcast]
+	public void Jump( Vector3 targetPos )
+	{
+		// animation/sound
+
+		if ( IsProxy )
+			return;
+
+		IsJumping = true;
+		_jumpStartPos = Transform.Position;
+		_jumpTargetPos = targetPos;
+		_jumpTime = 0.33f;
+		_timeSinceJump = 0f;
 	}
 }

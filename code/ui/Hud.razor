@@ -198,7 +198,7 @@
 	void JoinButtonClicked(int playerNum)
 	{
 		var localPlayer = Manager.Instance.GetLocalPlayer();
-		Manager.Instance.SetPlayerActive(playerNum, localPlayer.GameObject.Id);
+		Manager.Instance.PlayerHitJoinButton(playerNum, localPlayer.GameObject.Id);
 	}
 
 	protected override int BuildHash()
