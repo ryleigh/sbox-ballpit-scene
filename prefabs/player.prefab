@@ -1,20 +1,25 @@
 {
   "RootObject": {
-    "Id": "4b866e08-08b3-475a-abd5-1d946195f62b",
+    "Id": "3c228997-924b-4de7-9916-9b4e5101af37",
     "Name": "player",
     "Tags": "player",
     "Enabled": true,
+    "NetworkMode": 2,
     "Components": [
       {
         "__type": "PlayerController",
         "Animator": {
           "_type": "component",
-          "go": "8009782c-2ad8-44cd-b496-cb5f4d91ebe4",
+          "go": "e5584946-91a6-4561-b12c-14902d3782d3",
           "component_type": "CitizenAnimationHelper"
+        },
+        "InnerHitbox": {
+          "_type": "gameobject",
+          "go": "27de3f38-82e3-4848-9ffd-b2759ff91608"
         },
         "Model": {
           "_type": "gameobject",
-          "go": "8009782c-2ad8-44cd-b496-cb5f4d91ebe4"
+          "go": "e5584946-91a6-4561-b12c-14902d3782d3"
         }
       },
       {
@@ -23,32 +28,28 @@
         "IsTrigger": true,
         "Radius": 7,
         "Start": "0,0,0",
-        "Static": false,
-        "Surface": null
+        "Static": false
       },
       {
         "__type": "RagdollController",
         "Physics": {
           "_type": "component",
-          "go": "8009782c-2ad8-44cd-b496-cb5f4d91ebe4",
+          "go": "e5584946-91a6-4561-b12c-14902d3782d3",
           "component_type": "ModelPhysics"
         }
       }
     ],
     "Children": [
       {
-        "Id": "8009782c-2ad8-44cd-b496-cb5f4d91ebe4",
+        "Id": "e5584946-91a6-4561-b12c-14902d3782d3",
         "Name": "model",
         "Enabled": true,
+        "NetworkMode": 2,
         "Components": [
           {
             "__type": "SkinnedModelRenderer",
-            "AnimationGraph": null,
             "BodyGroups": 341,
-            "BoneMergeTarget": null,
             "CreateBoneObjects": false,
-            "MaterialGroup": null,
-            "MaterialOverride": null,
             "Model": "models/citizen/citizen.vmdl",
             "RenderType": "On",
             "Tint": "1,1,1,1"
@@ -56,19 +57,13 @@
           {
             "__type": "CitizenAnimationHelper",
             "BodyWeight": 1,
-            "EyeSource": null,
             "EyesWeight": 1,
             "HeadWeight": 1,
             "Height": 1,
-            "IkLeftFoot": null,
-            "IkLeftHand": null,
-            "IkRightFoot": null,
-            "IkRightHand": null,
-            "LookAt": null,
             "LookAtEnabled": false,
             "Target": {
               "_type": "component",
-              "go": "8009782c-2ad8-44cd-b496-cb5f4d91ebe4",
+              "go": "e5584946-91a6-4561-b12c-14902d3782d3",
               "component_type": "SkinnedModelRenderer"
             }
           },
@@ -79,7 +74,7 @@
             "Model": "models/citizen/citizen.vmdl",
             "Renderer": {
               "_type": "component",
-              "go": "8009782c-2ad8-44cd-b496-cb5f4d91ebe4",
+              "go": "e5584946-91a6-4561-b12c-14902d3782d3",
               "component_type": "SkinnedModelRenderer"
             },
             "RigidbodyFlags": 0
@@ -87,15 +82,16 @@
         ]
       },
       {
-        "Id": "0bcaaacf-cb78-4221-98a7-95d8feebc3e6",
+        "Id": "27de3f38-82e3-4848-9ffd-b2759ff91608",
         "Name": "inner_hitbox",
         "Enabled": true,
+        "NetworkMode": 2,
         "Components": [
           {
             "__type": "PlayerInnerHitbox",
             "Player": {
               "_type": "component",
-              "go": "4b866e08-08b3-475a-abd5-1d946195f62b",
+              "go": "3c228997-924b-4de7-9916-9b4e5101af37",
               "component_type": "PlayerController"
             }
           },
@@ -105,17 +101,17 @@
             "IsTrigger": true,
             "Radius": 1.2,
             "Start": "0,0,0",
-            "Static": false,
-            "Surface": null
+            "Static": false
           }
         ]
       },
       {
-        "Id": "fe5fbbd0-9e74-4ec1-a609-faec074dfd3f",
+        "Id": "dca69476-b672-40c8-ac97-c24926dd26bb",
         "Name": "chat",
         "Position": "0,-20,100",
         "Rotation": "-0.5,-0.5,-0.5,0.5",
         "Enabled": true,
+        "NetworkMode": 2,
         "Components": [
           {
             "__type": "WorldPanel",
@@ -131,11 +127,12 @@
         ]
       },
       {
-        "Id": "d1417621-a51a-4950-b1fb-ac0f15b5aa3e",
+        "Id": "a3d46a52-935d-4f80-85e8-93a1466fd9ab",
         "Name": "chat_output",
         "Position": "0,25,100",
         "Rotation": "-0.5,-0.5,-0.5,0.5",
         "Enabled": true,
+        "NetworkMode": 2,
         "Components": [
           {
             "__type": "WorldPanel",
@@ -151,11 +148,12 @@
         ]
       },
       {
-        "Id": "6a70f5ed-528a-49b4-a2d1-c51c2722c508",
+        "Id": "9b319db4-eef1-4b0f-a172-f41e9b030d85",
         "Name": "nametag",
         "Position": "0,-20,100",
         "Rotation": "-0.5,-0.5,-0.5,0.5",
         "Enabled": true,
+        "NetworkMode": 2,
         "Components": [
           {
             "__type": "WorldPanel",

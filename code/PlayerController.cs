@@ -8,6 +8,7 @@ public class PlayerController : Component, Component.ITriggerListener
 {
 	[Property] public CitizenAnimationHelper Animator { get; set; }
 	[Property] public GameObject Model { get; set; }
+	[Property] public GameObject InnerHitbox { get; set; }
 	public RagdollController Ragdoll { get; private set; }
 
 	[Sync] public int PlayerNum { get; set; } = 0;
@@ -36,6 +37,14 @@ public class PlayerController : Component, Component.ITriggerListener
 	public const int MAX_UPGRADE_LEVEL = 10;
 
 	[Sync] public UpgradeType SelectedUpgradeType { get; set; }
+
+	private bool _isFlashing;
+	private TimeSince _timeSinceFlashToggle;
+	private bool _renderersVisible;
+
+	[Sync] public bool IsInvulnerable { get; set; }
+	private TimeSince _timeSinceInvulnerableStart;
+	public float InvulnerableTime { get; set; } = 1f;
 
 	protected override void OnAwake()
 	{
@@ -73,8 +82,20 @@ public class PlayerController : Component, Component.ITriggerListener
 				Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( PlayerNum == 0 ? 0f : 180f ), 5f * Time.Delta );
 		}
 
+		if( _isFlashing && _timeSinceFlashToggle > 0.04f )
+		{
+			SetRendererVisibility( !_renderersVisible );
+			_renderersVisible = !_renderersVisible;
+			_timeSinceFlashToggle = 0f;
+		}
+
 		if ( IsProxy )
 			return;
+
+		if(IsInvulnerable && _timeSinceInvulnerableStart > InvulnerableTime)
+		{
+			EndInvulnerability();
+		}
 
 		if(IsJumping)
 		{
@@ -299,10 +320,14 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( IsDead )
 			return;
 
-		if(HP > 1)
-			Sound.Play( "hurt", Transform.Position.WithZ( Globals.SFX_HEIGHT ) );
-		else
+		if(HP <= 1)
+		{
 			Sound.Play( "die", Transform.Position.WithZ( Globals.SFX_HEIGHT ) );
+		}
+		else
+		{
+			Sound.Play( "hurt", Transform.Position.WithZ( Globals.SFX_HEIGHT ) );
+		}
 
 		if (IsProxy)
 			return;
@@ -316,6 +341,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		else
 		{
 			Manager.Instance.PlayerHit(GameObject.Id);
+			StartInvulnerability();
 		}
 	}
 
@@ -324,6 +350,9 @@ public class PlayerController : Component, Component.ITriggerListener
 	{
 		if ( IsProxy )
 			return;
+
+		if(IsInvulnerable)
+			EndInvulnerability();
 
 		Ragdoll.Ragdoll( Transform.Position + Vector3.Up * 100f, force );
 
@@ -336,6 +365,9 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Broadcast]
 	public void Respawn()
 	{
+		_isFlashing = false;
+		SetRendererVisibility( visible: true );
+
 		if ( IsProxy )
 			return;
 
@@ -347,6 +379,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		}
 		
 		HP = MaxHP;
+		IsInvulnerable = false;
 	}
 
 	[Broadcast]
@@ -466,6 +499,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	public void Jump( Vector3 targetPos )
 	{
 		// animation/sound
+		Animator.TriggerJump();
 
 		if ( IsProxy )
 			return;
@@ -475,5 +509,39 @@ public class PlayerController : Component, Component.ITriggerListener
 		_jumpTargetPos = targetPos;
 		_jumpTime = 0.33f;
 		_timeSinceJump = 0f;
+	}
+
+	[Broadcast]
+	public void StartInvulnerability()
+	{
+		_isFlashing = true;
+		_timeSinceFlashToggle = 0f;
+
+		if ( IsProxy )
+			return;
+
+		IsInvulnerable = true;
+		_timeSinceInvulnerableStart = 0f;
+
+		InnerHitbox.Components.Get<Collider>().Enabled = false;
+	}
+
+	[Broadcast]
+	public void EndInvulnerability()
+	{
+		_isFlashing = false;
+		SetRendererVisibility( visible: true );
+
+		if ( IsProxy )
+			return;
+
+		IsInvulnerable = false;
+		InnerHitbox.Components.Get<Collider>(includeDisabled: true).Enabled = true;
+	}
+
+	void SetRendererVisibility(bool visible)
+	{
+		foreach ( var renderer in Model.Components.GetAll<SkinnedModelRenderer>( FindMode.EnabledInSelfAndDescendants ) )
+			renderer.Tint = Color.White.WithAlpha( visible ? 1f : 0.1f );
 	}
 }
