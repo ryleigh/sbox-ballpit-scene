@@ -1,24 +1,60 @@
-@using Sandbox;
+﻿@using Sandbox;
 @using Sandbox.UI;
 @inherits PanelComponent
 
-<root style="opacity:@(Manager.Instance.HoveredObject == GameObject.Parent ? 1f : 0f);">
+@if(Opacity <= 0f) {
+	return;
+}
+
+<root style="opacity:@(Opacity);">
 	@{
 		var owner = GameObject.Network.OwnerConnection;
+		var player = GameObject.Components.Get<PlayerController>();
+		var numWins = player?.NumMatchWins ?? 0;
+		var numLosses = player?.NumMatchLosses ?? 0;
+		var maxLetters = 10 + (numWins > 0 ? 0 : 3) + (numLosses > 0 ? 0 : 3);
 	}
 
 	<div class="avatar" style="background-image: url( avatar:@owner.SteamId )"></div>
-	<div class="title">@(owner.DisplayName.Length > 16 ? owner.DisplayName.Substring(0, 16) : owner.DisplayName)</div>
+	<div class="title">@($"{GetNameText(owner.DisplayName, maxLetters)}")</div>
+
+	@if(numWins > 0)
+	{
+		<div class="victories">@($"{numWins} 🏆")</div>
+	}
+
+	@if(numLosses > 0) 
+	{
+		<div class="victories">@($"{numLosses} 💀")</div>
+	}
 </root>
 
 @code
 {
+	public float Opacity { get; set; }
+
 	protected override void OnUpdate()
 	{
 		base.OnUpdate();
 
+		var player = GameObject.Parent.Components.Get<PlayerController>();
+		var targetOpacity = Manager.Instance.HoveredObject == GameObject.Parent && !player.IsDead ? 1f : 0f;
+		var lerpSpeed = Opacity > targetOpacity ? 0.07f : 0.2f;
+		Opacity = Utils.DynamicEaseTo(Opacity, targetOpacity, lerpSpeed, Time.Delta);
+
 		SetClass("hidden", Manager.Instance.HoveredObject != GameObject.Parent);
 	}
 
-	protected override int BuildHash() => System.HashCode.Combine(Manager.Instance.HoveredObject);
+	protected override int BuildHash() 
+	{
+		return System.HashCode.Combine(Manager.Instance.HoveredObject, Opacity);
+	}
+
+	string GetNameText(string name, int maxLetters)
+	{
+		if(name.Length > maxLetters)
+			name = $"{name.Substring(0, maxLetters)}...";
+
+		return name;
+	}
 }

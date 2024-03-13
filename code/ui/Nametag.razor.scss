@@ -13,6 +13,11 @@ Nametag {
 	//background-color: #00000055;
 	transition: opacity 0.1s ease-out;
 	white-space: nowrap;
+	gap: 2px;
+
+	.row {
+		flex-direction: row;
+	}
 
 	.avatar {
 		width: 42px;
@@ -30,5 +35,17 @@ Nametag {
 		color: #fff;
 		justify-content: center;
 		align-items: center;
+	}
+
+	.victories {
+		border-radius: 20px;
+		background-color: #ffffff11;
+		font-size: 25px;
+		font-family: Poppins;
+		justify-content: center;
+		align-items: center;
+		color: #fff;
+		margin-left: 8px;
+		padding: 8px;
 	}
 }

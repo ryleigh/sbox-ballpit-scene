@@ -32,6 +32,8 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Sync] public bool IsSpectator { get; set; }
 	[Sync] public int Score { get; private set; }
 	[Sync] public int Money { get; private set; }
+	[Sync] public int NumMatchWins { get; private set; }
+	[Sync] public int NumMatchLosses { get; private set; }
 
 	[Sync] public NetDictionary<UpgradeType, int> Upgrades { get; set; } = new();
 	public const int MAX_UPGRADE_LEVEL = 10;
