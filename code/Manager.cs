@@ -6,7 +6,7 @@ using System.IO;
 using System.Numerics;
 using System.Threading.Channels;
 
-public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, RoundFinished, BuyPhase }
+public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, BetweenRounds, BuyPhase, Victory }
 
 public sealed class Manager : Component, Component.INetworkListener
 {
@@ -48,6 +48,9 @@ public sealed class Manager : Component, Component.INetworkListener
 	private int _numBuyPhaseSkips;
 
 	public const float START_NEW_MATCH_DELAY = 5f;
+	public const int MATCH_MAX_SCORE = 1;
+
+	[Sync] public string WinningPlayerName { get; set; }
 
 	public Vector3 OriginalCameraPos { get; private set; }
 	public Rotation OriginalCameraRot { get; private set; }
@@ -59,7 +62,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	private float _slowmoTimeScale;
 	private RealTimeSince _realTimeSinceSlowmoStarted;
 	private EasingType _slowmoEasingType;
-	public const float ROUND_FINISHED_DELAY = 4f;
+	public const float BETWEEN_ROUNDS_DELAY = 4f;
+	public const float VICTORY_DELAY = 10f;
 	public float BuyPhaseDuration { get; private set; } = 30f;
 
 	public GameObject HoveredObject { get; private set; }
@@ -96,8 +100,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		//CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, 1, 3 );
 
-		StartNewMatch();
-		StartNewRound();
+		//StartNewMatch();
+		//StartNewRound();
 	}
 
 	public void OnActive( Connection channel )
@@ -182,9 +186,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		{
 			case GamePhase.WaitingForPlayers:
 				if(DoesPlayerExist0 && DoesPlayerExist1)
-				{
 					StartNewMatch();
-				}
 				break;
 			case GamePhase.StartingNewMatch:
 				if ( TimeSincePhaseChange > START_NEW_MATCH_DELAY )
@@ -192,13 +194,24 @@ public sealed class Manager : Component, Component.INetworkListener
 				break;
 			case GamePhase.RoundActive:
 				break;
-			case GamePhase.RoundFinished:
-				if ( TimeSincePhaseChange > ROUND_FINISHED_DELAY )
-					StartBuyPhase();
+			case GamePhase.BetweenRounds:
+				if ( TimeSincePhaseChange > BETWEEN_ROUNDS_DELAY )
+				{
+					if ( DoesPlayerExist0 && Player0.Score >= MATCH_MAX_SCORE )
+						Victory( winningPlayerNum: 0 );
+					else if ( DoesPlayerExist1 && Player1.Score >= MATCH_MAX_SCORE )
+						Victory( winningPlayerNum: 1 );
+					else
+						StartBuyPhase();
+				}
 				break;
 			case GamePhase.BuyPhase:
 				if ( TimeSincePhaseChange > BuyPhaseDuration )
 					FinishBuyPhase();
+				break;
+			case GamePhase.Victory:
+				if ( TimeSincePhaseChange > VICTORY_DELAY )
+					StartNewMatch();
 				break;
 		}
 	}
@@ -236,15 +249,23 @@ public sealed class Manager : Component, Component.INetworkListener
 			return;
 
 		var playerObj = Scene.Directory.FindByGuid( id );
-		if ( playerObj != null )
+		if ( playerObj == null )
 		{
-			var player = playerObj.Components.Get<PlayerController>();
-			player.AddScoreAndMoney( score: 0, money: 5 );
-
-			var otherPlayer = GetPlayer( GetOtherPlayerNum( player.PlayerNum ) );
-			if ( otherPlayer != null )
-				otherPlayer.AddScoreAndMoney( score: 1, money: 10 );
+			StopCurrentMatch();
+			return;
 		}
+		
+		var player = playerObj.Components.Get<PlayerController>();
+		var otherPlayer = GetPlayer( GetOtherPlayerNum( player.PlayerNum ) );
+
+		if ( otherPlayer == null )
+		{
+			StopCurrentMatch();
+			return;
+		}
+
+		player.AddScoreAndMoney( score: 0, money: 5 );
+		otherPlayer.AddScoreAndMoney( score: 1, money: 10 );
 
 		FinishRound();
 	}
@@ -270,9 +291,33 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void FinishRound()
 	{
-		GamePhase = GamePhase.RoundFinished;
-
 		DestroyBalls();
+		GamePhase = GamePhase.BetweenRounds;
+	}
+
+	void Victory(int winningPlayerNum)
+	{
+		Player0?.Respawn();
+		Player1?.Respawn();
+
+		if ( DoesPlayerExist0 )
+		{
+			if ( winningPlayerNum == 0 )
+				Player0.AddMatchVictory();
+			else
+				Player0.AddMatchLoss();
+		}
+
+		if ( DoesPlayerExist1 )
+		{
+			if ( winningPlayerNum == 1 )
+				Player1.AddMatchVictory();
+			else
+				Player1.AddMatchLoss();
+		}
+
+		GamePhase = GamePhase.Victory;
+		WinningPlayerName = GetPlayer( winningPlayerNum ).GameObject.Network.OwnerConnection.DisplayName;
 	}
 
 	void StartBuyPhase()
@@ -462,7 +507,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void StopCurrentMatch()
 	{
-		Log.Info( $"StopCurrentMatch" );
+		//Log.Info( $"StopCurrentMatch" );
 
 		Player0?.Respawn();
 		Player1?.Respawn();
@@ -551,7 +596,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		var targetPos = player.GetClosestSpectatorPos( player.Transform.Position );
 		playerObj.Components.Get<PlayerController>().Jump( targetPos );
 
-		if (DoesPlayerExist0 && PlayerId0 == id)
+		if ( DoesPlayerExist0 && PlayerId0 == id )
 		{
 			DoesPlayerExist0 = false;
 			Player0 = null;

@@ -18,11 +18,14 @@
 				roundLabel = $"Starting match in {MathX.CeilToInt(Manager.START_NEW_MATCH_DELAY - manager.TimeSincePhaseChange)}...";
 				break;
 			case GamePhase.RoundActive:
-			case GamePhase.RoundFinished:
-				roundLabel = $"Round {manager.RoundNum + 1}";
+			case GamePhase.BetweenRounds:
+				roundLabel = $"Round {manager.RoundNum}";
 				break;
 			case GamePhase.BuyPhase:
 				roundLabel = $"Buy Phase ({MathX.FloorToInt(manager.BuyPhaseDuration - manager.TimeSincePhaseChange)})";
+				break;
+			case GamePhase.Victory:
+				roundLabel = $"{manager.WinningPlayerName} wins! 🏆";
 				break;
 		}
 	}
@@ -37,7 +40,7 @@
 		// NAME
 		<div class="bottom_row" style="left: 100px; bottom: 45px; flex-direction: row;">
 			<div class="player_avatar" style="background-image: url( avatar:@connection0.SteamId )"></div>
-			<div class="player_name" style="color: #0000aa;">@($"{connection0.DisplayName} (points: {player0.Score}) 💲{player0.Money}")</div>
+			<div class="player_name" style="color: #0000aa;">@($"{connection0.DisplayName} (points: {player0.Score}/{Manager.MATCH_MAX_SCORE}) 💲{player0.Money}")</div>
 		</div>
 
 		// HP
@@ -84,7 +87,7 @@
 
 		// NAME
 		<div class="bottom_row" style="right: 100px; bottom: 45px; flex-direction: row-reverse;">
-			<div class="player_name" style="color: #007700;">@($"{manager.GetConnection(1).DisplayName} 🏆{player1.Score} 💲{player1.Money}")</div>
+			<div class="player_name" style="color: #007700;">@($"{manager.GetConnection(1).DisplayName} (points: {player1.Score}/{Manager.MATCH_MAX_SCORE}) 💲{player1.Money}")</div>
 		</div>
 
 		// HP

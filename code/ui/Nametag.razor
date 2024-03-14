@@ -9,7 +9,7 @@
 <root style="opacity:@(Opacity);">
 	@{
 		var owner = GameObject.Network.OwnerConnection;
-		var player = GameObject.Components.Get<PlayerController>();
+		var player = GameObject.Parent.Components.Get<PlayerController>();
 		var numWins = player?.NumMatchWins ?? 0;
 		var numLosses = player?.NumMatchLosses ?? 0;
 		var maxLetters = 10 + (numWins > 0 ? 0 : 3) + (numLosses > 0 ? 0 : 3);
@@ -47,7 +47,11 @@
 
 	protected override int BuildHash() 
 	{
-		return System.HashCode.Combine(Manager.Instance.HoveredObject, Opacity);
+		var player = GameObject.Parent.Components.Get<PlayerController>();
+		var numWins = player?.NumMatchWins ?? 0;
+		var numLosses = player?.NumMatchLosses ?? 0;
+
+		return System.HashCode.Combine(Manager.Instance.HoveredObject, Opacity, numWins, numLosses);
 	}
 
 	string GetNameText(string name, int maxLetters)

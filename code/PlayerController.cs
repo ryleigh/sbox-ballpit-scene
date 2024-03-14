@@ -86,7 +86,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		//}
 
 		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
-		//Gizmo.Draw.Text( $"{str}", new global::Transform( Transform.Position ) );
+		//Gizmo.Draw.Text( $"{NumMatchWins} - {NumMatchLosses}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity * (Velocity.y > 0f ? 0.7f : 0.6f));
 
@@ -434,6 +434,24 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		Score += score;
 		Money += money;
+	}
+
+	[Broadcast]
+	public void AddMatchVictory()
+	{
+		if ( IsProxy )
+			return;
+
+		NumMatchWins++;
+	}
+
+	[Broadcast]
+	public void AddMatchLoss()
+	{
+		if ( IsProxy )
+			return;
+
+		NumMatchLosses++;
 	}
 
 	public int GetUpgradeLevel(UpgradeType upgradeType)
