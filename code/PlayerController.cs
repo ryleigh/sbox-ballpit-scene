@@ -8,7 +8,7 @@ public class PlayerController : Component, Component.ITriggerListener
 {
 	[Property] public CitizenAnimationHelper Animator { get; set; }
 	[Property] public GameObject Model { get; set; }
-	[Property] public GameObject InnerHitbox { get; set; }
+	//[Property] public GameObject InnerHitbox { get; set; }
 	public RagdollController Ragdoll { get; private set; }
 
 	[Sync] public int PlayerNum { get; set; } = 0;
@@ -48,6 +48,9 @@ public class PlayerController : Component, Component.ITriggerListener
 	private TimeSince _timeSinceInvulnerableStart;
 	public float InvulnerableTime { get; set; } = 1f;
 
+	public float RadiusLarge { get; set; } = 6f;
+	public float RadiusSmall { get; set; } = 1.2f;
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -67,9 +70,20 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	protected override void OnUpdate()
 	{
-		//var str = "";
-		//foreach ( var other in Components.Get<Collider>().Touching )
-		//	str += $"{other.GameObject.Name}\n";
+		//using ( Gizmo.Scope() )
+		//{
+		//	Gizmo.Draw.Color = Color.Red;
+		//	Gizmo.Draw.LineSphere( Transform.Position.WithZ(100f), RadiusSmall );
+
+		//	Gizmo.Draw.Color = Color.Blue;
+		//	Gizmo.Draw.LineSphere( Transform.Position.WithZ( 100f ), RadiusLarge );
+
+		//	foreach ( var ball in Scene.GetAllComponents<Ball>() )
+		//	{
+		//		Gizmo.Draw.Color = Color.White;
+		//		Gizmo.Draw.LineSphere( ball.Transform.Position.WithZ( 100f ), ball.Radius );
+		//	}
+		//}
 
 		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
 		//Gizmo.Draw.Text( $"{str}", new global::Transform( Transform.Position ) );
@@ -140,6 +154,33 @@ public class PlayerController : Component, Component.ITriggerListener
 			}
 
 			CheckBoundsPlaying();
+		}
+
+		if(!IsDead && !IsSpectator && Manager.Instance.GamePhase == GamePhase.RoundActive )
+		{
+			foreach ( var ball in Scene.GetAllComponents<Ball>() )
+			{
+				if ( !ball.IsActive )
+					continue;
+
+				if( ball.PlayerNum == PlayerNum )
+				{
+					if( ball.TimeSinceWobble > 0.25f &&
+						(ball.Transform.Position - Transform.Position).WithZ( 0f ).LengthSquared < MathF.Pow( RadiusLarge + ball.Radius, 2f ) )
+					{
+						ball.BumpedByPlayer( direction: ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal );
+						HitOwnBall( (Vector2)ball.Transform.Position );
+					}
+				}
+				else
+				{
+					if ( !IsInvulnerable &&
+						 (ball.Transform.Position - Transform.Position ).WithZ( 0f ).LengthSquared < MathF.Pow( RadiusSmall + ball.Radius, 2f ))
+					{
+						HitOpponentBall( ball );
+					}
+				}
+			}
 		}
 	}
 
@@ -270,18 +311,19 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( IsProxy || IsDead || IsSpectator )
 			return;
 
-		if(other.GameObject.Tags.Has("ball") && Manager.Instance.GamePhase == GamePhase.RoundActive )
-		{
-			//Log.Info( $"OnTriggerEnter {other.GameObject.Name} time: {Time.Now}" );
+		//if(other.GameObject.Tags.Has("ball") && Manager.Instance.GamePhase == GamePhase.RoundActive )
+		//{
+		//	//Log.Info( $"OnTriggerEnter {other.GameObject.Name} time: {Time.Now}" );
 
-			var ball = other.Components.Get<Ball>();
-			if (ball.IsActive && ball.PlayerNum == PlayerNum)
-			{
-				ball.BumpedByPlayer( direction: ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal );
-				HitOwnBall( (Vector2)ball.Transform.Position );
-			}
-		}
-		else if(other.GameObject.Tags.Has("item") && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 2f)
+		//	var ball = other.Components.Get<Ball>();
+		//	if (ball.IsActive && ball.PlayerNum == PlayerNum)
+		//	{
+		//		ball.BumpedByPlayer( direction: ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal );
+		//		HitOwnBall( (Vector2)ball.Transform.Position );
+		//	}
+		//}
+
+		if(other.GameObject.Tags.Has("item") && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 2f)
 		{
 			var item = other.Components.Get<ShopItem>();
 			if(item.Price <= Money)
@@ -525,7 +567,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		IsInvulnerable = true;
 		_timeSinceInvulnerableStart = 0f;
 
-		InnerHitbox.Components.Get<Collider>().Enabled = false;
+		//InnerHitbox.Components.Get<Collider>().Enabled = false;
 	}
 
 	[Broadcast]
@@ -538,7 +580,7 @@ public class PlayerController : Component, Component.ITriggerListener
 			return;
 
 		IsInvulnerable = false;
-		InnerHitbox.Components.Get<Collider>(includeDisabled: true).Enabled = true;
+		//InnerHitbox.Components.Get<Collider>(includeDisabled: true).Enabled = true;
 	}
 
 	void SetRendererVisibility(bool visible)

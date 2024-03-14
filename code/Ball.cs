@@ -24,6 +24,8 @@ public class Ball : Component
 
 	private Vector3 _localScaleStart;
 
+	[Sync] public float Radius { get; set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();

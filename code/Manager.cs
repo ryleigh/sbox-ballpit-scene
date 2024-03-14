@@ -344,6 +344,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		var ball = ballObj.Components.Get<Ball>();
 
 		ball.Velocity = velocity;
+		ball.Radius = 8f;
 
 		//Log.Info( $"SpawnBall - connection: {connection}" );
 
