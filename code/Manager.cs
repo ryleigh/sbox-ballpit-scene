@@ -45,10 +45,11 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	[Sync] public GamePhase GamePhase { get; private set; }
 	[Sync] public TimeSince TimeSincePhaseChange { get; private set; }
+	private int _numSecondsLeftInPhase;
 	private int _numBuyPhaseSkips;
 
 	public const float START_NEW_MATCH_DELAY = 5f;
-	public const int MATCH_MAX_SCORE = 1;
+	public const int MATCH_MAX_SCORE = 10;
 
 	[Sync] public string WinningPlayerName { get; set; }
 
@@ -100,7 +101,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		//CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, 1, 3 );
 
-		//StartNewMatch();
+		StartNewMatch();
 		//StartNewRound();
 	}
 
@@ -179,6 +180,38 @@ public sealed class Manager : Component, Component.INetworkListener
 			HoveredObject = tr.GameObject;
 		}
 
+		switch ( GamePhase )
+		{
+			case GamePhase.WaitingForPlayers:
+				break;
+			case GamePhase.StartingNewMatch:
+				var numSecondsLeft = MathX.CeilToInt( START_NEW_MATCH_DELAY - TimeSincePhaseChange );
+				if ( numSecondsLeft != _numSecondsLeftInPhase )
+				{
+					_numSecondsLeftInPhase = numSecondsLeft;
+					var sfx = Sound.Play( "woody_beep" );
+					if ( sfx != null )
+						sfx.Pitch = numSecondsLeft == 0 ? 1.1f : Utils.Map( numSecondsLeft, (int)START_NEW_MATCH_DELAY - 1, 1, 1f, 0.9f, EasingType.QuadIn );
+				}
+				break;
+			case GamePhase.RoundActive:
+				break;
+			case GamePhase.BetweenRounds:
+				break;
+			case GamePhase.BuyPhase:
+				var numSecondsLeftBuyPhase = MathX.CeilToInt( BuyPhaseDuration - TimeSincePhaseChange );
+				if ( numSecondsLeftBuyPhase <= 3 && numSecondsLeftBuyPhase != _numSecondsLeftInPhase )
+				{
+					_numSecondsLeftInPhase = numSecondsLeftBuyPhase;
+					var sfx = Sound.Play( "woody_beep" );
+					if ( sfx != null )
+						sfx.Pitch = numSecondsLeftBuyPhase == 0 ? 1.1f : Utils.Map( numSecondsLeftBuyPhase, 3, 1, 1f, 0.9f, EasingType.QuadIn );
+				}
+				break;
+			case GamePhase.Victory:
+				break;
+		}
+
 		if ( IsProxy )
 			return;
 
@@ -249,23 +282,15 @@ public sealed class Manager : Component, Component.INetworkListener
 			return;
 
 		var playerObj = Scene.Directory.FindByGuid( id );
-		if ( playerObj == null )
+		if ( playerObj != null )
 		{
-			StopCurrentMatch();
-			return;
-		}
-		
-		var player = playerObj.Components.Get<PlayerController>();
-		var otherPlayer = GetPlayer( GetOtherPlayerNum( player.PlayerNum ) );
+			var player = playerObj.Components.Get<PlayerController>();
+			player.AddScoreAndMoney( score: 0, money: 5 );
 
-		if ( otherPlayer == null )
-		{
-			StopCurrentMatch();
-			return;
+			var otherPlayer = GetPlayer( GetOtherPlayerNum( player.PlayerNum ) );
+			if ( otherPlayer != null )
+				otherPlayer.AddScoreAndMoney( score: 1, money: 10 );
 		}
-
-		player.AddScoreAndMoney( score: 0, money: 5 );
-		otherPlayer.AddScoreAndMoney( score: 1, money: 10 );
 
 		FinishRound();
 	}
@@ -278,6 +303,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		GamePhase = GamePhase.StartingNewMatch;
 		TimeSincePhaseChange = 0f;
+		_numSecondsLeftInPhase = (int)START_NEW_MATCH_DELAY;
 	}
 
 	void StartNewRound()
@@ -297,6 +323,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void Victory(int winningPlayerNum)
 	{
+		PlayVictoryEffects();
+
 		Player0?.Respawn();
 		Player1?.Respawn();
 
@@ -318,6 +346,12 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		GamePhase = GamePhase.Victory;
 		WinningPlayerName = GetPlayer( winningPlayerNum ).GameObject.Network.OwnerConnection.DisplayName;
+	}
+
+	[Broadcast]
+	public void PlayVictoryEffects()
+	{
+		Sound.Play( "victory" );
 	}
 
 	void StartBuyPhase()

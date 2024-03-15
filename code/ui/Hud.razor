@@ -22,7 +22,7 @@
 				roundLabel = $"Round {manager.RoundNum}";
 				break;
 			case GamePhase.BuyPhase:
-				roundLabel = $"Buy Phase ({MathX.FloorToInt(manager.BuyPhaseDuration - manager.TimeSincePhaseChange)})";
+				roundLabel = $"Buy Phase ({MathX.CeilToInt(manager.BuyPhaseDuration - manager.TimeSincePhaseChange)})";
 				break;
 			case GamePhase.Victory:
 				roundLabel = $"{manager.WinningPlayerName} wins! 🏆";
