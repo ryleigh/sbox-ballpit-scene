@@ -5,6 +5,7 @@ public class ShopItem : Component
 	[Sync] public UpgradeType UpgradeType { get; set; }
 	[Sync] public int NumLevels { get; set; }
 	[Sync] public int Price { get; set; }
+	[Sync] public int PlayerNum { get; set; }
 
 	//protected override void OnUpdate()
 	//{
@@ -13,7 +14,7 @@ public class ShopItem : Component
 	//}
 
 	[Broadcast]
-	public void Init(UpgradeType upgradeType, int numLevels, int price)
+	public void Init(UpgradeType upgradeType, int numLevels, int price, int playerNum)
 	{
 		if ( IsProxy )
 			return;
@@ -21,6 +22,7 @@ public class ShopItem : Component
 		UpgradeType = upgradeType;
 		NumLevels = numLevels;
 		Price = price;
+		PlayerNum = playerNum;
 	}
 
 	[Broadcast]

@@ -91,6 +91,8 @@ public sealed class Manager : Component, Component.INetworkListener
 			GameNetworkSystem.CreateLobby();
 		}
 
+		//Network.SetOrphanedMode( NetworkOrphaned.Random );
+
 		if ( Networking.IsHost )
 			Network.TakeOwnership();
 
@@ -99,8 +101,11 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		GamePhase = GamePhase.WaitingForPlayers;
 
-		//CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, 1, 3 );
+		//CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
+		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.ShootBalls, numLevels: 2, price: 4 );
+		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Gather, numLevels: 1, price: 0 );
 
+		StartBuyPhase();
 		//StartNewMatch();
 		//StartNewRound();
 	}
@@ -401,7 +406,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		var shopItemObj = ShopItemPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
 		shopItemObj.NetworkSpawn( GetConnection( playerNum ) );
-		shopItemObj.Components.Get<ShopItem>().Init( upgradeType, numLevels, price );
+		shopItemObj.Components.Get<ShopItem>().Init( upgradeType, numLevels, price, playerNum );
 	}
 
 	[Broadcast]

@@ -57,6 +57,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		Ragdoll = Components.GetInDescendantsOrSelf<RagdollController>();
 		HP = MaxHP;
+
+		Money = 448;
 	}
 
 	protected override void OnStart()
@@ -510,9 +512,13 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		if(amount < 0 && SelectedUpgradeType == UpgradeType.None)
 		{
-			foreach( var upgradeT in Upgrades )
+			foreach( var pair in Upgrades )
 			{
-				//if(!Globals.IsUpgradePassive(upgrade.)
+				if(!Globals.IsUpgradePassive( pair.Key ))
+				{
+					SelectedUpgradeType = pair.Key;
+					break;
+				}
 			}
 		}
 	}

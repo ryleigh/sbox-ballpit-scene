@@ -19,6 +19,17 @@ public class Globals
 		}
 	}
 
+	public static string GetIconForUpgrade( UpgradeType upgradeType )
+	{
+		switch ( upgradeType )
+		{
+			case UpgradeType.None: default: return "";
+			case UpgradeType.MoveSpeed: return "🏃🏻";
+			case UpgradeType.ShootBalls: return "🔴";
+			case UpgradeType.Gather: return "⤵️";
+		}
+	}
+
 	public static string GetDescriptionForUpgrade( UpgradeType upgradeType )
 	{
 		switch ( upgradeType )
@@ -30,16 +41,16 @@ public class Globals
 		}
 	}
 
-	public static string GetIconForUpgrade( UpgradeType upgradeType )
-	{
-		switch ( upgradeType )
-		{
-			case UpgradeType.None: default: return "";
-			case UpgradeType.MoveSpeed: return "movespeed";
-			case UpgradeType.ShootBalls: return "shoot";
-			case UpgradeType.Gather: return "gather";
-		}
-	}
+	//public static string GetIconForUpgrade( UpgradeType upgradeType )
+	//{
+	//	switch ( upgradeType )
+	//	{
+	//		case UpgradeType.None: default: return "";
+	//		case UpgradeType.MoveSpeed: return "movespeed";
+	//		case UpgradeType.ShootBalls: return "shoot";
+	//		case UpgradeType.Gather: return "gather";
+	//	}
+	//}
 
 	public static bool IsUpgradePassive( UpgradeType upgradeType )
 	{

@@ -8,20 +8,28 @@
 		return;
 	}
 
-	<div class="bg" style="background-image: url(@($"materials/icons/{Globals.GetIconForUpgrade(ShopItem.UpgradeType)}.png"));"></div>
+	@{
+		var player = Manager.Instance.GetPlayer(ShopItem.PlayerNum);
+		var money = player?.Money ?? 0;
+	}
 
-	<div class="price">@($"${ShopItem.Price}")</div>
+	<!-- <div class="bg" style="background-image: url(@($"materials/icons/{Globals.GetIconForUpgrade(ShopItem.UpgradeType)}.png"));"></div> -->
+	<div class="bg" style="opacity:@((Manager.Instance.HoveredObject == TargetObject ? 1f : 0.9f) * (money >= ShopItem.Price ? 1f : 0.4f));">@(Globals.GetIconForUpgrade(ShopItem.UpgradeType))</div>
+
+	<div class="price" style="color: @((money >= ShopItem.Price ? Color.White : new Color(1f, 0.3f, 0.3f)).Rgba);">@($"${ShopItem.Price}")</div>
 
 	@if(ShopItem.NumLevels > 1) 
 	{
 		<div class="level" style="right: 0px; top: 0px;">@($"{ShopItem.NumLevels}")</div>
 	}
 
+	<!--
 	@if(Manager.Instance.HoveredObject == TargetObject)
 	{
 		var pos = Scene.Camera.PointToScreenNormal(TargetObject.Transform.Position);
 		<div class="overlay" style="left:@(pos.x + 10)px; top:@(pos.y + 10)px;"></div>
 	}
+	-->
 </root>
 
 @code

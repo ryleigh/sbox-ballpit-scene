@@ -52,8 +52,8 @@ public class Ball : Component
 
 	protected override void OnUpdate()
 	{
-		Gizmo.Draw.Color = Color.White;
-		Gizmo.Draw.Text( $"{GameObject.Name}\n{Network.OwnerConnection?.Id.ToString().Substring(0, 6) ?? ""}", new global::Transform( Transform.Position + new Vector3(0f, 1f, 1f)) );
+		//Gizmo.Draw.Color = Color.White;
+		//Gizmo.Draw.Text( $"{GameObject.Name}\n{Network.OwnerConnection?.Id.ToString().Substring(0, 6) ?? ""}", new global::Transform( Transform.Position + new Vector3(0f, 1f, 1f)) );
 
 		if(IsWobbling)
 		{

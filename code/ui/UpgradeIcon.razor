@@ -4,7 +4,12 @@
 @attribute [StyleSheet( "UpgradeIcon.razor.scss" )]
 
 <root>
-	<div class="bg" style="background-image: url(@($"materials/icons/{Globals.GetIconForUpgrade(UpgradeType)}.png"));"></div>
+	@{
+		var player = Manager.Instance.GetPlayer(PlayerNum);
+	}
+
+	<!-- <div class="bg" style="background-image: url(@($"materials/icons/{Globals.GetIconForUpgrade(UpgradeType)}.png"));"></div> -->
+	<div class="bg" style="opacity:@((Manager.Instance.HoveredUpgradeType == UpgradeType ? 1f : 0.9f) * (player.SelectedUpgradeType == UpgradeType ? 1f : 0.6f) );">@(Globals.GetIconForUpgrade(UpgradeType))</div>
 	<div class="level">@($"{Level}")</div>
 </root>
 
@@ -12,6 +17,7 @@
 {
 	public UpgradeType UpgradeType { get; set; }
 	public int Level { get; set; }
+	public int PlayerNum { get; set; }
 
 	protected override int BuildHash() => System.HashCode.Combine(UpgradeType, Level);
 
