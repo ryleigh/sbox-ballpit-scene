@@ -54,8 +54,11 @@ public sealed class Dispenser : Component
 				{
 					var speed = 85f;
 
-					Manager.Instance.SpawnBall( (Vector2)Transform.Position, new Vector2( 1f, 0f ) * speed, playerNum: ShotNum % 2 == 0 ? 0 : 1 );
-					Manager.Instance.SpawnBall( (Vector2)Transform.Position, new Vector2( -1f, 0f ) * speed, playerNum: ShotNum % 2 == 0 ? 1 : 0 );
+					var right = new Vector2( 1f, 0f );
+					var left = new Vector2( -1f, 0f );
+
+					Manager.Instance.SpawnBall( (Vector2)Transform.Position + right, right * speed, playerNum: ShotNum % 2 == 0 ? 0 : 1 );
+					Manager.Instance.SpawnBall( (Vector2)Transform.Position + left, left * speed, playerNum: ShotNum % 2 == 0 ? 1 : 0 );
 
 					PlayShootEffects();
 

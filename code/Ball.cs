@@ -3,7 +3,7 @@ using Sandbox;
 public class Ball : Component
 {
 	[Sync] public int PlayerNum { get; set; }
-	//[Sync] public int CurrentSide { get; set; }
+	[Sync] public int CurrentSide { get; set; }
 
 	[Sync] public Vector2 Velocity { get; set; }
 	[Property, Sync, Hide] public Color Color { get; private set; }
@@ -21,6 +21,8 @@ public class Ball : Component
 	public bool IsWobbling { get; set; }
 	public TimeSince TimeSinceWobble { get; private set; }
 	private float _wobbleTime = 0.5f;
+
+	public TimeSince TimeSinceBumped { get; private set; }
 
 	private Vector3 _localScaleStart;
 
@@ -50,8 +52,8 @@ public class Ball : Component
 
 	protected override void OnUpdate()
 	{
-		//Gizmo.Draw.Color = Color.White;
-		//Gizmo.Draw.Text( $"{IsWobbling}", new global::Transform( Transform.Position + new Vector3(0f, 1f, 1f)) );
+		Gizmo.Draw.Color = Color.White;
+		Gizmo.Draw.Text( $"{GameObject.Name}\n{Network.OwnerConnection?.Id.ToString().Substring(0, 6) ?? ""}", new global::Transform( Transform.Position + new Vector3(0f, 1f, 1f)) );
 
 		if(IsWobbling)
 		{
@@ -83,8 +85,9 @@ public class Ball : Component
 		{
 
 
-			// todo: don't do this if IsProxy=true?
-			Transform.Position += (Vector3)Velocity * Time.Delta;
+			// don't move if IsProxy?
+			if(!IsProxy)
+				Transform.Position += (Vector3)Velocity * Time.Delta;
 
 
 
@@ -115,14 +118,10 @@ public class Ball : Component
 
 		CheckBounds();
 
-		//if(CurrentSide == 0 && Transform.Position.x > 0f)
-		//{
-		//	SetSide( 1 );
-		//}
-		//else if(CurrentSide == 1 && Transform.Position.x < 0f)
-		//{
-		//	SetSide( 0 );
-		//}
+		if ( CurrentSide == 0 && Transform.Position.x > 0f )
+			SetSide( 1 );
+		else if ( CurrentSide == 1 && Transform.Position.x < 0f )
+			SetSide( 0 );
 	}
 
 	void CheckBounds()
@@ -171,11 +170,11 @@ public class Ball : Component
 		}
 	}
 
-	[Broadcast]
+	//[Broadcast]
 	public void SetPlayerNum(int playerNum )
 	{
-		if ( IsProxy )
-			return;
+		//if ( IsProxy )
+		//	return;
 
 		PlayerNum = playerNum;
 
@@ -190,19 +189,19 @@ public class Ball : Component
 		//highlightOutline.InsideColor = Color.WithAlpha( 0.75f );
 	}
 
-	//public void SetSide(int side)
-	//{
-	//	if(CurrentSide == side) 
-	//		return;
+	public void SetSide( int side )
+	{
+		if ( CurrentSide == side )
+			return;
 
-	//	CurrentSide = side;
+		var connection = Manager.Instance.GetConnection( side );
+		//Log.Info( $"{GameObject.Name} isHost: {(Network.OwnerConnection?.IsHost.ToString() ?? "...")} isOwner: {Network.IsOwner} SetSide: {CurrentSide}->{side} curr: {Network.OwnerConnection?.Id.ToString().Substring( 0, 6 ) ?? "..."} , switching to: {connection?.Id.ToString().Substring( 0, 6 ) ?? "..."}" );
+		
+		CurrentSide = side;
 
-	//	var connection = Manager.Instance.GetConnection( side );
-	//	if( connection != null )
-	//	{
-	//		Network.AssignOwnership( connection );
-	//	}
-	//}
+		if ( connection != null )
+			Network.AssignOwnership( connection );
+	}
 
 	[Broadcast]
 	public void HitPlayer(Guid hitPlayerId)
@@ -259,15 +258,17 @@ public class Ball : Component
 		IsActive = false;
 	}
 
+	//[Broadcast]
+	//public void DestroyBall()
+	//{
+	//	GameObject.Destroy();
+	//}
+
 	[Broadcast]
-	public void BumpedByPlayer(Vector2 direction)
+	public void BumpedByPlayer()
 	{
 		IsWobbling = true;
 		TimeSinceWobble = 0f;
-
-		if(IsProxy)
-			return;
-
-		Velocity = direction * Velocity.Length;
+		TimeSinceBumped = 0f;
 	}
 }

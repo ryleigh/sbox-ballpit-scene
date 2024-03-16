@@ -165,11 +165,13 @@ public class PlayerController : Component, Component.ITriggerListener
 
 				if( ball.PlayerNum == PlayerNum )
 				{
-					if( ball.TimeSinceWobble > 0.25f &&
+					if( ball.TimeSinceBumped > 0.5f &&
 						(ball.Transform.Position - Transform.Position).WithZ( 0f ).LengthSquared < MathF.Pow( RadiusLarge + ball.Radius, 2f ) )
 					{
-						ball.BumpedByPlayer( direction: ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal );
-						HitOwnBall( (Vector2)ball.Transform.Position );
+						var direction = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal;
+						ball.Velocity = direction * ball.Velocity.Length;
+						ball.BumpedByPlayer();
+						BumpOwnBall( (Vector2)ball.Transform.Position );
 					}
 				}
 				else
@@ -186,6 +188,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	void TryUseItem()
 	{
+		Log.Info( $"TryUseItem: {SelectedUpgradeType}" );
+
 		switch(SelectedUpgradeType)
 		{
 			case UpgradeType.None: default:
@@ -295,7 +299,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	}
 
 	[Broadcast]
-	public void HitOwnBall( Vector2 pos )
+	public void BumpOwnBall( Vector2 pos )
 	{
 		Sound.Play( "impact-thump", new Vector3(pos.x, pos.y, Globals.SFX_HEIGHT ) );
 	}
@@ -503,6 +507,14 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		if ( amount > 0 && !Globals.IsUpgradePassive( upgradeType ) && SelectedUpgradeType == UpgradeType.None )
 			SelectedUpgradeType = upgradeType;
+
+		if(amount < 0 && SelectedUpgradeType == UpgradeType.None)
+		{
+			foreach( var upgradeT in Upgrades )
+			{
+				//if(!Globals.IsUpgradePassive(upgrade.)
+			}
+		}
 	}
 
 	[Broadcast]

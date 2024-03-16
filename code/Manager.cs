@@ -101,7 +101,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		//CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, 1, 3 );
 
-		StartNewMatch();
+		//StartNewMatch();
 		//StartNewRound();
 	}
 
@@ -109,7 +109,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		//Log.Info( $"Player '{channel.DisplayName}' is becoming active (local = {channel == Connection.Local}) (host = {channel.IsHost})" );
 
-		var playerObj = PlayerPrefab.Clone( Vector3.Zero );
+		var playerObj = PlayerPrefab.Clone( new Vector3(0f, 500f, 500f));
 		var player = playerObj.Components.Get<PlayerController>();
 
 		//var copter = copterObj.Components.Get<Copter>();
@@ -317,7 +317,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void FinishRound()
 	{
-		DestroyBalls();
+		DespawnBalls();
 		GamePhase = GamePhase.BetweenRounds;
 	}
 
@@ -370,15 +370,17 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( DoesPlayerExist0 )
 		{
 			CreateSkipButton( 0 );
-			CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, 1, 3 );
-			CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.ShootBalls, 2, 4 );
+			CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
+			CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.ShootBalls, numLevels: 2, price: 4 );
+			CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Gather, numLevels: 1, price: 0 );
 		}
 
 		if ( DoesPlayerExist1 )
 		{
 			CreateSkipButton( 1 );
-			CreateShopItem( 1, new Vector2( 215f, -20f ), UpgradeType.MoveSpeed, 1, 3 );
-			CreateShopItem( 1, new Vector2( 215f, 20f ), UpgradeType.ShootBalls, 2, 4 );
+			CreateShopItem( 1, new Vector2( 215f, -20f ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
+			CreateShopItem( 1, new Vector2( 215f, 20f ), UpgradeType.ShootBalls, numLevels: 2, price: 4 );
+			CreateShopItem( 1, new Vector2( 215f, -60f ), UpgradeType.Gather, numLevels: 1, price: 0 );
 		}
 	}
 
@@ -428,12 +430,27 @@ public sealed class Manager : Component, Component.INetworkListener
 		//Log.Info( $"SpawnBall - connection: {connection}" );
 
 		//ballObj.NetworkSpawn( GetConnection( playerNum ) );
-		ballObj.NetworkSpawn();
+		//ballObj.NetworkSpawn();
 
 		ball.SetPlayerNum( playerNum );
 
-		//int side = pos.x > 0f ? 1 : 0;
-		//ballObj.NetworkSpawn(GetConnection(side));
+		int side = pos.x > 0f ? 1 : 0;
+		ball.CurrentSide = side;
+
+		ballObj.Network.SetOwnerTransfer( OwnerTransfer.Takeover );
+		ballObj.Network.SetOrphanedMode( NetworkOrphaned.Destroy );
+
+		var connection = GetConnection( side );
+		if(connection != null)
+		{
+			ballObj.NetworkSpawn( connection );
+		}
+		else
+		{
+			ballObj.NetworkSpawn();
+		}
+
+		//Log.Info( $"--- spawned {ballObj.Name} side: {side} connection: {ballObj.Network.OwnerConnection?.Id.ToString().Substring( 0, 6 ) ?? "..."}" );
 	}
 
 	[Broadcast]
@@ -546,7 +563,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		Player0?.Respawn();
 		Player1?.Respawn();
 
-		DestroyBalls();
+		DespawnBalls();
 		DestroyShopStuff();
 
 		GamePhase = GamePhase.WaitingForPlayers;
@@ -563,7 +580,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		_slowmoEasingType = easingType;
 	}
 
-	void DestroyBalls()
+	void DespawnBalls()
 	{
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )
 		{
@@ -571,6 +588,14 @@ public sealed class Manager : Component, Component.INetworkListener
 				ball.Despawn();
 		}
 	}
+
+	//void DestroyBalls()
+	//{
+	//	foreach ( var ball in Scene.GetAllComponents<Ball>() )
+	//	{
+	//		ball.DestroyBall();
+	//	}
+	//}
 
 	void DestroyShopStuff()
 	{

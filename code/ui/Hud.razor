@@ -133,9 +133,10 @@
 		if(manager.HoveredObject.Tags.Has("item"))
 		{
 			var pos = Scene.Camera.PointToScreenNormal(manager.HoveredObject.Transform.Position);
+			var upgradeType = manager.HoveredObject.Components.Get<ShopItem>().UpgradeType;
 
 			<div class="item_description" style="left:@(pos.x * 100f + (pos.x < 0.5f ? 3f : -13.5f))%; top:@(pos.y * 100f - 4f)%;">
-				@(Globals.GetDescriptionForUpgrade(manager.HoveredObject.Components.Get<ShopItem>().UpgradeType))
+				@($"{Globals.GetNameForUpgrade(upgradeType).ToUpper()}\n\n{Globals.GetDescriptionForUpgrade(upgradeType)}")
 			</div>
 		}
 	}
@@ -145,7 +146,7 @@
 		//Log.Info($"{manager.HoveredUpgradeType} - {Mouse.Position}");
 
 		<div class="item_description" style="left:@(Mouse.Position.x)px; top:@(Mouse.Position.y)px;">
-			@(Globals.GetDescriptionForUpgrade(manager.HoveredUpgradeType))
+			@($"{Globals.GetNameForUpgrade(manager.HoveredUpgradeType).ToUpper()}\n\n{Globals.GetDescriptionForUpgrade(manager.HoveredUpgradeType)}")
 		</div>
 	}
 
