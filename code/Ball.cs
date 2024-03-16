@@ -271,4 +271,13 @@ public class Ball : Component
 		TimeSinceWobble = 0f;
 		TimeSinceBumped = 0f;
 	}
+
+	[Broadcast]
+	public void SetDirection(Vector2 dir)
+	{
+		if ( IsProxy )
+			return;
+
+		Velocity = dir * Velocity.Length;
+	}
 }

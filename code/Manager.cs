@@ -105,7 +105,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.ShootBalls, numLevels: 2, price: 4 );
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Gather, numLevels: 1, price: 0 );
 
-		//StartBuyPhase();
+		StartBuyPhase();
 		//StartNewMatch();
 		//StartNewRound();
 	}
@@ -376,16 +376,16 @@ public sealed class Manager : Component, Component.INetworkListener
 		{
 			CreateSkipButton( 0 );
 			CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
-			CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.ShootBalls, numLevels: 2, price: 4 );
-			CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Gather, numLevels: 1, price: 0 );
+			CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
+			CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Gather, numLevels: 3, price: 0 );
 		}
 
 		if ( DoesPlayerExist1 )
 		{
 			CreateSkipButton( 1 );
 			CreateShopItem( 1, new Vector2( 215f, -20f ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
-			CreateShopItem( 1, new Vector2( 215f, 20f ), UpgradeType.ShootBalls, numLevels: 2, price: 4 );
-			CreateShopItem( 1, new Vector2( 215f, -60f ), UpgradeType.Gather, numLevels: 1, price: 0 );
+			CreateShopItem( 1, new Vector2( 215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
+			CreateShopItem( 1, new Vector2( 215f, -60f ), UpgradeType.Gather, numLevels: 3, price: 0 );
 		}
 	}
 
@@ -477,6 +477,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		var player = playerObj.Components.Get<PlayerController>();
 		player.SetPlayerNum( playerNum );
 		player.SetSpectator( false );
+		player.PassiveUpgrades.Clear();
+		player.ActiveUpgrades.Clear();
+		player.SelectedUpgradeType = UpgradeType.None;
 
 		if ( playerNum == 0 )
 		{

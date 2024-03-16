@@ -98,7 +98,7 @@
 			{
 				var upgradeType = pair.Key;
 				var level = pair.Value;
-				<UpgradeIcon UpgradeType=@upgradeType Level=@level PlayerNum=@(1) />	
+				<UpgradeIcon UpgradeType=@upgradeType Level=@level />	
 			}
 		</div>
 
@@ -110,7 +110,7 @@
 				var level = pair.Value;
 				if(level > 0)
 				{
-					<UpgradeIcon UpgradeType=@upgradeType Level=@level />		
+					<UpgradeIcon UpgradeType=@upgradeType Level=@level PlayerNum=@(1) />		
 				}
 			}
 		</div>
@@ -133,7 +133,7 @@
 	{
 		//Log.Info($"{manager.HoveredUpgradeType} - {Mouse.Position}");
 
-		<div class="item_description" style="left:@(Mouse.Position.x)px; top:@(Mouse.Position.y)px;">
+		<div class="item_description" style="left:@(Mouse.Position.x * Panel.ScaleFromScreen)px; top:@(Mouse.Position.y * Panel.ScaleFromScreen - 100)px;">
 			@($"{Globals.GetNameForUpgrade(manager.HoveredUpgradeType).ToUpper()}\n\n{Globals.GetDescriptionForUpgrade(manager.HoveredUpgradeType)}")
 		</div>
 	}

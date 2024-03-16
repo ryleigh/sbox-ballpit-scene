@@ -3,7 +3,7 @@ global using System;
 global using System.Collections.Generic;
 global using System.Linq;
 
-public enum UpgradeType { None, MoveSpeed, ShootBalls, Gather, }
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, }
 
 public class Globals
 {
@@ -14,7 +14,7 @@ public class Globals
 		{
 			case UpgradeType.None: default: return "";
 			case UpgradeType.MoveSpeed: return "Move Speed";
-			case UpgradeType.ShootBalls: return "Bounce Speed";
+			case UpgradeType.Volley: return "Volley";
 			case UpgradeType.Gather: return "Gather";
 		}
 	}
@@ -25,7 +25,7 @@ public class Globals
 		{
 			case UpgradeType.None: default: return "";
 			case UpgradeType.MoveSpeed: return "🏃🏻";
-			case UpgradeType.ShootBalls: return "🔴";
+			case UpgradeType.Volley: return "🔴";
 			case UpgradeType.Gather: return "⤵️";
 		}
 	}
@@ -36,7 +36,7 @@ public class Globals
 		{
 			case UpgradeType.None: default: return "";
 			case UpgradeType.MoveSpeed: return "Move faster.";
-			case UpgradeType.ShootBalls: return "Shoot some balls.";
+			case UpgradeType.Volley: return "Shoot some balls.";
 			case UpgradeType.Gather: return "Your balls target you.";
 		}
 	}
@@ -58,7 +58,7 @@ public class Globals
 		{
 			case UpgradeType.None: default: return false;
 			case UpgradeType.MoveSpeed: return true;
-			case UpgradeType.ShootBalls: return false;
+			case UpgradeType.Volley: return false;
 			case UpgradeType.Gather: return false;
 		}
 	}

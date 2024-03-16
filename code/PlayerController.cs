@@ -134,15 +134,15 @@ public class PlayerController : Component, Component.ITriggerListener
 			return;
 		}
 
-		if ( !IsDead )
-		{
-			var wishMoveDir = new Vector2( -Input.AnalogMove.y, Input.AnalogMove.x ).Normal;
+		if ( IsDead )
+			return;
 
-			float moveSpeed = Utils.Map( GetUpgradeLevel( UpgradeType.MoveSpeed ), 0, 10, 90f, 125f, EasingType.SineOut );
-			Velocity = Utils.DynamicEaseTo( Velocity, wishMoveDir * moveSpeed, 0.2f, Time.Delta );
-			Transform.Position += (Vector3)Velocity * Time.Delta;
-			Transform.Position = Transform.Position.WithZ( IsSpectator ? Manager.SPECTATOR_HEIGHT : 0f );
-		}
+		var wishMoveDir = new Vector2( -Input.AnalogMove.y, Input.AnalogMove.x ).Normal;
+
+		float moveSpeed = Utils.Map( GetUpgradeLevel( UpgradeType.MoveSpeed ), 0, 10, 90f, 125f, EasingType.SineOut );
+		Velocity = Utils.DynamicEaseTo( Velocity, wishMoveDir * moveSpeed, 0.2f, Time.Delta );
+		Transform.Position += (Vector3)Velocity * Time.Delta;
+		Transform.Position = Transform.Position.WithZ( IsSpectator ? Manager.SPECTATOR_HEIGHT : 0f );
 
 		if ( IsSpectator )
 		{
@@ -151,9 +151,9 @@ public class PlayerController : Component, Component.ITriggerListener
 		}
 		else
 		{
-			if ( Manager.Instance.GamePhase == GamePhase.RoundActive && Input.Pressed( "Jump" ) )
+			if ( Input.Pressed( "Jump" ) )
 			{
-				TryUseItem();
+				TryUseItem(SelectedUpgradeType);
 			}
 			else if(Input.MouseWheel != Vector2.Zero)
 			{
@@ -161,32 +161,33 @@ public class PlayerController : Component, Component.ITriggerListener
 			}
 
 			CheckBoundsPlaying();
-		}
 
-		if(!IsDead && !IsSpectator && Manager.Instance.GamePhase == GamePhase.RoundActive )
-		{
-			foreach ( var ball in Scene.GetAllComponents<Ball>() )
+			// collide with balls
+			if ( Manager.Instance.GamePhase == GamePhase.RoundActive )
 			{
-				if ( !ball.IsActive )
-					continue;
+				foreach ( var ball in Scene.GetAllComponents<Ball>() )
+				{
+					if ( !ball.IsActive )
+						continue;
 
-				if( ball.PlayerNum == PlayerNum )
-				{
-					if( ball.TimeSinceBumped > 0.5f &&
-						(ball.Transform.Position - Transform.Position).WithZ( 0f ).LengthSquared < MathF.Pow( RadiusLarge + ball.Radius, 2f ) )
+					if ( ball.PlayerNum == PlayerNum )
 					{
-						var direction = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal;
-						ball.Velocity = direction * ball.Velocity.Length;
-						ball.BumpedByPlayer();
-						BumpOwnBall( (Vector2)ball.Transform.Position );
+						if ( ball.TimeSinceBumped > 0.5f &&
+							(ball.Transform.Position - Transform.Position).WithZ( 0f ).LengthSquared < MathF.Pow( RadiusLarge + ball.Radius, 2f ) )
+						{
+							var direction = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal;
+							ball.Velocity = direction * ball.Velocity.Length;
+							ball.BumpedByPlayer();
+							BumpOwnBall( (Vector2)ball.Transform.Position );
+						}
 					}
-				}
-				else
-				{
-					if ( !IsInvulnerable &&
-						 (ball.Transform.Position - Transform.Position ).WithZ( 0f ).LengthSquared < MathF.Pow( RadiusSmall + ball.Radius, 2f ))
+					else
 					{
-						HitOpponentBall( ball );
+						if ( !IsInvulnerable &&
+							 (ball.Transform.Position - Transform.Position).WithZ( 0f ).LengthSquared < MathF.Pow( RadiusSmall + ball.Radius, 2f ) )
+						{
+							HitOpponentBall( ball );
+						}
 					}
 				}
 			}
@@ -219,15 +220,17 @@ public class PlayerController : Component, Component.ITriggerListener
 		SelectedUpgradeType = upgradeTypes.ElementAt(nextIndex);
 	}
 
-	void TryUseItem()
+	public void TryUseItem(UpgradeType upgradeType)
 	{
-		Log.Info( $"TryUseItem: {SelectedUpgradeType}" );
+		if ( Manager.Instance.GamePhase != GamePhase.RoundActive ||
+			!ActiveUpgrades.ContainsKey( upgradeType ) )
+			return;
 
-		switch(SelectedUpgradeType)
+		switch( upgradeType )
 		{
 			case UpgradeType.None: default:
 				break;
-			case UpgradeType.ShootBalls:
+			case UpgradeType.Volley:
 				var currDegrees = -30f;
 				for(int i = 0; i < 5; i++)
 				{
@@ -239,10 +242,21 @@ public class PlayerController : Component, Component.ITriggerListener
 				}
 
 				break;
+			case UpgradeType.Gather:
+				foreach ( var ball in Scene.GetAllComponents<Ball>() )
+				{
+					if ( ball.IsActive && ball.PlayerNum == PlayerNum )
+						ball.SetDirection( ((Vector2)Transform.Position - (Vector2)ball.Transform.Position).Normal );
+				}
+
+				break;
 		}
 
-		if ( SelectedUpgradeType != UpgradeType.None )
-			AdjustUpgradeLevel( SelectedUpgradeType, -1 );
+		if ( upgradeType != UpgradeType.None )
+			AdjustUpgradeLevel( upgradeType, -1 );
+
+		if ( Manager.Instance.HoveredUpgradeType != UpgradeType.None && !ActiveUpgrades.ContainsKey( Manager.Instance.HoveredUpgradeType ) )
+			Manager.Instance.HoveredUpgradeType = UpgradeType.None;
 	}
 
 	protected override void OnFixedUpdate()
