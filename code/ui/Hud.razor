@@ -53,29 +53,23 @@
 
 		// PASSIVE UPGRADES
 		<div class="upgrades_passive" style="left: 10px; bottom: 60px; flex-direction: column-reverse;">
-			@foreach(var pair in player0.Upgrades)
+			@foreach(var pair in player0.PassiveUpgrades)
 			{
 				var upgradeType = pair.Key;
-				if(Globals.IsUpgradePassive(upgradeType))
-				{
-					var level = pair.Value;
-					<UpgradeIcon UpgradeType=@upgradeType Level=@level />	
-				}
+				var level = pair.Value;
+				<UpgradeIcon UpgradeType=@upgradeType Level=@level />	
 			}
 		</div>
 
 		// ACTIVE UPGRADES
 		<div class="upgrades_active" style="left: 360px; bottom: 10px; flex-direction: row;">
-			@foreach(var pair in player0.Upgrades)
+			@foreach(var pair in player0.ActiveUpgrades)
 			{
 				var upgradeType = pair.Key;
-				if(!Globals.IsUpgradePassive(upgradeType))
+				var level = pair.Value;
+				if(level > 0)
 				{
-					var level = pair.Value;
-					if(level > 0)
-					{
-						<UpgradeIcon UpgradeType=@upgradeType Level=@level PlayerNum=@(0) />		
-					}
+					<UpgradeIcon UpgradeType=@upgradeType Level=@level PlayerNum=@(0) />		
 				}
 			}
 		</div>
@@ -100,29 +94,23 @@
 
 		// PASSIVE UPGRADES
 		<div class="upgrades_passive" style="right: 10px; bottom: 60px; flex-direction: column-reverse;">
-			@foreach(var pair in player1.Upgrades)
+			@foreach(var pair in player1.PassiveUpgrades)
 			{
 				var upgradeType = pair.Key;
-				if(Globals.IsUpgradePassive(upgradeType))
-				{
-					var level = pair.Value;
-					<UpgradeIcon UpgradeType=@upgradeType Level=@level PlayerNum=@(1) />	
-				}
+				var level = pair.Value;
+				<UpgradeIcon UpgradeType=@upgradeType Level=@level PlayerNum=@(1) />	
 			}
 		</div>
 
 		// ACTIVE UPGRADES
 		<div class="upgrades_active" style="right: 360px; bottom: 10px; flex-direction: row;">
-			@foreach(var pair in player1.Upgrades)
+			@foreach(var pair in player1.ActiveUpgrades)
 			{
 				var upgradeType = pair.Key;
-				if(!Globals.IsUpgradePassive(upgradeType))
+				var level = pair.Value;
+				if(level > 0)
 				{
-					var level = pair.Value;
-					if(level > 0)
-					{
-						<UpgradeIcon UpgradeType=@upgradeType Level=@level />		
-					}
+					<UpgradeIcon UpgradeType=@upgradeType Level=@level />		
 				}
 			}
 		</div>

@@ -35,7 +35,8 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Sync] public int NumMatchWins { get; private set; }
 	[Sync] public int NumMatchLosses { get; private set; }
 
-	[Sync] public NetDictionary<UpgradeType, int> Upgrades { get; set; } = new();
+	[Sync] public NetDictionary<UpgradeType, int> PassiveUpgrades { get; set; } = new();
+	[Sync] public NetDictionary<UpgradeType, int> ActiveUpgrades { get; set; } = new();
 	public const int MAX_UPGRADE_LEVEL = 10;
 
 	[Sync] public UpgradeType SelectedUpgradeType { get; set; }
@@ -462,8 +463,16 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public int GetUpgradeLevel(UpgradeType upgradeType)
 	{
-		if(Upgrades.ContainsKey(upgradeType))
-			return Upgrades[upgradeType];
+		if ( Globals.IsUpgradePassive( upgradeType ) )
+		{
+			if( PassiveUpgrades.ContainsKey( upgradeType ) )
+				return PassiveUpgrades[upgradeType];
+		}
+		else
+		{
+			if ( ActiveUpgrades.ContainsKey( upgradeType ) )
+				return ActiveUpgrades[upgradeType];
+		}
 
 		return 0;
 	}
@@ -494,27 +503,29 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( IsProxy )
 			return;
 
-		if ( Upgrades.ContainsKey(upgradeType) )
-			Upgrades[upgradeType] = Math.Min( Upgrades[upgradeType] + amount, MAX_UPGRADE_LEVEL );
-		else
-			Upgrades.Add(upgradeType, Math.Min( amount, MAX_UPGRADE_LEVEL ) );
+		var upgrades = Globals.IsUpgradePassive(upgradeType) ? PassiveUpgrades : ActiveUpgrades;
 
-		if ( Upgrades[upgradeType] <= 0 )
+		if ( upgrades.ContainsKey(upgradeType) )
+			upgrades[upgradeType] = Math.Min( upgrades[upgradeType] + amount, MAX_UPGRADE_LEVEL );
+		else
+			upgrades.Add(upgradeType, Math.Min( amount, MAX_UPGRADE_LEVEL ) );
+
+		if ( upgrades[upgradeType] <= 0 )
 		{
-			Upgrades.Remove( upgradeType );
+			upgrades.Remove( upgradeType );
 
 			if ( SelectedUpgradeType == upgradeType )
 				SelectedUpgradeType = UpgradeType.None;
 		}
 
-		if ( amount > 0 && !Globals.IsUpgradePassive( upgradeType ) && SelectedUpgradeType == UpgradeType.None )
-			SelectedUpgradeType = upgradeType;
-
-		if(amount < 0 && SelectedUpgradeType == UpgradeType.None)
+		if(!Globals.IsUpgradePassive( upgradeType ) )
 		{
-			foreach( var pair in Upgrades )
+			if ( amount > 0 && SelectedUpgradeType == UpgradeType.None )
+				SelectedUpgradeType = upgradeType;
+
+			if ( amount < 0 && SelectedUpgradeType == UpgradeType.None )
 			{
-				if(!Globals.IsUpgradePassive( pair.Key ))
+				foreach ( var pair in ActiveUpgrades )
 				{
 					SelectedUpgradeType = pair.Key;
 					break;
@@ -529,10 +540,12 @@ public class PlayerController : Component, Component.ITriggerListener
 		if( IsProxy ) 
 			return;
 
-		if ( Upgrades.ContainsKey( upgradeType ) )
-			Upgrades[upgradeType] = Math.Min( Upgrades[upgradeType] + amount, MAX_UPGRADE_LEVEL );
+		var upgrades = Globals.IsUpgradePassive( upgradeType ) ? PassiveUpgrades : ActiveUpgrades;
+
+		if ( upgrades.ContainsKey( upgradeType ) )
+			upgrades[upgradeType] = Math.Min( upgrades[upgradeType] + amount, MAX_UPGRADE_LEVEL );
 		else
-			Upgrades.Add( upgradeType, Math.Min( amount, MAX_UPGRADE_LEVEL ) );
+			upgrades.Add( upgradeType, Math.Min( amount, MAX_UPGRADE_LEVEL ) );
 	}
 
 	[Broadcast]
@@ -550,7 +563,10 @@ public class PlayerController : Component, Component.ITriggerListener
 	{
 		int hash = 0;
 
-		foreach ( var upgrade in Upgrades )
+		foreach ( var upgrade in PassiveUpgrades )
+			hash += upgrade.Value;
+
+		foreach ( var upgrade in ActiveUpgrades )
 			hash += upgrade.Value;
 
 		return hash;
