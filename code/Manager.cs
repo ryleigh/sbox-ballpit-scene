@@ -105,7 +105,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.ShootBalls, numLevels: 2, price: 4 );
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Gather, numLevels: 1, price: 0 );
 
-		StartBuyPhase();
+		//StartBuyPhase();
 		//StartNewMatch();
 		//StartNewRound();
 	}

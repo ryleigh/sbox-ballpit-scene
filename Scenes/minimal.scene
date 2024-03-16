@@ -1,15 +1,16 @@
 {
-  "Id": "9f832399-4887-46b0-8f21-2ee284f538e2",
+  "__guid": "9f832399-4887-46b0-8f21-2ee284f538e2",
   "GameObjects": [
     {
-      "Id": "c155d476-e3e0-4db6-832b-8bc2675a5ff2",
+      "__guid": "c155d476-e3e0-4db6-832b-8bc2675a5ff2",
       "Name": "Manager",
       "Position": "-79.17239,54.31364,-161.3666",
-      "Networked": true,
       "Enabled": true,
+      "NetworkMode": 1,
       "Components": [
         {
           "__type": "Manager",
+          "__guid": "e8fd85c8-2801-4f41-81f8-cbfbb2d4a78a",
           "BallExplosionParticles": {
             "_type": "gameobject",
             "prefab": "effects/ball_explosion_particles.prefab"
@@ -39,25 +40,29 @@
         },
         {
           "__type": "ScreenPanel",
+          "__guid": "399f1b2b-3ae6-4716-8b2f-aa84313db96b",
           "AutoScreenScale": true,
           "Opacity": 1,
           "Scale": 1,
           "ZIndex": 100
         },
         {
-          "__type": "Hud"
+          "__type": "Hud",
+          "__guid": "ea357f33-9a78-459e-b62d-e9eecc0df2ef"
         }
       ]
     },
     {
-      "Id": "bfc59c12-1ed2-4f91-8956-a95a315eac3c",
+      "__guid": "bfc59c12-1ed2-4f91-8956-a95a315eac3c",
       "Name": "Sun",
       "Rotation": "0.2628342,-0.6741447,-0.2507316,-0.6431024",
       "Tags": "light_directional,light",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "DirectionalLight",
+          "__guid": "fede1076-16d0-4535-a1da-76dea5612de4",
           "FogMode": "Enabled",
           "FogStrength": 1,
           "LightColor": "0.94419,0.97767,1,1",
@@ -67,18 +72,21 @@
       ]
     },
     {
-      "Id": "00344a8c-fa5e-45ae-b12a-10bb781a1dc3",
+      "__guid": "00344a8c-fa5e-45ae-b12a-10bb781a1dc3",
       "Name": "2D Skybox",
       "Tags": "skybox",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "SkyBox2D",
+          "__guid": "c54fa58d-597f-45b8-9b68-fbd8520166d5",
           "SkyMaterial": "materials/skybox/light_test_sky_sunny03.vmat",
           "Tint": "1,1,1,1"
         },
         {
           "__type": "EnvmapProbe",
+          "__guid": "5985538d-831e-4f88-9504-15933c62919c",
           "Bounds": {
             "Mins": "-512,-512,-512",
             "Maxs": "512,512,512"
@@ -91,15 +99,16 @@
       ]
     },
     {
-      "Id": "6ad70641-3c6c-4402-9c85-9a4969af4764",
+      "__guid": "6ad70641-3c6c-4402-9c85-9a4969af4764",
       "Name": "ground",
       "Scale": "5.3333,3.000001,5",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "18c9c793-353f-40cf-a61f-6034851401e0",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
           "MaterialOverride": "materials/default.vmat",
           "Model": "models/dev/plane.vmdl",
           "RenderType": "On",
@@ -107,25 +116,26 @@
         },
         {
           "__type": "BoxCollider",
+          "__guid": "01d29087-3ada-468e-b7ea-8cd2fd2f4375",
           "Center": "0,0,-5",
           "IsTrigger": false,
           "Scale": "100,100,10",
-          "Static": true,
-          "Surface": null
+          "Static": true
         }
       ]
     },
     {
-      "Id": "63c8989c-3142-4b73-8966-1a8f68902970",
+      "__guid": "63c8989c-3142-4b73-8966-1a8f68902970",
       "Name": "ground_2",
       "Position": "128,-0.05786896,1",
       "Scale": "2.338768,2.437423,1",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "7face56c-b95a-4d03-89ba-996ce35163ba",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
           "MaterialOverride": "materials/default.vmat",
           "Model": "models/dev/plane.vmdl",
           "RenderType": "Off",
@@ -134,16 +144,17 @@
       ]
     },
     {
-      "Id": "06f0daeb-00a6-4572-8ec7-75d54d735b6a",
+      "__guid": "06f0daeb-00a6-4572-8ec7-75d54d735b6a",
       "Name": "ground_1",
       "Position": "-128,-0.05786896,1",
       "Scale": "2.338768,2.438,1",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "c9995b59-9dcc-476a-a1d3-c42335d97e09",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
           "MaterialOverride": "materials/default.vmat",
           "Model": "models/dev/plane.vmdl",
           "RenderType": "Off",
@@ -152,16 +163,17 @@
       ]
     },
     {
-      "Id": "3c1bff51-07c9-4229-88d3-b2fa65222b6f",
+      "__guid": "3c1bff51-07c9-4229-88d3-b2fa65222b6f",
       "Name": "bleachers",
       "Position": "-284.4013,-0.05786896,80",
       "Scale": "0.9561952,2.973863,1",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "34d07958-cf53-4c31-9a3c-2bd8dadfb4c7",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
           "MaterialOverride": "materials/default.vmat",
           "Model": "models/dev/plane.vmdl",
           "RenderType": "Off",
@@ -170,16 +182,17 @@
       ]
     },
     {
-      "Id": "45cf1ed1-1383-41de-bb95-ed23733d24c2",
+      "__guid": "45cf1ed1-1383-41de-bb95-ed23733d24c2",
       "Name": "bleachers (1)",
       "Position": "284.401,-0.05786896,80",
       "Scale": "0.9561952,2.973863,1",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "c6102a7b-8e0a-421d-a44b-a07a9cb1ea7e",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
           "MaterialOverride": "materials/default.vmat",
           "Model": "models/dev/plane.vmdl",
           "RenderType": "Off",
@@ -188,16 +201,17 @@
       ]
     },
     {
-      "Id": "03f432b7-49ab-4841-98eb-26875137ade5",
+      "__guid": "03f432b7-49ab-4841-98eb-26875137ade5",
       "Name": "bleachers (2)",
       "Position": "0,164.9621,80",
       "Scale": "5.890082,0.8153919,1",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "35446fc3-8676-410c-8a1c-f7bf0135efed",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
           "MaterialOverride": "materials/default.vmat",
           "Model": "models/dev/plane.vmdl",
           "RenderType": "Off",
@@ -206,16 +220,17 @@
       ]
     },
     {
-      "Id": "e317f223-9408-4249-8b5d-d75ed94f617d",
+      "__guid": "e317f223-9408-4249-8b5d-d75ed94f617d",
       "Name": "bleachers (3)",
       "Position": "0,-164.962,80",
       "Scale": "5.890082,0.8153919,1",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "c815f19c-93a9-49ef-856a-632d40368cd2",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
           "MaterialOverride": "materials/default.vmat",
           "Model": "models/dev/plane.vmdl",
           "RenderType": "Off",
@@ -224,16 +239,17 @@
       ]
     },
     {
-      "Id": "3c2490ef-54a0-49bb-8f13-490e40aa51d1",
+      "__guid": "3c2490ef-54a0-49bb-8f13-490e40aa51d1",
       "Name": "middle_line",
       "Position": "-11,0,-4.5",
       "Scale": "0.015,4.9,0.2",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "e3460d62-f631-4e70-8631-5e4ae9547982",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
           "MaterialOverride": "materials/default.vmat",
           "Model": "models/dev/box.vmdl",
           "RenderType": "Off",
@@ -242,16 +258,17 @@
       ]
     },
     {
-      "Id": "e772f55c-4f22-49c2-939f-db86e1829670",
+      "__guid": "e772f55c-4f22-49c2-939f-db86e1829670",
       "Name": "middle_line (1)",
       "Position": "11,0,-4.5",
       "Scale": "0.015,4.9,0.2",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "4ab69b5b-83eb-46ce-b878-df4cd0c8625c",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
           "MaterialOverride": "materials/default.vmat",
           "Model": "models/dev/box.vmdl",
           "RenderType": "Off",
@@ -260,14 +277,16 @@
       ]
     },
     {
-      "Id": "3ee1c9f4-07be-4e0b-8b23-67bee2d8ec8a",
+      "__guid": "3ee1c9f4-07be-4e0b-8b23-67bee2d8ec8a",
       "Name": "Camera",
       "Position": "0,0,250",
       "Rotation": "-0.5,0.5,0.5,0.5",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "CameraComponent",
+          "__guid": "5a754e4d-95ee-4c35-97aa-35fbaf23c2db",
           "BackgroundColor": "0.33333,0.46275,0.52157,1",
           "ClearFlags": "All",
           "FieldOfView": 60,
@@ -284,6 +303,7 @@
         },
         {
           "__type": "Bloom",
+          "__guid": "0bf7c0df-25ad-4b2e-a143-5c7d6cdc5936",
           "BloomColor": {
             "color": [
               {
@@ -312,6 +332,7 @@
         },
         {
           "__type": "Tonemapping",
+          "__guid": "92251529-0b5c-4168-b93e-5f5d0da3c3d3",
           "ExposureCompensation": 0,
           "MaximumExposure": 2,
           "MinimumExposure": 1,
@@ -319,189 +340,191 @@
         },
         {
           "__type": "Sharpen",
+          "__guid": "bc608051-c127-4bcf-aaf2-c92e3aaa7240",
           "Scale": 0.2
         },
         {
           "__type": "Highlight",
+          "__guid": "36816886-1e41-4675-80ed-da637c23aa9f",
           "__enabled": false
         }
       ]
     },
     {
-      "Id": "244b9dbc-1bfc-433b-83d8-c98806a4ef57",
+      "__guid": "244b9dbc-1bfc-433b-83d8-c98806a4ef57",
       "Name": "wall",
       "Position": "-235,0,0",
       "Scale": "0.05,4.95,2.99",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "a2ff3f15-8a5a-4c27-9a62-0a2671765424",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
-          "MaterialOverride": null,
           "Model": "models/dev/box.vmdl",
           "RenderType": "Off",
           "Tint": "0,0,0,1"
         },
         {
           "__type": "BoxCollider",
+          "__guid": "83ec2c37-4951-4e26-aa76-f9acfaa623a9",
           "Center": "0,0,0",
           "IsTrigger": false,
           "Scale": "50,50,50",
-          "Static": true,
-          "Surface": null
+          "Static": true
         }
       ]
     },
     {
-      "Id": "5bcfadd0-3533-47ae-bd63-5d9a6594be02",
+      "__guid": "5bcfadd0-3533-47ae-bd63-5d9a6594be02",
       "Name": "wall_green",
       "Position": "-232.8196,0,0",
       "Scale": "0.05,4.95,2.99",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "fddd7f46-f4da-4d74-bfa6-a6aaca1cd0ae",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
-          "MaterialOverride": null,
           "Model": "models/dev/box.vmdl",
           "RenderType": "Off",
           "Tint": "0,0.24651,0.07395,1"
         },
         {
           "__type": "BoxCollider",
+          "__guid": "fc81dafb-fbec-41e3-a5ca-8e6b80960e0f",
           "Center": "0,0,0",
           "IsTrigger": false,
           "Scale": "50,50,50",
-          "Static": false,
-          "Surface": null
+          "Static": false
         }
       ]
     },
     {
-      "Id": "adeed76a-8fe9-490b-a503-186c2fd7b006",
+      "__guid": "adeed76a-8fe9-490b-a503-186c2fd7b006",
       "Name": "wall (1)",
       "Position": "235,0,0",
       "Scale": "0.05,4.95,2.99",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "1b7d0926-0f13-4845-881d-0ca1c36ac36b",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
-          "MaterialOverride": null,
           "Model": "models/dev/box.vmdl",
           "RenderType": "Off",
           "Tint": "0,0,0,1"
         },
         {
           "__type": "BoxCollider",
+          "__guid": "b7647085-44b3-4268-b487-db3c3597ca5b",
           "Center": "0,0,0",
           "IsTrigger": false,
           "Scale": "50,50,50",
-          "Static": true,
-          "Surface": null
+          "Static": true
         }
       ]
     },
     {
-      "Id": "7567ac62-ee13-4f31-b15e-104725a78dae",
+      "__guid": "7567ac62-ee13-4f31-b15e-104725a78dae",
       "Name": "wall_blue",
       "Position": "232.82,0,0",
       "Scale": "0.05,4.95,2.99",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "09f6e64a-46db-4c3c-a77d-800a16713422",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
-          "MaterialOverride": null,
           "Model": "models/dev/box.vmdl",
           "RenderType": "Off",
           "Tint": "0,0.05969,0.32558,1"
         },
         {
           "__type": "BoxCollider",
+          "__guid": "b31e36bc-242c-437e-bc8a-e450e936dddd",
           "Center": "0,0,0",
           "IsTrigger": false,
           "Scale": "50,50,50",
-          "Static": false,
-          "Surface": null
+          "Static": false
         }
       ]
     },
     {
-      "Id": "7337425d-603a-4591-9fe0-fee4b34d8939",
+      "__guid": "7337425d-603a-4591-9fe0-fee4b34d8939",
       "Name": "wall (2)",
       "Position": "0,-122.8541,0",
       "Scale": "9.45,0.05,3",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "3d012adf-0596-420c-afb2-710e9d048e50",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
-          "MaterialOverride": null,
           "Model": "models/dev/box.vmdl",
           "RenderType": "Off",
           "Tint": "0,0,0,1"
         },
         {
           "__type": "BoxCollider",
+          "__guid": "2d6ad031-7469-41bc-800e-316611eaed6a",
           "Center": "0,0,0",
           "IsTrigger": false,
           "Scale": "50,50,50",
-          "Static": true,
-          "Surface": null
+          "Static": true
         }
       ]
     },
     {
-      "Id": "84da3e36-97bc-4c95-b72b-2c94165916b9",
+      "__guid": "84da3e36-97bc-4c95-b72b-2c94165916b9",
       "Name": "wall (3)",
       "Position": "0,122.854,0",
       "Scale": "9.45,0.05,3",
       "Enabled": true,
+      "NetworkMode": 2,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "53696897-a3c8-45da-a1e1-9b33d17f9557",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
-          "MaterialOverride": null,
           "Model": "models/dev/box.vmdl",
           "RenderType": "Off",
           "Tint": "0,0,0,1"
         },
         {
           "__type": "BoxCollider",
+          "__guid": "c227d366-6cb4-41a5-84f5-dc6896ec4634",
           "Center": "0,0,0",
           "IsTrigger": false,
           "Scale": "50,50,50",
-          "Static": true,
-          "Surface": null
+          "Static": true
         }
       ]
     },
     {
-      "Id": "f233e7d1-dc91-4bc0-88ac-7003c697d4cd",
+      "__guid": "f233e7d1-dc91-4bc0-88ac-7003c697d4cd",
       "Name": "dispenser",
       "Position": "0,113,40",
       "Scale": "0.3207256,0.3652692,0.7030009",
-      "Networked": true,
       "Enabled": true,
+      "NetworkMode": 1,
       "Components": [
         {
           "__type": "ModelRenderer",
+          "__guid": "97a5f3e8-633f-498f-ace8-a9686affc83d",
           "BodyGroups": 18446744073709551615,
-          "MaterialGroup": null,
-          "MaterialOverride": null,
           "Model": "models/dev/box.vmdl",
           "RenderType": "On",
           "Tint": "0.15349,0.05354,0.05354,1"
         },
         {
-          "__type": "Dispenser"
+          "__type": "Dispenser",
+          "__guid": "22c24a6c-2d8e-4d13-b310-979b53d2e696"
         }
       ]
     }
@@ -529,6 +552,8 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-03-06T22:00:33.3517537-08:00",
+  "LastSaved": "2024-03-16T02:36:36.6961191-07:00",
+  "ResourceVersion": 1,
+  "__version": 1,
   "__references": []
 }

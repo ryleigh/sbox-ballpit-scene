@@ -10,7 +10,7 @@
 
 	<!-- <div class="bg" style="background-image: url(@($"materials/icons/{Globals.GetIconForUpgrade(UpgradeType)}.png"));"></div> -->
 	<div class="bg" style="opacity:@((Manager.Instance.HoveredUpgradeType == UpgradeType ? 1f : 0.9f) * (player.SelectedUpgradeType == UpgradeType ? 1f : 0.6f) );">@(Globals.GetIconForUpgrade(UpgradeType))</div>
-	<div class="level">@($"{Level}")</div>
+	<div class="level" style="opacity:@((Manager.Instance.HoveredUpgradeType == UpgradeType ? 1f : 0.9f) * (player.SelectedUpgradeType == UpgradeType ? 1f : 0.3f) );">@($"{Level}")</div>
 </root>
 
 @code
@@ -19,7 +19,13 @@
 	public int Level { get; set; }
 	public int PlayerNum { get; set; }
 
-	protected override int BuildHash() => System.HashCode.Combine(UpgradeType, Level);
+	protected override int BuildHash() 
+	{
+		var player = Manager.Instance.GetPlayer(PlayerNum);
+		var isHovered = Manager.Instance.HoveredUpgradeType == UpgradeType;
+		var isSelected = player.SelectedUpgradeType == UpgradeType;
+		return System.HashCode.Combine(UpgradeType, Level, isHovered, isSelected);
+	}
 
 	protected override void OnMouseOver(MousePanelEvent e)
 	{

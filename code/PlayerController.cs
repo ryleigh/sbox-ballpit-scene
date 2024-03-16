@@ -155,6 +155,10 @@ public class PlayerController : Component, Component.ITriggerListener
 			{
 				TryUseItem();
 			}
+			else if(Input.MouseWheel != Vector2.Zero)
+			{
+				ChangeSelectedActiveUpgrade( up: Input.MouseWheel.y > 0f );
+			}
 
 			CheckBoundsPlaying();
 		}
@@ -187,6 +191,32 @@ public class PlayerController : Component, Component.ITriggerListener
 				}
 			}
 		}
+	}
+
+	void ChangeSelectedActiveUpgrade(bool up)
+	{
+		if ( ActiveUpgrades.Count < 2 )
+			return;
+
+		var upgradeTypes = ActiveUpgrades.Keys;
+		var selectedIndex = 0;
+		int count = 0;
+		foreach ( var upgradeType in upgradeTypes ) 
+		{ 
+			if( upgradeType == SelectedUpgradeType)
+			{
+				selectedIndex = count;
+				break;
+			}
+
+			count++;
+		}
+
+		int nextIndex = up
+			? (selectedIndex < ActiveUpgrades.Count - 1 ? selectedIndex + 1 : 0)
+			: (selectedIndex > 0 ? selectedIndex - 1 : upgradeTypes.Count - 1);
+
+		SelectedUpgradeType = upgradeTypes.ElementAt(nextIndex);
 	}
 
 	void TryUseItem()
