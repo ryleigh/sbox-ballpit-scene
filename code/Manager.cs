@@ -18,6 +18,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject ShopItemPrefab { get; set; }
 	[Property] public GameObject BallExplosionParticles { get; set; }
 	[Property] public GameObject BallGutterParticles { get; set; }
+	[Property] public GameObject SlidingGround { get; set; }
 
 	[Property, Sync] public Color ColorPlayer0 { get; set; }
 	[Property, Sync] public Color ColorPlayer1 { get; set; }
@@ -49,7 +50,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	private int _numBuyPhaseSkips;
 
 	public const float START_NEW_MATCH_DELAY = 5f;
-	public const int MATCH_MAX_SCORE = 10;
+	//public const int MATCH_MAX_SCORE = 10;
 
 	[Sync] public string WinningPlayerName { get; set; }
 
@@ -70,6 +71,12 @@ public sealed class Manager : Component, Component.INetworkListener
 	public GameObject HoveredObject { get; private set; }
 	public UpgradeType HoveredUpgradeType { get; set; }
 	public Vector2 HoveredUpgradePos { get; set; }
+
+	[Sync] public float CenterLineOffset { get; set; }
+	private float _targetCenterLineOffset;
+
+	[Sync] public int CurrentScore { get; set; }
+	public const float SCORE_NEEDED_TO_WIN = 5;
 
 	protected override void OnAwake()
 	{
@@ -105,9 +112,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.ShootBalls, numLevels: 2, price: 4 );
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Gather, numLevels: 1, price: 0 );
 
-		StartBuyPhase();
-		//StartNewMatch();
-		//StartNewRound();
+		//StartBuyPhase();
+		StartNewMatch();
+		StartNewRound();
 	}
 
 	public void OnActive( Connection channel )
@@ -161,8 +168,10 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		DebugDisplay();
 
-		//Gizmo.Draw.Color = Color.White;
-		//Gizmo.Draw.Text( $"{HoveredObject}", new global::Transform( Vector3.Zero ) );
+		Gizmo.Draw.Color = Color.White;
+		Gizmo.Draw.Text( $"CurrentScore: {CurrentScore}", new global::Transform( Vector3.Zero ) );
+
+		SlidingGround.Transform.Position = new Vector3( CenterLineOffset, 0f, 0f );
 
 		if (IsSlowmo)
 		{
@@ -235,9 +244,9 @@ public sealed class Manager : Component, Component.INetworkListener
 			case GamePhase.BetweenRounds:
 				if ( TimeSincePhaseChange > BETWEEN_ROUNDS_DELAY )
 				{
-					if ( DoesPlayerExist0 && Player0.Score >= MATCH_MAX_SCORE )
+					if ( DoesPlayerExist0 && CurrentScore >= SCORE_NEEDED_TO_WIN )
 						Victory( winningPlayerNum: 0 );
-					else if ( DoesPlayerExist1 && Player1.Score >= MATCH_MAX_SCORE )
+					else if ( DoesPlayerExist1 && CurrentScore <= -SCORE_NEEDED_TO_WIN)
 						Victory( winningPlayerNum: 1 );
 					else
 						StartBuyPhase();
@@ -252,6 +261,8 @@ public sealed class Manager : Component, Component.INetworkListener
 					StartNewMatch();
 				break;
 		}
+
+		CenterLineOffset = Utils.DynamicEaseTo( CenterLineOffset, _targetCenterLineOffset, 0.05f, Time.Delta );
 	}
 
 	void DebugDisplay()
@@ -289,15 +300,27 @@ public sealed class Manager : Component, Component.INetworkListener
 		var playerObj = Scene.Directory.FindByGuid( id );
 		if ( playerObj != null )
 		{
-			var player = playerObj.Components.Get<PlayerController>();
-			player.AddScoreAndMoney( score: 0, money: 5 );
+			var deadPlayer = playerObj.Components.Get<PlayerController>();
+			deadPlayer.AddMoney( 5 );
 
-			var otherPlayer = GetPlayer( GetOtherPlayerNum( player.PlayerNum ) );
+			var otherPlayer = GetPlayer( GetOtherPlayerNum( deadPlayer.PlayerNum ) );
 			if ( otherPlayer != null )
-				otherPlayer.AddScoreAndMoney( score: 1, money: 10 );
+				otherPlayer.AddMoney( 10 );
+
+			ChangeScore( deadPlayer.PlayerNum == 0 ? 1 : 0 );
 		}
 
 		FinishRound();
+	}
+
+	void ChangeScore(int winningPlayerNum)
+	{
+		if ( winningPlayerNum == 0 )
+			CurrentScore++;
+		else
+			CurrentScore--;
+
+		_targetCenterLineOffset = Utils.Map( CurrentScore, -SCORE_NEEDED_TO_WIN, SCORE_NEEDED_TO_WIN, 95f, -95f );
 	}
 
 	void StartNewMatch()
@@ -305,6 +328,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		RoundNum = 0;
 		Player0?.StartNewMatch();
 		Player1?.StartNewMatch();
+		_targetCenterLineOffset = 0f;
+		CurrentScore = 0;
 
 		GamePhase = GamePhase.StartingNewMatch;
 		TimeSincePhaseChange = 0f;
@@ -398,7 +423,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void CreateSkipButton( int playerNum )
 	{
-		var skipButtonObj = SkipButtonPrefab.Clone( new Vector3( 30f * (playerNum == 0 ? -1f : 1f), 103f, 0f ) );
+		var skipButtonObj = SkipButtonPrefab.Clone( new Vector3( 212f * (playerNum == 0 ? -1f : 1f), 103f, 0f ) );
 		skipButtonObj.NetworkSpawn( GetConnection( playerNum ) );
 	}
 
@@ -425,7 +450,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public void SpawnBall(Vector2 pos, Vector2 velocity, int playerNum)
 	{
-		var height = (playerNum == 0 && pos.x > 0f || playerNum == 1 && pos.x < 0f) ? BALL_HEIGHT_OPPONENT : BALL_HEIGHT_SELF;
+		var height = (playerNum == 0 && pos.x > CenterLineOffset || playerNum == 1 && pos.x < CenterLineOffset) ? BALL_HEIGHT_OPPONENT : BALL_HEIGHT_SELF;
 		var ballObj = BallPrefab.Clone( new Vector3(pos.x, pos.y, height ) );
 		var ball = ballObj.Components.Get<Ball>();
 
@@ -567,6 +592,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	void StopCurrentMatch()
 	{
 		//Log.Info( $"StopCurrentMatch" );
+		_targetCenterLineOffset = 0f;
+		CurrentScore = 0;
 
 		Player0?.Respawn();
 		Player1?.Respawn();

@@ -36,6 +36,10 @@
           "SkipButtonPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/skip_button.prefab"
+          },
+          "SlidingGround": {
+            "_type": "gameobject",
+            "go": "a6c7246a-4f7b-44dd-927a-0190c61f1bdb"
           }
         },
         {
@@ -95,70 +99,6 @@
           "Projection": "Sphere",
           "Texture": "textures/cubemaps/default2.vtex",
           "TintColor": "1,1,1,1"
-        }
-      ]
-    },
-    {
-      "__guid": "6ad70641-3c6c-4402-9c85-9a4969af4764",
-      "Name": "ground",
-      "Scale": "5.3333,3.000001,5",
-      "Enabled": true,
-      "NetworkMode": 2,
-      "Components": [
-        {
-          "__type": "ModelRenderer",
-          "__guid": "18c9c793-353f-40cf-a61f-6034851401e0",
-          "BodyGroups": 18446744073709551615,
-          "MaterialOverride": "materials/default.vmat",
-          "Model": "models/dev/plane.vmdl",
-          "RenderType": "On",
-          "Tint": "0.41058,0.41395,0.37352,1"
-        },
-        {
-          "__type": "BoxCollider",
-          "__guid": "01d29087-3ada-468e-b7ea-8cd2fd2f4375",
-          "Center": "0,0,-5",
-          "IsTrigger": false,
-          "Scale": "100,100,10",
-          "Static": true
-        }
-      ]
-    },
-    {
-      "__guid": "63c8989c-3142-4b73-8966-1a8f68902970",
-      "Name": "ground_2",
-      "Position": "128,-0.05786896,1",
-      "Scale": "2.338768,2.437423,1",
-      "Enabled": true,
-      "NetworkMode": 2,
-      "Components": [
-        {
-          "__type": "ModelRenderer",
-          "__guid": "7face56c-b95a-4d03-89ba-996ce35163ba",
-          "BodyGroups": 18446744073709551615,
-          "MaterialOverride": "materials/default.vmat",
-          "Model": "models/dev/plane.vmdl",
-          "RenderType": "Off",
-          "Tint": "0.14018,0.50233,0.20658,1"
-        }
-      ]
-    },
-    {
-      "__guid": "06f0daeb-00a6-4572-8ec7-75d54d735b6a",
-      "Name": "ground_1",
-      "Position": "-128,-0.05786896,1",
-      "Scale": "2.338768,2.438,1",
-      "Enabled": true,
-      "NetworkMode": 2,
-      "Components": [
-        {
-          "__type": "ModelRenderer",
-          "__guid": "c9995b59-9dcc-476a-a1d3-c42335d97e09",
-          "BodyGroups": 18446744073709551615,
-          "MaterialOverride": "materials/default.vmat",
-          "Model": "models/dev/plane.vmdl",
-          "RenderType": "Off",
-          "Tint": "0.2133,0.24049,0.53953,1"
         }
       ]
     },
@@ -235,44 +175,6 @@
           "Model": "models/dev/plane.vmdl",
           "RenderType": "Off",
           "Tint": "0.63878,0.65581,0.45144,1"
-        }
-      ]
-    },
-    {
-      "__guid": "3c2490ef-54a0-49bb-8f13-490e40aa51d1",
-      "Name": "middle_line",
-      "Position": "-11,0,-4.5",
-      "Scale": "0.015,4.9,0.2",
-      "Enabled": true,
-      "NetworkMode": 2,
-      "Components": [
-        {
-          "__type": "ModelRenderer",
-          "__guid": "e3460d62-f631-4e70-8631-5e4ae9547982",
-          "BodyGroups": 18446744073709551615,
-          "MaterialOverride": "materials/default.vmat",
-          "Model": "models/dev/box.vmdl",
-          "RenderType": "Off",
-          "Tint": "1,1,1,1"
-        }
-      ]
-    },
-    {
-      "__guid": "e772f55c-4f22-49c2-939f-db86e1829670",
-      "Name": "middle_line (1)",
-      "Position": "11,0,-4.5",
-      "Scale": "0.015,4.9,0.2",
-      "Enabled": true,
-      "NetworkMode": 2,
-      "Components": [
-        {
-          "__type": "ModelRenderer",
-          "__guid": "4ab69b5b-83eb-46ce-b878-df4cd0c8625c",
-          "BodyGroups": 18446744073709551615,
-          "MaterialOverride": "materials/default.vmat",
-          "Model": "models/dev/box.vmdl",
-          "RenderType": "Off",
-          "Tint": "1,1,1,1"
         }
       ]
     },
@@ -507,24 +409,134 @@
       ]
     },
     {
-      "__guid": "f233e7d1-dc91-4bc0-88ac-7003c697d4cd",
-      "Name": "dispenser",
-      "Position": "0,113,40",
-      "Scale": "0.3207256,0.3652692,0.7030009",
+      "__guid": "a6c7246a-4f7b-44dd-927a-0190c61f1bdb",
+      "Name": "sliding_ground",
       "Enabled": true,
-      "NetworkMode": 1,
-      "Components": [
+      "NetworkMode": 2,
+      "Children": [
         {
-          "__type": "ModelRenderer",
-          "__guid": "97a5f3e8-633f-498f-ace8-a9686affc83d",
-          "BodyGroups": 18446744073709551615,
-          "Model": "models/dev/box.vmdl",
-          "RenderType": "On",
-          "Tint": "0.15349,0.05354,0.05354,1"
+          "__guid": "6ad70641-3c6c-4402-9c85-9a4969af4764",
+          "Name": "ground",
+          "Scale": "5.3333,3.000001,5",
+          "Enabled": true,
+          "NetworkMode": 2,
+          "Components": [
+            {
+              "__type": "ModelRenderer",
+              "__guid": "18c9c793-353f-40cf-a61f-6034851401e0",
+              "BodyGroups": 18446744073709551615,
+              "MaterialOverride": "materials/default.vmat",
+              "Model": "models/dev/plane.vmdl",
+              "RenderType": "On",
+              "Tint": "0.41058,0.41395,0.37352,1"
+            },
+            {
+              "__type": "BoxCollider",
+              "__guid": "01d29087-3ada-468e-b7ea-8cd2fd2f4375",
+              "Center": "0,0,-5",
+              "IsTrigger": false,
+              "Scale": "100,100,10",
+              "Static": true
+            }
+          ]
         },
         {
-          "__type": "Dispenser",
-          "__guid": "22c24a6c-2d8e-4d13-b310-979b53d2e696"
+          "__guid": "63c8989c-3142-4b73-8966-1a8f68902970",
+          "Name": "ground_2",
+          "Position": "261.236,-0.05786896,1",
+          "Scale": "5,2.437423,1",
+          "Enabled": true,
+          "NetworkMode": 2,
+          "Components": [
+            {
+              "__type": "ModelRenderer",
+              "__guid": "7face56c-b95a-4d03-89ba-996ce35163ba",
+              "BodyGroups": 18446744073709551615,
+              "MaterialOverride": "materials/default.vmat",
+              "Model": "models/dev/plane.vmdl",
+              "RenderType": "Off",
+              "Tint": "0.14018,0.50233,0.20658,1"
+            }
+          ]
+        },
+        {
+          "__guid": "06f0daeb-00a6-4572-8ec7-75d54d735b6a",
+          "Name": "ground_1",
+          "Position": "-261.2357,-0.05786896,1",
+          "Scale": "5,2.438,1",
+          "Enabled": true,
+          "NetworkMode": 2,
+          "Components": [
+            {
+              "__type": "ModelRenderer",
+              "__guid": "c9995b59-9dcc-476a-a1d3-c42335d97e09",
+              "BodyGroups": 18446744073709551615,
+              "MaterialOverride": "materials/default.vmat",
+              "Model": "models/dev/plane.vmdl",
+              "RenderType": "Off",
+              "Tint": "0.2133,0.24049,0.53953,1"
+            }
+          ]
+        },
+        {
+          "__guid": "3c2490ef-54a0-49bb-8f13-490e40aa51d1",
+          "Name": "middle_line",
+          "Position": "-11,0,-4.5",
+          "Scale": "0.015,4.9,0.2",
+          "Enabled": true,
+          "NetworkMode": 2,
+          "Components": [
+            {
+              "__type": "ModelRenderer",
+              "__guid": "e3460d62-f631-4e70-8631-5e4ae9547982",
+              "BodyGroups": 18446744073709551615,
+              "MaterialOverride": "materials/default.vmat",
+              "Model": "models/dev/box.vmdl",
+              "RenderType": "Off",
+              "Tint": "1,1,1,1"
+            }
+          ]
+        },
+        {
+          "__guid": "e772f55c-4f22-49c2-939f-db86e1829670",
+          "Name": "middle_line (1)",
+          "Position": "11,0,-4.5",
+          "Scale": "0.015,4.9,0.2",
+          "Enabled": true,
+          "NetworkMode": 2,
+          "Components": [
+            {
+              "__type": "ModelRenderer",
+              "__guid": "4ab69b5b-83eb-46ce-b878-df4cd0c8625c",
+              "BodyGroups": 18446744073709551615,
+              "MaterialOverride": "materials/default.vmat",
+              "Model": "models/dev/box.vmdl",
+              "RenderType": "Off",
+              "Tint": "1,1,1,1"
+            }
+          ]
+        },
+        {
+          "__guid": "f233e7d1-dc91-4bc0-88ac-7003c697d4cd",
+          "Name": "dispenser",
+          "Position": "0,113,40",
+          "Scale": "0.3207256,0.3652692,0.7030009",
+          "Enabled": true,
+          "NetworkMode": 1,
+          "Components": [
+            {
+              "__type": "ModelRenderer",
+              "__guid": "97a5f3e8-633f-498f-ace8-a9686affc83d",
+              "BodyGroups": 18446744073709551615,
+              "Model": "models/dev/box.vmdl",
+              "RenderType": "On",
+              "Tint": "0.15349,0.05354,0.05354,1"
+            },
+            {
+              "__type": "Dispenser",
+              "__guid": "22c24a6c-2d8e-4d13-b310-979b53d2e696"
+            }
+          ]
         }
       ]
     }
@@ -552,7 +564,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-03-16T02:36:36.6961191-07:00",
+  "LastSaved": "2024-03-21T01:04:18.8200773-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

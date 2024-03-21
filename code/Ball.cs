@@ -91,7 +91,8 @@ public class Ball : Component
 
 
 
-			var height = (PlayerNum == 0 && Transform.Position.x > 0f || PlayerNum == 1 && Transform.Position.x < 0f) ? Manager.BALL_HEIGHT_OPPONENT : Manager.BALL_HEIGHT_SELF;
+			// todo: change height when changing ownership
+			var height = (PlayerNum == 0 && Transform.Position.x > Manager.Instance.CenterLineOffset || PlayerNum == 1 && Transform.Position.x < Manager.Instance.CenterLineOffset) ? Manager.BALL_HEIGHT_OPPONENT : Manager.BALL_HEIGHT_SELF;
 			Transform.Position = Transform.Position.WithZ( height );
 
 			if ( ModelRenderer != null )
@@ -118,9 +119,9 @@ public class Ball : Component
 
 		CheckBounds();
 
-		if ( CurrentSide == 0 && Transform.Position.x > 0f )
+		if ( CurrentSide == 0 && Transform.Position.x > Manager.Instance.CenterLineOffset )
 			SetSide( 1 );
-		else if ( CurrentSide == 1 && Transform.Position.x < 0f )
+		else if ( CurrentSide == 1 && Transform.Position.x < Manager.Instance.CenterLineOffset )
 			SetSide( 0 );
 	}
 

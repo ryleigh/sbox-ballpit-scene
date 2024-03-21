@@ -30,7 +30,6 @@ public class PlayerController : Component, Component.ITriggerListener
 	public int MaxHP { get; set; } = 3;
 
 	[Sync] public bool IsSpectator { get; set; }
-	[Sync] public int Score { get; private set; }
 	[Sync] public int Money { get; private set; }
 	[Sync] public int NumMatchWins { get; private set; }
 	[Sync] public int NumMatchLosses { get; private set; }
@@ -59,7 +58,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		Ragdoll = Components.GetInDescendantsOrSelf<RagdollController>();
 		HP = MaxHP;
 
-		Money = 448;
+		//Money = 448;
 	}
 
 	protected override void OnStart()
@@ -271,8 +270,10 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	void CheckBoundsPlaying()
 	{
-		var xMin = PlayerNum == 0 ? -Manager.X_FAR : Manager.X_CLOSE;
-		var xMax = PlayerNum == 0 ? -Manager.X_CLOSE : Manager.X_FAR;
+		var center = Manager.Instance.CenterLineOffset;
+
+		var xMin = PlayerNum == 0 ? -Manager.X_FAR : (center + Manager.X_CLOSE);
+		var xMax = PlayerNum == 0 ? (center - Manager.X_CLOSE) : Manager.X_FAR;
 		var yMin = -Manager.Y_LIMIT;
 		var yMax = Manager.Y_LIMIT;
 
@@ -478,14 +479,23 @@ public class PlayerController : Component, Component.ITriggerListener
 	}
 
 	[Broadcast]
-	public void AddScoreAndMoney(int score, int money)
+	public void AddMoney( int money )
 	{
 		if ( IsProxy )
 			return;
 
-		Score += score;
 		Money += money;
 	}
+
+	//[Broadcast]
+	//public void AddScoreAndMoney(int score, int money)
+	//{
+	//	if ( IsProxy )
+	//		return;
+
+	//	Score += score;
+	//	Money += money;
+	//}
 
 	[Broadcast]
 	public void AddMatchVictory()
@@ -598,9 +608,10 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( IsProxy )
 			return;
 
-		Score = 0;
 		Money = 0;
 		HP = MaxHP;
+		PassiveUpgrades.Clear();
+		ActiveUpgrades.Clear();
 	}
 
 	public int GetUpgradeHash()

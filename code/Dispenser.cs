@@ -30,7 +30,7 @@ public sealed class Dispenser : Component
 		_botPos = new Vector3( 0f, -160f, HEIGHT );
 
 		IsGoingUp = Game.Random.Int( 0, 1 ) == 0;
-		Transform.Position = IsGoingUp ? _botPos : _topPos;
+		Transform.LocalPosition = IsGoingUp ? _botPos : _topPos;
 
 		//StartWave();
 	}
@@ -45,8 +45,8 @@ public sealed class Dispenser : Component
 			if ( Manager.Instance.GamePhase != GamePhase.RoundActive )
 				Speed *= (1f + 1.5f * Time.Delta);
 
-			Transform.Position = Transform.Position.WithY( Transform.Position.y + Speed * (IsGoingUp ? 1f : -1f) * Time.Delta );
-			var y = Transform.Position.y;
+			Transform.LocalPosition = Transform.LocalPosition.WithY( Transform.LocalPosition.y + Speed * (IsGoingUp ? 1f : -1f) * Time.Delta );
+			var y = Transform.LocalPosition.y;
 
 			if( y < SHOOT_THRESHOLD && y > -SHOOT_THRESHOLD && Manager.Instance.GamePhase == GamePhase.RoundActive )
 			{
@@ -84,13 +84,13 @@ public sealed class Dispenser : Component
 	[Broadcast]
 	public void PlayShootEffects()
 	{
-		Sound.Play( "shoot-enemy-default-light", Transform.Position.WithZ(Globals.SFX_HEIGHT) );
+		Sound.Play( "shoot-enemy-default-light", Transform.LocalPosition.WithZ(Globals.SFX_HEIGHT) );
 	}
 
 	public void StartWave()
 	{
 		IsGoingUp = !IsGoingUp;
-		Transform.Position = IsGoingUp ? _botPos : _topPos;
+		Transform.LocalPosition = IsGoingUp ? _botPos : _topPos;
 		IsWaveActive = true;
 		TimeSinceShoot = 0f;
 		ShotNum = 0;

@@ -40,7 +40,7 @@
 		// NAME
 		<div class="bottom_row" style="left: 100px; bottom: 45px; flex-direction: row;">
 			<div class="player_avatar" style="background-image: url( avatar:@connection0.SteamId )"></div>
-			<div class="player_name" style="color: #0000aa;">@($"{connection0.DisplayName} (points: {player0.Score}/{Manager.MATCH_MAX_SCORE}) 💲{player0.Money}")</div>
+			<div class="player_name" style="color: #0000aa;">@($"{connection0.DisplayName} 💲{player0.Money}")</div>
 		</div>
 
 		// HP
@@ -81,7 +81,7 @@
 
 		// NAME
 		<div class="bottom_row" style="right: 100px; bottom: 45px; flex-direction: row-reverse;">
-			<div class="player_name" style="color: #007700;">@($"{manager.GetConnection(1).DisplayName} (points: {player1.Score}/{Manager.MATCH_MAX_SCORE}) 💲{player1.Money}")</div>
+			<div class="player_name" style="color: #007700;">@($"{manager.GetConnection(1).DisplayName} 💲{player1.Money}")</div>
 		</div>
 
 		// HP
@@ -202,8 +202,6 @@
 		var playerName1 = manager.GetConnection(1)?.DisplayName ?? "";
 		var hp0 = player0?.HP ?? 0;
 		var hp1 = player1?.HP ?? 0;
-		var score0 = player0?.Score ?? 0;
-		var score1 = player1?.Score ?? 0;
 		var money0 = player0?.Money ?? 0;
 		var money1 = player1?.Money ?? 0;
 		var upgrades0 = player0?.GetUpgradeHash() ?? 0;
@@ -213,7 +211,7 @@
 		var mouseHoverUpgradePos = manager.HoveredUpgradeType != UpgradeType.None ? Mouse.Position : Vector2.Zero;
 
 		return HashCode.Combine(
-			HashCode.Combine(playerName0, playerName1, hp0, hp1, score0, score1),
+			HashCode.Combine(playerName0, playerName1, hp0, hp1),
 			HashCode.Combine(money0, money1, upgrades0, upgrades1, manager.RoundNum),
 			HashCode.Combine(manager.GamePhase, buyPhaseTimer, newMatchTimer, manager.HoveredObject, mouseHoverUpgradePos)
 		);
