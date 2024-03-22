@@ -270,7 +270,7 @@ public sealed class Manager : Component, Component.INetworkListener
 				break;
 		}
 
-		//CurrentScore = 5;
+		//CurrentScore = 2;
 		//_targetCenterLineOffset = Utils.Map( CurrentScore, -SCORE_NEEDED_TO_WIN, SCORE_NEEDED_TO_WIN, 95f, -95f );
 
 		CenterLineOffset = Utils.DynamicEaseTo( CenterLineOffset, _targetCenterLineOffset, 0.05f, Time.Delta );
@@ -732,13 +732,21 @@ public sealed class Manager : Component, Component.INetworkListener
 		string blue_circle = "🔵";
 		string green_circle = "🟢";
 
-		SpawnFadingText( new Vector3( -120f, 40f, 180f ), $"AVOID {green_circle}", 4f );
-		SpawnFadingText( new Vector3( 120f, 40f, 180f ), $"AVOID {blue_circle}", 4f );
+		await Task.Delay( 400 );
 
-		await Task.Delay( 2000 );
+		var localPlayerNum = GetLocalPlayer()?.PlayerNum ?? 0;
 
-		SpawnFadingText( new Vector3( -120f, -10f, 180f ), $"BUMP {blue_circle}", 4f );
-		SpawnFadingText( new Vector3( 120f, -10f, 180f ), $"BUMP {green_circle}", 4f );
+		if(localPlayerNum == 0)
+			SpawnFadingText( new Vector3( -120f, 40f, 180f ), $"AVOID {green_circle}", 4f );
+		else
+			SpawnFadingText( new Vector3( 120f, 40f, 180f ), $"AVOID {blue_circle}", 3f );
+
+		await Task.Delay( 1500 );
+
+		if ( localPlayerNum == 0 )
+			SpawnFadingText( new Vector3( -120f, -10f, 180f ), $"BUMP {blue_circle}", 4f );
+		else
+			SpawnFadingText( new Vector3( 120f, -10f, 180f ), $"BUMP {green_circle}", 3f );
 	}
 
 	public void SpawnFadingText(Vector3 pos, string text, float lifetime)
