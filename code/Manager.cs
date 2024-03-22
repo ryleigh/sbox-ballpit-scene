@@ -5,6 +5,7 @@ using System.Diagnostics.Metrics;
 using System.IO;
 using System.Numerics;
 using System.Threading.Channels;
+using System.Threading.Tasks;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, BetweenRounds, BuyPhase, Victory }
 
@@ -16,6 +17,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject BallPrefab { get; set; }
 	[Property] public GameObject SkipButtonPrefab { get; set; }
 	[Property] public GameObject ShopItemPrefab { get; set; }
+	[Property] public GameObject FadingTextPrefab { get; set; }
 	[Property] public GameObject BallExplosionParticles { get; set; }
 	[Property] public GameObject BallGutterParticles { get; set; }
 	[Property] public GameObject SlidingGround { get; set; }
@@ -113,7 +115,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Gather, numLevels: 1, price: 0 );
 
 		//StartBuyPhase();
-		//StartNewMatch();
+		StartNewMatch();
 		//StartNewRound();
 	}
 
@@ -341,6 +343,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		GamePhase = GamePhase.StartingNewMatch;
 		TimeSincePhaseChange = 0f;
 		_numSecondsLeftInPhase = (int)START_NEW_MATCH_DELAY;
+
+		SpawnTutorialText();
 	}
 
 	void StartNewRound()
@@ -715,6 +719,34 @@ public sealed class Manager : Component, Component.INetworkListener
 			if ( GamePhase != GamePhase.WaitingForPlayers )
 				StopCurrentMatch();
 		}
+	}
+
+	[Broadcast]
+	public void SpawnTutorialText()
+	{
+		SpawnTutorialTextAsync();
+	}
+
+	async Task SpawnTutorialTextAsync()
+	{
+		string blue_circle = "🔵";
+		string green_circle = "🟢";
+
+		SpawnFadingText( new Vector3( -120f, 40f, 180f ), $"AVOID {green_circle}", 4f );
+		SpawnFadingText( new Vector3( 120f, 40f, 180f ), $"AVOID {blue_circle}", 4f );
+
+		await Task.Delay( 2000 );
+
+		SpawnFadingText( new Vector3( -120f, -10f, 180f ), $"BUMP {blue_circle}", 4f );
+		SpawnFadingText( new Vector3( 120f, -10f, 180f ), $"BUMP {green_circle}", 4f );
+	}
+
+	public void SpawnFadingText(Vector3 pos, string text, float lifetime)
+	{
+		var textObj = FadingTextPrefab.Clone( pos );
+		textObj.Transform.Rotation = Rotation.From( 90f, 90f, 0f );
+
+		textObj.Components.Get<FadingText>().Init( text, lifetime );
 	}
 
 	public void CreateBallExplosionParticles(Vector3 pos, int playerNum )

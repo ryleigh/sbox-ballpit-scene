@@ -25,6 +25,10 @@
           },
           "ColorPlayer0": "0,0,0.73333,1",
           "ColorPlayer1": "0,0.6,0,1",
+          "FadingTextPrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/fading_text.prefab"
+          },
           "PlayerPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/player.prefab"
@@ -564,7 +568,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-03-21T02:33:56.3508728-07:00",
+  "LastSaved": "2024-03-21T22:13:07.0025355-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

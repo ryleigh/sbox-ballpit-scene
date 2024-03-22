@@ -1,0 +1,36 @@
+{
+  "RootObject": {
+    "__guid": "7d8a5ddb-7f75-4094-a74e-8783c0972fc9",
+    "Name": "fading_text",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "Components": [
+      {
+        "__type": "TextRenderer",
+        "__guid": "ed3e052e-bade-419d-844e-4ce3545c4618",
+        "Color": "1,1,1,1",
+        "FontFamily": "Poppins",
+        "FontSize": 50,
+        "Scale": 0.3,
+        "Text": "Text"
+      },
+      {
+        "__type": "FadingText",
+        "__guid": "89d2b67c-8361-4435-92db-240bf4637062",
+        "TextRenderer": {
+          "_type": "component",
+          "component_id": "ed3e052e-bade-419d-844e-4ce3545c4618",
+          "go": "7d8a5ddb-7f75-4094-a74e-8783c0972fc9",
+          "component_type": "TextRenderer"
+        }
+      }
+    ],
+    "Children": []
+  },
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "ResourceVersion": 1,
+  "__version": 1,
+  "__references": []
+}
