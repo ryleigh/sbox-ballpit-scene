@@ -76,7 +76,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	private float _targetCenterLineOffset;
 
 	[Sync] public int CurrentScore { get; set; }
-	public const float SCORE_NEEDED_TO_WIN = 5;
+	public const int SCORE_NEEDED_TO_WIN = 5;
 
 	protected override void OnAwake()
 	{
@@ -113,8 +113,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Gather, numLevels: 1, price: 0 );
 
 		//StartBuyPhase();
-		StartNewMatch();
-		StartNewRound();
+		//StartNewMatch();
+		//StartNewRound();
 	}
 
 	public void OnActive( Connection channel )
@@ -168,8 +168,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		DebugDisplay();
 
-		Gizmo.Draw.Color = Color.White;
-		Gizmo.Draw.Text( $"CurrentScore: {CurrentScore}", new global::Transform( Vector3.Zero ) );
+		//Gizmo.Draw.Color = Color.White;
+		//Gizmo.Draw.Text( $"CurrentScore: {CurrentScore}", new global::Transform( Vector3.Zero ) );
 
 		SlidingGround.Transform.Position = new Vector3( CenterLineOffset, 0f, 0f );
 
@@ -242,6 +242,12 @@ public sealed class Manager : Component, Component.INetworkListener
 			case GamePhase.RoundActive:
 				break;
 			case GamePhase.BetweenRounds:
+				// move center line
+				if(TimeSincePhaseChange > BETWEEN_ROUNDS_DELAY / 2f)
+				{
+					_targetCenterLineOffset = Utils.Map( CurrentScore, -SCORE_NEEDED_TO_WIN, SCORE_NEEDED_TO_WIN, 95f, -95f );
+				}
+
 				if ( TimeSincePhaseChange > BETWEEN_ROUNDS_DELAY )
 				{
 					if ( DoesPlayerExist0 && CurrentScore >= SCORE_NEEDED_TO_WIN )
@@ -261,6 +267,9 @@ public sealed class Manager : Component, Component.INetworkListener
 					StartNewMatch();
 				break;
 		}
+
+		//CurrentScore = 5;
+		//_targetCenterLineOffset = Utils.Map( CurrentScore, -SCORE_NEEDED_TO_WIN, SCORE_NEEDED_TO_WIN, 95f, -95f );
 
 		CenterLineOffset = Utils.DynamicEaseTo( CenterLineOffset, _targetCenterLineOffset, 0.05f, Time.Delta );
 	}
@@ -316,11 +325,9 @@ public sealed class Manager : Component, Component.INetworkListener
 	void ChangeScore(int winningPlayerNum)
 	{
 		if ( winningPlayerNum == 0 )
-			CurrentScore++;
+			CurrentScore = Math.Min(CurrentScore + 1, SCORE_NEEDED_TO_WIN);
 		else
-			CurrentScore--;
-
-		_targetCenterLineOffset = Utils.Map( CurrentScore, -SCORE_NEEDED_TO_WIN, SCORE_NEEDED_TO_WIN, 95f, -95f );
+			CurrentScore = Math.Max( CurrentScore - 1, -SCORE_NEEDED_TO_WIN );
 	}
 
 	void StartNewMatch()
