@@ -119,7 +119,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		//StartBuyPhase();
 		StartNewMatch();
-		//StartNewRound();
+		StartNewRound();
 	}
 
 	public void OnActive( Connection channel )

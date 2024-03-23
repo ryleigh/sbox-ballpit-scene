@@ -564,8 +564,8 @@
         {
           "__guid": "e264b0ae-da9c-4b9b-bb4b-9a9b9495a69e",
           "Name": "line (4)",
-          "Position": "-94.5,139.8753,0",
-          "Scale": "1,1,0.01",
+          "Position": "-94.5,141.9564,0",
+          "Scale": "0.05,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
           "Components": [
@@ -582,7 +582,7 @@
         {
           "__guid": "1b122006-bc82-488b-a08d-a1cf50658ded",
           "Name": "line (3)",
-          "Position": "-76.4,141.6221,0",
+          "Position": "-76.4,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -593,14 +593,14 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         },
         {
           "__guid": "784ad59f-362d-4ba3-a030-c0286e3e7a75",
           "Name": "line (2)",
-          "Position": "-57.3,143.4325,0",
+          "Position": "-57.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -611,14 +611,14 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         },
         {
           "__guid": "c1888b12-2220-46cc-b154-d60ffe5c28c7",
           "Name": "line (1)",
-          "Position": "-38.6,144.5973,0",
+          "Position": "-38.6,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -629,14 +629,14 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         },
         {
           "__guid": "736d7296-51d9-4855-bdfa-de56cc055b19",
           "Name": "line",
-          "Position": "-19.3,145.0563,0",
+          "Position": "-19.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -647,7 +647,7 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         }
@@ -664,8 +664,8 @@
         {
           "__guid": "38407f01-98b6-4960-9099-7f5845c1702a",
           "Name": "line (4)",
-          "Position": "-94.5,139.8753,0",
-          "Scale": "1,1,0.01",
+          "Position": "-94.5,141.9564,0",
+          "Scale": "0.05,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
           "Components": [
@@ -682,7 +682,7 @@
         {
           "__guid": "0775254a-6ef6-4b7e-957a-b4356b0850e8",
           "Name": "line (3)",
-          "Position": "-76.4,141.6221,0",
+          "Position": "-76.4,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -693,14 +693,14 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         },
         {
           "__guid": "8944b0ce-21ce-4c68-a2bd-a4e892a95ff4",
           "Name": "line (2)",
-          "Position": "-57.3,143.4325,0",
+          "Position": "-57.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -711,14 +711,14 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         },
         {
           "__guid": "57ca2e55-166e-4836-bd46-6f7791ed759c",
           "Name": "line (1)",
-          "Position": "-38.6,144.5973,0",
+          "Position": "-38.6,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -729,14 +729,14 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         },
         {
           "__guid": "2fe219c8-d218-4657-a92f-bfe181d0e433",
           "Name": "line",
-          "Position": "-19.3,145.0563,0",
+          "Position": "-19.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -747,7 +747,7 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         }
@@ -764,8 +764,8 @@
         {
           "__guid": "ee030d21-fdc7-43a0-9a47-926557c9d604",
           "Name": "line (4)",
-          "Position": "-94.5,139.8753,0",
-          "Scale": "1,1,0.01",
+          "Position": "-94.5,141.9564,0",
+          "Scale": "0.05,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
           "Components": [
@@ -782,7 +782,7 @@
         {
           "__guid": "0ace1e6d-b2e4-4efd-98cb-a32dad115786",
           "Name": "line (3)",
-          "Position": "-76.4,141.6221,0",
+          "Position": "-76.4,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -793,14 +793,14 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         },
         {
           "__guid": "78188917-4d19-4d27-a23d-0b3504927ff4",
           "Name": "line (2)",
-          "Position": "-57.3,143.4325,0",
+          "Position": "-57.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -811,14 +811,14 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         },
         {
           "__guid": "a3ae1ed3-5033-4b89-ac8a-033c2a2dc63a",
           "Name": "line (1)",
-          "Position": "-38.6,144.5973,0",
+          "Position": "-38.6,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -829,14 +829,14 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         },
         {
           "__guid": "44518966-cb28-46ba-a2eb-6381a7968cfb",
           "Name": "line",
-          "Position": "-19.3,145.0563,0",
+          "Position": "-19.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -847,7 +847,7 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         }
@@ -864,8 +864,8 @@
         {
           "__guid": "d8d14c78-dba6-416a-82f9-af908d2a74a2",
           "Name": "line (4)",
-          "Position": "-94.5,139.8753,0",
-          "Scale": "1,1,0.01",
+          "Position": "-94.5,141.9564,0",
+          "Scale": "0.05,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
           "Components": [
@@ -882,7 +882,7 @@
         {
           "__guid": "295e3916-fb36-435c-934f-2aa134aa64f6",
           "Name": "line (3)",
-          "Position": "-76.4,141.6221,0",
+          "Position": "-76.4,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -893,14 +893,14 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         },
         {
           "__guid": "86b866f8-c679-4c0d-8ce6-ccd7e6a44f5d",
           "Name": "line (2)",
-          "Position": "-57.3,143.4325,0",
+          "Position": "-57.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -911,14 +911,14 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         },
         {
           "__guid": "f089b407-f0e4-490c-837b-0c6c854cac9c",
           "Name": "line (1)",
-          "Position": "-38.6,144.5973,0",
+          "Position": "-38.6,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -929,14 +929,14 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         },
         {
           "__guid": "255ee016-a1c5-4a22-8c11-a987a9e71238",
           "Name": "line",
-          "Position": "-19.3,145.0563,0",
+          "Position": "-19.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
@@ -947,7 +947,7 @@
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
               "RenderType": "Off",
-              "Tint": "0.14419,0.14419,0.14419,1"
+              "Tint": "0.2,0.2,0.2,1"
             }
           ]
         }
@@ -977,7 +977,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-03-22T20:50:53.147313-07:00",
+  "LastSaved": "2024-03-22T23:13:28.1534592-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

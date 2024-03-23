@@ -1,5 +1,7 @@
 using Sandbox;
 
+public enum DispenserPattern { Alternate, AlternateDouble, AlternateTriple, FiveToOne, }
+
 public sealed class Dispenser : Component
 {
 	public const float HEIGHT = 50f;
@@ -19,6 +21,8 @@ public sealed class Dispenser : Component
 
 	public int ShotNum { get; private set; }
 
+	private DispenserPattern _dispenserPattern;
+
 	protected override void OnStart()
 	{
 		base.OnStart();
@@ -37,6 +41,9 @@ public sealed class Dispenser : Component
 
 	protected override void OnUpdate()
 	{
+		//Gizmo.Draw.Color = Color.White;
+		//Gizmo.Draw.Text( $"{Manager.Instance.TimeSincePhaseChange}", new global::Transform( Transform.Position ) );
+
 		if ( IsProxy )
 			return;
 
@@ -50,15 +57,56 @@ public sealed class Dispenser : Component
 
 			if( y < SHOOT_THRESHOLD && y > -SHOOT_THRESHOLD && Manager.Instance.GamePhase == GamePhase.RoundActive )
 			{
-				if ( TimeSinceShoot > 0.25f )
+				float delay = 
+					Utils.Map( Manager.Instance.RoundNum, 1, 10, 0.2f, 0f, EasingType.SineOut) 
+					+ Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, Utils.Map( Manager.Instance.RoundNum, 1, 8, 60f, 30f ), 0.5f, 0.25f );
+
+				if ( TimeSinceShoot > delay )
 				{
-					var speed = 85f;
+					var ballSpeed =
+						Utils.Map( Manager.Instance.RoundNum, 1, 16, 75f, 100f, EasingType.SineOut )
+						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, Utils.Map( Manager.Instance.RoundNum, 1, 16, 240f, 120f ), 1f, Utils.Map( Manager.Instance.RoundNum, 1, 32, 1.5f, 4f ) )
+						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, 600f, 1f, 2f );
 
-					var right = new Vector2( 1f, 0f );
-					var left = new Vector2( -1f, 0f );
+					//var speed = 85f;
+					//_dispenserPattern = DispenserPattern.FiveToOne;
 
-					Manager.Instance.SpawnBall( (Vector2)Transform.Position + right, right * speed, playerNum: ShotNum % 2 == 0 ? 0 : 1 );
-					Manager.Instance.SpawnBall( (Vector2)Transform.Position + left, left * speed, playerNum: ShotNum % 2 == 0 ? 1 : 0 );
+					int playerNum;
+					switch(_dispenserPattern)
+					{
+						case DispenserPattern.Alternate:
+							playerNum = ShotNum % 2 == 0 ? 0 : 1;
+							if ( WaveNum % 5 < 2 )
+								playerNum = Globals.GetOpponentPlayerNum( playerNum );
+
+							SpawnBall( playerNum, toLeft: true, ballSpeed );
+							SpawnBall( Globals.GetOpponentPlayerNum( playerNum ), toLeft: false, ballSpeed );
+							break;
+						case DispenserPattern.AlternateDouble:
+							playerNum = ShotNum % 4 < 2 ? 0 : 1;
+							if ( WaveNum % 3 == 0 )
+								playerNum = Globals.GetOpponentPlayerNum( playerNum );
+
+							SpawnBall( playerNum, toLeft: true, ballSpeed );
+							SpawnBall( Globals.GetOpponentPlayerNum( playerNum ), toLeft: false, ballSpeed );
+							break;
+						case DispenserPattern.AlternateTriple:
+							playerNum = ShotNum % 6 < 3 ? 0 : 1;
+							if ( WaveNum % 7 > 4 )
+								playerNum = Globals.GetOpponentPlayerNum( playerNum );
+
+							SpawnBall( playerNum, toLeft: true, ballSpeed );
+							SpawnBall( Globals.GetOpponentPlayerNum( playerNum ), toLeft: false, ballSpeed );
+							break;
+						case DispenserPattern.FiveToOne:
+							playerNum = ShotNum % 6 == (WaveNum % 6) ? 0 : 1;
+							if ( WaveNum % 2 == 0 )
+								playerNum = Globals.GetOpponentPlayerNum( playerNum );
+
+							SpawnBall( playerNum, toLeft: true, ballSpeed );
+							SpawnBall( Globals.GetOpponentPlayerNum( playerNum ), toLeft: false, ballSpeed );
+							break;
+					}
 
 					PlayShootEffects();
 
@@ -74,17 +122,29 @@ public sealed class Dispenser : Component
 		}
 		else
 		{
-			if( TimeSinceWaveEnded > 1f && Manager.Instance.GamePhase == GamePhase.RoundActive )
+			float delayTime = Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, Utils.Map( Manager.Instance.RoundNum, 1, 12, 90f, 30f ), 1f, 0.5f );
+			if ( TimeSinceWaveEnded > delayTime && Manager.Instance.GamePhase == GamePhase.RoundActive )
 			{
 				StartWave();
 			}
 		}
 	}
 
+	void SpawnBall(int playerNum, bool toLeft, float speed)
+	{
+		var dir = toLeft ? new Vector2( -1f, 0f ) : new Vector2( 1f, 0f );
+		Manager.Instance.SpawnBall( (Vector2)Transform.Position + dir, dir * speed, playerNum );
+	}
+
 	[Broadcast]
 	public void PlayShootEffects()
 	{
 		Sound.Play( "shoot-enemy-default-light", Transform.LocalPosition.WithZ(Globals.SFX_HEIGHT) );
+	}
+
+	public void StartNewMatch()
+	{
+		WaveNum = 0;
 	}
 
 	public void StartWave()
@@ -94,6 +154,7 @@ public sealed class Dispenser : Component
 		IsWaveActive = true;
 		TimeSinceShoot = 0f;
 		ShotNum = 0;
+		_dispenserPattern = (DispenserPattern)Game.Random.Int(0, Enum.GetValues( typeof( DispenserPattern ) ).Length - 1 );
 
 		Speed = 40f;
 	}
@@ -102,5 +163,6 @@ public sealed class Dispenser : Component
 	{
 		IsWaveActive = false;
 		TimeSinceWaveEnded = 0f;
+		WaveNum++;
 	}
 }

@@ -62,4 +62,9 @@ public class Globals
 			case UpgradeType.Gather: return false;
 		}
 	}
+
+	public static int GetOpponentPlayerNum(int playerNum)
+	{
+		return playerNum == 0 ? 1 : 0;
+	}
 }
