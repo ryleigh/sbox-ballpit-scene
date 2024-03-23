@@ -856,8 +856,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void GenerateUpgrades()
 	{
-		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster." );
-		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls.", isPassive: true );
+		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster.", isPassive: true );
+		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls." );
 		CreateUpgrade( UpgradeType.Gather, "Gather", "⤵️", "Your balls target you." );
 		CreateUpgrade( UpgradeType.Repel, "Repel", "🔆", "Push nearby balls away." );
 	}

@@ -1,4 +1,5 @@
 using Sandbox;
+using System.Numerics;
 
 public class Ball : Component
 {
@@ -28,6 +29,14 @@ public class Ball : Component
 
 	[Sync] public float Radius { get; set; }
 
+	private bool _timeScaleActive;
+	private float TimeScale;
+	private float _timeScaleDuration;
+	private EasingType _timeScaleEasingType;
+	private TimeSince _timeSinceTimeScaleStarted;
+	private float _timeScaleStartingValue;
+
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -41,6 +50,7 @@ public class Ball : Component
 		base.OnStart();
 
 		IsActive = true;
+		TimeScale = 1f;
 
 		_localScaleStart = Transform.LocalScale;
 
@@ -87,7 +97,7 @@ public class Ball : Component
 
 			// don't move if IsProxy?
 			if(!IsProxy)
-				Transform.Position += (Vector3)Velocity * Time.Delta;
+				Transform.Position += (Vector3)Velocity * Time.Delta * TimeScale;
 
 
 
@@ -107,6 +117,19 @@ public class Ball : Component
 
 		if ( IsProxy )
 			return;
+
+		if(_timeScaleActive)
+		{
+			if ( _timeSinceTimeScaleStarted > _timeScaleDuration )
+			{
+				TimeScale = 1f;
+				_timeScaleActive = false;
+			}
+			else 
+			{
+				TimeScale = Utils.Map( _timeSinceTimeScaleStarted, 0f, _timeScaleDuration, _timeScaleStartingValue, 1f, _timeScaleEasingType );
+			}
+		}
 
 		if ( IsDespawning )
 		{
@@ -283,11 +306,36 @@ public class Ball : Component
 	}
 
 	[Broadcast]
-	public void SetVelocity( Vector2 velocity )
+	public void SetVelocity( Vector2 velocity, float timeScale = 1f, float timeScaleDuration = 0f )
 	{
 		if ( IsProxy )
 			return;
 
 		Velocity = velocity;
+
+		if ( timeScale < 1f && timeScaleDuration > 0f )
+			SetTimeScale( timeScale, timeScaleDuration, EasingType.ExpoIn );
+	}
+
+	[Broadcast]
+	public void SetTimeScaleRPC( float timeScale, float time, EasingType easingType = EasingType.Linear )
+	{
+		if ( IsProxy )
+			return;
+
+		SetTimeScale( timeScale, time, easingType );
+	}
+
+	public void SetTimeScale( float timeScale, float time, EasingType easingType = EasingType.Linear )
+	{
+		if ( IsDespawning || !IsActive || (_timeScaleActive && TimeScale < timeScale) )
+			return;
+
+		_timeScaleActive = true;
+		TimeScale = timeScale;
+		_timeScaleStartingValue = timeScale;
+		_timeScaleDuration = time;
+		_timeScaleEasingType = easingType;
+		_timeSinceTimeScaleStarted = 0f;
 	}
 }

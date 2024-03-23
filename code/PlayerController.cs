@@ -258,8 +258,8 @@ public class PlayerController : Component, Component.ITriggerListener
 					var distSqr = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).LengthSquared;
 					if(distSqr < MathF.Pow(100f, 2f))
 					{
-						ball.SetVelocity( ball.Velocity * 1.15f );
-						ball.SetDirection( ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal );
+						var speed = ball.Velocity.Length * 1.15f;
+						ball.SetVelocity( ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal * speed, timeScale: 0f, timeScaleDuration: 0.1f );
 					}
 				}
 
