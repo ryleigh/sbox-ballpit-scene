@@ -281,4 +281,13 @@ public class Ball : Component
 
 		Velocity = dir * Velocity.Length;
 	}
+
+	[Broadcast]
+	public void SetVelocity( Vector2 velocity )
+	{
+		if ( IsProxy )
+			return;
+
+		Velocity = velocity;
+	}
 }

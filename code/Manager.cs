@@ -136,12 +136,12 @@ public sealed class Manager : Component, Component.INetworkListener
 		GamePhase = GamePhase.WaitingForPlayers;
 
 		//CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
-		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.ShootBalls, numLevels: 2, price: 4 );
-		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Gather, numLevels: 1, price: 0 );
+		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
+		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Repel, numLevels: 1, price: 0 );
 
-		//StartBuyPhase();
-		StartNewMatch();
-		StartNewRound();
+		StartBuyPhase();
+		//StartNewMatch();
+		//StartNewRound();
 	}
 
 	public void OnActive( Connection channel )
@@ -441,9 +441,18 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( DoesPlayerExist0 )
 		{
 			CreateSkipButton( 0 );
-			CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
-			CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
-			CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Gather, numLevels: 3, price: 0 );
+			var topPos = new Vector2( -215f, 70f );
+			var interval = 43f;
+
+			CreateShopItem( 0, topPos + new Vector2( 0f, 0f ), UpgradeType.Volley, numLevels: 2, price: 4 );
+			CreateShopItem( 0, topPos + new Vector2( 0f, interval * -1 ), UpgradeType.Volley, numLevels: 2, price: 4 );
+			CreateShopItem( 0, topPos + new Vector2( 0f, interval * -2 ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
+			CreateShopItem( 0, topPos + new Vector2( 0f, interval * -3 ), UpgradeType.Gather, numLevels: 3, price: 1 );
+			CreateShopItem( 0, topPos + new Vector2( 0f, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
+			CreateShopItem( 0, topPos + new Vector2( interval * 1, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
+			CreateShopItem( 0, topPos + new Vector2( interval * 2, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
+			CreateShopItem( 0, topPos + new Vector2( interval * 3, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
+			CreateShopItem( 0, topPos + new Vector2( interval * 4, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
 		}
 
 		if ( DoesPlayerExist1 )

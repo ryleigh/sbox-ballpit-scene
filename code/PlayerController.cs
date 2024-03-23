@@ -58,7 +58,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		Ragdoll = Components.GetInDescendantsOrSelf<RagdollController>();
 		HP = MaxHP;
 
-		//Money = 448;
+		Money = 448;
 	}
 
 	protected override void OnStart()
@@ -249,6 +249,21 @@ public class PlayerController : Component, Component.ITriggerListener
 				}
 
 				break;
+			case UpgradeType.Repel:
+				foreach ( var ball in Scene.GetAllComponents<Ball>() )
+				{
+					if(!ball.IsActive)
+						continue;
+
+					var distSqr = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).LengthSquared;
+					if(distSqr < MathF.Pow(100f, 2f))
+					{
+						ball.SetVelocity( ball.Velocity * 1.15f );
+						ball.SetDirection( ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal );
+					}
+				}
+
+				break;
 		}
 
 		if ( upgradeType != UpgradeType.None )
@@ -375,7 +390,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		//	}
 		//}
 
-		if(other.GameObject.Tags.Has("item") && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 2f)
+		if(other.GameObject.Tags.Has("item") && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 0.5f)
 		{
 			var item = other.Components.Get<ShopItem>();
 			if(item.Price <= Money)
@@ -392,7 +407,7 @@ public class PlayerController : Component, Component.ITriggerListener
 				BuyItem( success: false );
 			}
 		}
-		else if ( other.GameObject.Tags.Has( "skip_button" ) && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 2f )
+		else if ( other.GameObject.Tags.Has( "skip_button" ) && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 0.5f )
 		{
 			other.GameObject.Destroy();
 			Manager.Instance.SkipButtonHit();
