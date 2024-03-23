@@ -18,7 +18,7 @@
 				roundLabel = $"Starting match in {MathX.CeilToInt(Manager.START_NEW_MATCH_DELAY - manager.TimeSincePhaseChange)}...";
 				break;
 			case GamePhase.RoundActive:
-			case GamePhase.BetweenRounds:
+			case GamePhase.AfterRoundDelay:
 				roundLabel = $"Round {manager.RoundNum}";
 				break;
 			case GamePhase.BuyPhase:

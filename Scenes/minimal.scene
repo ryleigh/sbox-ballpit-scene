@@ -565,7 +565,7 @@
           "__guid": "e264b0ae-da9c-4b9b-bb4b-9a9b9495a69e",
           "Name": "line (4)",
           "Position": "-94.5,139.8753,0",
-          "Scale": "0.05437036,1,0.01",
+          "Scale": "1,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
           "Components": [
@@ -665,7 +665,7 @@
           "__guid": "38407f01-98b6-4960-9099-7f5845c1702a",
           "Name": "line (4)",
           "Position": "-94.5,139.8753,0",
-          "Scale": "0.05437036,1,0.01",
+          "Scale": "1,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
           "Components": [
@@ -765,7 +765,7 @@
           "__guid": "ee030d21-fdc7-43a0-9a47-926557c9d604",
           "Name": "line (4)",
           "Position": "-94.5,139.8753,0",
-          "Scale": "0.05437036,1,0.01",
+          "Scale": "1,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
           "Components": [
@@ -865,7 +865,7 @@
           "__guid": "d8d14c78-dba6-416a-82f9-af908d2a74a2",
           "Name": "line (4)",
           "Position": "-94.5,139.8753,0",
-          "Scale": "0.05437036,1,0.01",
+          "Scale": "1,1,0.01",
           "Enabled": true,
           "NetworkMode": 2,
           "Components": [
@@ -977,7 +977,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-03-22T00:07:32.1537337-07:00",
+  "LastSaved": "2024-03-22T20:50:53.147313-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

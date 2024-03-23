@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
-public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, BetweenRounds, BuyPhase, Victory }
+public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
 public sealed class Manager : Component, Component.INetworkListener
 {
@@ -79,6 +79,9 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	[Sync] public int CurrentScore { get; set; }
 	public const int SCORE_NEEDED_TO_WIN = 5;
+
+	private int _roundWinnerPlayerNum;
+	private bool _hasIncrementedScore;
 
 	protected override void OnAwake()
 	{
@@ -212,7 +215,7 @@ public sealed class Manager : Component, Component.INetworkListener
 				break;
 			case GamePhase.RoundActive:
 				break;
-			case GamePhase.BetweenRounds:
+			case GamePhase.AfterRoundDelay:
 				break;
 			case GamePhase.BuyPhase:
 				var numSecondsLeftBuyPhase = MathX.CeilToInt( BuyPhaseDuration - TimeSincePhaseChange );
@@ -243,11 +246,15 @@ public sealed class Manager : Component, Component.INetworkListener
 				break;
 			case GamePhase.RoundActive:
 				break;
-			case GamePhase.BetweenRounds:
-				// move center line
-				if(TimeSincePhaseChange > BETWEEN_ROUNDS_DELAY / 2f)
+			case GamePhase.AfterRoundDelay:
+				if( !_hasIncrementedScore && TimeSincePhaseChange > BETWEEN_ROUNDS_DELAY / 2f )
 				{
+					ChangeScore( _roundWinnerPlayerNum );
 					_targetCenterLineOffset = Utils.Map( CurrentScore, -SCORE_NEEDED_TO_WIN, SCORE_NEEDED_TO_WIN, 95f, -95f );
+					_hasIncrementedScore = true;
+
+					if( Math.Abs(CurrentScore) < SCORE_NEEDED_TO_WIN )
+						SpawnScoreText( _roundWinnerPlayerNum, CurrentScore );
 				}
 
 				if ( TimeSincePhaseChange > BETWEEN_ROUNDS_DELAY )
@@ -270,7 +277,7 @@ public sealed class Manager : Component, Component.INetworkListener
 				break;
 		}
 
-		//CurrentScore = 2;
+		//CurrentScore = 4;
 		//_targetCenterLineOffset = Utils.Map( CurrentScore, -SCORE_NEEDED_TO_WIN, SCORE_NEEDED_TO_WIN, 95f, -95f );
 
 		CenterLineOffset = Utils.DynamicEaseTo( CenterLineOffset, _targetCenterLineOffset, 0.05f, Time.Delta );
@@ -318,7 +325,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			if ( otherPlayer != null )
 				otherPlayer.AddMoney( 10 );
 
-			ChangeScore( deadPlayer.PlayerNum == 0 ? 1 : 0 );
+			_roundWinnerPlayerNum = (deadPlayer.PlayerNum == 0 ? 1 : 0);
 		}
 
 		FinishRound();
@@ -359,7 +366,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	void FinishRound()
 	{
 		DespawnBalls();
-		GamePhase = GamePhase.BetweenRounds;
+		GamePhase = GamePhase.AfterRoundDelay;
+		_hasIncrementedScore = false;
 	}
 
 	void Victory(int winningPlayerNum)
@@ -727,7 +735,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		SpawnTutorialTextAsync();
 	}
 
-	async Task SpawnTutorialTextAsync()
+	async void SpawnTutorialTextAsync()
 	{
 		string blue_circle = "🔵";
 		string green_circle = "🟢";
@@ -741,12 +749,22 @@ public sealed class Manager : Component, Component.INetworkListener
 		else
 			SpawnFadingText( new Vector3( 120f, 40f, 180f ), $"AVOID {blue_circle}", 3f );
 
-		await Task.Delay( 1500 );
+		await Task.Delay( 1200 );
 
 		if ( localPlayerNum == 0 )
 			SpawnFadingText( new Vector3( -120f, -10f, 180f ), $"BUMP {blue_circle}", 4f );
 		else
 			SpawnFadingText( new Vector3( 120f, -10f, 180f ), $"BUMP {green_circle}", 3f );
+	}
+
+	[Broadcast]
+	public void SpawnScoreText( int winningPlayerNum, int currentScore )
+	{
+		var connection = GetConnection( winningPlayerNum );
+		string name = connection != null ? $"{connection.DisplayName}" : (winningPlayerNum == 0 ? "🟦" : "🟩");
+		//int amountNeeded = SCORE_NEEDED_TO_WIN + CurrentScore * (winningPlayerNum == 0 ? -1 : 1);
+
+		SpawnFadingText( new Vector3( 0f, 20f, 180f ), $"{name} WON THE ROUND", 3f );
 	}
 
 	public void SpawnFadingText(Vector3 pos, string text, float lifetime)
