@@ -517,7 +517,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public int GetUpgradeLevel(UpgradeType upgradeType)
 	{
-		if ( Globals.IsUpgradePassive( upgradeType ) )
+		if ( Manager.Instance.IsUpgradePassive( upgradeType ) )
 		{
 			if( PassiveUpgrades.ContainsKey( upgradeType ) )
 				return PassiveUpgrades[upgradeType];
@@ -557,7 +557,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( IsProxy )
 			return;
 
-		var upgrades = Globals.IsUpgradePassive(upgradeType) ? PassiveUpgrades : ActiveUpgrades;
+		var upgrades = Manager.Instance.IsUpgradePassive(upgradeType) ? PassiveUpgrades : ActiveUpgrades;
 
 		if ( upgrades.ContainsKey(upgradeType) )
 			upgrades[upgradeType] = Math.Min( upgrades[upgradeType] + amount, MAX_UPGRADE_LEVEL );
@@ -572,7 +572,7 @@ public class PlayerController : Component, Component.ITriggerListener
 				SelectedUpgradeType = UpgradeType.None;
 		}
 
-		if(!Globals.IsUpgradePassive( upgradeType ) )
+		if(!Manager.Instance.IsUpgradePassive( upgradeType ) )
 		{
 			if ( amount > 0 && SelectedUpgradeType == UpgradeType.None )
 				SelectedUpgradeType = upgradeType;
@@ -594,7 +594,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		if( IsProxy ) 
 			return;
 
-		var upgrades = Globals.IsUpgradePassive( upgradeType ) ? PassiveUpgrades : ActiveUpgrades;
+		var upgrades = Manager.Instance.IsUpgradePassive( upgradeType ) ? PassiveUpgrades : ActiveUpgrades;
 
 		if ( upgrades.ContainsKey( upgradeType ) )
 			upgrades[upgradeType] = Math.Min( upgrades[upgradeType] + amount, MAX_UPGRADE_LEVEL );

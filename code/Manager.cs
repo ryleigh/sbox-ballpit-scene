@@ -9,6 +9,24 @@ using System.Threading.Tasks;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, }
+
+public struct UpgradeData
+{
+	public string name;
+	public string icon;
+	public string description;
+	public bool isPassive;
+
+	public UpgradeData( string _name, string _icon, string _description, bool _isPassive )
+	{
+		name = _name;
+		icon = _icon;
+		description = _description;
+		isPassive = _isPassive;
+	}
+}
+
 public sealed class Manager : Component, Component.INetworkListener
 {
 	public static Manager Instance { get; private set; }
@@ -83,6 +101,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	private int _roundWinnerPlayerNum;
 	private bool _hasIncrementedScore;
 
+	public Dictionary<UpgradeType, UpgradeData> UpgradeDatas { get; private set; } = new();
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -94,6 +114,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		OriginalCameraRot = camera.Transform.Rotation;
 
 		Dispenser = Scene.GetAllComponents<Dispenser>().FirstOrDefault();
+
+		GenerateUpgrades();
 	}
 
 	protected override void OnStart()
@@ -789,5 +811,50 @@ public sealed class Manager : Component, Component.INetworkListener
 		var particleEffect = particleObj.Components.Get<ParticleEffect>();
 		particleEffect.Tint = playerNum == 0 ? Color.Blue : Color.Green;
 		particleObj.Transform.Rotation = Rotation.LookAt(new Vector3( playerNum == 0 ? 1f : -1f, 0f, 0f));
+	}
+
+	public string GetNameForUpgrade( UpgradeType upgradeType )
+	{
+		if ( UpgradeDatas.ContainsKey( upgradeType ) )
+			return UpgradeDatas[upgradeType].name;
+
+		return "";
+	}
+
+	public string GetIconForUpgrade( UpgradeType upgradeType )
+	{
+		if ( UpgradeDatas.ContainsKey( upgradeType ) )
+			return UpgradeDatas[upgradeType].icon;
+
+		return "";
+	}
+
+	public string GetDescriptionForUpgrade( UpgradeType upgradeType )
+	{
+		if ( UpgradeDatas.ContainsKey( upgradeType ) )
+			return UpgradeDatas[upgradeType].description;
+
+		return "";
+	}
+
+	public bool IsUpgradePassive( UpgradeType upgradeType )
+	{
+		if ( UpgradeDatas.ContainsKey( upgradeType ) )
+			return UpgradeDatas[upgradeType].isPassive;
+
+		return true;
+	}
+
+	void GenerateUpgrades()
+	{
+		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster." );
+		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls.", isPassive: true );
+		CreateUpgrade( UpgradeType.Gather, "Gather", "⤵️", "Your balls target you." );
+		CreateUpgrade( UpgradeType.Repel, "Repel", "🔆", "Push nearby balls away." );
+	}
+
+	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, bool isPassive = false)
+	{
+		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, description, isPassive));
 	}
 }

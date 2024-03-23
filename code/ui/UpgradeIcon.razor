@@ -13,7 +13,7 @@
 	}
 
 	<!-- <div class="bg" style="background-image: url(@($"materials/icons/{Globals.GetIconForUpgrade(UpgradeType)}.png"));"></div> -->
-	<div class="bg" style="opacity:@((Manager.Instance.HoveredUpgradeType == UpgradeType ? 1f : 0.9f) * (player.SelectedUpgradeType == UpgradeType ? 1f : 0.6f) );">@(Globals.GetIconForUpgrade(UpgradeType))</div>
+	<div class="bg" style="opacity:@((Manager.Instance.HoveredUpgradeType == UpgradeType ? 1f : 0.9f) * (player.SelectedUpgradeType == UpgradeType ? 1f : 0.6f) );">@(Manager.Instance.GetIconForUpgrade(UpgradeType))</div>
 	<div class="level" style="opacity:@((Manager.Instance.HoveredUpgradeType == UpgradeType ? 1f : 0.9f) * (player.SelectedUpgradeType == UpgradeType ? 1f : 0.3f) );">@($"{Level}")</div>
 </root>
 
