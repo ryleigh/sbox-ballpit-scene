@@ -1,0 +1,67 @@
+{
+  "RootObject": {
+    "__guid": "f7c2f8a3-bd37-4ffd-8a28-add1db70cda9",
+    "Name": "shop_item_passive",
+    "Scale": "0.5,0.5,0.5",
+    "Tags": "item",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "Components": [
+      {
+        "__type": "ModelRenderer",
+        "__guid": "26eea19f-c4da-43c9-85f3-89daac7d20b7",
+        "BodyGroups": 18446744073709551615,
+        "Model": "models/dev/sphere.vmdl",
+        "RenderType": "On",
+        "Tint": "0.14724,0.11686,0.17209,1"
+      },
+      {
+        "__type": "SphereCollider",
+        "__guid": "341d6783-2089-45c3-8d33-48df6b63f43f",
+        "Center": "0,0,0",
+        "IsTrigger": true,
+        "Radius": 33,
+        "Static": false
+      },
+      {
+        "__type": "ShopItem",
+        "__guid": "b1caaa9b-3022-42b5-b7b4-900f6e53e2cd"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "1c3f263c-cc29-446b-91df-059a7fe923f8",
+        "Name": "World",
+        "Position": "0,0,40",
+        "Rotation": "-0.4999999,-0.5,-0.5,0.5000001",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "Components": [
+          {
+            "__type": "WorldPanel",
+            "__guid": "e404642d-287f-4a24-8f1c-10ad6452f4d2",
+            "HorizontalAlign": "Center",
+            "LookAtCamera": false,
+            "PanelSize": "1000,1000",
+            "RenderScale": 5,
+            "VerticalAlign": "Center"
+          },
+          {
+            "__type": "ShopItemLabel",
+            "__guid": "eacd856e-1df6-4aec-aa37-454869cc4c6c",
+            "TargetObject": {
+              "_type": "gameobject",
+              "go": "f7c2f8a3-bd37-4ffd-8a28-add1db70cda9"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "ResourceVersion": 1,
+  "__version": 1,
+  "__references": []
+}

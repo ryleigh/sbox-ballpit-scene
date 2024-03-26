@@ -245,7 +245,11 @@ public class PlayerController : Component, Component.ITriggerListener
 				foreach ( var ball in Scene.GetAllComponents<Ball>() )
 				{
 					if ( ball.IsActive && ball.PlayerNum == PlayerNum )
-						ball.SetDirection( ((Vector2)Transform.Position - (Vector2)ball.Transform.Position).Normal );
+					{
+						var speed = ball.Velocity.Length;
+						var dir = ((Vector2)Transform.Position - (Vector2)ball.Transform.Position).Normal;
+						ball.SetVelocity( dir * speed, timeScale: 0f, duration: 0.2f, EasingType.Linear );
+					}
 				}
 
 				break;
@@ -259,8 +263,20 @@ public class PlayerController : Component, Component.ITriggerListener
 					if(distSqr < MathF.Pow(100f, 2f))
 					{
 						var speed = ball.Velocity.Length * 1.15f;
-						ball.SetVelocity( ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal * speed, timeScale: 0f, timeScaleDuration: 0.1f );
+						var dir = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal;
+						ball.SetVelocity( dir * speed, timeScale: 0f, duration: 0.1f, EasingType.ExpoIn );
 					}
+				}
+
+				break;
+			case UpgradeType.Replace:
+				foreach ( var ball in Scene.GetAllComponents<Ball>() )
+				{
+					if ( !ball.IsActive )
+						continue;
+
+					ball.SetTimeScaleRPC( timeScale: 0f, duration: 0.5f, EasingType.QuadIn );
+					ball.SetPlayerNum( Globals.GetOpponentPlayerNum( ball.PlayerNum ) );
 				}
 
 				break;

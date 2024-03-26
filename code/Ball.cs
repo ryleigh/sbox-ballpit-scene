@@ -7,7 +7,7 @@ public class Ball : Component
 	[Sync] public int CurrentSide { get; set; }
 
 	[Sync] public Vector2 Velocity { get; set; }
-	[Property, Sync, Hide] public Color Color { get; private set; }
+	[Property, Sync, Hide] public Color Color { get; set; }
 
 	//public HighlightOutline HighlightOutline { get; private set; }
 	public ModelRenderer ModelRenderer { get; private set; }
@@ -194,15 +194,16 @@ public class Ball : Component
 		}
 	}
 
-	//[Broadcast]
-	public void SetPlayerNum(int playerNum )
+	[Broadcast]
+	public void SetPlayerNum( int playerNum )
 	{
+		Color = (playerNum == 0 ? Manager.Instance.ColorPlayer0 : Manager.Instance.ColorPlayer1);
+
 		//if ( IsProxy )
 		//	return;
 
 		PlayerNum = playerNum;
-
-		Color = (playerNum == 0 ? Manager.Instance.ColorPlayer0 : Manager.Instance.ColorPlayer1);
+		
 		//Log.Info( $"Color: {Color} Manager.Instance.ColorPlayer0: {Manager.Instance.ColorPlayer0} Manager.Instance.ColorPlayer1: {Manager.Instance.ColorPlayer1} IsProxy: {IsProxy}" );
 
 		//Components.Get<ModelRenderer>().Tint = Color;
@@ -306,24 +307,24 @@ public class Ball : Component
 	}
 
 	[Broadcast]
-	public void SetVelocity( Vector2 velocity, float timeScale = 1f, float timeScaleDuration = 0f )
+	public void SetVelocity( Vector2 velocity, float timeScale = 1f, float duration = 0f, EasingType easingType = EasingType.Linear )
 	{
 		if ( IsProxy )
 			return;
 
 		Velocity = velocity;
 
-		if ( timeScale < 1f && timeScaleDuration > 0f )
-			SetTimeScale( timeScale, timeScaleDuration, EasingType.ExpoIn );
+		if ( timeScale < 1f && duration > 0f )
+			SetTimeScale( timeScale, duration, easingType );
 	}
 
 	[Broadcast]
-	public void SetTimeScaleRPC( float timeScale, float time, EasingType easingType = EasingType.Linear )
+	public void SetTimeScaleRPC( float timeScale, float duration, EasingType easingType = EasingType.Linear )
 	{
 		if ( IsProxy )
 			return;
 
-		SetTimeScale( timeScale, time, easingType );
+		SetTimeScale( timeScale, duration, easingType );
 	}
 
 	public void SetTimeScale( float timeScale, float time, EasingType easingType = EasingType.Linear )

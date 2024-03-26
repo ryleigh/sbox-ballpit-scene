@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
-public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, }
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, }
+public enum UpgradeRarity { Common, Uncommon, Rare, Epic, }
 
 public struct UpgradeData
 {
@@ -35,6 +36,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject BallPrefab { get; set; }
 	[Property] public GameObject SkipButtonPrefab { get; set; }
 	[Property] public GameObject ShopItemPrefab { get; set; }
+	[Property] public GameObject ShopItemPassivePrefab { get; set; }
 	[Property] public GameObject FadingTextPrefab { get; set; }
 	[Property] public GameObject BallExplosionParticles { get; set; }
 	[Property] public GameObject BallGutterParticles { get; set; }
@@ -450,7 +452,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			CreateShopItem( 0, topPos + new Vector2( 0f, interval * -3 ), UpgradeType.Gather, numLevels: 3, price: 1 );
 			CreateShopItem( 0, topPos + new Vector2( 0f, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
 			CreateShopItem( 0, topPos + new Vector2( interval * 1, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
-			CreateShopItem( 0, topPos + new Vector2( interval * 2, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
+			CreateShopItem( 0, topPos + new Vector2( interval * 2, interval * -4 ), UpgradeType.Replace, numLevels: 3, price: 1 );
 			CreateShopItem( 0, topPos + new Vector2( interval * 3, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
 			CreateShopItem( 0, topPos + new Vector2( interval * 4, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
 		}
@@ -479,7 +481,10 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void CreateShopItem( int playerNum, Vector2 pos, UpgradeType upgradeType, int numLevels, int price )
 	{
-		var shopItemObj = ShopItemPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
+		var shopItemObj = IsUpgradePassive(upgradeType)
+			? ShopItemPassivePrefab.Clone( new Vector3( pos.x, pos.y, 0f ) )
+			: ShopItemPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
+
 		shopItemObj.NetworkSpawn( GetConnection( playerNum ) );
 		shopItemObj.Components.Get<ShopItem>().Init( upgradeType, numLevels, price, playerNum );
 	}
@@ -512,7 +517,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		//ballObj.NetworkSpawn( GetConnection( playerNum ) );
 		//ballObj.NetworkSpawn();
 
-		ball.SetPlayerNum( playerNum );
+		ball.Color = (playerNum == 0 ? ColorPlayer0 : ColorPlayer1);
+		ball.PlayerNum = playerNum;
 
 		int side = pos.x > 0f ? 1 : 0;
 		ball.CurrentSide = side;
@@ -858,8 +864,9 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster.", isPassive: true );
 		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls." );
-		CreateUpgrade( UpgradeType.Gather, "Gather", "⤵️", "Your balls target you." );
-		CreateUpgrade( UpgradeType.Repel, "Repel", "🔆", "Push nearby balls away." );
+		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you." );
+		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away." );
+		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy." );
 	}
 
 	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, bool isPassive = false)

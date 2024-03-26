@@ -12,7 +12,7 @@ ShopItemLabel {
 	//white-space: pre;
 	overflow: visible;
 
-	.bg {
+	.icon {
 		position: absolute;
 		width: 80%;
 		height: 80%;
@@ -23,6 +23,7 @@ ShopItemLabel {
 		justify-content: center;
 		align-items: center;
 		font-size: 70px;
+		text-stroke: 8px blue;
 	}
 
 	.price {
