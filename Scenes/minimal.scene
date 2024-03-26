@@ -33,6 +33,10 @@
             "_type": "gameobject",
             "prefab": "prefabs/player.prefab"
           },
+          "ShopItemPassivePrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/shop_item_passive.prefab"
+          },
           "ShopItemPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/shop_item.prefab"
@@ -977,7 +981,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-03-22T23:13:28.1534592-07:00",
+  "LastSaved": "2024-03-26T02:37:20.5935614-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

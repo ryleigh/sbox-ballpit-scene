@@ -17,13 +17,15 @@ public struct UpgradeData
 	public string name;
 	public string icon;
 	public string description;
+	public UpgradeRarity rarity;
 	public bool isPassive;
 
-	public UpgradeData( string _name, string _icon, string _description, bool _isPassive )
+	public UpgradeData( string _name, string _icon, string _description, UpgradeRarity _rarity, bool _isPassive )
 	{
 		name = _name;
 		icon = _icon;
 		description = _description;
+		rarity = _rarity;
 		isPassive = _isPassive;
 	}
 }
@@ -180,6 +182,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			player.IsSpectator = true;
 		}
 
+		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
 
 		//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 1 );
@@ -366,8 +369,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	void StartNewMatch()
 	{
 		RoundNum = 0;
-		Player0?.StartNewMatch();
-		Player1?.StartNewMatch();
+		Player0?.ClearStats();
+		Player1?.ClearStats();
 		_targetCenterLineOffset = 0f;
 		CurrentScore = 0;
 
@@ -443,26 +446,43 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( DoesPlayerExist0 )
 		{
 			CreateSkipButton( 0 );
-			var topPos = new Vector2( -215f, 70f );
-			var interval = 43f;
 
-			CreateShopItem( 0, topPos + new Vector2( 0f, 0f ), UpgradeType.Volley, numLevels: 2, price: 4 );
-			CreateShopItem( 0, topPos + new Vector2( 0f, interval * -1 ), UpgradeType.Volley, numLevels: 2, price: 4 );
-			CreateShopItem( 0, topPos + new Vector2( 0f, interval * -2 ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
-			CreateShopItem( 0, topPos + new Vector2( 0f, interval * -3 ), UpgradeType.Gather, numLevels: 3, price: 1 );
-			CreateShopItem( 0, topPos + new Vector2( 0f, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
-			CreateShopItem( 0, topPos + new Vector2( interval * 1, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
-			CreateShopItem( 0, topPos + new Vector2( interval * 2, interval * -4 ), UpgradeType.Replace, numLevels: 3, price: 1 );
-			CreateShopItem( 0, topPos + new Vector2( interval * 3, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
-			CreateShopItem( 0, topPos + new Vector2( interval * 4, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
+			//var topPos = new Vector2( -215f, 70f );
+			//var interval = 43f;
+
+			CreateShopItems( playerNum: 0, numItems: Player0.NumShopItems );
+
+			//CreateShopItem( 0, topPos + new Vector2( 0f, 0f ), UpgradeType.Volley, numLevels: 2, price: 4 );
+			//CreateShopItem( 0, topPos + new Vector2( 0f, interval * -1 ), UpgradeType.Volley, numLevels: 2, price: 4 );
+			//CreateShopItem( 0, topPos + new Vector2( 0f, interval * -2 ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
+			//CreateShopItem( 0, topPos + new Vector2( 0f, interval * -3 ), UpgradeType.Gather, numLevels: 3, price: 1 );
+			//CreateShopItem( 0, topPos + new Vector2( 0f, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
+			//CreateShopItem( 0, topPos + new Vector2( interval * 1, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
+			//CreateShopItem( 0, topPos + new Vector2( interval * 2, interval * -4 ), UpgradeType.Replace, numLevels: 3, price: 1 );
+			//CreateShopItem( 0, topPos + new Vector2( interval * 3, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
+			//CreateShopItem( 0, topPos + new Vector2( interval * 4, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
 		}
 
 		if ( DoesPlayerExist1 )
 		{
 			CreateSkipButton( 1 );
-			CreateShopItem( 1, new Vector2( 215f, -20f ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
-			CreateShopItem( 1, new Vector2( 215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
-			CreateShopItem( 1, new Vector2( 215f, -60f ), UpgradeType.Gather, numLevels: 3, price: 0 );
+
+			CreateShopItems( playerNum: 1, numItems: Player1.NumShopItems );
+
+			//CreateShopItem( 1, new Vector2( 215f, -20f ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
+			//CreateShopItem( 1, new Vector2( 215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
+			//CreateShopItem( 1, new Vector2( 215f, -60f ), UpgradeType.Gather, numLevels: 3, price: 0 );
+		}
+	}
+
+	void CreateShopItems(int playerNum, int numItems)
+	{
+		for(int i = 0; i <= numItems; i++)
+		{
+			var upgradeType = (UpgradeType)Game.Random.Int( 1, Enum.GetValues( typeof( UpgradeType ) ).Length - 1 );
+			int numLevels = Game.Random.Int( 1, 3 );
+			int price = Game.Random.Int( 0, 7 );
+			CreateShopItem( playerNum, i, upgradeType, numLevels, price );
 		}
 	}
 
@@ -479,14 +499,31 @@ public sealed class Manager : Component, Component.INetworkListener
 		skipButtonObj.NetworkSpawn( GetConnection( playerNum ) );
 	}
 
-	void CreateShopItem( int playerNum, Vector2 pos, UpgradeType upgradeType, int numLevels, int price )
+	void CreateShopItem( int playerNum, int itemNum, UpgradeType upgradeType, int numLevels, int price )
 	{
+		var pos = GetPosForShopItem( playerNum, itemNum );
+
 		var shopItemObj = IsUpgradePassive(upgradeType)
 			? ShopItemPassivePrefab.Clone( new Vector3( pos.x, pos.y, 0f ) )
 			: ShopItemPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
 
 		shopItemObj.NetworkSpawn( GetConnection( playerNum ) );
 		shopItemObj.Components.Get<ShopItem>().Init( upgradeType, numLevels, price, playerNum );
+	}
+
+	Vector2 GetPosForShopItem(int playerNum, int itemNum)
+	{
+		var topPos = new Vector2( -215f * (playerNum == 0 ? 1f : -1f), 70f );
+		var interval = 43f;
+
+		Vector2 offset;
+
+		if ( itemNum < 5 )
+			offset = new Vector2( 0f, -itemNum * interval );
+		else
+			offset = new Vector2( (itemNum - 4) * interval * (playerNum == 0 ? 1f : -1f), -4 * interval );
+
+		return topPos + offset;
 	}
 
 	[Broadcast]
@@ -852,6 +889,14 @@ public sealed class Manager : Component, Component.INetworkListener
 		return "";
 	}
 
+	public UpgradeRarity GetRarityForUpgrade( UpgradeType upgradeType )
+	{
+		if ( UpgradeDatas.ContainsKey( upgradeType ) )
+			return UpgradeDatas[upgradeType].rarity;
+
+		return UpgradeRarity.Common;
+	}
+
 	public bool IsUpgradePassive( UpgradeType upgradeType )
 	{
 		if ( UpgradeDatas.ContainsKey( upgradeType ) )
@@ -860,17 +905,28 @@ public sealed class Manager : Component, Component.INetworkListener
 		return true;
 	}
 
-	void GenerateUpgrades()
+	public static Color GetColorForRarity( UpgradeRarity rarity )
 	{
-		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster.", isPassive: true );
-		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls." );
-		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you." );
-		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away." );
-		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy." );
+		switch ( rarity )
+		{
+			case UpgradeRarity.Common: default: return new Color( 0f, 0f, 0f );
+			case UpgradeRarity.Uncommon: return new Color( 0.3f, 0.3f, 0.6f );
+			case UpgradeRarity.Rare: return new Color( 0.6f, 0.2f, 0.2f );
+			case UpgradeRarity.Epic: return new Color( 0.7f, 0.7f, 0f );
+		}
 	}
 
-	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, bool isPassive = false)
+	void GenerateUpgrades()
 	{
-		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, description, isPassive));
+		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster.", UpgradeRarity.Common, isPassive: true );
+		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls.", UpgradeRarity.Common );
+		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you.", UpgradeRarity.Rare );
+		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away.", UpgradeRarity.Epic );
+		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy.", UpgradeRarity.Uncommon );
+	}
+
+	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, UpgradeRarity rarity, bool isPassive = false)
+	{
+		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, description, rarity, isPassive));
 	}
 }

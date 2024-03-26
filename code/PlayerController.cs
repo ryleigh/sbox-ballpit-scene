@@ -33,6 +33,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Sync] public int Money { get; private set; }
 	[Sync] public int NumMatchWins { get; private set; }
 	[Sync] public int NumMatchLosses { get; private set; }
+	[Sync] public int NumShopItems { get; private set; }
 
 	[Sync] public NetDictionary<UpgradeType, int> PassiveUpgrades { get; set; } = new();
 	[Sync] public NetDictionary<UpgradeType, int> ActiveUpgrades { get; set; } = new();
@@ -56,9 +57,6 @@ public class PlayerController : Component, Component.ITriggerListener
 		base.OnAwake();
 
 		Ragdoll = Components.GetInDescendantsOrSelf<RagdollController>();
-		HP = MaxHP;
-
-		Money = 448;
 	}
 
 	protected override void OnStart()
@@ -275,7 +273,7 @@ public class PlayerController : Component, Component.ITriggerListener
 					if ( !ball.IsActive )
 						continue;
 
-					ball.SetTimeScaleRPC( timeScale: 0f, duration: 0.5f, EasingType.QuadIn );
+					ball.SetTimeScaleRPC( timeScale: 0f, duration: 0.75f, EasingType.QuadIn );
 					ball.SetPlayerNum( Globals.GetOpponentPlayerNum( ball.PlayerNum ) );
 				}
 
@@ -634,7 +632,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	}
 
 	[Broadcast]
-	public void StartNewMatch()
+	public void ClearStats()
 	{
 		if ( IsProxy )
 			return;
@@ -643,6 +641,10 @@ public class PlayerController : Component, Component.ITriggerListener
 		HP = MaxHP;
 		PassiveUpgrades.Clear();
 		ActiveUpgrades.Clear();
+		IsInvulnerable = false;
+		NumShopItems = 5;
+
+		Money = 448;
 	}
 
 	public int GetUpgradeHash()

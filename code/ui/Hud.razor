@@ -124,7 +124,7 @@
 			var upgradeType = manager.HoveredObject.Components.Get<ShopItem>().UpgradeType;
 
 			<div class="item_description" style="left:@(pos.x * 100f + (pos.x < 0.5f ? 3f : -13.5f))%; top:@(pos.y * 100f - 4f)%;">
-				@($"{manager.GetNameForUpgrade(upgradeType).ToUpper()}\n\n{manager.GetDescriptionForUpgrade(upgradeType)}")
+				@($"{manager.GetNameForUpgrade(upgradeType).ToUpper()}\n{manager.GetRarityForUpgrade(upgradeType)}\n\n{manager.GetDescriptionForUpgrade(upgradeType)}")
 			</div>
 		}
 	}
@@ -134,7 +134,7 @@
 		//Log.Info($"{manager.HoveredUpgradeType} - {Mouse.Position}");
 
 		<div class="item_description" style="left:@(Mouse.Position.x * Panel.ScaleFromScreen)px; top:@(Mouse.Position.y * Panel.ScaleFromScreen - 100)px;">
-			@($"{manager.GetNameForUpgrade(manager.HoveredUpgradeType).ToUpper()}\n\n{manager.GetDescriptionForUpgrade(manager.HoveredUpgradeType)}")
+			@($"{manager.GetNameForUpgrade(manager.HoveredUpgradeType).ToUpper()}\n{manager.GetRarityForUpgrade(manager.HoveredUpgradeType)}\n\n{manager.GetDescriptionForUpgrade(manager.HoveredUpgradeType)}")
 		</div>
 	}
 

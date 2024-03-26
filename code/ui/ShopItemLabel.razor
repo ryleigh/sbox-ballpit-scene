@@ -15,7 +15,7 @@
 
 	<!-- <div class="bg" style="background-image: url(@($"materials/icons/{Globals.GetIconForUpgrade(ShopItem.UpgradeType)}.png"));"></div> -->
 	<!-- <div class="icon" style="opacity:@((Manager.Instance.HoveredObject == TargetObject ? 1f : 0.9f) * (money >= ShopItem.Price ? 1f : 0.4f));">@(Manager.Instance.GetIconForUpgrade(ShopItem.UpgradeType))</div> -->
-	<div class="icon" style="opacity:@((money >= ShopItem.Price ? 1f : 0.4f));">@(Manager.Instance.GetIconForUpgrade(ShopItem.UpgradeType))</div>
+	<div class="icon" style="opacity:@((money >= ShopItem.Price ? 1f : 0.4f)); text-stroke: 12px @(Manager.GetColorForRarity(Manager.Instance.GetRarityForUpgrade(ShopItem.UpgradeType)).Rgba);">@(Manager.Instance.GetIconForUpgrade(ShopItem.UpgradeType))</div>
 
 	<div class="price" style="color: @((money >= ShopItem.Price ? Color.White : new Color(1f, 0.3f, 0.3f)).Rgba);">@($"${ShopItem.Price}")</div>
 
