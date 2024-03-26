@@ -29,6 +29,10 @@
             "_type": "gameobject",
             "prefab": "prefabs/fading_text.prefab"
           },
+          "FloaterTextPrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/floater_text.prefab"
+          },
           "PlayerPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/player.prefab"
@@ -981,7 +985,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-03-26T02:37:20.5935614-07:00",
+  "LastSaved": "2024-03-26T06:11:00.5486715-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

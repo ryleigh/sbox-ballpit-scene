@@ -40,6 +40,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject ShopItemPrefab { get; set; }
 	[Property] public GameObject ShopItemPassivePrefab { get; set; }
 	[Property] public GameObject FadingTextPrefab { get; set; }
+	[Property] public GameObject FloaterTextPrefab { get; set; }
 	[Property] public GameObject BallExplosionParticles { get; set; }
 	[Property] public GameObject BallGutterParticles { get; set; }
 	[Property] public GameObject SlidingGround { get; set; }
@@ -146,6 +147,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		StartBuyPhase();
 		//StartNewMatch();
 		//StartNewRound();
+
+		SpawnFloaterText( new Vector3( -120f, 40f, 180f ), $"+VOLLEY", 3f, new Color(0.6f, 0.6f, 1f), velocity: new Vector2(0f, 25f), deceleration: 1f, startScale: 0.17f, endScale: 0.20f );
 	}
 
 	public void OnActive( Connection channel )
@@ -841,12 +844,20 @@ public sealed class Manager : Component, Component.INetworkListener
 		SpawnFadingText( new Vector3( 0f, 20f, 180f ), $"{name} WON THE ROUND", 3f );
 	}
 
-	public void SpawnFadingText(Vector3 pos, string text, float lifetime)
+	public void SpawnFadingText(Vector3 pos, string text, float lifetime )
 	{
 		var textObj = FadingTextPrefab.Clone( pos );
 		textObj.Transform.Rotation = Rotation.From( 90f, 90f, 0f );
 
 		textObj.Components.Get<FadingText>().Init( text, lifetime );
+	}
+
+	public void SpawnFloaterText( Vector3 pos, string text, float lifetime, Color color, Vector2 velocity, float deceleration, float startScale, float endScale  )
+	{
+		var textObj = FloaterTextPrefab.Clone( pos );
+		textObj.Transform.Rotation = Rotation.From( 90f, 90f, 0f );
+
+		textObj.Components.Get<FloaterText>().Init( text, lifetime, color, velocity, deceleration, startScale, endScale );
 	}
 
 	public void CreateBallExplosionParticles(Vector3 pos, int playerNum )
