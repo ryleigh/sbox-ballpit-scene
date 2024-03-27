@@ -911,9 +911,22 @@ public sealed class Manager : Component, Component.INetworkListener
 		switch ( rarity )
 		{
 			case UpgradeRarity.Common: default: return new Color( 0f, 0f, 0f );
-			case UpgradeRarity.Uncommon: return new Color( 0.3f, 0.3f, 0.6f );
+			case UpgradeRarity.Uncommon: return new Color( 0.5f, 0.5f, 0.8f );
 			case UpgradeRarity.Rare: return new Color( 0.6f, 0.2f, 0.2f );
-			case UpgradeRarity.Epic: return new Color( 0.7f, 0.7f, 0f );
+			case UpgradeRarity.Epic: return new Color( 0.9f, 0.4f, 0f );
+			case UpgradeRarity.Legendary: return new Color( 1f, 1f, 0f );
+		}
+	}
+
+	public static int GetOutlineSizeForRarity( UpgradeRarity rarity )
+	{
+		switch ( rarity )
+		{
+			case UpgradeRarity.Common: default: return 6;
+			case UpgradeRarity.Uncommon: return 12;
+			case UpgradeRarity.Rare: return 12;
+			case UpgradeRarity.Epic: return 12;
+			case UpgradeRarity.Legendary: return 12;
 		}
 	}
 
