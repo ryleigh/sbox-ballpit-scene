@@ -17,7 +17,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Sync] public Vector2 Velocity { get; set; }
 
 	public Vector2 Pos2D => (Vector2)Transform.Position;
-	public Vector2 ForwardVec2D => PlayerNum == 0 ? new Vector2( 1f, 0f ) : new Vector2( -1f, 0f );
+	//public Vector2 ForwardVec2D => PlayerNum == 0 ? new Vector2( 1f, 0f ) : new Vector2( -1f, 0f );
 
 	[Sync] public bool IsDead { get; set; }
 	[Sync] public bool IsJumping { get; set; }
@@ -95,7 +95,8 @@ public class PlayerController : Component, Component.ITriggerListener
 			if ( IsSpectator )
 				Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( Utils.VectorToDegrees( Velocity ) ), Velocity.Length * 0.2f * Time.Delta );
 			else
-				Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( PlayerNum == 0 ? 0f : 180f ), 5f * Time.Delta );
+				Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( Utils.VectorToDegrees( Manager.Instance.MouseWorldPos - (Vector2)Transform.Position ) ), 5f * Time.Delta );
+			//Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( PlayerNum == 0 ? 0f : 180f ), 5f * Time.Delta );
 		}
 
 		if( _isFlashing && _timeSinceFlashToggle > 0.04f )
@@ -233,7 +234,8 @@ public class PlayerController : Component, Component.ITriggerListener
 				var currDegrees = -30f;
 				for(int i = 0; i < 5; i++)
 				{
-					var forwardDegrees = Utils.VectorToDegrees( ForwardVec2D );
+					//var forwardDegrees = Utils.VectorToDegrees( ForwardVec2D );
+					var forwardDegrees = Utils.VectorToDegrees( Manager.Instance.MouseWorldPos - (Vector2)Transform.Position );
 					var vec = Utils.DegreesToVector( currDegrees + forwardDegrees );
 					var speed = 85f;
 					Manager.Instance.SpawnBall( Pos2D + vec * 25f, vec * speed, PlayerNum );
@@ -598,19 +600,19 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Broadcast]
 	public void AdjustUpgradeLevel(UpgradeType upgradeType, int amount)
 	{
-		if(amount > 0)
-		{
-			Manager.Instance.SpawnFloaterText( 
-				Transform.Position.WithZ( 150f ), 
-				Manager.Instance.GetFloaterTextForUpgrade( upgradeType ), 
-				lifetime: 1.5f, 
-				color: Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ) ), 
-				velocity: new Vector2( 0f, 35f ), 
-				deceleration: 1.8f, 
-				startScale: 0.14f, 
-				endScale: 0.16f 
-			);
-		}
+		if ( amount == 0 )
+			return;
+
+		Manager.Instance.SpawnFloaterText( 
+			Transform.Position.WithZ( 150f ), 
+			$"{(amount > 0 ? "+" : "-")}{Manager.Instance.GetFloaterTextForUpgrade( upgradeType )}", 
+			lifetime: amount > 0 ? 1.5f : 1.2f, 
+			color: Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ) ), 
+			velocity: new Vector2( 0f, amount > 0 ? 35f : -70f ), 
+			deceleration: amount > 0 ? 1.8f : 1.9f, 
+			startScale: 0.14f, 
+			endScale: 0.16f 
+		);
 
 		if ( IsProxy )
 			return;
@@ -671,7 +673,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		PassiveUpgrades.Clear();
 		ActiveUpgrades.Clear();
 		IsInvulnerable = false;
-		NumShopItems = 5;
+		NumShopItems = 9;
 
 		Money = 448;
 	}

@@ -1,14 +1,14 @@
 {
   "RootObject": {
-    "__guid": "bcfd57b5-444c-410e-9077-c9d5f25feda1",
+    "__guid": "fc65cabf-0791-4d95-be64-2d1522ad264f",
     "Name": "fading_text",
     "Enabled": true,
     "NetworkMode": 2,
     "Components": [
       {
         "__type": "TextRenderer",
-        "__guid": "787d8c7d-e097-41ed-8162-312fd561af8a",
-        "Color": "1,1,1,1",
+        "__guid": "57084dfb-18db-4c46-b6dc-37c50b5827f3",
+        "Color": "0,0,0,0",
         "FontFamily": "Budokan Rounded",
         "FontSize": 50,
         "Scale": 0.3,
@@ -16,11 +16,11 @@
       },
       {
         "__type": "FadingText",
-        "__guid": "63d3a337-f9eb-4ece-bb1c-6095d9b67a1a",
+        "__guid": "9df6d3fd-fd48-48af-b52d-451946caab25",
         "TextRenderer": {
           "_type": "component",
-          "component_id": "787d8c7d-e097-41ed-8162-312fd561af8a",
-          "go": "bcfd57b5-444c-410e-9077-c9d5f25feda1",
+          "component_id": "57084dfb-18db-4c46-b6dc-37c50b5827f3",
+          "go": "fc65cabf-0791-4d95-be64-2d1522ad264f",
           "component_type": "TextRenderer"
         }
       }

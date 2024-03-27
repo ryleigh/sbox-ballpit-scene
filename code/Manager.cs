@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
-public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink }
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 
 public struct UpgradeData
@@ -473,7 +473,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void CreateShopItems(int playerNum, int numItems)
 	{
-		for(int i = 0; i <= numItems; i++)
+		for(int i = 0; i < numItems; i++)
 		{
 			int numLevels = Game.Random.Int( 1, 3 );
 			int price = Game.Random.Int( 0, 7 );
@@ -965,12 +965,13 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void GenerateUpgrades()
 	{
-		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster.", "+MOVESPEED", UpgradeRarity.Common, isPassive: true );
-		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls.", "+VOLLEY", UpgradeRarity.Common );
-		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you.", "+GATHER", UpgradeRarity.Rare );
-		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away.", "+REPEL", UpgradeRarity.Epic );
-		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy.", "+REPLACE", UpgradeRarity.Uncommon );
-		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", "Teleport to your cursor.", "+BLINK", UpgradeRarity.Uncommon, useableInBuyPhase: true );
+		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster.", "MOVESPEED", UpgradeRarity.Common, isPassive: true );
+		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls.", "VOLLEY", UpgradeRarity.Common );
+		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you.", "GATHER", UpgradeRarity.Rare );
+		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away.", "REPEL", UpgradeRarity.Epic );
+		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy.", "REPLACE", UpgradeRarity.Uncommon );
+		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", "Teleport to your cursor.", "BLINK", UpgradeRarity.Uncommon, useableInBuyPhase: true );
+		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", "Redirect all balls randomly.", "SCATTER", UpgradeRarity.Uncommon );
 
 		foreach (var upgradeData in UpgradeDatas)
 		{
