@@ -1,15 +1,13 @@
 {
   "RootObject": {
-    "__guid": "5c94f71f-f6b0-47bd-adf2-1cb65f3f6e1e",
+    "__guid": "4288a8f1-db3e-4297-9b57-892655ea3f26",
     "Name": "floater_text",
-    "Position": "0,0,50",
-    "Rotation": "-0.5,0.5,0.5,0.5",
     "Enabled": true,
     "NetworkMode": 2,
     "Components": [
       {
         "__type": "TextRenderer",
-        "__guid": "b7700498-c952-41ce-b598-ff70d5f928ff",
+        "__guid": "ad23eb83-f3f6-4499-9aa2-84c1f8e52ce6",
         "Color": "0.89767,0.89767,0.89767,1",
         "FontFamily": "Poppins",
         "FontSize": 64,
@@ -18,15 +16,16 @@
       },
       {
         "__type": "FloaterText",
-        "__guid": "70ea16bc-048f-432f-ba36-6adc025015ae",
+        "__guid": "a8f58035-2654-4788-946b-b512997c340b",
         "TextRenderer": {
           "_type": "component",
-          "component_id": "b7700498-c952-41ce-b598-ff70d5f928ff",
-          "go": "5c94f71f-f6b0-47bd-adf2-1cb65f3f6e1e",
+          "component_id": "ad23eb83-f3f6-4499-9aa2-84c1f8e52ce6",
+          "go": "4288a8f1-db3e-4297-9b57-892655ea3f26",
           "component_type": "TextRenderer"
         }
       }
-    ]
+    ],
+    "Children": []
   },
   "ShowInMenu": false,
   "MenuPath": null,

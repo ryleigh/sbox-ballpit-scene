@@ -17,14 +17,16 @@ public struct UpgradeData
 	public string name;
 	public string icon;
 	public string description;
+	public string floaterText;
 	public UpgradeRarity rarity;
 	public bool isPassive;
 
-	public UpgradeData( string _name, string _icon, string _description, UpgradeRarity _rarity, bool _isPassive )
+	public UpgradeData( string _name, string _icon, string _description, string _floaterText, UpgradeRarity _rarity, bool _isPassive )
 	{
 		name = _name;
 		icon = _icon;
 		description = _description;
+		floaterText = _floaterText;
 		rarity = _rarity;
 		isPassive = _isPassive;
 	}
@@ -147,8 +149,6 @@ public sealed class Manager : Component, Component.INetworkListener
 		StartBuyPhase();
 		//StartNewMatch();
 		//StartNewRound();
-
-		SpawnFloaterText( new Vector3( -120f, 40f, 180f ), $"+VOLLEY", 3f, new Color(0.6f, 0.6f, 1f), velocity: new Vector2(0f, 25f), deceleration: 1f, startScale: 0.17f, endScale: 0.20f );
 	}
 
 	public void OnActive( Connection channel )
@@ -900,6 +900,14 @@ public sealed class Manager : Component, Component.INetworkListener
 		return "";
 	}
 
+	public string GetFloaterTextForUpgrade( UpgradeType upgradeType )
+	{
+		if ( UpgradeDatas.ContainsKey( upgradeType ) )
+			return UpgradeDatas[upgradeType].floaterText;
+
+		return "";
+	}
+
 	public UpgradeRarity GetRarityForUpgrade( UpgradeType upgradeType )
 	{
 		if ( UpgradeDatas.ContainsKey( upgradeType ) )
@@ -929,15 +937,15 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void GenerateUpgrades()
 	{
-		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster.", UpgradeRarity.Common, isPassive: true );
-		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls.", UpgradeRarity.Common );
-		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you.", UpgradeRarity.Rare );
-		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away.", UpgradeRarity.Epic );
-		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy.", UpgradeRarity.Uncommon );
+		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster.", "+MOVESPEED", UpgradeRarity.Common, isPassive: true );
+		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls.", "+VOLLEY", UpgradeRarity.Common );
+		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you.", "+GATHER", UpgradeRarity.Rare );
+		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away.", "+REPEL", UpgradeRarity.Epic );
+		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy.", "+REPLACE", UpgradeRarity.Uncommon );
 	}
 
-	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, UpgradeRarity rarity, bool isPassive = false)
+	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, string floaterText, UpgradeRarity rarity, bool isPassive = false)
 	{
-		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, description, rarity, isPassive));
+		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, description, floaterText, rarity, isPassive));
 	}
 }

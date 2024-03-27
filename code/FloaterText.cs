@@ -37,9 +37,10 @@ public sealed class FloaterText : Component
 
 	protected override void OnUpdate()
 	{
-		float opacity = Utils.Map( _timeSinceSpawn, 0f, 0.5f, 0f, 1f, EasingType.QuadOut ) * Utils.Map( _timeSinceSpawn, 0f, Lifetime - 0.1f, 1f, 0.1f, EasingType.ExpoIn ) * Utils.Map( _timeSinceSpawn, Lifetime - 0.5f, Lifetime - 0.1f, 1f, 0f, EasingType.Linear );
+		float opacity = Utils.Map( _timeSinceSpawn, 0f, 0.3f, 0f, 1f, EasingType.QuadOut ) * Utils.Map( _timeSinceSpawn, 0f, Lifetime - 0.1f, 1f, 0.1f, EasingType.ExpoIn ) * Utils.Map( _timeSinceSpawn, Lifetime - 0.3f, Lifetime - 0.05f, 1f, 0f, EasingType.Linear );
 		TextRenderer.Color = _color.WithAlpha( opacity );
 		TextRenderer.Scale = Utils.Map( _timeSinceSpawn, 0f, Lifetime, _startScale, _endScale, EasingType.SineOut );
+		Transform.Rotation = Rotation.From( 90f, 90f, 0f );
 
 		Transform.Position += new Vector3( _velocity.x, _velocity.y, 0f ) * Time.Delta;
 		_velocity *= (1f -  _deceleration * Time.Delta);

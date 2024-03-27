@@ -583,6 +583,20 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Broadcast]
 	public void AdjustUpgradeLevel(UpgradeType upgradeType, int amount)
 	{
+		if(amount > 0)
+		{
+			Manager.Instance.SpawnFloaterText( 
+				Transform.Position.WithZ( 150f ), 
+				Manager.Instance.GetFloaterTextForUpgrade( upgradeType ), 
+				lifetime: 1.5f, 
+				color: Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ) ), 
+				velocity: new Vector2( 0f, 35f ), 
+				deceleration: 1.8f, 
+				startScale: 0.14f, 
+				endScale: 0.16f 
+			);
+		}
+
 		if ( IsProxy )
 			return;
 
