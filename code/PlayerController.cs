@@ -149,13 +149,13 @@ public class PlayerController : Component, Component.ITriggerListener
 		else
 		{
 			if ( Input.Pressed( "Jump" ) )
-			{
 				TryUseItem(SelectedUpgradeType);
-			}
+			else if(Input.Pressed("PrevItem"))
+				ChangeSelectedActiveUpgrade( up: false );
+			else if ( Input.Pressed( "NextItem" ) )
+				ChangeSelectedActiveUpgrade( up: true );
 			else if(Input.MouseWheel != Vector2.Zero)
-			{
-				ChangeSelectedActiveUpgrade( up: Input.MouseWheel.y > 0f );
-			}
+				ChangeSelectedActiveUpgrade( up: Input.MouseWheel.y < 0f );
 
 			CheckBoundsPlaying();
 
@@ -219,8 +219,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public void TryUseItem(UpgradeType upgradeType)
 	{
-		if ( Manager.Instance.GamePhase != GamePhase.RoundActive ||
-			!ActiveUpgrades.ContainsKey( upgradeType ) )
+		bool useableNow = Manager.Instance.GamePhase == GamePhase.RoundActive || Manager.Instance.CanUseUpgradeInBuyPhase( upgradeType );
+		if ( !useableNow || !ActiveUpgrades.ContainsKey( upgradeType ) )
 			return;
 
 		switch( upgradeType )
@@ -228,6 +228,8 @@ public class PlayerController : Component, Component.ITriggerListener
 			case UpgradeType.None: default:
 				break;
 			case UpgradeType.Volley:
+				Manager.Instance.PlaySfx( "bubble", Transform.Position );
+
 				var currDegrees = -30f;
 				for(int i = 0; i < 5; i++)
 				{
@@ -240,6 +242,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 				break;
 			case UpgradeType.Gather:
+				Manager.Instance.PlaySfx( "bubble", Transform.Position );
+
 				foreach ( var ball in Scene.GetAllComponents<Ball>() )
 				{
 					if ( ball.IsActive && ball.PlayerNum == PlayerNum )
@@ -252,6 +256,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 				break;
 			case UpgradeType.Repel:
+				Manager.Instance.PlaySfx( "bubble", Transform.Position );
+
 				foreach ( var ball in Scene.GetAllComponents<Ball>() )
 				{
 					if(!ball.IsActive)
@@ -268,6 +274,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 				break;
 			case UpgradeType.Replace:
+				Manager.Instance.PlaySfx( "bubble", Transform.Position );
+
 				foreach ( var ball in Scene.GetAllComponents<Ball>() )
 				{
 					if ( !ball.IsActive )
@@ -276,6 +284,13 @@ public class PlayerController : Component, Component.ITriggerListener
 					ball.SetTimeScaleRPC( timeScale: 0f, duration: 0.75f, EasingType.QuadIn );
 					ball.SetPlayerNum( Globals.GetOpponentPlayerNum( ball.PlayerNum ) );
 				}
+
+				break;
+			case UpgradeType.Blink:
+				Transform.Position = new Vector3( Manager.Instance.MouseWorldPos.x, Manager.Instance.MouseWorldPos.y, Transform.Position.z );
+				CheckBoundsPlaying();
+
+				Manager.Instance.PlaySfx( "bubble", Transform.Position );
 
 				break;
 		}

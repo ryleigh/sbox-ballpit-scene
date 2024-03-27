@@ -92,12 +92,6 @@
           "GroupName": "Actions"
         },
         {
-          "Name": "use",
-          "KeyboardCode": "e",
-          "GamepadCode": "Y",
-          "GroupName": "Actions"
-        },
-        {
           "Name": "Slot1",
           "KeyboardCode": "1",
           "GamepadCode": "DpadWest",
@@ -191,12 +185,6 @@
           "GroupName": "Other"
         },
         {
-          "Name": "Menu",
-          "KeyboardCode": "Q",
-          "GamepadCode": "SwitchRightMenu",
-          "GroupName": "Other"
-        },
-        {
           "Name": "Chat",
           "KeyboardCode": "enter",
           "GroupName": "Other"
@@ -209,6 +197,16 @@
         {
           "Name": "MouseWheelDown",
           "KeyboardCode": "MWHEELDOWN",
+          "GroupName": "Other"
+        },
+        {
+          "Name": "PrevItem",
+          "KeyboardCode": "Q",
+          "GroupName": "Other"
+        },
+        {
+          "Name": "NextItem",
+          "KeyboardCode": "E",
           "GroupName": "Other"
         }
       ],

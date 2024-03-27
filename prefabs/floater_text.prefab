@@ -1,26 +1,26 @@
 {
   "RootObject": {
-    "__guid": "4288a8f1-db3e-4297-9b57-892655ea3f26",
+    "__guid": "670564b3-360a-488b-b9f8-7c5e1a89c103",
     "Name": "floater_text",
     "Enabled": true,
     "NetworkMode": 2,
     "Components": [
       {
         "__type": "TextRenderer",
-        "__guid": "ad23eb83-f3f6-4499-9aa2-84c1f8e52ce6",
+        "__guid": "eb3c432e-e8b5-4607-ac63-bcee5ae71986",
         "Color": "0.89767,0.89767,0.89767,1",
-        "FontFamily": "Poppins",
+        "FontFamily": "Budokan Rounded",
         "FontSize": 64,
         "Scale": 0.3,
         "Text": "\u002BTEXT"
       },
       {
         "__type": "FloaterText",
-        "__guid": "a8f58035-2654-4788-946b-b512997c340b",
+        "__guid": "b677836f-4dd0-48e7-97b2-d9b732b55f3e",
         "TextRenderer": {
           "_type": "component",
-          "component_id": "ad23eb83-f3f6-4499-9aa2-84c1f8e52ce6",
-          "go": "4288a8f1-db3e-4297-9b57-892655ea3f26",
+          "component_id": "eb3c432e-e8b5-4607-ac63-bcee5ae71986",
+          "go": "670564b3-360a-488b-b9f8-7c5e1a89c103",
           "component_type": "TextRenderer"
         }
       }

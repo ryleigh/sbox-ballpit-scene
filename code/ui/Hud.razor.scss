@@ -34,6 +34,7 @@ Hud {
 		font-size: 25px;
 		font-family: Poppins;
 		//background-color: #00665511;
+		font-family: "Budokan Rounded";
 	}
 
 	.player_avatar {
@@ -92,6 +93,7 @@ Hud {
 		color: #bbbbbb;
 		pointer-events: all;
 		opacity: 0.7;
+		font-family: "Budokan Rounded";
 
 		&:hover {
 			background-color: #153582;
@@ -113,11 +115,12 @@ Hud {
 		background-color: #333;
 		justify-content: center;
 		align-items: center;
-		font-size: 24px;
+		font-size: 50px;
 		font-family: Poppins;
 		color: #bbbbbb;
 		pointer-events: all;
 		opacity: 0.7;
+		font-family: "Budokan Rounded";
 
 		&:hover {
 			background-color: #153582;

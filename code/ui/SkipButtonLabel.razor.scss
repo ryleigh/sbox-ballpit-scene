@@ -1,5 +1,4 @@
-SkipButtonLabel
-{
+SkipButtonLabel {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -11,10 +10,10 @@ SkipButtonLabel
 	font-weight: bold;
 	border-radius: 20px;
 
-	.title
-	{
+	.title {
 		font-size: 25px;
 		font-family: Poppins;
 		color: #fff;
+		font-family: "Budokan Rounded";
 	}
 }

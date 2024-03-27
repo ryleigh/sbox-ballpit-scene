@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
-public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, }
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 
 public struct UpgradeData
@@ -20,8 +20,9 @@ public struct UpgradeData
 	public string floaterText;
 	public UpgradeRarity rarity;
 	public bool isPassive;
+	public bool useableInBuyPhase;
 
-	public UpgradeData( string _name, string _icon, string _description, string _floaterText, UpgradeRarity _rarity, bool _isPassive )
+	public UpgradeData( string _name, string _icon, string _description, string _floaterText, UpgradeRarity _rarity, bool _isPassive, bool _usableInBuyPhase )
 	{
 		name = _name;
 		icon = _icon;
@@ -29,6 +30,7 @@ public struct UpgradeData
 		floaterText = _floaterText;
 		rarity = _rarity;
 		isPassive = _isPassive;
+		useableInBuyPhase = _usableInBuyPhase;
 	}
 }
 
@@ -81,6 +83,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	[Sync] public string WinningPlayerName { get; set; }
 
+	public CameraComponent Camera { get; private set; }
 	public Vector3 OriginalCameraPos { get; private set; }
 	public Rotation OriginalCameraRot { get; private set; }
 
@@ -111,15 +114,17 @@ public sealed class Manager : Component, Component.INetworkListener
 	public Dictionary<UpgradeType, UpgradeData> UpgradeDatas { get; private set; } = new();
 	public Dictionary<UpgradeRarity, List<UpgradeType>> UpgradesByRarity = new();
 
+	public Vector2 MouseWorldPos { get; private set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
 
 		Instance = this;
 
-		var camera = Scene.GetAllComponents<CameraComponent>().FirstOrDefault();
-		OriginalCameraPos = camera.Transform.Position;
-		OriginalCameraRot = camera.Transform.Rotation;
+		Camera = Scene.GetAllComponents<CameraComponent>().FirstOrDefault();
+		OriginalCameraPos = Camera.Transform.Position;
+		OriginalCameraRot = Camera.Transform.Rotation;
 
 		Dispenser = Scene.GetAllComponents<Dispenser>().FirstOrDefault();
 
@@ -203,6 +208,12 @@ public sealed class Manager : Component, Component.INetworkListener
 		base.OnUpdate();
 
 		DebugDisplay();
+
+		var targetingTrace = Scene.Trace.Ray( Camera.ScreenPixelToRay( Mouse.Position), 1000f ).Run();
+		if(targetingTrace.Hit)
+		{
+			MouseWorldPos = (Vector2)targetingTrace.HitPosition;
+		}
 
 		//Gizmo.Draw.Color = Color.White;
 		//Gizmo.Draw.Text( $"CurrentScore: {CurrentScore}", new global::Transform( Vector3.Zero ) );
@@ -498,8 +509,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	Vector2 GetPosForShopItem(int playerNum, int itemNum)
 	{
-		var topPos = new Vector2( -215f * (playerNum == 0 ? 1f : -1f), 70f );
-		var interval = 43f;
+		var topPos = new Vector2( -215f * (playerNum == 0 ? 1f : -1f), 65f );
+		var interval = 41f;
 
 		Vector2 offset;
 
@@ -858,6 +869,20 @@ public sealed class Manager : Component, Component.INetworkListener
 		particleObj.Transform.Rotation = Rotation.LookAt(new Vector3( playerNum == 0 ? 1f : -1f, 0f, 0f));
 	}
 
+	[Broadcast]
+	public void PlaySfx( string name, Vector3 pos )
+	{
+		Sound.Play( name, pos );
+	}
+
+	[Broadcast]
+	public void PlaySfx( string name, Vector3 pos, float pitch )
+	{
+		var sfx = Sound.Play( name, pos );
+		if ( sfx != null )
+			sfx.Pitch = pitch;
+	}
+
 	public string GetNameForUpgrade( UpgradeType upgradeType )
 	{
 		if ( UpgradeDatas.ContainsKey( upgradeType ) )
@@ -906,6 +931,14 @@ public sealed class Manager : Component, Component.INetworkListener
 		return true;
 	}
 
+	public bool CanUseUpgradeInBuyPhase( UpgradeType upgradeType )
+	{
+		if ( UpgradeDatas.ContainsKey( upgradeType ) )
+			return UpgradeDatas[upgradeType].useableInBuyPhase;
+
+		return false;
+	}
+
 	public static Color GetColorForRarity( UpgradeRarity rarity )
 	{
 		switch ( rarity )
@@ -937,8 +970,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you.", "+GATHER", UpgradeRarity.Rare );
 		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away.", "+REPEL", UpgradeRarity.Epic );
 		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy.", "+REPLACE", UpgradeRarity.Uncommon );
+		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", "Teleport to your cursor.", "+BLINK", UpgradeRarity.Uncommon, useableInBuyPhase: true );
 
-		foreach(var upgradeData in UpgradeDatas)
+		foreach (var upgradeData in UpgradeDatas)
 		{
 			var upgradeType = upgradeData.Key;
 			var rarity = upgradeData.Value.rarity;
@@ -991,8 +1025,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		return UpgradeRarity.Common;
 	}
 
-	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, string floaterText, UpgradeRarity rarity, bool isPassive = false)
+	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, string floaterText, UpgradeRarity rarity, bool isPassive = false, bool useableInBuyPhase = false)
 	{
-		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, description, floaterText, rarity, isPassive));
+		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, description, floaterText, rarity, isPassive, useableInBuyPhase));
 	}
 }
