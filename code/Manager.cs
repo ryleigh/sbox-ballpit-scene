@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
 public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, }
-public enum UpgradeRarity { Common, Uncommon, Rare, Epic, }
+public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 
 public struct UpgradeData
 {
@@ -109,6 +109,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	private bool _hasIncrementedScore;
 
 	public Dictionary<UpgradeType, UpgradeData> UpgradeDatas { get; private set; } = new();
+	public Dictionary<UpgradeRarity, List<UpgradeType>> UpgradesByRarity = new();
 
 	protected override void OnAwake()
 	{
@@ -449,32 +450,13 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( DoesPlayerExist0 )
 		{
 			CreateSkipButton( 0 );
-
-			//var topPos = new Vector2( -215f, 70f );
-			//var interval = 43f;
-
 			CreateShopItems( playerNum: 0, numItems: Player0.NumShopItems );
-
-			//CreateShopItem( 0, topPos + new Vector2( 0f, 0f ), UpgradeType.Volley, numLevels: 2, price: 4 );
-			//CreateShopItem( 0, topPos + new Vector2( 0f, interval * -1 ), UpgradeType.Volley, numLevels: 2, price: 4 );
-			//CreateShopItem( 0, topPos + new Vector2( 0f, interval * -2 ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
-			//CreateShopItem( 0, topPos + new Vector2( 0f, interval * -3 ), UpgradeType.Gather, numLevels: 3, price: 1 );
-			//CreateShopItem( 0, topPos + new Vector2( 0f, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
-			//CreateShopItem( 0, topPos + new Vector2( interval * 1, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
-			//CreateShopItem( 0, topPos + new Vector2( interval * 2, interval * -4 ), UpgradeType.Replace, numLevels: 3, price: 1 );
-			//CreateShopItem( 0, topPos + new Vector2( interval * 3, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
-			//CreateShopItem( 0, topPos + new Vector2( interval * 4, interval * -4 ), UpgradeType.Repel, numLevels: 3, price: 1 );
 		}
 
 		if ( DoesPlayerExist1 )
 		{
 			CreateSkipButton( 1 );
-
 			CreateShopItems( playerNum: 1, numItems: Player1.NumShopItems );
-
-			//CreateShopItem( 1, new Vector2( 215f, -20f ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
-			//CreateShopItem( 1, new Vector2( 215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
-			//CreateShopItem( 1, new Vector2( 215f, -60f ), UpgradeType.Gather, numLevels: 3, price: 0 );
 		}
 	}
 
@@ -482,10 +464,10 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		for(int i = 0; i <= numItems; i++)
 		{
-			var upgradeType = (UpgradeType)Game.Random.Int( 1, Enum.GetValues( typeof( UpgradeType ) ).Length - 1 );
 			int numLevels = Game.Random.Int( 1, 3 );
 			int price = Game.Random.Int( 0, 7 );
-			CreateShopItem( playerNum, i, upgradeType, numLevels, price );
+			var rarity = GetRandomRarity();
+			CreateShopItem( playerNum, i, GetRandomUpgradeType(rarity), numLevels, price );
 		}
 	}
 
@@ -942,6 +924,58 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you.", "+GATHER", UpgradeRarity.Rare );
 		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away.", "+REPEL", UpgradeRarity.Epic );
 		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy.", "+REPLACE", UpgradeRarity.Uncommon );
+
+		foreach(var upgradeData in UpgradeDatas)
+		{
+			var upgradeType = upgradeData.Key;
+			var rarity = upgradeData.Value.rarity;
+			if ( UpgradesByRarity.ContainsKey( rarity ) )
+				UpgradesByRarity[rarity].Add( upgradeType );
+			else
+				UpgradesByRarity.Add(rarity, new List<UpgradeType> { upgradeType } );
+		}
+	}
+
+	public UpgradeType GetRandomUpgradeType()
+	{
+		return (UpgradeType)Game.Random.Int( 1, Enum.GetValues( typeof( UpgradeType ) ).Length - 1 );
+	}
+
+	public UpgradeType GetRandomUpgradeType(UpgradeRarity rarity)
+	{
+		if ( UpgradesByRarity.ContainsKey( rarity ) && UpgradesByRarity[rarity].Count > 0 )
+			return UpgradesByRarity[rarity][Game.Random.Int( 0, UpgradesByRarity[rarity].Count - 1 )];
+
+		return UpgradeType.None;
+	}
+
+	public UpgradeRarity GetRandomRarity()
+	{
+		Dictionary<UpgradeRarity, float> weights = new Dictionary<UpgradeRarity, float>
+		{
+			{ UpgradeRarity.Common, 100f },
+			{ UpgradeRarity.Uncommon, 58f },
+			{ UpgradeRarity.Rare, 27f },
+			{ UpgradeRarity.Epic, 16f },
+			{ UpgradeRarity.Legendary, 2f },
+		};
+
+		var total = 0f;
+		foreach ( var weight in weights.Values )
+			total += weight;
+
+		float rand = Game.Random.Float( 0f, total );
+
+		var runningTotal = 0f;
+		foreach( var pair in weights )
+		{
+			runningTotal += pair.Value;
+			var upgradeType = pair.Key;
+			if ( rand < runningTotal && UpgradesByRarity.ContainsKey( upgradeType ) )
+				return upgradeType;
+		}
+
+		return UpgradeRarity.Common;
 	}
 
 	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, string floaterText, UpgradeRarity rarity, bool isPassive = false)
