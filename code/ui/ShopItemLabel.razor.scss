@@ -41,7 +41,7 @@ ShopItemLabel {
 		position: absolute;
 		width: 40px;
 		height: 40px;
-		font-size: 32px;
+		font-size: 38px;
 		font-family: Poppins;
 		color: #fff;
 		text-align: center;
@@ -50,6 +50,7 @@ ShopItemLabel {
 		//background-color: #0000ff;
 		overflow: visible;
 		font-family: "Budokan Rounded";
+		text-stroke: 12px black;
 	}
 
 	.overlay {

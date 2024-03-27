@@ -1,42 +1,46 @@
 {
   "RootObject": {
-    "Id": "23d839dd-8c8f-47d7-9055-820540de2bd1",
+    "__guid": "d3f7ff74-b5d0-446f-bd93-c30da732aa9f",
     "Name": "shop_item",
     "Scale": "0.5,0.5,0.5",
     "Tags": "item",
     "Enabled": true,
+    "NetworkMode": 2,
     "Components": [
       {
         "__type": "ModelRenderer",
+        "__guid": "37560f6b-dd9d-4dc1-afee-3a5bc6aaa5d5",
+        "__enabled": false,
         "BodyGroups": 18446744073709551615,
-        "MaterialGroup": null,
-        "MaterialOverride": null,
         "Model": "models/dev/box.vmdl",
         "RenderType": "On",
         "Tint": "0,0.21705,0.81395,1"
       },
       {
         "__type": "BoxCollider",
+        "__guid": "e5ebcebc-0ded-48f5-919c-8579bfae7115",
         "Center": "0,0,0",
         "IsTrigger": true,
         "Scale": "50,50,50",
-        "Static": false,
-        "Surface": null
+        "Static": false
       },
       {
-        "__type": "ShopItem"
+        "__type": "ShopItem",
+        "__guid": "01cc7159-cacc-4dca-a98a-65ba7e4385c3"
       }
     ],
     "Children": [
       {
-        "Id": "fd3d61f4-a67a-4fd7-bbe0-dcd7b0279f05",
+        "__guid": "17814123-2ce6-4f56-ba49-3aaa6c9d902e",
         "Name": "World",
         "Position": "0,0,26",
         "Rotation": "-0.4999999,-0.5,-0.5,0.5000001",
         "Enabled": true,
+        "NetworkMode": 2,
         "Components": [
           {
             "__type": "WorldPanel",
+            "__guid": "1349c9a5-ecbe-4624-a4ea-3b46267b84fb",
             "HorizontalAlign": "Center",
             "LookAtCamera": false,
             "PanelSize": "1000,1000",
@@ -45,9 +49,10 @@
           },
           {
             "__type": "ShopItemLabel",
+            "__guid": "ab19dc69-4185-4977-995e-9f25553a6d96",
             "TargetObject": {
               "_type": "gameobject",
-              "go": "23d839dd-8c8f-47d7-9055-820540de2bd1"
+              "go": "d3f7ff74-b5d0-446f-bd93-c30da732aa9f"
             }
           }
         ]
@@ -57,5 +62,7 @@
   "ShowInMenu": false,
   "MenuPath": null,
   "MenuIcon": null,
+  "ResourceVersion": 1,
+  "__version": 1,
   "__references": []
 }

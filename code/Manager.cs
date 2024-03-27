@@ -116,6 +116,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public Vector2 MouseWorldPos { get; private set; }
 
+	[Sync] public float TimeScale { get; set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -146,6 +148,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( IsProxy )
 			return;
 
+		TimeScale = 1f;
 		GamePhase = GamePhase.WaitingForPlayers;
 
 		//CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
@@ -392,6 +395,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		GamePhase = GamePhase.StartingNewMatch;
 		TimeSincePhaseChange = 0f;
 		_numSecondsLeftInPhase = (int)START_NEW_MATCH_DELAY;
+
+		TimeScale = 1f;
 
 		SpawnTutorialText();
 	}

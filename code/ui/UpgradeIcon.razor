@@ -12,15 +12,19 @@
 		return;
 	}
 
+	@{
+		var rarity = Manager.Instance.GetRarityForUpgrade(UpgradeType);
+	}
+
 	<!-- <div class="bg" style="background-image: url(@($"materials/icons/{Globals.GetIconForUpgrade(UpgradeType)}.png"));"></div> -->
-	<div class="icon" style="opacity:@((Manager.Instance.HoveredUpgradeType == UpgradeType ? 1f : 0.9f) * (player.SelectedUpgradeType == UpgradeType ? 1f : 0.6f) );
-						text-stroke: 12px @(Manager.GetColorForRarity(Manager.Instance.GetRarityForUpgrade(UpgradeType)).Rgba)">
+	<div class="icon" style="opacity:@((Manager.Instance.HoveredUpgradeType == UpgradeType ? 1f : 0.9f) * (Manager.Instance.IsUpgradePassive(UpgradeType) || player.SelectedUpgradeType == UpgradeType ? 1f : 0.6f) );
+						text-stroke: @(Manager.GetOutlineSizeForRarity(rarity))px @(Manager.GetColorForRarity(rarity).Rgba)">
 		@(Manager.Instance.GetIconForUpgrade(UpgradeType))
 	</div>
 
 	@if(Level > 1)
 	{
-		<div class="level" style="opacity:@((Manager.Instance.HoveredUpgradeType == UpgradeType ? 1f : 0.9f) * (player.SelectedUpgradeType == UpgradeType ? 1f : 0.3f) );">@($"{Level}")</div>
+		<div class="level" style="opacity:@((Manager.Instance.HoveredUpgradeType == UpgradeType ? 1f : 0.9f) * (Manager.Instance.IsUpgradePassive(UpgradeType) || player.SelectedUpgradeType == UpgradeType ? 1f : 0.3f) );">@($"{Level}")</div>
 	}
 </root>
 
@@ -56,7 +60,7 @@
 			return;
 
 		if (e.MouseButton == MouseButtons.Left)
-			localPlayer.SelectedUpgradeType = UpgradeType;
+			localPlayer.SetSelectedActiveUpgrade(UpgradeType);
 		else if (e.MouseButton == MouseButtons.Right)
 			localPlayer.TryUseItem(UpgradeType);
 	}
