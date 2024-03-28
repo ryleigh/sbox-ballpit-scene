@@ -29,12 +29,12 @@ ShopItemLabel {
 		position: absolute;
 		font-size: 32px;
 		font-family: Poppins;
-		color: #fff;
 		left: -2px;
 		top: -10px;
 		text-shadow: 2px 2px 4px black;
 		font-weight: 500;
 		font-family: "Budokan Rounded";
+		text-stroke: 8px black;
 	}
 
 	.level {

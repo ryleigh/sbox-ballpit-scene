@@ -186,7 +186,7 @@ public class PlayerController : Component, Component.ITriggerListener
 						{
 							var dir = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal;
 
-							Log.Info( $"ball.Velocity: {ball.Velocity.Length} player.Velocity: {Velocity.Length}" );
+							//Log.Info( $"ball.Velocity: {ball.Velocity.Length} player.Velocity: {Velocity.Length}" );
 							var speed = Math.Max( ball.Velocity.Length, Velocity.Length );
 							ball.Velocity = dir * speed;
 							ball.BumpedByPlayer();

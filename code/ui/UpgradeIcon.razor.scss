@@ -29,7 +29,6 @@ UpgradeIcon {
         right: -10px;
         width: 30px;
         height: 30px;
-        font-size: 32px;
         //font-family: Poppins;
         font-family: "Budokan Rounded";
         color: #fff;
@@ -37,6 +36,7 @@ UpgradeIcon {
         justify-content: center;
         align-items: center;
         pointer-events: none;
-        text-shadow: 2px 2px 2px black;
+        //text-shadow: 2px 2px 2px black;
+        text-stroke: 12px black;
     }
 }
