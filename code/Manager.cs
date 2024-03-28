@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
-public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, }
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 
 public struct UpgradeData
@@ -94,6 +94,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	private float _slowmoTimeScale;
 	private RealTimeSince _realTimeSinceSlowmoStarted;
 	private EasingType _slowmoEasingType;
+
 	public const float BETWEEN_ROUNDS_DELAY = 4f;
 	public const float VICTORY_DELAY = 10f;
 	public float BuyPhaseDuration { get; private set; } = 30f;
@@ -698,6 +699,12 @@ public sealed class Manager : Component, Component.INetworkListener
 		GamePhase = GamePhase.WaitingForPlayers;
 	}
 
+	[Broadcast]
+	public void SlowmoRPC( float timeScale, float time, EasingType easingType )
+	{
+		Slowmo( timeScale, time, easingType );
+	}
+
 	public void Slowmo(float timeScale, float time, EasingType easingType)
 	{
 		IsSlowmo = true;
@@ -977,6 +984,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy.", "REPLACE", UpgradeRarity.Uncommon );
 		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", "Teleport to your cursor.", "BLINK", UpgradeRarity.Uncommon, useableInBuyPhase: true );
 		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", "Redirect all balls randomly.", "SCATTER", UpgradeRarity.Uncommon );
+		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", "Briefly slow time.", "SLOWMO", UpgradeRarity.Common );
 
 		foreach (var upgradeData in UpgradeDatas)
 		{

@@ -15,6 +15,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	public int OpponentPlayerNum => PlayerNum == 0 ? 1 : 0;
 
 	[Sync] public Vector2 Velocity { get; set; }
+	[Sync] public float FacingAngle { get; set; }
 
 	public Vector2 Pos2D => (Vector2)Transform.Position;
 	//public Vector2 ForwardVec2D => PlayerNum == 0 ? new Vector2( 1f, 0f ) : new Vector2( -1f, 0f );
@@ -86,16 +87,18 @@ public class PlayerController : Component, Component.ITriggerListener
 		//}
 
 		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
-		//Gizmo.Draw.Text( $"{NumMatchWins} - {NumMatchLosses}", new global::Transform( Transform.Position ) );
+		//Gizmo.Draw.Text( $"{Velocity.Length}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity * (Velocity.y > 0f ? 0.7f : 0.6f));
 
 		if(!IsJumping)
 		{
-			if ( IsSpectator )
-				Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( Utils.VectorToDegrees( Velocity ) ), Velocity.Length * 0.2f * Time.Delta );
-			else
-				Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( Utils.VectorToDegrees( Manager.Instance.MouseWorldPos - (Vector2)Transform.Position ) ), 5f * Time.Delta );
+			Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( FacingAngle ), 5f * Time.Delta );
+
+			//if ( IsSpectator )
+			//	Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( Utils.VectorToDegrees( Velocity ) ), Velocity.Length * 0.2f * Time.Delta );
+			//else
+			//	Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( Utils.VectorToDegrees( Manager.Instance.MouseWorldPos - (Vector2)Transform.Position ) ), 5f * Time.Delta );
 			//Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( PlayerNum == 0 ? 0f : 180f ), 5f * Time.Delta );
 		}
 
@@ -109,7 +112,9 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( IsProxy )
 			return;
 
-		if(IsInvulnerable && _timeSinceInvulnerableStart > InvulnerableTime)
+		FacingAngle = Utils.VectorToDegrees( Manager.Instance.MouseWorldPos - (Vector2)Transform.Position );
+
+		if (IsInvulnerable && _timeSinceInvulnerableStart > InvulnerableTime)
 		{
 			EndInvulnerability();
 		}
@@ -137,7 +142,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		var wishMoveDir = new Vector2( -Input.AnalogMove.y, Input.AnalogMove.x ).Normal;
 
-		float moveSpeed = Utils.Map( GetUpgradeLevel( UpgradeType.MoveSpeed ), 0, 10, 90f, 125f, EasingType.SineOut );
+		float moveSpeed = Utils.Map( GetUpgradeLevel( UpgradeType.MoveSpeed ), 0, 9, 90f, 125f, EasingType.SineOut );
 		Velocity = Utils.DynamicEaseTo( Velocity, wishMoveDir * moveSpeed, 0.2f, Time.Delta );
 		Transform.Position += (Vector3)Velocity * Time.Delta;
 		Transform.Position = Transform.Position.WithZ( IsSpectator ? Manager.SPECTATOR_HEIGHT : 0f );
@@ -179,8 +184,11 @@ public class PlayerController : Component, Component.ITriggerListener
 						if ( ball.TimeSinceBumped > 0.5f &&
 							(ball.Transform.Position - Transform.Position).WithZ( 0f ).LengthSquared < MathF.Pow( RadiusLarge + ball.Radius, 2f ) )
 						{
-							var direction = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal;
-							ball.Velocity = direction * ball.Velocity.Length;
+							var dir = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal;
+
+							Log.Info( $"ball.Velocity: {ball.Velocity.Length} player.Velocity: {Velocity.Length}" );
+							var speed = Math.Max( ball.Velocity.Length, Velocity.Length );
+							ball.Velocity = dir * speed;
 							ball.BumpedByPlayer();
 							BumpOwnBall( (Vector2)ball.Transform.Position );
 						}
@@ -336,6 +344,10 @@ public class PlayerController : Component, Component.ITriggerListener
 					ball.SetVelocity( dir * speed, timeScale: 0f, duration: 0.66f, EasingType.QuadIn );
 				}
 
+				break;
+			case UpgradeType.Slowmo:
+				Manager.Instance.PlaySfx( "bubble", Transform.Position );
+				Manager.Instance.SlowmoRPC( 0.1f, 4f, EasingType.ExpoIn );
 				break;
 		}
 
