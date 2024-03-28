@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
-public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, }
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 
 public struct UpgradeData
@@ -985,6 +985,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", "Teleport to your cursor.", "BLINK", UpgradeRarity.Uncommon, useableInBuyPhase: true );
 		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", "Redirect all balls randomly.", "SCATTER", UpgradeRarity.Uncommon );
 		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", "Briefly slow time.", "SLOWMO", UpgradeRarity.Common );
+		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", "Move quicky toward cursor.", "DASH", UpgradeRarity.Common, useableInBuyPhase: true );
 
 		foreach (var upgradeData in UpgradeDatas)
 		{

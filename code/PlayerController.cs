@@ -15,6 +15,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	public int OpponentPlayerNum => PlayerNum == 0 ? 1 : 0;
 
 	[Sync] public Vector2 Velocity { get; set; }
+	public Vector2 TotalVelocity => Velocity + (_isDashing ? _dashVelocity : Vector2.Zero);
 	[Sync] public float FacingAngle { get; set; }
 
 	public Vector2 Pos2D => (Vector2)Transform.Position;
@@ -53,6 +54,13 @@ public class PlayerController : Component, Component.ITriggerListener
 	public float RadiusLarge { get; set; } = 6f;
 	public float RadiusSmall { get; set; } = 1.2f;
 
+	private bool _isDashing;
+	private TimeSince _timeSinceDashStarted;
+	private float _dashTime;
+	private Vector2 _dashVelocity;
+
+	public const float BUMP_SPEED_INCREASE_FACTOR_MAX = 1.2f;
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -89,7 +97,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
 		//Gizmo.Draw.Text( $"{Velocity.Length}", new global::Transform( Transform.Position ) );
 
-		Animator.WithVelocity( Velocity * (Velocity.y > 0f ? 0.7f : 0.6f));
+		Animator.WithVelocity( Velocity );
 
 		if(!IsJumping)
 		{
@@ -147,6 +155,19 @@ public class PlayerController : Component, Component.ITriggerListener
 		Transform.Position += (Vector3)Velocity * Time.Delta;
 		Transform.Position = Transform.Position.WithZ( IsSpectator ? Manager.SPECTATOR_HEIGHT : 0f );
 
+		if(_isDashing)
+		{
+			if(_timeSinceDashStarted > _dashTime)
+			{
+				_isDashing = false;
+			}
+			else
+			{
+				Transform.Position += (Vector3)_dashVelocity * Utils.Map(_timeSinceDashStarted, 0f, _dashTime, 1f, 0f, EasingType.SineOut) * Time.Delta;
+				Transform.Position = Transform.Position.WithZ( IsSpectator ? Manager.SPECTATOR_HEIGHT : 0f );
+			}
+		}
+
 		if ( IsSpectator )
 		{
 			CheckCollisionWithPlayers();
@@ -187,8 +208,10 @@ public class PlayerController : Component, Component.ITriggerListener
 							var dir = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal;
 
 							//Log.Info( $"ball.Velocity: {ball.Velocity.Length} player.Velocity: {Velocity.Length}" );
-							var speed = Math.Max( ball.Velocity.Length, Velocity.Length );
+							var currVel = ball.Velocity.Length;
+							var speed = Math.Max( currVel, Math.Min(TotalVelocity.Length, currVel * BUMP_SPEED_INCREASE_FACTOR_MAX ) );
 							ball.Velocity = dir * speed;
+
 							ball.BumpedByPlayer();
 							BumpOwnBall( (Vector2)ball.Transform.Position );
 						}
@@ -348,6 +371,13 @@ public class PlayerController : Component, Component.ITriggerListener
 			case UpgradeType.Slowmo:
 				Manager.Instance.PlaySfx( "bubble", Transform.Position );
 				Manager.Instance.SlowmoRPC( 0.1f, 4f, EasingType.ExpoIn );
+				break;
+			case UpgradeType.Dash:
+				Manager.Instance.PlaySfx( "bubble", Transform.Position );
+
+				var vel = (Manager.Instance.MouseWorldPos - (Vector2)Transform.Position).Normal * 400f;
+				Dash( vel, 0.5f );
+
 				break;
 		}
 
@@ -812,5 +842,13 @@ public class PlayerController : Component, Component.ITriggerListener
 	{
 		foreach ( var renderer in Model.Components.GetAll<SkinnedModelRenderer>( FindMode.EnabledInSelfAndDescendants ) )
 			renderer.Tint = Color.White.WithAlpha( visible ? 1f : 0.1f );
+	}
+
+	public void Dash(Vector2 vel, float time)
+	{
+		_isDashing = true;
+		_timeSinceDashStarted = 0f;
+		_dashTime = time;
+		_dashVelocity = vel;
 	}
 }
