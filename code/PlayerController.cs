@@ -379,6 +379,21 @@ public class PlayerController : Component, Component.ITriggerListener
 				Dash( vel, 0.5f );
 
 				break;
+			case UpgradeType.Redirect:
+				Manager.Instance.PlaySfx( "bubble", Transform.Position );
+
+				var redirectDir = (Manager.Instance.MouseWorldPos - (Vector2)Transform.Position).Normal;
+
+				foreach ( var ball in Scene.GetAllComponents<Ball>() )
+				{
+					if ( ball.IsActive && ball.PlayerNum == PlayerNum )
+					{
+						var speed = ball.Velocity.Length;
+						ball.SetVelocity( redirectDir * speed, timeScale: 0f, duration: 0.5f, EasingType.QuadIn );
+					}
+				}
+
+				break;
 		}
 
 		if ( upgradeType != UpgradeType.None )
