@@ -703,14 +703,16 @@ public class PlayerController : Component, Component.ITriggerListener
 			return;
 
 		Manager.Instance.SpawnFloaterText( 
-			Transform.Position.WithZ( 150f ), 
-			$"{(amount > 0 ? "+" : "-")}{Manager.Instance.GetFloaterTextForUpgrade( upgradeType )}", 
+			Transform.Position.WithZ( 150f ),
+			//$"{(amount > 0 ? "+" : "-")}{Manager.Instance.GetFloaterTextForUpgrade( upgradeType )}", 
+			$"{Manager.Instance.GetIconForUpgrade( upgradeType )}",
 			lifetime: amount > 0 ? 1.5f : 1.2f, 
 			color: Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ) ), 
 			velocity: new Vector2( 0f, amount > 0 ? 35f : -70f ), 
 			deceleration: amount > 0 ? 1.8f : 1.9f, 
-			startScale: 0.14f, 
-			endScale: 0.16f 
+			startScale: amount > 0 ? 0.25f : 0.27f, 
+			endScale: amount > 0 ? 0.3f : 0.2f,
+			isEmoji: true
 		);
 
 		if ( IsProxy )

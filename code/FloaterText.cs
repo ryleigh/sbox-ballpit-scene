@@ -15,7 +15,7 @@ public sealed class FloaterText : Component
 	private Vector2 _velocity;
 	private float _deceleration;
 
-	public void Init( string text, float lifetime, Color color, Vector2 velocity, float deceleration, float startScale, float endScale )
+	public void Init( string text, float lifetime, Color color, Vector2 velocity, float deceleration, float startScale, float endScale, bool isEmoji )
 	{
 		TextRenderer.Text = text;
 		TextRenderer.Scale = startScale;
@@ -25,6 +25,9 @@ public sealed class FloaterText : Component
 		_deceleration = deceleration;
 		_startScale = startScale;
 		_endScale = endScale;
+
+		if(isEmoji)
+			TextRenderer.FontFamily = "W10Emoji";
 	}
 
 	protected override void OnStart()

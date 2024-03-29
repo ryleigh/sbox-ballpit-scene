@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
-public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect }
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 
 public struct UpgradeData
@@ -17,17 +17,15 @@ public struct UpgradeData
 	public string name;
 	public string icon;
 	public string description;
-	public string floaterText;
 	public UpgradeRarity rarity;
 	public bool isPassive;
 	public bool useableInBuyPhase;
 
-	public UpgradeData( string _name, string _icon, string _description, string _floaterText, UpgradeRarity _rarity, bool _isPassive, bool _usableInBuyPhase )
+	public UpgradeData( string _name, string _icon, string _description, UpgradeRarity _rarity, bool _isPassive, bool _usableInBuyPhase )
 	{
 		name = _name;
 		icon = _icon;
 		description = _description;
-		floaterText = _floaterText;
 		rarity = _rarity;
 		isPassive = _isPassive;
 		useableInBuyPhase = _usableInBuyPhase;
@@ -857,12 +855,12 @@ public sealed class Manager : Component, Component.INetworkListener
 		textObj.Components.Get<FadingText>().Init( text, lifetime );
 	}
 
-	public void SpawnFloaterText( Vector3 pos, string text, float lifetime, Color color, Vector2 velocity, float deceleration, float startScale, float endScale  )
+	public void SpawnFloaterText( Vector3 pos, string text, float lifetime, Color color, Vector2 velocity, float deceleration, float startScale, float endScale, bool isEmoji  )
 	{
 		var textObj = FloaterTextPrefab.Clone( pos );
 		textObj.Transform.Rotation = Rotation.From( 90f, 90f, 0f );
 
-		textObj.Components.Get<FloaterText>().Init( text, lifetime, color, velocity, deceleration, startScale, endScale );
+		textObj.Components.Get<FloaterText>().Init( text, lifetime, color, velocity, deceleration, startScale, endScale, isEmoji );
 	}
 
 	public void CreateBallExplosionParticles(Vector3 pos, int playerNum )
@@ -919,14 +917,6 @@ public sealed class Manager : Component, Component.INetworkListener
 		return "";
 	}
 
-	public string GetFloaterTextForUpgrade( UpgradeType upgradeType )
-	{
-		if ( UpgradeDatas.ContainsKey( upgradeType ) )
-			return UpgradeDatas[upgradeType].floaterText;
-
-		return "";
-	}
-
 	public UpgradeRarity GetRarityForUpgrade( UpgradeType upgradeType )
 	{
 		if ( UpgradeDatas.ContainsKey( upgradeType ) )
@@ -977,16 +967,17 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void GenerateUpgrades()
 	{
-		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster.", "MOVESPEED", UpgradeRarity.Common, isPassive: true );
-		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls.", "VOLLEY", UpgradeRarity.Common );
-		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you.", "GATHER", UpgradeRarity.Rare );
-		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away.", "REPEL", UpgradeRarity.Epic );
-		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy.", "REPLACE", UpgradeRarity.Uncommon );
-		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", "Teleport to your cursor.", "BLINK", UpgradeRarity.Uncommon, useableInBuyPhase: true );
-		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", "Redirect all balls randomly.", "SCATTER", UpgradeRarity.Uncommon );
-		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", "Briefly slow time.", "SLOWMO", UpgradeRarity.Common );
-		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", "Move quicky toward cursor.", "DASH", UpgradeRarity.Common, useableInBuyPhase: true );
-		CreateUpgrade( UpgradeType.Redirect, "Redirect", "⤴️", "All your balls move in the direction from you to cursor.", "REDIRECT", UpgradeRarity.Uncommon );
+		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster.", UpgradeRarity.Common, isPassive: true );
+		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls.", UpgradeRarity.Common );
+		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you.", UpgradeRarity.Rare );
+		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away.", UpgradeRarity.Epic );
+		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy.", UpgradeRarity.Uncommon );
+		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", "Teleport to your cursor.", UpgradeRarity.Uncommon, useableInBuyPhase: true );
+		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", "Redirect all balls randomly.", UpgradeRarity.Uncommon );
+		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", "Briefly slow time.", UpgradeRarity.Common );
+		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", "Move quicky toward cursor.", UpgradeRarity.Common, useableInBuyPhase: true );
+		CreateUpgrade( UpgradeType.Redirect, "Redirect", "⤴️", "All your balls move in the direction from you to cursor.", UpgradeRarity.Rare );
+		CreateUpgrade( UpgradeType.BumpStrength, "Bump Strength", "💪", "Bumping a ball increases its speed.", UpgradeRarity.Rare );
 
 		foreach (var upgradeData in UpgradeDatas)
 		{
@@ -1041,8 +1032,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		return UpgradeRarity.Common;
 	}
 
-	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, string floaterText, UpgradeRarity rarity, bool isPassive = false, bool useableInBuyPhase = false)
+	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, UpgradeRarity rarity, bool isPassive = false, bool useableInBuyPhase = false)
 	{
-		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, description, floaterText, rarity, isPassive, useableInBuyPhase));
+		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, description, rarity, isPassive, useableInBuyPhase));
 	}
 }
