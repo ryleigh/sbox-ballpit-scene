@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
-public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength }
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 
 public struct UpgradeData
@@ -41,6 +41,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject SkipButtonPrefab { get; set; }
 	[Property] public GameObject ShopItemPrefab { get; set; }
 	[Property] public GameObject ShopItemPassivePrefab { get; set; }
+	[Property] public GameObject PickupItemPrefab { get; set; }
 	[Property] public GameObject FadingTextPrefab { get; set; }
 	[Property] public GameObject FloaterTextPrefab { get; set; }
 	[Property] public GameObject BallExplosionParticles { get; set; }
@@ -116,6 +117,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	public Vector2 MouseWorldPos { get; private set; }
 
 	[Sync] public float TimeScale { get; set; }
+
+	private TimeSince _timeSincePickupSpawn;
 
 	protected override void OnAwake()
 	{
@@ -258,6 +261,17 @@ public sealed class Manager : Component, Component.INetworkListener
 				}
 				break;
 			case GamePhase.RoundActive:
+				// pickups
+				if( _timeSincePickupSpawn > 5f)
+				{
+					var connection = GetConnection(playerNum: Game.Random.Int( 0, 1 ) );
+					if(connection != null)
+					{
+						SpawnPickupItem( GetConnection( 0 ), GetRandomPickupType(), 1, startAtTop: Game.Random.Int(0, 1) == 0 );
+						_timeSincePickupSpawn = 0f;
+					}
+				}
+
 				break;
 			case GamePhase.AfterRoundDelay:
 				break;
@@ -405,6 +419,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		RoundNum++;
 		GamePhase = GamePhase.RoundActive;
 		TimeSincePhaseChange = 0f;
+		_timeSincePickupSpawn = 0f;
 
 		Dispenser.StartWave();
 	}
@@ -524,6 +539,15 @@ public sealed class Manager : Component, Component.INetworkListener
 			offset = new Vector2( (itemNum - 4) * interval * (playerNum == 0 ? 1f : -1f), -4 * interval );
 
 		return topPos + offset;
+	}
+
+	public void SpawnPickupItem( Connection connection, UpgradeType upgradeType, int numLevels, bool startAtTop )
+	{
+		var pos = new Vector2( 0f, 150f * (startAtTop ? 1f : -1f) );
+
+		var pickupItemObj = PickupItemPrefab.Clone( new Vector3( pos.x, pos.y, 120f * (startAtTop ? 1f : -1f)) );
+		pickupItemObj.NetworkSpawn( connection );
+		pickupItemObj.Components.Get<PickupItem>().Init( upgradeType, numLevels, startAtTop );
 	}
 
 	[Broadcast]
@@ -947,8 +971,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		{
 			case UpgradeRarity.Common: default: return new Color( 0f, 0f, 0f );
 			case UpgradeRarity.Uncommon: return new Color( 0.5f, 0.5f, 0.8f );
-			case UpgradeRarity.Rare: return new Color( 0.6f, 0.2f, 0.2f );
-			case UpgradeRarity.Epic: return new Color( 0.9f, 0.4f, 0f );
+			case UpgradeRarity.Rare: return new Color( 0.8f, 0.3f, 0f );
+			case UpgradeRarity.Epic: return new Color( 0.6f, 0f, 0.8f );
 			case UpgradeRarity.Legendary: return new Color( 1f, 1f, 0f );
 		}
 	}
@@ -968,6 +992,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	void GenerateUpgrades()
 	{
 		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster.", UpgradeRarity.Common, isPassive: true );
+		CreateUpgrade( UpgradeType.BumpStrength, "Bump Strength", "💪", "Bumping a ball increases its speed.", UpgradeRarity.Uncommon, isPassive: true );
+
 		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls.", UpgradeRarity.Common );
 		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you.", UpgradeRarity.Rare );
 		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away.", UpgradeRarity.Epic );
@@ -977,7 +1003,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", "Briefly slow time.", UpgradeRarity.Common );
 		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", "Move quicky toward cursor.", UpgradeRarity.Common, useableInBuyPhase: true );
 		CreateUpgrade( UpgradeType.Redirect, "Redirect", "⤴️", "All your balls move in the direction from you to cursor.", UpgradeRarity.Rare );
-		CreateUpgrade( UpgradeType.BumpStrength, "Bump Strength", "💪", "Bumping a ball increases its speed.", UpgradeRarity.Rare );
+		CreateUpgrade( UpgradeType.Converge, "Converge", "📍", "Your balls target enemy.", UpgradeRarity.Epic );
 
 		foreach (var upgradeData in UpgradeDatas)
 		{
@@ -1024,9 +1050,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		foreach( var pair in weights )
 		{
 			runningTotal += pair.Value;
-			var upgradeType = pair.Key;
-			if ( rand < runningTotal && UpgradesByRarity.ContainsKey( upgradeType ) )
-				return upgradeType;
+			var rarity = pair.Key;
+			if ( rand < runningTotal && UpgradesByRarity.ContainsKey( rarity ) )
+				return rarity;
 		}
 
 		return UpgradeRarity.Common;
@@ -1035,5 +1061,35 @@ public sealed class Manager : Component, Component.INetworkListener
 	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, UpgradeRarity rarity, bool isPassive = false, bool useableInBuyPhase = false)
 	{
 		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, description, rarity, isPassive, useableInBuyPhase));
+	}
+
+	UpgradeType GetRandomPickupType()
+	{
+		Dictionary<UpgradeType, float> weights = new Dictionary<UpgradeType, float>
+		{
+			{ UpgradeType.Blink, 10f },
+			{ UpgradeType.Dash, 12f },
+			{ UpgradeType.Volley, 4f },
+			{ UpgradeType.Repel, 5f },
+			{ UpgradeType.Gather, 3f },
+			{ UpgradeType.Slowmo, 5f },
+		};
+
+		var total = 0f;
+		foreach ( var weight in weights.Values )
+			total += weight;
+
+		float rand = Game.Random.Float( 0f, total );
+
+		var runningTotal = 0f;
+		foreach ( var pair in weights )
+		{
+			runningTotal += pair.Value;
+			var upgradeType = pair.Key;
+			if ( rand < runningTotal )
+				return upgradeType;
+		}
+
+		return UpgradeType.Dash;
 	}
 }

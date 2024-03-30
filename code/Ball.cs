@@ -36,6 +36,7 @@ public class Ball : Component
 	private TimeSince _timeSinceTimeScaleStarted;
 	private float _timeScaleStartingValue;
 
+	public const float MAX_SPEED = 320f;
 
 	protected override void OnAwake()
 	{

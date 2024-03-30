@@ -210,6 +210,12 @@ public class PlayerController : Component, Component.ITriggerListener
 							//Log.Info( $"ball.Velocity: {ball.Velocity.Length} player.Velocity: {Velocity.Length}" );
 							var currVel = ball.Velocity.Length;
 							var speed = Math.Max( currVel, Math.Min(TotalVelocity.Length, currVel * BUMP_SPEED_INCREASE_FACTOR_MAX ) );
+
+							int bumpStrength = GetUpgradeLevel( UpgradeType.BumpStrength );
+							if ( bumpStrength > 0 )
+								speed += Utils.Map( bumpStrength, 0, 9, 4f, 16f );
+
+							speed = Math.Min( speed, Ball.MAX_SPEED );
 							ball.Velocity = dir * speed;
 
 							ball.BumpedByPlayer();
@@ -370,7 +376,7 @@ public class PlayerController : Component, Component.ITriggerListener
 				break;
 			case UpgradeType.Slowmo:
 				Manager.Instance.PlaySfx( "bubble", Transform.Position );
-				Manager.Instance.SlowmoRPC( 0.1f, 4f, EasingType.ExpoIn );
+				Manager.Instance.SlowmoRPC( 0.2f, 3f, EasingType.QuadIn );
 				break;
 			case UpgradeType.Dash:
 				Manager.Instance.PlaySfx( "bubble", Transform.Position );
@@ -520,15 +526,15 @@ public class PlayerController : Component, Component.ITriggerListener
 		//	}
 		//}
 
-		if(other.GameObject.Tags.Has("item") && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 0.5f)
+		if ( other.GameObject.Tags.Has( "item" ) && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 0.5f )
 		{
 			var item = other.Components.Get<ShopItem>();
-			if(item.Price <= Money)
+			if ( item.Price <= Money )
 			{
 				Money -= item.Price;
 				AdjustUpgradeLevel( item.UpgradeType, item.NumLevels );
 
-				BuyItem(success: true);
+				BuyItem( success: true );
 
 				item.GameObject.Destroy();
 			}
@@ -536,6 +542,15 @@ public class PlayerController : Component, Component.ITriggerListener
 			{
 				BuyItem( success: false );
 			}
+		}
+		else if ( other.GameObject.Tags.Has( "pickup_item" ) ) 
+		{ 
+			var pickupItem = other.Components.Get<PickupItem>();
+
+			Manager.Instance.PlaySfx( "bubble", Transform.Position );
+			AdjustUpgradeLevel( pickupItem.UpgradeType, pickupItem.NumLevels );
+
+			pickupItem.GameObject.Destroy();
 		}
 		else if ( other.GameObject.Tags.Has( "skip_button" ) && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 0.5f )
 		{

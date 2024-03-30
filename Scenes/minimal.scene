@@ -33,6 +33,10 @@
             "_type": "gameobject",
             "prefab": "prefabs/floater_text.prefab"
           },
+          "PickupItemPrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/pickup_item.prefab"
+          },
           "PlayerPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/player.prefab"
@@ -985,7 +989,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-03-26T06:11:00.5486715-07:00",
+  "LastSaved": "2024-03-30T01:42:17.6478748-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

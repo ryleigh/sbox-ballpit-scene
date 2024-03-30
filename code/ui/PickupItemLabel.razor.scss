@@ -1,4 +1,4 @@
-ShopItemLabel {
+PickupItemLabel {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -23,7 +23,6 @@ ShopItemLabel {
 		justify-content: center;
 		align-items: center;
 		font-size: 70px;
-		//text-shadow: -8px 8px 4px #000000;
 	}
 
 	.price {
