@@ -119,6 +119,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Sync] public float TimeScale { get; set; }
 
 	private TimeSince _timeSincePickupSpawn;
+	private float _pickupSpawnDelay;
 
 	protected override void OnAwake()
 	{
@@ -262,13 +263,14 @@ public sealed class Manager : Component, Component.INetworkListener
 				break;
 			case GamePhase.RoundActive:
 				// pickups
-				if( _timeSincePickupSpawn > 5f)
+				if( _timeSincePickupSpawn > _pickupSpawnDelay)
 				{
 					var connection = GetConnection(playerNum: Game.Random.Int( 0, 1 ) );
 					if(connection != null)
 					{
 						SpawnPickupItem( GetConnection( 0 ), GetRandomPickupType(), 1, startAtTop: Game.Random.Int(0, 1) == 0 );
 						_timeSincePickupSpawn = 0f;
+						_pickupSpawnDelay = Game.Random.Float( 3.5f, 12f ) * Utils.Map(TimeSincePhaseChange, 0f, 300f, 1f, 0.4f);
 					}
 				}
 
@@ -420,6 +422,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		GamePhase = GamePhase.RoundActive;
 		TimeSincePhaseChange = 0f;
 		_timeSincePickupSpawn = 0f;
+		_pickupSpawnDelay = Game.Random.Float( 0.5f, 10f );
 
 		Dispenser.StartWave();
 	}

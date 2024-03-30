@@ -400,6 +400,23 @@ public class PlayerController : Component, Component.ITriggerListener
 				}
 
 				break;
+			case UpgradeType.Converge:
+				Manager.Instance.PlaySfx( "bubble", Transform.Position );
+
+				var enemy = Manager.Instance.GetPlayer( Globals.GetOpponentPlayerNum( PlayerNum ) );
+				var enemyPos = enemy?.Transform.Position ?? Vector3.Zero;
+
+				foreach ( var ball in Scene.GetAllComponents<Ball>() )
+				{
+					if ( ball.IsActive && ball.PlayerNum == PlayerNum )
+					{
+						var dir = ((Vector2)enemyPos - (Vector2)ball.Transform.Position).Normal;
+						var speed = ball.Velocity.Length;
+						ball.SetVelocity( dir * speed, timeScale: 0f, duration: 0.5f, EasingType.QuadIn );
+					}
+				}
+
+				break;
 		}
 
 		if ( upgradeType != UpgradeType.None )
