@@ -235,7 +235,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		}
 	}
 
-	void AdjustSelectedActiveUpgrade(bool up)
+	public void AdjustSelectedActiveUpgrade(bool up)
 	{
 		if ( ActiveUpgrades.Count < 2 )
 			return;

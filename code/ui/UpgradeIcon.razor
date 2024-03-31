@@ -70,4 +70,13 @@
 		else if (e.MouseButton == MouseButtons.Right)
 			localPlayer.TryUseItem(UpgradeType);
 	}
+
+	public override void OnMouseWheel(Vector2 value)
+	{
+		var localPlayer = Manager.Instance.GetLocalPlayer();
+		if (localPlayer == null)
+			return;
+
+		localPlayer.AdjustSelectedActiveUpgrade(up: value.y > 0f);
+	}
 }
