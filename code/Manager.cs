@@ -381,11 +381,11 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( playerObj != null )
 		{
 			var deadPlayer = playerObj.Components.Get<PlayerController>();
-			deadPlayer.AddMoney( 5 );
+			deadPlayer.AdjustMoney( 5 );
 
 			var otherPlayer = GetPlayer( GetOtherPlayerNum( deadPlayer.PlayerNum ) );
 			if ( otherPlayer != null )
-				otherPlayer.AddMoney( 10 );
+				otherPlayer.AdjustMoney( 10 );
 
 			_roundWinnerPlayerNum = (deadPlayer.PlayerNum == 0 ? 1 : 0);
 		}

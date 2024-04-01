@@ -548,7 +548,7 @@ public class PlayerController : Component, Component.ITriggerListener
 			var item = other.Components.Get<ShopItem>();
 			if ( item.Price <= Money )
 			{
-				Money -= item.Price;
+				AdjustMoney(-item.Price);
 				AdjustUpgradeLevel( item.UpgradeType, item.NumLevels );
 
 				BuyItem( success: true );
@@ -574,7 +574,7 @@ public class PlayerController : Component, Component.ITriggerListener
 			var moneyPickup = other.Components.Get<MoneyPickup>();
 
 			Manager.Instance.PlaySfx( "bubble", Transform.Position );
-			AddMoney( moneyPickup.NumLevels );
+			AdjustMoney( moneyPickup.NumLevels );
 
 			moneyPickup.DestroyRPC();
 		}
@@ -665,12 +665,27 @@ public class PlayerController : Component, Component.ITriggerListener
 	}
 
 	[Broadcast]
-	public void AddMoney( int money )
+	public void AdjustMoney( int amount )
 	{
+		if ( amount == 0 )
+			return;
+
+		Manager.Instance.SpawnFloaterText(
+			Transform.Position.WithZ( 150f ),
+			$"{(amount > 0 ? "+" : "-")}${Math.Abs(amount)}",
+			lifetime: amount > 0 ? 1f : 0.9f,
+			color: new Color(1f, 1f, 0f),
+			velocity: new Vector2( 0f, amount > 0 ? 30f : -35f ),
+			deceleration: amount > 0 ? 1.8f : 1.9f,
+			startScale: amount > 0 ? 0.15f : 0.16f,
+			endScale: amount > 0 ? 0.19f : 0.12f,
+			isEmoji: false
+		);
+
 		if ( IsProxy )
 			return;
 
-		Money += money;
+		Money += amount;
 	}
 
 	//[Broadcast]
