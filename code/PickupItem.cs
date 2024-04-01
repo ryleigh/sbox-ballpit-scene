@@ -41,12 +41,12 @@ public class PickupItem : Component
 		Transform.Position = new Vector3( Utils.FastSin( Time.Now * _frequency ) * _amplitude, Transform.Position.y - 25f * ( _startAtTop ? 1f : -1f ) * Time.Delta, HEIGHT );
 	}
 
-	//[Broadcast]
-	//public void DestroyButton()
-	//{
-	//	if ( IsProxy )
-	//		return;
+	[Broadcast]
+	public void DestroyRPC()
+	{
+		if ( IsProxy )
+			return;
 
-	//	GameObject.Destroy();
-	//}
+		GameObject.Destroy();
+	}
 }

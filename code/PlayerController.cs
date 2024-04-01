@@ -567,7 +567,7 @@ public class PlayerController : Component, Component.ITriggerListener
 			Manager.Instance.PlaySfx( "bubble", Transform.Position );
 			AdjustUpgradeLevel( pickupItem.UpgradeType, pickupItem.NumLevels );
 
-			pickupItem.GameObject.Destroy();
+			pickupItem.DestroyRPC();
 		}
 		else if ( other.GameObject.Tags.Has( "skip_button" ) && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 0.5f )
 		{

@@ -133,7 +133,7 @@
 	{
 		//Log.Info($"{manager.HoveredUpgradeType} - {Mouse.Position}");
 
-		<div class="item_description" style="left:@(Mouse.Position.x * Panel.ScaleFromScreen)px; top:@(Mouse.Position.y * Panel.ScaleFromScreen - 100)px;">
+		<div class="item_description" style="left:@(Mouse.Position.x * Panel.ScaleFromScreen + 10)px; top:@(Mouse.Position.y * Panel.ScaleFromScreen - 100)px;">
 			@($"{manager.GetNameForUpgrade(manager.HoveredUpgradeType).ToUpper()}\n{manager.GetRarityForUpgrade(manager.HoveredUpgradeType)}\n\n{manager.GetDescriptionForUpgrade(manager.HoveredUpgradeType)}")
 		</div>
 	}

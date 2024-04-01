@@ -270,7 +270,7 @@ public sealed class Manager : Component, Component.INetworkListener
 					{
 						SpawnPickupItem( GetConnection( 0 ), GetRandomPickupType(), 1, startAtTop: Game.Random.Int(0, 1) == 0 );
 						_timeSincePickupSpawn = 0f;
-						_pickupSpawnDelay = Game.Random.Float( 3.5f, 12f ) * Utils.Map(TimeSincePhaseChange, 0f, 300f, 1f, 0.4f);
+						_pickupSpawnDelay = Game.Random.Float( 3.5f, 20f ) * Utils.Map(TimeSincePhaseChange, 0f, 300f, 1f, 0.4f);
 					}
 				}
 
@@ -422,7 +422,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		GamePhase = GamePhase.RoundActive;
 		TimeSincePhaseChange = 0f;
 		_timeSincePickupSpawn = 0f;
-		_pickupSpawnDelay = Game.Random.Float( 0.5f, 10f );
+		_pickupSpawnDelay = Game.Random.Float( 1f, 13f );
 
 		Dispenser.StartWave();
 	}
