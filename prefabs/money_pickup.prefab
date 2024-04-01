@@ -1,0 +1,68 @@
+{
+  "RootObject": {
+    "__guid": "bc8b5f4c-49a1-461e-bd31-daf159ae57a8",
+    "Name": "money_pickup",
+    "Scale": "0.5,0.5,0.5",
+    "Tags": "money_pickup",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "Components": [
+      {
+        "__type": "ModelRenderer",
+        "__guid": "5d5fd9e2-304d-4ef0-97b2-33ba5fd05234",
+        "__enabled": false,
+        "BodyGroups": 18446744073709551615,
+        "Model": "models/dev/box.vmdl",
+        "RenderType": "On",
+        "Tint": "0,0.21705,0.81395,1"
+      },
+      {
+        "__type": "SphereCollider",
+        "__guid": "11d0547a-0ffa-4b1b-9727-d64efae41e69",
+        "Center": "0,0,0",
+        "IsTrigger": true,
+        "Radius": 30,
+        "Static": false
+      },
+      {
+        "__type": "MoneyPickup",
+        "__guid": "c9330df1-e81e-4e52-9a4e-b25f19ef4517"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "07862bba-3327-41bf-8053-363cd3499e72",
+        "Name": "World",
+        "Position": "0,0,26",
+        "Rotation": "-0.4999999,-0.5,-0.5,0.5000001",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "Components": [
+          {
+            "__type": "WorldPanel",
+            "__guid": "3826e96d-8888-4afe-9b12-a00d5fdf3f9a",
+            "HorizontalAlign": "Center",
+            "LookAtCamera": false,
+            "PanelSize": "1000,1000",
+            "RenderScale": 5,
+            "VerticalAlign": "Center"
+          },
+          {
+            "__type": "MoneyPickupLabel",
+            "__guid": "58890bf5-0420-4ad6-85ed-baf02c6cbacd",
+            "TargetObject": {
+              "_type": "gameobject",
+              "go": "bc8b5f4c-49a1-461e-bd31-daf159ae57a8"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "ResourceVersion": 1,
+  "__version": 1,
+  "__references": []
+}

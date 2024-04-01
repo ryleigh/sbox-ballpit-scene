@@ -569,6 +569,15 @@ public class PlayerController : Component, Component.ITriggerListener
 
 			pickupItem.DestroyRPC();
 		}
+		else if ( other.GameObject.Tags.Has( "money_pickup" ) )
+		{
+			var moneyPickup = other.Components.Get<MoneyPickup>();
+
+			Manager.Instance.PlaySfx( "bubble", Transform.Position );
+			AddMoney( moneyPickup.NumLevels );
+
+			moneyPickup.DestroyRPC();
+		}
 		else if ( other.GameObject.Tags.Has( "skip_button" ) && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 0.5f )
 		{
 			other.GameObject.Destroy();

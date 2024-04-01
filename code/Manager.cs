@@ -42,6 +42,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject ShopItemPrefab { get; set; }
 	[Property] public GameObject ShopItemPassivePrefab { get; set; }
 	[Property] public GameObject PickupItemPrefab { get; set; }
+	[Property] public GameObject MoneyPickupPrefab { get; set; }
 	[Property] public GameObject FadingTextPrefab { get; set; }
 	[Property] public GameObject FloaterTextPrefab { get; set; }
 	[Property] public GameObject BallExplosionParticles { get; set; }
@@ -268,7 +269,8 @@ public sealed class Manager : Component, Component.INetworkListener
 					var connection = GetConnection(playerNum: Game.Random.Int( 0, 1 ) );
 					if(connection != null)
 					{
-						SpawnPickupItem( GetConnection( 0 ), GetRandomPickupType(), 1, startAtTop: Game.Random.Int(0, 1) == 0 );
+						//SpawnPickupItem( connection, GetRandomPickupType(), 1, startAtTop: Game.Random.Int(0, 1) == 0 );
+						SpawnMoneyPickup( connection, Game.Random.Int(1, 4), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 						_timeSincePickupSpawn = 0f;
 						_pickupSpawnDelay = Game.Random.Float( 3.5f, 20f ) * Utils.Map(TimeSincePhaseChange, 0f, 300f, 1f, 0.4f);
 					}
@@ -551,6 +553,15 @@ public sealed class Manager : Component, Component.INetworkListener
 		var pickupItemObj = PickupItemPrefab.Clone( new Vector3( pos.x, pos.y, 120f * (startAtTop ? 1f : -1f)) );
 		pickupItemObj.NetworkSpawn( connection );
 		pickupItemObj.Components.Get<PickupItem>().Init( upgradeType, numLevels, startAtTop );
+	}
+
+	public void SpawnMoneyPickup( Connection connection, int numLevels, bool startAtTop )
+	{
+		var pos = new Vector2( 0f, 150f * (startAtTop ? 1f : -1f) );
+
+		var moneyPickupObj = MoneyPickupPrefab.Clone( new Vector3( pos.x, pos.y, 120f * (startAtTop ? 1f : -1f) ) );
+		moneyPickupObj.NetworkSpawn( connection );
+		moneyPickupObj.Components.Get<MoneyPickup>().Init( numLevels, startAtTop );
 	}
 
 	[Broadcast]
