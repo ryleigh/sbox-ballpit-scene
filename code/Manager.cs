@@ -269,7 +269,6 @@ public sealed class Manager : Component, Component.INetworkListener
 					var connection = GetConnection(playerNum: Game.Random.Int( 0, 1 ) );
 					if(connection != null)
 					{
-						//SpawnPickupItem( connection, GetRandomPickupType(), 1, startAtTop: Game.Random.Int(0, 1) == 0 );
 						SpawnMoneyPickup( connection, Game.Random.Int(1, 4), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 						_timeSincePickupSpawn = 0f;
 						_pickupSpawnDelay = Game.Random.Float( 3.5f, 20f ) * Utils.Map(TimeSincePhaseChange, 0f, 300f, 1f, 0.4f);
@@ -316,7 +315,18 @@ public sealed class Manager : Component, Component.INetworkListener
 					_hasIncrementedScore = true;
 
 					if( Math.Abs(CurrentScore) < SCORE_NEEDED_TO_WIN )
+					{
 						SpawnScoreText( _roundWinnerPlayerNum, CurrentScore );
+
+						var winningPlayer = GetPlayer( _roundWinnerPlayerNum );
+						if ( winningPlayer != null )
+							SpawnMoneyPickup( GetConnection( winningPlayer.PlayerNum ), numLevels: 10, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (winningPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float(-5f, 5f), Game.Random.Float( -85f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
+
+						var deadPlayer = GetPlayer( Globals.GetOpponentPlayerNum( _roundWinnerPlayerNum ) );
+						Log.Info( $"deadPlayer: {deadPlayer}" );
+						if(deadPlayer != null)
+							SpawnMoneyPickup( GetConnection( deadPlayer.PlayerNum ), numLevels: 5, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (deadPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float( -5f, 5f ), Game.Random.Float( -85f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
+					}
 				}
 
 				if ( TimeSincePhaseChange > BETWEEN_ROUNDS_DELAY )
@@ -381,12 +391,6 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( playerObj != null )
 		{
 			var deadPlayer = playerObj.Components.Get<PlayerController>();
-			deadPlayer.AdjustMoney( 5 );
-
-			var otherPlayer = GetPlayer( GetOtherPlayerNum( deadPlayer.PlayerNum ) );
-			if ( otherPlayer != null )
-				otherPlayer.AdjustMoney( 10 );
-
 			_roundWinnerPlayerNum = (deadPlayer.PlayerNum == 0 ? 1 : 0);
 		}
 
@@ -559,9 +563,16 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		var pos = new Vector2( 0f, 150f * (startAtTop ? 1f : -1f) );
 
-		var moneyPickupObj = MoneyPickupPrefab.Clone( new Vector3( pos.x, pos.y, 120f * (startAtTop ? 1f : -1f) ) );
+		var moneyPickupObj = MoneyPickupPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
 		moneyPickupObj.NetworkSpawn( connection );
 		moneyPickupObj.Components.Get<MoneyPickup>().Init( numLevels, startAtTop );
+	}
+
+	public void SpawnMoneyPickup( Connection connection, int numLevels, Vector2 startPos, Vector2 endPos, float time )
+	{
+		var moneyPickupObj = MoneyPickupPrefab.Clone( new Vector3( startPos.x, startPos.y, 0f ) );
+		moneyPickupObj.NetworkSpawn( connection );
+		moneyPickupObj.Components.Get<MoneyPickup>().Init( numLevels, startPos, endPos, time );
 	}
 
 	[Broadcast]
