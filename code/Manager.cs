@@ -314,6 +314,8 @@ public sealed class Manager : Component, Component.INetworkListener
 					_targetCenterLineOffset = Utils.Map( CurrentScore, -SCORE_NEEDED_TO_WIN, SCORE_NEEDED_TO_WIN, 95f, -95f );
 					_hasIncrementedScore = true;
 
+					DestroyPickups();
+
 					if( Math.Abs(CurrentScore) < SCORE_NEEDED_TO_WIN )
 					{
 						SpawnScoreText( _roundWinnerPlayerNum, CurrentScore );
@@ -779,6 +781,15 @@ public sealed class Manager : Component, Component.INetworkListener
 	//		ball.DestroyBall();
 	//	}
 	//}
+
+	void DestroyPickups()
+	{
+		foreach ( var pickup in Scene.GetAllComponents<PickupItem>() )
+			pickup.DestroyRPC();
+
+		foreach ( var pickup in Scene.GetAllComponents<MoneyPickup>() )
+			pickup.DestroyRPC();
+	}
 
 	void DestroyShopStuff()
 	{
