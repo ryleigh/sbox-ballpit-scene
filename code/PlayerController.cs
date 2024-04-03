@@ -585,6 +585,13 @@ public class PlayerController : Component, Component.ITriggerListener
 
 			HitSkipButton();
 		}
+		else if ( other.GameObject.Tags.Has( "reroll_button" ) && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 0.5f )
+		{
+			other.GameObject.Destroy();
+			Manager.Instance.RerollButtonHit(PlayerNum);
+
+			HitRerollButton();
+		}
 	}
 
 	public void OnTriggerExit( Collider other )
@@ -743,6 +750,16 @@ public class PlayerController : Component, Component.ITriggerListener
 	}
 
 	[Broadcast]
+	public void HitRerollButton()
+	{
+		var sfx = Sound.Play( "bubble", Transform.Position );
+		if ( sfx != null )
+		{
+			sfx.Pitch = 0.6f;
+		}
+	}
+
+	[Broadcast]
 	public void BuyItem( bool success )
 	{
 		var sfx = Sound.Play( "bubble", Transform.Position );
@@ -762,10 +779,10 @@ public class PlayerController : Component, Component.ITriggerListener
 			Transform.Position.WithZ( 150f ),
 			//$"{(amount > 0 ? "+" : "-")}{Manager.Instance.GetFloaterTextForUpgrade( upgradeType )}", 
 			$"{Manager.Instance.GetIconForUpgrade( upgradeType )}",
-			lifetime: amount > 0 ? 1.5f : 1.2f, 
+			lifetime: amount > 0 ? 1.5f : 1.1f, 
 			color: Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ) ), 
-			velocity: new Vector2( 0f, amount > 0 ? 35f : -70f ), 
-			deceleration: amount > 0 ? 1.8f : 1.9f, 
+			velocity: new Vector2( 0f, amount > 0 ? 35f : -65f ), 
+			deceleration: amount > 0 ? 1.8f : 2.1f, 
 			startScale: amount > 0 ? 0.25f : 0.27f, 
 			endScale: amount > 0 ? 0.3f : 0.2f,
 			isEmoji: true
@@ -830,7 +847,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		PassiveUpgrades.Clear();
 		ActiveUpgrades.Clear();
 		IsInvulnerable = false;
-		NumShopItems = 9;
+		NumShopItems = 7;
 
 		Money = 448;
 	}

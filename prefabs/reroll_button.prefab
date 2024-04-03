@@ -1,15 +1,16 @@
 {
   "RootObject": {
-    "__guid": "a33a97d1-8a5e-4e8c-b6c1-b5a0303017b9",
-    "Name": "skip_button",
+    "__guid": "1b0e5ba2-b6da-4538-b795-fec136d65caf",
+    "Name": "reroll_button",
+    "Position": "51.47238,-7.571976,13",
     "Scale": "0.5,0.5,0.5",
-    "Tags": "skip_button",
+    "Tags": "reroll_button",
     "Enabled": true,
     "NetworkMode": 2,
     "Components": [
       {
         "__type": "ModelRenderer",
-        "__guid": "c9ac10e0-372f-42f3-ba7b-d8e9b057b1b2",
+        "__guid": "fe83ac61-231d-4971-a6e3-c05f3b5a3ae7",
         "BodyGroups": 18446744073709551615,
         "Model": "models/dev/box.vmdl",
         "RenderType": "On",
@@ -17,20 +18,20 @@
       },
       {
         "__type": "BoxCollider",
-        "__guid": "b55a5608-396b-406f-a15a-79ca5635b0bb",
+        "__guid": "9d1807be-3f57-4511-90cc-567d8ad7c4b1",
         "Center": "0,0,0",
         "IsTrigger": true,
         "Scale": "50,50,50",
         "Static": false
       },
       {
-        "__type": "SkipButton",
-        "__guid": "d5f34c25-6a8d-4d4f-b116-52d75f90cc25"
+        "__type": "RerollButton",
+        "__guid": "c1206be4-f8cf-4a10-a131-3cf9691a873f"
       }
     ],
     "Children": [
       {
-        "__guid": "9dbd4a2e-95ef-45fb-a914-ab500303eee4",
+        "__guid": "00307daf-9ad9-49d0-9cdd-726b6575fa47",
         "Name": "World",
         "Position": "0,0,42",
         "Rotation": "-0.4999999,-0.5,-0.5,0.5000001",
@@ -39,7 +40,7 @@
         "Components": [
           {
             "__type": "WorldPanel",
-            "__guid": "9dc47c02-41a2-4f81-abac-427bb4c35045",
+            "__guid": "9c5097f4-ea1d-4b90-93cf-4acaaa1d2bc8",
             "HorizontalAlign": "Center",
             "LookAtCamera": false,
             "PanelSize": "800,800",
@@ -47,8 +48,8 @@
             "VerticalAlign": "Center"
           },
           {
-            "__type": "SkipButtonLabel",
-            "__guid": "7b946be0-3dd9-4a76-a593-8a505e64919a"
+            "__type": "RerollButtonLabel",
+            "__guid": "f911b74d-979f-48e4-95a1-94f3357249f3"
           }
         ]
       }

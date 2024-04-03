@@ -64,12 +64,9 @@ public sealed class Dispenser : Component
 				if ( TimeSinceShoot > delay )
 				{
 					var ballSpeed =
-						Utils.Map( Manager.Instance.RoundNum, 1, 16, 75f, 100f, EasingType.SineOut )
-						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, Utils.Map( Manager.Instance.RoundNum, 1, 16, 240f, 120f ), 1f, Utils.Map( Manager.Instance.RoundNum, 1, 32, 1.5f, 4f ) )
-						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, 680f, 1f, 2.2f, EasingType.SineIn );
-
-					//var speed = 85f;
-					//_dispenserPattern = DispenserPattern.FiveToOne;
+						Utils.Map( Manager.Instance.RoundNum, 1, 16, 75f, 100f, EasingType.Linear )
+						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, Utils.Map( Manager.Instance.RoundNum, 1, 16, 250f, 140f ), 1f, Utils.Map( Manager.Instance.RoundNum, 1, 32, 1.5f, 4f ) )
+						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, 720f, 1f, 2.2f, EasingType.SineIn );
 
 					int playerNum;
 					switch(_dispenserPattern)

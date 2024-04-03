@@ -45,6 +45,10 @@
             "_type": "gameobject",
             "prefab": "prefabs/player.prefab"
           },
+          "RerollButtonPrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/reroll_button.prefab"
+          },
           "ShopItemPassivePrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/shop_item_passive.prefab"
@@ -993,7 +997,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-02T00:46:03.4974079-07:00",
+  "LastSaved": "2024-04-02T18:33:22.3122757-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

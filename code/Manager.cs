@@ -39,6 +39,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject PlayerPrefab { get; set; }
 	[Property] public GameObject BallPrefab { get; set; }
 	[Property] public GameObject SkipButtonPrefab { get; set; }
+	[Property] public GameObject RerollButtonPrefab { get; set; }
 	[Property] public GameObject ShopItemPrefab { get; set; }
 	[Property] public GameObject ShopItemPassivePrefab { get; set; }
 	[Property] public GameObject PickupItemPrefab { get; set; }
@@ -322,12 +323,12 @@ public sealed class Manager : Component, Component.INetworkListener
 
 						var winningPlayer = GetPlayer( _roundWinnerPlayerNum );
 						if ( winningPlayer != null )
-							SpawnMoneyPickup( GetConnection( winningPlayer.PlayerNum ), numLevels: 10, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (winningPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float(-5f, 5f), Game.Random.Float( -85f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
+							SpawnMoneyPickup( GetConnection( winningPlayer.PlayerNum ), numLevels: 10, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (winningPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float(-5f, 5f), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
 
 						var deadPlayer = GetPlayer( Globals.GetOpponentPlayerNum( _roundWinnerPlayerNum ) );
 						Log.Info( $"deadPlayer: {deadPlayer}" );
 						if(deadPlayer != null)
-							SpawnMoneyPickup( GetConnection( deadPlayer.PlayerNum ), numLevels: 5, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (deadPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float( -5f, 5f ), Game.Random.Float( -85f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
+							SpawnMoneyPickup( GetConnection( deadPlayer.PlayerNum ), numLevels: 5, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (deadPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
 					}
 				}
 
@@ -491,12 +492,14 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( DoesPlayerExist0 )
 		{
 			CreateSkipButton( 0 );
+			CreateRerollButton( 0 );
 			CreateShopItems( playerNum: 0, numItems: Player0.NumShopItems );
 		}
 
 		if ( DoesPlayerExist1 )
 		{
 			CreateSkipButton( 1 );
+			CreateRerollButton( 1 );
 			CreateShopItems( playerNum: 1, numItems: Player1.NumShopItems );
 		}
 	}
@@ -523,6 +526,12 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		var skipButtonObj = SkipButtonPrefab.Clone( new Vector3( 212f * (playerNum == 0 ? -1f : 1f), 103f, 0f ) );
 		skipButtonObj.NetworkSpawn( GetConnection( playerNum ) );
+	}
+
+	void CreateRerollButton( int playerNum )
+	{
+		var rerollButtonObj = RerollButtonPrefab.Clone( new Vector3( 114f * (playerNum == 0 ? -1f : 1f), 103f, 0f ) );
+		rerollButtonObj.NetworkSpawn( GetConnection( playerNum ) );
 	}
 
 	void CreateShopItem( int playerNum, int itemNum, UpgradeType upgradeType, int numLevels, int price )
@@ -588,6 +597,38 @@ public sealed class Manager : Component, Component.INetworkListener
 		if( _numBuyPhaseSkips >= NumActivePlayers )
 		{
 			FinishBuyPhase();
+		}
+	}
+
+	[Broadcast]
+	public void RerollButtonHit(int playerNum)
+	{
+		if ( IsProxy || GamePhase != GamePhase.BuyPhase )
+			return;
+
+		DestroyShopItems( playerNum );
+
+		var player = GetPlayer( playerNum );
+		if ( player == null )
+			return;
+
+		CreateShopItems( playerNum, numItems: player.NumShopItems );
+		RespawnRerollButton( playerNum );
+	}
+
+	async void RespawnRerollButton(int playerNum)
+	{
+		await Task.Delay( 1000 );
+
+		CreateRerollButton( playerNum );
+	}
+
+	void DestroyShopItems(int playerNum)
+	{
+		foreach ( var shopItem in Scene.GetAllComponents<ShopItem>() )
+		{
+			if((playerNum == 0 && shopItem.Transform.Position.x < 0f) || (playerNum == 1 && shopItem.Transform.Position.x > 0f) )
+				shopItem.DestroyButton();
 		}
 	}
 
@@ -795,6 +836,9 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		foreach ( var skipButton in Scene.GetAllComponents<SkipButton>() )
 			skipButton.DestroyButton();
+
+		foreach ( var rerollButton in Scene.GetAllComponents<RerollButton>() )
+			rerollButton.DestroyButton();
 
 		foreach ( var shopItem in Scene.GetAllComponents<ShopItem>() )
 			shopItem.DestroyButton();
