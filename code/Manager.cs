@@ -270,9 +270,17 @@ public sealed class Manager : Component, Component.INetworkListener
 					var connection = GetConnection(playerNum: Game.Random.Int( 0, 1 ) );
 					if(connection != null)
 					{
-						SpawnMoneyPickup( connection, Game.Random.Int(1, 4), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+						if(Game.Random.Float(0f, 1f) < 0.55f)
+						{
+							SpawnPickupItem( connection, GetRandomPickupType(), 1, startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+						}
+						else
+						{
+							SpawnMoneyPickup( connection, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+						}
+
 						_timeSincePickupSpawn = 0f;
-						_pickupSpawnDelay = Game.Random.Float( 3.5f, 20f ) * Utils.Map(TimeSincePhaseChange, 0f, 300f, 1f, 0.4f);
+						_pickupSpawnDelay = Game.Random.Float( 3.5f, 30f ) * Utils.Map(TimeSincePhaseChange, 0f, 300f, 1f, 0.4f, EasingType.SineIn);
 					}
 				}
 
@@ -326,7 +334,6 @@ public sealed class Manager : Component, Component.INetworkListener
 							SpawnMoneyPickup( GetConnection( winningPlayer.PlayerNum ), numLevels: 10, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (winningPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float(-5f, 5f), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
 
 						var deadPlayer = GetPlayer( Globals.GetOpponentPlayerNum( _roundWinnerPlayerNum ) );
-						Log.Info( $"deadPlayer: {deadPlayer}" );
 						if(deadPlayer != null)
 							SpawnMoneyPickup( GetConnection( deadPlayer.PlayerNum ), numLevels: 5, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (deadPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
 					}
@@ -431,7 +438,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		GamePhase = GamePhase.RoundActive;
 		TimeSincePhaseChange = 0f;
 		_timeSincePickupSpawn = 0f;
-		_pickupSpawnDelay = Game.Random.Float( 1f, 13f );
+		_pickupSpawnDelay = Game.Random.Float( 1f, 20f );
 
 		Player0?.ResetRerollPrice();
 		Player1?.ResetRerollPrice();

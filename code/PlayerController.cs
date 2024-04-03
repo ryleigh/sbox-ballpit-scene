@@ -563,10 +563,13 @@ public class PlayerController : Component, Component.ITriggerListener
 		{
 			var moneyPickup = other.Components.Get<MoneyPickup>();
 
-			Manager.Instance.PlaySfx( "bubble", Transform.Position );
-			AdjustMoney( moneyPickup.NumLevels );
+			if(moneyPickup.HasLanded || moneyPickup.Transform.Position.y < 20f)
+			{
+				Manager.Instance.PlaySfx( "bubble", Transform.Position );
+				AdjustMoney( moneyPickup.NumLevels );
 
-			moneyPickup.DestroyRPC();
+				moneyPickup.DestroyRPC();
+			}
 		}
 		else if ( other.GameObject.Tags.Has( "skip_button" ) && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 0.5f )
 		{
@@ -605,7 +608,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Broadcast]
 	public void TakeDamage( Vector2 force )
 	{
-		if ( IsDead )
+		if ( IsDead || Manager.Instance.GamePhase != GamePhase.RoundActive )
 			return;
 
 		if(HP <= 1)
@@ -867,7 +870,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		NumShopItems = 7;
 		CurrRerollPrice = 1;
 
-		Money = 448;
+		Money = 18;
 	}
 
 	public int GetUpgradeHash()

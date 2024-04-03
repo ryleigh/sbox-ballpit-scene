@@ -20,6 +20,9 @@ public class MoneyPickup : Component
 	private float _tossTime;
 	private TimeSince _timeSinceToss;
 
+	[Sync] public bool HasLanded { get; private set; }
+
+
 	[Broadcast]
 	public void Init( int numLevels, bool startAtTop )
 	{
@@ -33,6 +36,8 @@ public class MoneyPickup : Component
 		_frequency = Game.Random.Float( 1.5f, 2.5f ) * Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, 120f, 0.95f, 1.4f );
 		_amplitude = Game.Random.Float( 70f, 135f ) * (Game.Random.Int( 0, 1 ) == 0 ? 1f : -1f);
 		_startAtTop = startAtTop;
+
+		HasLanded = true;
 	}
 
 	[Broadcast]
@@ -50,6 +55,8 @@ public class MoneyPickup : Component
 		_isTossed = true;
 		_tossTime = time;
 		_timeSinceToss = 0f;
+
+		HasLanded = false;
 	}
 
 	protected override void OnUpdate()
@@ -71,6 +78,7 @@ public class MoneyPickup : Component
 					{
 						Transform.Position = new Vector3( _endPos.x, _endPos.y, HEIGHT );
 						_isTossed = false;
+						HasLanded = true;
 					}
 					else
 					{
