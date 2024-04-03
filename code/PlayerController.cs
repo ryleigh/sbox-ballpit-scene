@@ -61,6 +61,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public const float BUMP_SPEED_INCREASE_FACTOR_MAX = 1.2f;
 
+	[Sync] public int CurrRerollPrice { get; set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -531,18 +533,6 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( IsProxy || IsDead || IsSpectator )
 			return;
 
-		//if(other.GameObject.Tags.Has("ball") && Manager.Instance.GamePhase == GamePhase.RoundActive )
-		//{
-		//	//Log.Info( $"OnTriggerEnter {other.GameObject.Name} time: {Time.Now}" );
-
-		//	var ball = other.Components.Get<Ball>();
-		//	if (ball.IsActive && ball.PlayerNum == PlayerNum)
-		//	{
-		//		ball.BumpedByPlayer( direction: ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal );
-		//		HitOwnBall( (Vector2)ball.Transform.Position );
-		//	}
-		//}
-
 		if ( other.GameObject.Tags.Has( "item" ) && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 0.5f )
 		{
 			var item = other.Components.Get<ShopItem>();
@@ -587,10 +577,19 @@ public class PlayerController : Component, Component.ITriggerListener
 		}
 		else if ( other.GameObject.Tags.Has( "reroll_button" ) && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 0.5f )
 		{
-			other.GameObject.Destroy();
-			Manager.Instance.RerollButtonHit(PlayerNum);
+			if ( CurrRerollPrice <= Money )
+			{
+				AdjustMoney( -CurrRerollPrice );
 
-			HitRerollButton();
+				HitRerollButton( success: true );
+
+				other.GameObject.Destroy();
+				Manager.Instance.RerollButtonHit( PlayerNum );
+			}
+			else
+			{
+				HitRerollButton( success: false );
+			}
 		}
 	}
 
@@ -723,6 +722,24 @@ public class PlayerController : Component, Component.ITriggerListener
 		NumMatchLosses++;
 	}
 
+	[Broadcast]
+	public void IncreaseRerollPrice()
+	{
+		if ( IsProxy )
+			return;
+
+		CurrRerollPrice++;
+	}
+
+	[Broadcast]
+	public void ResetRerollPrice()
+	{
+		if ( IsProxy )
+			return;
+
+		CurrRerollPrice = 1;
+	}
+
 	public int GetUpgradeLevel(UpgradeType upgradeType)
 	{
 		if ( Manager.Instance.IsUpgradePassive( upgradeType ) )
@@ -750,12 +767,12 @@ public class PlayerController : Component, Component.ITriggerListener
 	}
 
 	[Broadcast]
-	public void HitRerollButton()
+	public void HitRerollButton(bool success)
 	{
 		var sfx = Sound.Play( "bubble", Transform.Position );
 		if ( sfx != null )
 		{
-			sfx.Pitch = 0.6f;
+			sfx.Pitch = success ? 1f : 0.5f;
 		}
 	}
 
@@ -848,6 +865,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		ActiveUpgrades.Clear();
 		IsInvulnerable = false;
 		NumShopItems = 7;
+		CurrRerollPrice = 1;
 
 		Money = 448;
 	}

@@ -35,7 +35,8 @@
 
 	protected override void OnUpdate()
 	{
-		PickupItem = TargetObject?.Components.Get<PickupItem>() ?? null;
+		if(PickupItem == null)
+			PickupItem = TargetObject?.Components.Get<PickupItem>() ?? null;
 	}
 
 	protected override int BuildHash() 

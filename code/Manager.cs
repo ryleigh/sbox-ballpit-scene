@@ -433,6 +433,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		_timeSincePickupSpawn = 0f;
 		_pickupSpawnDelay = Game.Random.Float( 1f, 13f );
 
+		Player0?.ResetRerollPrice();
+		Player1?.ResetRerollPrice();
+
 		Dispenser.StartWave();
 	}
 
@@ -612,6 +615,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( player == null )
 			return;
 
+		player.IncreaseRerollPrice();
+
 		CreateShopItems( playerNum, numItems: player.NumShopItems );
 		RespawnRerollButton( playerNum );
 	}
@@ -620,7 +625,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		await Task.Delay( 1000 );
 
-		CreateRerollButton( playerNum );
+		if( GamePhase == GamePhase.BuyPhase)
+			CreateRerollButton( playerNum );
 	}
 
 	void DestroyShopItems(int playerNum)

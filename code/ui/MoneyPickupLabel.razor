@@ -31,7 +31,8 @@
 
 	protected override void OnUpdate()
 	{
-		MoneyPickup = TargetObject?.Components.Get<MoneyPickup>() ?? null;
+		if(MoneyPickup == null)
+			MoneyPickup = TargetObject?.Components.Get<MoneyPickup>() ?? null;
 	}
 
 	protected override int BuildHash()

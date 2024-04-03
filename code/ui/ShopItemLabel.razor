@@ -41,11 +41,14 @@
 
 	protected override void OnUpdate()
 	{
-		ShopItem = TargetObject?.Components.Get<ShopItem>() ?? null;
+		if(ShopItem == null)
+			ShopItem = TargetObject?.Components.Get<ShopItem>() ?? null;
 	}
 
 	protected override int BuildHash() 
 	{
-		return System.HashCode.Combine(TargetObject, ShopItem.UpgradeType, ShopItem.NumLevels, ShopItem.Price, Manager.Instance.HoveredObject);
+		var player = Manager.Instance.GetPlayer(ShopItem.PlayerNum);
+		var money = player?.Money ?? 0;
+		return System.HashCode.Combine(TargetObject, ShopItem.UpgradeType, ShopItem.NumLevels, ShopItem.Price, Manager.Instance.HoveredObject, money);
 	}
 }

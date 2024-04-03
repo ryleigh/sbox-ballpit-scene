@@ -16,4 +16,16 @@ RerollButtonLabel {
 		color: #fff;
 		font-family: "Budokan Rounded";
 	}
+
+	.price {
+		position: absolute;
+		font-size: 32px;
+		font-family: Poppins;
+		left: -20px;
+		top: -20px;
+		text-shadow: 2px 2px 4px black;
+		font-weight: 500;
+		font-family: "Budokan Rounded";
+		text-stroke: 8px black;
+	}
 }

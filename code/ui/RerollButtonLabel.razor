@@ -4,9 +4,29 @@
 
 <root>
 	<div class="title">Reroll</div>
+
+	@{
+		var money = _player?.Money ?? 0;
+		var cost = _player?.CurrRerollPrice ?? 0;
+	}
+
+	<div class="price" style="color: @((money >= cost ? new Color(0.8f, 0.8f, 0f) : new Color(1f, 0.3f, 0.3f)).Rgba);">@($"${cost}")</div>
 </root>
 
 @code
 {
+	private PlayerController _player;
 
+	protected override void OnUpdate()
+	{
+		if(_player == null)
+			_player = Manager.Instance.GetPlayer(GameObject.Transform.Position.x < 0f ? 0 : 1);
+	}
+
+	protected override int BuildHash()
+	{
+		var money = _player?.Money ?? 0;
+		var cost = _player?.CurrRerollPrice ?? 0;
+		return System.HashCode.Combine(Manager.Instance.HoveredObject, money, cost);
+	}
 }
