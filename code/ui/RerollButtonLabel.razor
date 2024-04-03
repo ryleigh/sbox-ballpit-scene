@@ -3,14 +3,18 @@
 @inherits PanelComponent
 
 <root>
-	<div class="title">Reroll</div>
-
-	@{
-		var money = _player?.Money ?? 0;
-		var cost = _player?.CurrRerollPrice ?? 0;
+	@if(_player == null) 
+	{
+		return;
 	}
 
-	<div class="price" style="color: @((money >= cost ? new Color(0.8f, 0.8f, 0f) : new Color(1f, 0.3f, 0.3f)).Rgba);">@($"${cost}")</div>
+	@{
+		var canAfford = _player.Money >= _player.CurrRerollPrice;
+	}
+
+	<div class="title" style="opacity:@(canAfford ? 1f : 0.6f); color: @((canAfford ? Color.White : new Color(0.4f, 0f, 0f)).Rgba);">Reroll</div>
+
+	<div class="price" style="color: @((canAfford ? new Color(0.8f, 0.8f, 0f) : new Color(1f, 0.3f, 0.3f)).Rgba);">@($"${_player.CurrRerollPrice}")</div>
 </root>
 
 @code

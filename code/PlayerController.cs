@@ -867,7 +867,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		PassiveUpgrades.Clear();
 		ActiveUpgrades.Clear();
 		IsInvulnerable = false;
-		NumShopItems = 7;
+		NumShopItems = 4;
 		CurrRerollPrice = 1;
 
 		Money = 18;

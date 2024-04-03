@@ -22,7 +22,7 @@
 
 	@if(ShopItem.NumLevels > 1) 
 	{
-		<div class="level" style="right: -10px; top: 8px;">@($"{ShopItem.NumLevels}")</div>
+		<div class="level" style="right: -10px; top: 8px; opacity:@((money >= ShopItem.Price ? 1f : 0.4f));">@($"{ShopItem.NumLevels}")</div>
 	}
 
 	<!--

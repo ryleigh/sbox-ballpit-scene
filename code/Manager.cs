@@ -1,6 +1,7 @@
 ﻿using Sandbox;
 using Sandbox.Network;
 using Sandbox.UI;
+using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.IO;
 using System.Numerics;
@@ -542,6 +543,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		var rerollButtonObj = RerollButtonPrefab.Clone( new Vector3( 114f * (playerNum == 0 ? -1f : 1f), 103f, 0f ) );
 		rerollButtonObj.NetworkSpawn( GetConnection( playerNum ) );
+		rerollButtonObj.Components.Get<RerollButton>().Init( playerNum );
 	}
 
 	void CreateShopItem( int playerNum, int itemNum, UpgradeType upgradeType, int numLevels, int price )
