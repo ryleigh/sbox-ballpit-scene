@@ -913,6 +913,13 @@ public sealed class Manager : Component, Component.INetworkListener
 		var targetPos = player.GetClosestSpectatorPos( player.Transform.Position );
 		playerObj.Components.Get<PlayerController>().Jump( targetPos );
 
+		var otherPlayer = GetPlayer( Globals.GetOpponentPlayerNum( player.PlayerNum ) );
+		if(otherPlayer != null)
+		{
+			if( (otherPlayer.PlayerNum == 0 && CurrentScore > 0) || (otherPlayer.PlayerNum == 1 && CurrentScore < 0))
+				player.AddMatchLoss();
+		}
+
 		if ( DoesPlayerExist0 && PlayerId0 == id )
 		{
 			DoesPlayerExist0 = false;
