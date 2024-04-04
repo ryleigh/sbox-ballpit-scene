@@ -5,11 +5,15 @@
 <root>
 	<div class="table">
 		<div class="header row">
-			<div class="name">Name</div>
-			<div class="stat_wins">Wins</div>
-			<div class="stat">Losses</div>
-			<div class="stat">Time</div>
-			<div class="stat">Ping</div>
+			<div style="justify-content: flex-start; flex-grow: 1;">
+				<div class="name">Name</div>
+			</div>
+			<div style="justify-content: flex-end; flex-grow: 1;">
+				<div class="stat_wins" style="padding-right: 30px;">Wins</div>
+				<div class="stat" style="padding-right: 40px;">Losses</div>
+				<div class="stat" style="padding-right: 52px;">Time</div>
+				<div class="stat" style="padding-right: 0px;">Ping</div>
+			</div>
 		</div>
 
 		@{
@@ -29,15 +33,37 @@
 				<div class="name">
 					@connection.DisplayName
 
+					@if(Manager.Instance.GetConnection(0) == connection)
+					{
+						<div style="padding-left: 4px; font-family: W10Emoji;">@("🟦")</div>
+					}
+					else 
+					{
+						@if(Manager.Instance.GetConnection(1) == connection)
+						{
+							<div style="padding-left: 4px; font-family: W10Emoji;">@("🟩")</div>
+						}
+					}
+
 					@if(connection.IsHost)
 					{
 						<div style="opacity:0.1; padding-left: 8px; font-family: Budokan Rounded; padding-top: 3px;">@("(host)")</div>
 					}
 				</div>
-				<div class="stat_kills">@($"{player.NumMatchWins}🏆")</div>
-				<div class="stat">@($"{player.NumMatchLosses}💀")</div>
-				<div class="stat">@GetTime(connection)</div>
-				<div class="stat">@(MathF.Round(connection.Ping)</div>
+				<div class="stat_container">
+					<div class="stat_kills">@($"{player.NumMatchWins}")</div>
+					<div style="font-family: W10Emoji;">@("🏆")</div>
+				</div>
+				<div class="stat_container">
+					<div class="stat">@($"{player.NumMatchLosses}")</div>
+					<div style="font-family: W10Emoji;">@("💀")</div>
+				</div>
+				<div class="stat_container">
+					<div class="stat">@GetTime(connection)</div>
+				</div>
+				<div class="stat_container">
+					<div class="stat">@(MathF.Round(connection.Ping))</div>
+				</div>
 			</div>
 
 			rowNum++;

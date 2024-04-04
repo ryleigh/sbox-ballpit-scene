@@ -385,7 +385,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			str += $"\n";
 		}
 		Gizmo.Draw.Color = Color.White;
-		Gizmo.Draw.ScreenText( str, new Vector2( 5f, 5f ), size: 12, flags: TextFlag.Left );
+		Gizmo.Draw.ScreenText( str, new Vector2( 5f, 30f ), size: 12, flags: TextFlag.Left );
 	}
 
 	[Broadcast]

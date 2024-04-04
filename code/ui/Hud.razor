@@ -161,6 +161,11 @@
 			<div class="leave_button" onclick=@(() => LeaveButtonClicked() )>Forfeit</div>
 		}
 	}
+
+	@if(!Input.Down("Score"))
+	{
+		<div class="tab_indicator">TAB</div>
+	}
 </root>
 
 @code
@@ -209,7 +214,7 @@
 		var mouseHoverUpgradePos = manager.HoveredUpgradeType != UpgradeType.None ? Mouse.Position : Vector2.Zero;
 
 		return HashCode.Combine(
-			HashCode.Combine(playerName0, playerName1, hp0, hp1),
+			HashCode.Combine(playerName0, playerName1, hp0, hp1, Input.Down("Score")),
 			HashCode.Combine(money0, money1, upgrades0, upgrades1, manager.RoundNum),
 			HashCode.Combine(manager.GamePhase, buyPhaseTimer, newMatchTimer, manager.HoveredObject, mouseHoverUpgradePos)
 		);
