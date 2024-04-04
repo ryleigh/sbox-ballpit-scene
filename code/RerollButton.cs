@@ -22,7 +22,7 @@ public class RerollButton : Component
 		base.OnUpdate();
 
 		var player = Manager.Instance.GetPlayer( PlayerNum );
-		if ( player == null )
+		if ( player == null || _renderer == null )
 			return;
 
 		_renderer.Tint = player.Money >= player.CurrRerollPrice ? new Color( 0.11f, 0.11f, 0.11f ) : new Color( 0.11f, 0.07f, 0.07f );

@@ -4,16 +4,20 @@ SkipButtonLabel {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: #444;
 	justify-content: center;
 	align-items: center;
-	font-weight: bold;
-	border-radius: 20px;
 
 	.title {
+		width: 95%;
+		height: 95%;
 		font-size: 25px;
 		font-family: Poppins;
 		color: #fff;
 		font-family: "Budokan Rounded";
+		background-color: #444;
+		border-radius: 20px;
+		justify-content: center;
+		align-items: center;
+		font-weight: bold;
 	}
 }

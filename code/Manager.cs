@@ -610,6 +610,11 @@ public sealed class Manager : Component, Component.INetworkListener
 		{
 			FinishBuyPhase();
 		}
+		else
+		{
+			foreach ( var skipButton in Scene.GetAllComponents<SkipButton>() )
+				skipButton.StartFlashing();
+		}
 	}
 
 	[Broadcast]
