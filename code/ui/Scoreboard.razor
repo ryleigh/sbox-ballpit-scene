@@ -25,12 +25,13 @@
 				specialClass = "me";
 
 			<div class="row @specialClass @(rowNum % 2 == 0 ? "even_row" : "odd_row")">
+				<div class="avatar" style="background-image: url( avatar:@connection.SteamId )"></div>
 				<div class="name">
 					@connection.DisplayName
 
 					@if(connection.IsHost)
 					{
-						<div style="opacity:0.1; padding-left: 8px;">@("(host)")</div>
+						<div style="opacity:0.1; padding-left: 8px; font-family: Budokan Rounded; padding-top: 3px;">@("(host)")</div>
 					}
 				</div>
 				<div class="stat_kills">@($"{player.NumMatchWins}🏆")</div>

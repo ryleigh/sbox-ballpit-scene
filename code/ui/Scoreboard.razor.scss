@@ -39,6 +39,18 @@ Scoreboard {
 
 		.row {
 			white-space: nowrap;
+			justify-content: center;
+			align-items: center;
+
+			> .avatar {
+				width: 26px;
+				height: 26px;
+				background-position: center;
+				background-size: cover;
+				border-radius: 5px;
+				margin: 4px;
+				flex-shrink: 0;
+			}
 
 			> .name {
 				flex-grow: 1;
