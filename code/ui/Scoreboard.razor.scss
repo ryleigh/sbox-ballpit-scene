@@ -1,0 +1,84 @@
+Scoreboard {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	//background-color: #1115;
+	justify-content: center;
+	align-items: center;
+	font-family: Poppins;
+	font-size: 22px;
+	color: #ffffffff;
+	backdrop-filter: blur( 3px );
+	transform: scale( 1 );
+	transition: all 0.085s ease-out;
+	font-family: "Budokan Rounded";
+	border: 1px solid #000000bb;
+	overflow: hidden;
+
+	.table {
+		flex-direction: column;
+		width: 40%;
+		//border: 3px solid #333;
+		border-radius: 5px;
+		//height: 100%;
+		//top: 0px;
+		//justify-content: flex-start;
+		//mix-blend-mode: lighten;
+		//align-items: flex-start;
+		box-shadow: -8px 8px 24px 8px #00000066;
+
+		.header {
+			//opacity: 0.3;
+			//background-color: black;
+			color: #ffffff99;
+			background-color: #000000bb;
+			border-radius: 5px;
+		}
+
+		.row {
+			white-space: nowrap;
+
+			> .name {
+				flex-grow: 1;
+				font-family: Poppins;
+			}
+
+			> .stat {
+				width: 100px;
+				justify-content: flex-end;
+				opacity: 0.7;
+			}
+
+			> .stat_wins {
+				width: 100px;
+				justify-content: flex-end;
+				opacity: 1;
+				font-weight: bold;
+			}
+
+			> * {
+				padding: 0px 8px;
+			}
+		}
+
+		.even_row {
+			background-color: #00000011;
+		}
+
+		.odd_row {
+			background-color: #00000033;
+		}
+
+		.me {
+			color: #88ff88ff;
+			//font-weight: bold;
+		}
+	}
+
+	&.hidden {
+		opacity: 0.0;
+		transform: scale( 0.96 );
+	}
+}

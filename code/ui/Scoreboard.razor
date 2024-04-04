@@ -1,0 +1,70 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+
+<root>
+	<div class="table">
+		<div class="header row">
+			<div class="name">Name</div>
+			<div class="stat_wins">Wins</div>
+			<div class="stat">Losses</div>
+			<div class="stat">Time</div>
+			<div class="stat">Ping</div>
+		</div>
+
+		@{
+			var rowNum = 0;
+		}
+
+		@foreach(var player in Scene.GetAllComponents<PlayerController>().ToList().OrderByDescending(x => x.NumMatchWins))
+		{
+			var connection = player.Network.OwnerConnection;
+
+			string specialClass = "";
+			if(connection == Connection.Local)
+				specialClass = "me";
+
+			<div class="row @specialClass @(rowNum % 2 == 0 ? "even_row" : "odd_row")">
+				<div class="name">
+					@connection.DisplayName
+
+					@if(connection.IsHost)
+					{
+						<div style="opacity:0.1; padding-left: 8px;">@("(host)")</div>
+					}
+				</div>
+				<div class="stat_kills">@($"{player.NumMatchWins}🏆")</div>
+				<div class="stat">@($"{player.NumMatchLosses}💀")</div>
+				<div class="stat">@GetTime(connection)</div>
+				<div class="stat">@(MathF.Round(connection.Ping)</div>
+			</div>
+
+			rowNum++;
+		}
+	</div>
+
+</root>
+
+@code
+{
+
+	string GetTime(Connection c)
+	{
+		TimeSpan time = DateTime.UtcNow - c.ConnectionTime;
+		return time.TotalSeconds > 3600 ? time.ToString(@"hh\:mm\:ss") : time.ToString(@"mm\:ss");
+	}
+
+	protected override void OnUpdate()
+	{
+		SetClass("hidden", !Input.Down("Score"));
+	}
+
+	protected override int BuildHash() 
+	{
+		var seconds = RealTime.Now;
+		var wholeSeconds = seconds.CeilToInt();
+		var tenthSeconds = (int)((seconds - (int)seconds) * 10f);
+
+		return System.HashCode.Combine(wholeSeconds, tenthSeconds);
+	}
+}
