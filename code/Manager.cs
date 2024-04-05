@@ -1109,19 +1109,19 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void GenerateUpgrades()
 	{
-		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster.", UpgradeRarity.Common, maxLevel: 9, isPassive: true );
-		CreateUpgrade( UpgradeType.BumpStrength, "Bump Strength", "💪", "Bumping a ball increases its speed.", UpgradeRarity.Uncommon, maxLevel: 9, isPassive: true );
+		CreateUpgrade( UpgradeType.MoveSpeed, "Cardio", "🏃🏻", "Move faster", UpgradeRarity.Common, maxLevel: 9, isPassive: true );
+		CreateUpgrade( UpgradeType.BumpStrength, "Muscles", "💪", "Bumping a ball increases its speed", UpgradeRarity.Uncommon, maxLevel: 9, isPassive: true );
 
-		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls.", UpgradeRarity.Common, maxLevel: 9 );
-		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you.", UpgradeRarity.Rare, maxLevel: 9 );
-		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away.", UpgradeRarity.Epic, maxLevel: 9 );
-		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy.", UpgradeRarity.Uncommon, maxLevel: 9 );
-		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", "Teleport to your cursor.", UpgradeRarity.Uncommon, maxLevel: 9, useableInBuyPhase: true );
-		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", "Redirect all balls randomly.", UpgradeRarity.Uncommon, maxLevel: 9 );
-		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", "Briefly slow time.", UpgradeRarity.Common, maxLevel: 9 );
-		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", "Move quicky toward cursor.", UpgradeRarity.Common, maxLevel: 9, useableInBuyPhase: true );
-		CreateUpgrade( UpgradeType.Redirect, "Redirect", "⤴️", "All your balls move in the direction from you to cursor.", UpgradeRarity.Rare, maxLevel: 9 );
-		CreateUpgrade( UpgradeType.Converge, "Converge", "📍", "Your balls target enemy.", UpgradeRarity.Epic, maxLevel: 9 );
+		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls", UpgradeRarity.Common, maxLevel: 9 );
+		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you", UpgradeRarity.Rare, maxLevel: 9 );
+		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away", UpgradeRarity.Epic, maxLevel: 9 );
+		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy", UpgradeRarity.Uncommon, maxLevel: 3 );
+		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", "Teleport to your cursor", UpgradeRarity.Uncommon, maxLevel: 9, useableInBuyPhase: true );
+		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", "Redirect all balls randomly", UpgradeRarity.Uncommon, maxLevel: 3 );
+		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", "Briefly slow time", UpgradeRarity.Common, maxLevel: 9 );
+		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", "Move quicky toward cursor", UpgradeRarity.Common, maxLevel: 9, useableInBuyPhase: true );
+		CreateUpgrade( UpgradeType.Redirect, "Redirect", "⤴️", "All your balls move in the direction from you to cursor", UpgradeRarity.Rare, maxLevel: 3 );
+		CreateUpgrade( UpgradeType.Converge, "Converge", "📍", "Your balls target enemy", UpgradeRarity.Epic, maxLevel: 3 );
 
 		foreach (var upgradeData in UpgradeDatas)
 		{

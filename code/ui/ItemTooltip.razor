@@ -6,12 +6,18 @@
 <root>
 	@{
 		var manager = Manager.Instance;
+		var isPassive = manager.IsUpgradePassive(UpgradeType);
+		var amount_name = isPassive ? "LVL" : "AMMO";
+		var rarity = manager.GetRarityForUpgrade(UpgradeType);
 	}
 
 	<div class="top_row">
-		<div class="name">@($"{manager.GetNameForUpgrade(UpgradeType).ToUpper()}")</div>
-		<div class="rarity">@($"{manager.GetRarityForUpgrade(UpgradeType)}")</div>
-		<div class="level">@($"LVL {Level}/{manager.GetMaxLevelForUpgrade(UpgradeType)}")</div>
+		<div class="name_container">
+			<div class="icon">@($"{manager.GetIconForUpgrade(UpgradeType)}")</div>
+			<div class="name">@($"{manager.GetNameForUpgrade(UpgradeType).ToUpper()}")</div>
+		</div>
+		<div class="rarity" style="background-color:@(Manager.GetColorForRarity(rarity).WithAlpha(0.7f).Rgba);">@($"{manager.GetRarityForUpgrade(UpgradeType)}")</div>
+		<div class="level">@($"{amount_name} {Level}/{manager.GetMaxLevelForUpgrade(UpgradeType)}")</div>
 	</div>
 
 	<div class="description">
@@ -24,6 +30,7 @@
 	public UpgradeType UpgradeType { get; set; }
 	public int Level { get; set; }
 	public int PlayerNum { get; set; }
+	// public bool IsShopItem { get; set; }
 
 	protected override int BuildHash()
 	{

@@ -1,4 +1,4 @@
-using Sandbox;
+﻿using Sandbox;
 using Sandbox.Citizen;
 using Sandbox.UI;
 using System.Numerics;
@@ -39,7 +39,6 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	[Sync] public NetDictionary<UpgradeType, int> PassiveUpgrades { get; set; } = new();
 	[Sync] public NetDictionary<UpgradeType, int> ActiveUpgrades { get; set; } = new();
-	public const int MAX_UPGRADE_LEVEL = 10;
 
 	[Sync] public UpgradeType SelectedUpgradeType { get; set; }
 
@@ -797,10 +796,18 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		Log.Info( $"AdjustUpgradeLevel: {upgradeType}, {amount}" );
 
+		var isPassive = Manager.Instance.IsUpgradePassive( upgradeType );
+		var upgrades = isPassive ? PassiveUpgrades : ActiveUpgrades;
+
+		var maxLevel = Manager.Instance.GetMaxLevelForUpgrade( upgradeType );
+		var currLevel = upgrades.ContainsKey( upgradeType ) ? upgrades[upgradeType] : 0;
+
+		var icon = (currLevel >= maxLevel) ? "🚫" : Manager.Instance.GetIconForUpgrade( upgradeType );
+
 		Manager.Instance.SpawnFloaterText( 
 			Transform.Position.WithZ( 150f ),
 			//$"{(amount > 0 ? "+" : "-")}{Manager.Instance.GetFloaterTextForUpgrade( upgradeType )}", 
-			$"{Manager.Instance.GetIconForUpgrade( upgradeType )}",
+			$"{icon}",
 			lifetime: amount > 0 ? 1.5f : 1.1f, 
 			color: Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ) ), 
 			velocity: new Vector2( 0f, amount > 0 ? 35f : -65f ), 
@@ -813,12 +820,10 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( IsProxy )
 			return;
 
-		var upgrades = Manager.Instance.IsUpgradePassive(upgradeType) ? PassiveUpgrades : ActiveUpgrades;
-
 		if ( upgrades.ContainsKey(upgradeType) )
-			upgrades[upgradeType] = Math.Min( upgrades[upgradeType] + amount, MAX_UPGRADE_LEVEL );
+			upgrades[upgradeType] = Math.Min( upgrades[upgradeType] + amount, maxLevel );
 		else
-			upgrades.Add(upgradeType, Math.Min( amount, MAX_UPGRADE_LEVEL ) );
+			upgrades.Add(upgradeType, Math.Min( amount, maxLevel ) );
 
 		if ( upgrades[upgradeType] <= 0 )
 		{
@@ -842,20 +847,6 @@ public class PlayerController : Component, Component.ITriggerListener
 				}
 			}
 		}
-	}
-
-	[Broadcast]
-	public void SetUpgradeLevel( UpgradeType upgradeType, int amount )
-	{
-		if( IsProxy ) 
-			return;
-
-		var upgrades = Manager.Instance.IsUpgradePassive( upgradeType ) ? PassiveUpgrades : ActiveUpgrades;
-
-		if ( upgrades.ContainsKey( upgradeType ) )
-			upgrades[upgradeType] = Math.Min( upgrades[upgradeType] + amount, MAX_UPGRADE_LEVEL );
-		else
-			upgrades.Add( upgradeType, Math.Min( amount, MAX_UPGRADE_LEVEL ) );
 	}
 
 	[Broadcast]

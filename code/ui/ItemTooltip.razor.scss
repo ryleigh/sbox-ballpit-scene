@@ -1,6 +1,6 @@
 ItemTooltip {
     position: absolute;
-    width: 250px;
+    width: 270px;
     //height: 80px;
     //background-color: #00000011;
     background-color: #ffffff11;
@@ -19,13 +19,23 @@ ItemTooltip {
         align-items: center;
     }
 
-    .name {
+    .name_container {
         font-size: 16px;
         border-radius: 8px;
         padding: 4px;
-        margin: 2px;
-        background-color: #00000066;
+        margin: 4px;
+        background-color: #00000099;
         white-space: nowrap;
+    }
+
+    .name {
+        padding-right: 2px;
+    }
+
+    .icon {
+        font-family: W10Emoji;
+        font-size: 14px;
+        padding-right: 2px;
     }
 
     .rarity {
@@ -34,6 +44,8 @@ ItemTooltip {
         margin: 2px;
         background-color: #00000066;
         white-space: nowrap;
+        color: #ccc;
+        //font-size: 12px;
     }
 
     .level {
@@ -42,28 +54,15 @@ ItemTooltip {
         margin: 2px;
         background-color: #00000066;
         white-space: nowrap;
+        color: #aaa;
     }
 
     .description {
         border-radius: 8px;
-        padding: 4px;
+        color: #333;
+        padding: 6px;
         margin: 2px;
-        background-color: #00000066;
-    }
-
-    .icon {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        aspect-ratio: 1;
-        background-size: cover;
-        pointer-events: none;
-        font-family: W10Emoji;
-        text-align: center;
-        justify-content: center;
-        align-items: center;
-        font-size: 50px;
-        text-shadow: -8px 8px 4px #000000;
+        background-color: #ffffff55;
     }
     //.level {
     //    position: absolute;
