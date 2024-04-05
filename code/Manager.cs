@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
-public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge }
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 
 public struct UpgradeData
@@ -206,8 +206,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
 
-		player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 1 );
-		player.AdjustUpgradeLevel( UpgradeType.Volley, 3 );
+		player.AdjustUpgradeLevel( UpgradeType.Autoball, 1 );
+		player.AdjustUpgradeLevel( UpgradeType.Volley, 2 );
 
 		//if ( channel.IsHost )
 		//{
@@ -1111,8 +1111,9 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		CreateUpgrade( UpgradeType.MoveSpeed, "Cardio", "🏃🏻", "Move faster", UpgradeRarity.Common, maxLevel: 9, isPassive: true );
 		CreateUpgrade( UpgradeType.BumpStrength, "Muscles", "💪", "Bumping a ball increases its speed", UpgradeRarity.Uncommon, maxLevel: 9, isPassive: true );
+		CreateUpgrade( UpgradeType.Autoball, "Autoball", "⏲️", "Release a ball every few seconds", UpgradeRarity.Rare, maxLevel: 9, isPassive: true );
 
-		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls", UpgradeRarity.Common, maxLevel: 9 );
+		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls", UpgradeRarity.Common, maxLevel: 5 );
 		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you", UpgradeRarity.Rare, maxLevel: 9 );
 		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away", UpgradeRarity.Epic, maxLevel: 9 );
 		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy", UpgradeRarity.Uncommon, maxLevel: 3 );

@@ -46,15 +46,22 @@ ItemTooltip {
         white-space: nowrap;
         color: #ccc;
         //font-size: 12px;
+        box-shadow: -2px 2px 6px #00000066;
     }
 
-    .level {
+    .level_container {
         border-radius: 8px;
         padding: 4px;
         margin: 2px;
         background-color: #00000066;
         white-space: nowrap;
-        color: #aaa;
+    }
+
+    .level_label {
+        padding-right: 3px;
+    }
+
+    .level_amount {
     }
 
     .description {

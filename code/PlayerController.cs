@@ -58,6 +58,8 @@ public class PlayerController : Component, Component.ITriggerListener
 	private float _dashTime;
 	private Vector2 _dashVelocity;
 
+	private float _autoballTimer;
+
 	public const float BUMP_SPEED_INCREASE_FACTOR_MAX = 1.2f;
 
 	[Sync] public int CurrRerollPrice { get; set; }
@@ -193,9 +195,9 @@ public class PlayerController : Component, Component.ITriggerListener
 
 			CheckBoundsPlaying();
 
-			// collide with balls
 			if ( Manager.Instance.GamePhase == GamePhase.RoundActive )
 			{
+				// collide with balls
 				foreach ( var ball in Scene.GetAllComponents<Ball>() )
 				{
 					if ( !ball.IsActive )
@@ -230,6 +232,22 @@ public class PlayerController : Component, Component.ITriggerListener
 						{
 							HitOpponentBall( ball );
 						}
+					}
+				}
+
+				// autoball upgrade
+				var autoballLevel = GetUpgradeLevel( UpgradeType.Autoball );
+				if ( autoballLevel > 0 )
+				{
+					_autoballTimer += Time.Delta;
+					float reqTime = Utils.Map( autoballLevel, 1, Manager.Instance.GetMaxLevelForUpgrade( UpgradeType.Autoball ), 5f, 1f );
+					if ( _autoballTimer > reqTime )
+					{
+						var speed = 85f;
+						var dir = Utils.GetRandomVector();
+						Manager.Instance.SpawnBall( Pos2D + dir * 15f, dir * speed, PlayerNum );
+
+						_autoballTimer = 0f;
 					}
 				}
 			}
@@ -800,7 +818,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		var maxLevel = Manager.Instance.GetMaxLevelForUpgrade( upgradeType );
 		var currLevel = upgrades.ContainsKey( upgradeType ) ? upgrades[upgradeType] : 0;
 
-		var icon = (currLevel >= maxLevel) ? "🚫" : Manager.Instance.GetIconForUpgrade( upgradeType );
+		var icon = (currLevel >= maxLevel && amount > 0) ? "🚫" : Manager.Instance.GetIconForUpgrade( upgradeType );
 
 		Manager.Instance.SpawnFloaterText( 
 			Transform.Position.WithZ( 150f ),
