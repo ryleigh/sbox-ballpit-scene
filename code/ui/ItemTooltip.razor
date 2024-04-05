@@ -1,0 +1,27 @@
+@using Sandbox;
+@using Sandbox.UI;
+@inherits Panel
+@attribute [StyleSheet("ItemTooltip.razor.scss")]
+
+<root>
+	@{
+		var manager = Manager.Instance;
+	}
+
+	<div>
+		@($"{manager.GetNameForUpgrade(UpgradeType).ToUpper()}\n{manager.GetRarityForUpgrade(UpgradeType)}\n\n{manager.GetDescriptionForUpgrade(UpgradeType)}")
+	</div>
+</root>
+
+@code
+{
+	public UpgradeType UpgradeType { get; set; }
+	public int Level { get; set; }
+	public int PlayerNum { get; set; }
+
+	protected override int BuildHash()
+	{
+		var mousePos = Mouse.Position;
+		return System.HashCode.Combine(UpgradeType, Level, PlayerNum, mousePos);
+	}
+}

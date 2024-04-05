@@ -77,6 +77,10 @@
         {
           "__type": "Hud",
           "__guid": "ea357f33-9a78-459e-b62d-e9eecc0df2ef"
+        },
+        {
+          "__type": "Scoreboard",
+          "__guid": "8453d7d8-37a7-4b5c-bb8b-8ec1b8c42aac"
         }
       ]
     },
@@ -997,7 +1001,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-02T22:46:30.6929393-07:00",
+  "LastSaved": "2024-04-04T04:55:56.6906228-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

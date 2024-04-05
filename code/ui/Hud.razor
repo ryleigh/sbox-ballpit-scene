@@ -121,21 +121,19 @@
 		if(manager.HoveredObject.Tags.Has("item"))
 		{
 			var pos = Scene.Camera.PointToScreenNormal(manager.HoveredObject.Transform.Position);
-			var upgradeType = manager.HoveredObject.Components.Get<ShopItem>().UpgradeType;
+			var shopItem = manager.HoveredObject.Components.Get<ShopItem>();
 
-			<div class="item_description" style="left:@(pos.x * 100f + (pos.x < 0.5f ? 3f : -13.5f))%; top:@(pos.y * 100f - 4f)%;">
-				@($"{manager.GetNameForUpgrade(upgradeType).ToUpper()}\n{manager.GetRarityForUpgrade(upgradeType)}\n\n{manager.GetDescriptionForUpgrade(upgradeType)}")
-			</div>
+			<ItemTooltip UpgradeType=@shopItem.UpgradeType Level=@shopItem.NumLevels PlayerNum=@shopItem.PlayerNum style="left:@(Mouse.Position.x * Panel.ScaleFromScreen + 10)px; top:@(Mouse.Position.y * Panel.ScaleFromScreen - 100)px;" />
 		}
 	}
 
 	@if(manager.HoveredUpgradeType != UpgradeType.None)
 	{
 		//Log.Info($"{manager.HoveredUpgradeType} - {Mouse.Position}");
+		var player = manager.GetPlayer(manager.HoveredUpgradePlayerNum);
+		var level = player?.GetUpgradeLevel(manager.HoveredUpgradeType) ?? 1;
 
-		<div class="item_description" style="left:@(Mouse.Position.x * Panel.ScaleFromScreen + 10)px; top:@(Mouse.Position.y * Panel.ScaleFromScreen - 100)px;">
-			@($"{manager.GetNameForUpgrade(manager.HoveredUpgradeType).ToUpper()}\n{manager.GetRarityForUpgrade(manager.HoveredUpgradeType)}\n\n{manager.GetDescriptionForUpgrade(manager.HoveredUpgradeType)}")
-		</div>
+		<ItemTooltip UpgradeType=@manager.HoveredUpgradeType Level=@level PlayerNum=@manager.HoveredUpgradePlayerNum style="left:@(Mouse.Position.x * Panel.ScaleFromScreen + 10)px; top:@(Mouse.Position.y * Panel.ScaleFromScreen - 100)px;" />
 	}
 
 	@{
@@ -211,12 +209,12 @@
 		var upgrades1 = player1?.GetUpgradeHash() ?? 0;
 		var buyPhaseTimer = manager.GamePhase == GamePhase.BuyPhase ? MathX.FloorToInt(manager.BuyPhaseDuration - manager.TimeSincePhaseChange) : 0;
 		var newMatchTimer = manager.GamePhase == GamePhase.StartingNewMatch ? MathX.CeilToInt(Manager.START_NEW_MATCH_DELAY - manager.TimeSincePhaseChange) : 0;
-		var mouseHoverUpgradePos = manager.HoveredUpgradeType != UpgradeType.None ? Mouse.Position : Vector2.Zero;
+		var tooltipPos = (manager.HoveredObject != null || manager.HoveredUpgradeType != UpgradeType.None) ? Mouse.Position : Vector2.Zero;
 
 		return HashCode.Combine(
 			HashCode.Combine(playerName0, playerName1, hp0, hp1, Input.Down("Score")),
 			HashCode.Combine(money0, money1, upgrades0, upgrades1, manager.RoundNum),
-			HashCode.Combine(manager.GamePhase, buyPhaseTimer, newMatchTimer, manager.HoveredObject, mouseHoverUpgradePos)
+			HashCode.Combine(manager.GamePhase, buyPhaseTimer, newMatchTimer, manager.HoveredObject, tooltipPos)
 		);
 	}
 }

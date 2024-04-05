@@ -103,6 +103,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public GameObject HoveredObject { get; private set; }
 	public UpgradeType HoveredUpgradeType { get; set; }
+	public int HoveredUpgradePlayerNum { get; set; }
 	public Vector2 HoveredUpgradePos { get; set; }
 
 	[Sync] public float CenterLineOffset { get; set; }
