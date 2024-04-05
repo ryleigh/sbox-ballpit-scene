@@ -8,8 +8,14 @@
 		var manager = Manager.Instance;
 	}
 
-	<div>
-		@($"{manager.GetNameForUpgrade(UpgradeType).ToUpper()}\n{manager.GetRarityForUpgrade(UpgradeType)}\n\n{manager.GetDescriptionForUpgrade(UpgradeType)}")
+	<div class="top_row">
+		<div class="name">@($"{manager.GetNameForUpgrade(UpgradeType).ToUpper()}")</div>
+		<div class="rarity">@($"{manager.GetRarityForUpgrade(UpgradeType)}")</div>
+		<div class="level">@($"LVL {Level}/{manager.GetMaxLevelForUpgrade(UpgradeType)}")</div>
+	</div>
+
+	<div class="description">
+		@($"{manager.GetDescriptionForUpgrade(UpgradeType)}")
 	</div>
 </root>
 

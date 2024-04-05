@@ -97,7 +97,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		//}
 
 		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
-		//Gizmo.Draw.Text( $"{Velocity.Length}", new global::Transform( Transform.Position ) );
+		//Gizmo.Draw.Text( $"{GetUpgradeLevel(UpgradeType.MoveSpeed)}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity );
 
@@ -794,6 +794,8 @@ public class PlayerController : Component, Component.ITriggerListener
 	{
 		if ( amount == 0 )
 			return;
+
+		Log.Info( $"AdjustUpgradeLevel: {upgradeType}, {amount}" );
 
 		Manager.Instance.SpawnFloaterText( 
 			Transform.Position.WithZ( 150f ),

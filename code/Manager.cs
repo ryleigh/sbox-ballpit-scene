@@ -19,15 +19,17 @@ public struct UpgradeData
 	public string icon;
 	public string description;
 	public UpgradeRarity rarity;
+	public int maxLevel;
 	public bool isPassive;
 	public bool useableInBuyPhase;
 
-	public UpgradeData( string _name, string _icon, string _description, UpgradeRarity _rarity, bool _isPassive, bool _usableInBuyPhase )
+	public UpgradeData( string _name, string _icon, string _description, UpgradeRarity _rarity, int _maxLevel, bool _isPassive, bool _usableInBuyPhase )
 	{
 		name = _name;
 		icon = _icon;
 		description = _description;
 		rarity = _rarity;
+		maxLevel = _maxLevel;
 		isPassive = _isPassive;
 		useableInBuyPhase = _usableInBuyPhase;
 	}
@@ -182,19 +184,19 @@ public sealed class Manager : Component, Component.INetworkListener
 		clothing.Deserialize( channel.GetUserData( "avatar" ) );
 		clothing.Apply( playerObj.Components.GetInChildren<SkinnedModelRenderer>() );
 
-		if ( !DoesPlayerExist0 )
-		{
-			Player0 = player;
-			PlayerId0 = player.GameObject.Id;
-			DoesPlayerExist0 = true;
-			player.PlayerNum = 0;
-		}
-		else if ( !DoesPlayerExist1 )
+		if ( !DoesPlayerExist1 )
 		{
 			Player1 = player;
 			PlayerId1 = player.GameObject.Id;
 			DoesPlayerExist1 = true;
 			player.PlayerNum = 1;
+		}
+		else if( !DoesPlayerExist0 )
+		{
+			Player0 = player;
+			PlayerId0 = player.GameObject.Id;
+			DoesPlayerExist0 = true;
+			player.PlayerNum = 0;
 		}
 		else
 		{
@@ -204,8 +206,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
 
-		//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 1 );
-		//player.AdjustUpgradeLevel( UpgradeType.ShootBalls, 3 );
+		player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 1 );
+		player.AdjustUpgradeLevel( UpgradeType.Volley, 3 );
 
 		//if ( channel.IsHost )
 		//{
@@ -1057,6 +1059,14 @@ public sealed class Manager : Component, Component.INetworkListener
 		return UpgradeRarity.Common;
 	}
 
+	public int GetMaxLevelForUpgrade( UpgradeType upgradeType )
+	{
+		if ( UpgradeDatas.ContainsKey( upgradeType ) )
+			return UpgradeDatas[upgradeType].maxLevel;
+
+		return 0;
+	}
+
 	public bool IsUpgradePassive( UpgradeType upgradeType )
 	{
 		if ( UpgradeDatas.ContainsKey( upgradeType ) )
@@ -1099,19 +1109,19 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void GenerateUpgrades()
 	{
-		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster.", UpgradeRarity.Common, isPassive: true );
-		CreateUpgrade( UpgradeType.BumpStrength, "Bump Strength", "💪", "Bumping a ball increases its speed.", UpgradeRarity.Uncommon, isPassive: true );
+		CreateUpgrade( UpgradeType.MoveSpeed, "Move Speed", "🏃🏻", "Move faster.", UpgradeRarity.Common, maxLevel: 9, isPassive: true );
+		CreateUpgrade( UpgradeType.BumpStrength, "Bump Strength", "💪", "Bumping a ball increases its speed.", UpgradeRarity.Uncommon, maxLevel: 9, isPassive: true );
 
-		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls.", UpgradeRarity.Common );
-		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you.", UpgradeRarity.Rare );
-		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away.", UpgradeRarity.Epic );
-		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy.", UpgradeRarity.Uncommon );
-		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", "Teleport to your cursor.", UpgradeRarity.Uncommon, useableInBuyPhase: true );
-		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", "Redirect all balls randomly.", UpgradeRarity.Uncommon );
-		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", "Briefly slow time.", UpgradeRarity.Common );
-		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", "Move quicky toward cursor.", UpgradeRarity.Common, useableInBuyPhase: true );
-		CreateUpgrade( UpgradeType.Redirect, "Redirect", "⤴️", "All your balls move in the direction from you to cursor.", UpgradeRarity.Rare );
-		CreateUpgrade( UpgradeType.Converge, "Converge", "📍", "Your balls target enemy.", UpgradeRarity.Epic );
+		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls.", UpgradeRarity.Common, maxLevel: 9 );
+		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you.", UpgradeRarity.Rare, maxLevel: 9 );
+		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away.", UpgradeRarity.Epic, maxLevel: 9 );
+		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy.", UpgradeRarity.Uncommon, maxLevel: 9 );
+		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", "Teleport to your cursor.", UpgradeRarity.Uncommon, maxLevel: 9, useableInBuyPhase: true );
+		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", "Redirect all balls randomly.", UpgradeRarity.Uncommon, maxLevel: 9 );
+		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", "Briefly slow time.", UpgradeRarity.Common, maxLevel: 9 );
+		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", "Move quicky toward cursor.", UpgradeRarity.Common, maxLevel: 9, useableInBuyPhase: true );
+		CreateUpgrade( UpgradeType.Redirect, "Redirect", "⤴️", "All your balls move in the direction from you to cursor.", UpgradeRarity.Rare, maxLevel: 9 );
+		CreateUpgrade( UpgradeType.Converge, "Converge", "📍", "Your balls target enemy.", UpgradeRarity.Epic, maxLevel: 9 );
 
 		foreach (var upgradeData in UpgradeDatas)
 		{
@@ -1166,9 +1176,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		return UpgradeRarity.Common;
 	}
 
-	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, UpgradeRarity rarity, bool isPassive = false, bool useableInBuyPhase = false)
+	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, UpgradeRarity rarity, int maxLevel, bool isPassive = false, bool useableInBuyPhase = false)
 	{
-		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, description, rarity, isPassive, useableInBuyPhase));
+		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, description, rarity, maxLevel, isPassive, useableInBuyPhase));
 	}
 
 	UpgradeType GetRandomPickupType()
