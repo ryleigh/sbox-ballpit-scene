@@ -14,8 +14,8 @@
 
 	@{
 		var rarity = Manager.Instance.GetRarityForUpgrade(UpgradeType);
-		var isSelected = player.SelectedUpgradeType == UpgradeType;
-		var isHovered = Manager.Instance.HoveredUpgradeType == UpgradeType;
+		var isSelected = player.SelectedUpgradeType == UpgradeType && player.PlayerNum == PlayerNum;
+		var isHovered = Manager.Instance.HoveredUpgradeType == UpgradeType && Manager.Instance.HoveredUpgradePlayerNum == PlayerNum;
 	}
 
 	<!-- <div class="bg" style="background-image: url(@($"materials/icons/{Globals.GetIconForUpgrade(UpgradeType)}.png"));"></div> -->

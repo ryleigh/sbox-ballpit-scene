@@ -794,8 +794,6 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( amount == 0 )
 			return;
 
-		Log.Info( $"AdjustUpgradeLevel: {upgradeType}, {amount}" );
-
 		var isPassive = Manager.Instance.IsUpgradePassive( upgradeType );
 		var upgrades = isPassive ? PassiveUpgrades : ActiveUpgrades;
 
