@@ -21,37 +21,7 @@ Hud {
 		//white-space: pre;
 		//font-family: "Discoteca Rounded";
 		//font-family: "Roundy Rainbows";
-		font-family: "Budokan Rounded";
-	}
-
-	.bottom_row {
-		position: absolute;
-		width: 40%;
-		//background-color: #00ff0033;
-	}
-
-	.player_name {
-		font-size: 25px;
-		font-family: Poppins;
-		//background-color: #00665511;
-		//font-family: "Budokan Rounded";
-		font-family: Poppins;
-		font-weight: 700;
-	}
-
-	.player_avatar {
-		width: 32px;
-		height: 32px;
-		background-position: center;
-		background-size: cover;
-		border-radius: 10px;
-		margin-right: 4px;
-	}
-
-	.player_hp {
-		font-size: 25px;
-		color: #ffffff;
-		//background-color: #0000ff11;
+		font-family: Budokan Rounded;
 	}
 
 	.upgrades_passive {
@@ -84,6 +54,7 @@ Hud {
 		pointer-events: all;
 		opacity: 0.7;
 		font-family: "Budokan Rounded";
+		border-radius: 8px;
 
 		&:hover {
 			background-color: #153582;
@@ -110,6 +81,7 @@ Hud {
 		pointer-events: all;
 		opacity: 0.7;
 		font-family: "Budokan Rounded";
+		border-radius: 8px;
 
 		&:hover {
 			background-color: #153582;
@@ -126,10 +98,12 @@ Hud {
 
 	.tab_indicator {
 		position: absolute;
-		left: 0px;
-		top: 0px;
-		width: 80px;
-		height: 30px;
+		left: -6px;
+		top: -6px;
+		width: 84px;
+		height: 34px;
+		padding-left: 4px;
+		padding-top: 4px;
 		background-color: #333;
 		justify-content: center;
 		align-items: center;
@@ -138,5 +112,6 @@ Hud {
 		pointer-events: all;
 		opacity: 0.7;
 		font-family: "Budokan Rounded";
+		border-radius: 6px;
 	}
 }

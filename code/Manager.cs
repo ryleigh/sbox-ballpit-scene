@@ -192,24 +192,24 @@ public sealed class Manager : Component, Component.INetworkListener
 		clothing.Deserialize( channel.GetUserData( "avatar" ) );
 		clothing.Apply( playerObj.Components.GetInChildren<SkinnedModelRenderer>() );
 
-		//if ( !DoesPlayerExist0 )
-		//{
-		//	Player0 = player;
-		//	PlayerId0 = player.GameObject.Id;
-		//	DoesPlayerExist0 = true;
-		//	player.PlayerNum = 0;
-		//}
-		//else if ( !DoesPlayerExist1 )
-		//{
-		//	Player1 = player;
-		//	PlayerId1 = player.GameObject.Id;
-		//	DoesPlayerExist1 = true;
-		//	player.PlayerNum = 1;
-		//}
-		//else
-		//{
-		player.IsSpectator = true;
-		//}
+		if ( !DoesPlayerExist0 )
+		{
+			Player0 = player;
+			PlayerId0 = player.GameObject.Id;
+			DoesPlayerExist0 = true;
+			player.PlayerNum = 0;
+		}
+		else if ( !DoesPlayerExist1 )
+		{
+			Player1 = player;
+			PlayerId1 = player.GameObject.Id;
+			DoesPlayerExist1 = true;
+			player.PlayerNum = 1;
+		}
+		else
+		{
+			player.IsSpectator = true;
+		}
 
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
@@ -820,6 +820,9 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		Player0?.Respawn();
 		Player1?.Respawn();
+
+		Player0?.ClearStats();
+		Player1?.ClearStats();
 
 		DespawnBalls();
 		DestroyShopStuff();

@@ -1,0 +1,64 @@
+PlayerBar {
+    position: absolute;
+    width: 270px;
+    height: 82px;
+    //height: 80px;
+    //background-color: #00000011;
+    background-color: #ffffff11;
+    font-size: 16px;
+    color: #ffffff;
+    padding: 4px;
+    border-radius: 8px;
+    //backdrop-filter: blur( 5px );
+    //box-shadow: -5px 5px 16px 4px #00000033;
+    flex-direction: column;
+    font-family: "Budokan Rounded";
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+        background-position: center;
+        background-size: cover;
+        border-radius: 10px;
+        margin-right: 4px;
+    }
+
+    .name {
+        font-size: 25px;
+        font-family: Poppins;
+        //background-color: #00665511;
+        //font-family: Budokan Rounded;
+        font-weight: 700;
+    }
+
+    .lower_row {
+        gap: 20px;
+    }
+
+    .money_icon {
+        font-size: 26px;
+        font-family: W10Emoji;
+        //margin-bottom: 14px;
+        text-stroke: 4px black;
+    }
+
+    .money {
+        font-size: 30px;
+        font-family: Budokan Rounded;
+        //padding-right: 16px;
+        //padding-top: 2px;
+        color: #ffff00;
+        text-stroke: 12px black;
+    }
+
+    .hp_container {
+
+    }
+
+    .hp {
+        font-size: 25px;
+        color: #ffffff;
+        text-stroke: 6px black;
+        //background-color: #0000ff11;
+    }
+}

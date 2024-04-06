@@ -1,0 +1,44 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@inherits Panel
+@attribute [StyleSheet("PlayerBar.razor.scss")]
+
+<root>
+	@{
+		var playerNum = Player.PlayerNum;
+	}
+
+	<div style="flex-direction: @(playerNum == 0 ? "row" : "row-reverse");">
+		<div class="avatar" style="background-image: url( avatar:@Connection.SteamId )"></div>
+		<div class="name" style="color: #0000aa;">@($"{Connection.DisplayName}")</div>
+	</div>
+
+	<div class="lower_row" style="flex-direction: @(playerNum == 0 ? "row" : "row-reverse");">
+		<div style="flex-direction: row;">
+			<div class="money_icon" style="color: #fff;">@($"💲")</div>
+			<div class="money">@($"{Player.Money}")</div>
+		</div>
+
+		<div class="hp_container" style="flex-direction: @(playerNum == 0 ? "row" : "row-reverse");">
+			@for(int i = 0; i < Player.MaxHP; i++)
+			{
+				<div class="hp" style="opacity:@(Player.HP > i ? 1f : 0.15f);">@(Player.HP > i ? "❤️" : "🖤")</div>
+			}
+		</div>
+	</div>
+</root>
+
+@code
+{
+	public Connection Connection { get; set; }
+	public PlayerController Player { get; set; }
+	// public bool IsShopItem { get; set; }
+
+	protected override int BuildHash()
+	{
+		if (Player == null || Connection == null)
+			return 0;
+
+		return System.HashCode.Combine(Player.HP, Player.Money, Connection.DisplayName);
+	}
+}
