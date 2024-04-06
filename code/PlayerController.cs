@@ -879,7 +879,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		NumShopItems = 4;
 		CurrRerollPrice = 1;
 
-		Money = 18;
+		//Money = 18;
 	}
 
 	public int GetUpgradeHash()

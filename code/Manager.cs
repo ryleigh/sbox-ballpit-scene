@@ -172,7 +172,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Repel, numLevels: 1, price: 0 );
 
-		StartBuyPhase();
+		//StartBuyPhase();
 		//StartNewMatch();
 		//StartNewRound();
 	}
@@ -181,7 +181,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		//Log.Info( $"Player '{channel.DisplayName}' is becoming active (local = {channel == Connection.Local}) (host = {channel.IsHost})" );
 
-		var playerObj = PlayerPrefab.Clone( new Vector3(0f, 500f, 500f));
+		var playerObj = PlayerPrefab.Clone( new Vector3( 0f, 500f, 500f ) );
 		var player = playerObj.Components.Get<PlayerController>();
 
 		//var copter = copterObj.Components.Get<Copter>();
@@ -192,30 +192,30 @@ public sealed class Manager : Component, Component.INetworkListener
 		clothing.Deserialize( channel.GetUserData( "avatar" ) );
 		clothing.Apply( playerObj.Components.GetInChildren<SkinnedModelRenderer>() );
 
-		if ( !DoesPlayerExist1 )
-		{
-			Player1 = player;
-			PlayerId1 = player.GameObject.Id;
-			DoesPlayerExist1 = true;
-			player.PlayerNum = 1;
-		}
-		else if( !DoesPlayerExist0 )
-		{
-			Player0 = player;
-			PlayerId0 = player.GameObject.Id;
-			DoesPlayerExist0 = true;
-			player.PlayerNum = 0;
-		}
-		else
-		{
-			player.IsSpectator = true;
-		}
+		//if ( !DoesPlayerExist0 )
+		//{
+		//	Player0 = player;
+		//	PlayerId0 = player.GameObject.Id;
+		//	DoesPlayerExist0 = true;
+		//	player.PlayerNum = 0;
+		//}
+		//else if ( !DoesPlayerExist1 )
+		//{
+		//	Player1 = player;
+		//	PlayerId1 = player.GameObject.Id;
+		//	DoesPlayerExist1 = true;
+		//	player.PlayerNum = 1;
+		//}
+		//else
+		//{
+		player.IsSpectator = true;
+		//}
 
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
 
-		player.AdjustUpgradeLevel( UpgradeType.Autoball, 1 );
-		player.AdjustUpgradeLevel( UpgradeType.Volley, 2 );
+		//player.AdjustUpgradeLevel( UpgradeType.Autoball, 1 );
+		//player.AdjustUpgradeLevel( UpgradeType.Volley, 2 );
 
 		//if ( channel.IsHost )
 		//{
@@ -227,10 +227,10 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		base.OnUpdate();
 
-		DebugDisplay();
+		//DebugDisplay();
 
-		var targetingTrace = Scene.Trace.Ray( Camera.ScreenPixelToRay( Mouse.Position), 1000f ).Run();
-		if(targetingTrace.Hit)
+		var targetingTrace = Scene.Trace.Ray( Camera.ScreenPixelToRay( Mouse.Position ), 1000f ).Run();
+		if ( targetingTrace.Hit )
 		{
 			MouseWorldPos = (Vector2)targetingTrace.HitPosition;
 		}
@@ -240,9 +240,9 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		SlidingGround.Transform.Position = new Vector3( CenterLineOffset, 0f, 0f );
 
-		if (IsSlowmo)
+		if ( IsSlowmo )
 		{
-			if(_realTimeSinceSlowmoStarted > _slowmoTime)
+			if ( _realTimeSinceSlowmoStarted > _slowmoTime )
 			{
 				IsSlowmo = false;
 				Scene.TimeScale = 1f;
@@ -277,12 +277,12 @@ public sealed class Manager : Component, Component.INetworkListener
 				break;
 			case GamePhase.RoundActive:
 				// pickups
-				if( _timeSincePickupSpawn > _pickupSpawnDelay)
+				if ( _timeSincePickupSpawn > _pickupSpawnDelay )
 				{
-					var connection = GetConnection(playerNum: Game.Random.Int( 0, 1 ) );
-					if(connection != null)
+					var connection = GetConnection( playerNum: Game.Random.Int( 0, 1 ) );
+					if ( connection != null )
 					{
-						if(Game.Random.Float(0f, 1f) < 0.55f)
+						if ( Game.Random.Float( 0f, 1f ) < 0.55f )
 						{
 							SpawnPickupItem( connection, GetRandomPickupType(), 1, startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 						}
@@ -292,7 +292,7 @@ public sealed class Manager : Component, Component.INetworkListener
 						}
 
 						_timeSincePickupSpawn = 0f;
-						_pickupSpawnDelay = Game.Random.Float( 3.5f, 30f ) * Utils.Map(TimeSincePhaseChange, 0f, 300f, 1f, 0.4f, EasingType.SineIn);
+						_pickupSpawnDelay = Game.Random.Float( 3.5f, 30f ) * Utils.Map( TimeSincePhaseChange, 0f, 300f, 1f, 0.4f, EasingType.SineIn );
 					}
 				}
 
@@ -316,10 +316,10 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( IsProxy )
 			return;
 
-		switch (GamePhase)
+		switch ( GamePhase )
 		{
 			case GamePhase.WaitingForPlayers:
-				if(DoesPlayerExist0 && DoesPlayerExist1)
+				if ( DoesPlayerExist0 && DoesPlayerExist1 )
 					StartNewMatch();
 				break;
 			case GamePhase.StartingNewMatch:
@@ -329,7 +329,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			case GamePhase.RoundActive:
 				break;
 			case GamePhase.AfterRoundDelay:
-				if( !_hasIncrementedScore && TimeSincePhaseChange > BETWEEN_ROUNDS_DELAY / 2f )
+				if ( !_hasIncrementedScore && TimeSincePhaseChange > BETWEEN_ROUNDS_DELAY / 2f )
 				{
 					ChangeScore( _roundWinnerPlayerNum );
 					_targetCenterLineOffset = Utils.Map( CurrentScore, -SCORE_NEEDED_TO_WIN, SCORE_NEEDED_TO_WIN, 95f, -95f );
@@ -337,16 +337,16 @@ public sealed class Manager : Component, Component.INetworkListener
 
 					DestroyPickups();
 
-					if( Math.Abs(CurrentScore) < SCORE_NEEDED_TO_WIN )
+					if ( Math.Abs( CurrentScore ) < SCORE_NEEDED_TO_WIN )
 					{
 						SpawnScoreText( _roundWinnerPlayerNum, CurrentScore );
 
 						var winningPlayer = GetPlayer( _roundWinnerPlayerNum );
 						if ( winningPlayer != null )
-							SpawnMoneyPickup( GetConnection( winningPlayer.PlayerNum ), numLevels: 10, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (winningPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float(-5f, 5f), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
+							SpawnMoneyPickup( GetConnection( winningPlayer.PlayerNum ), numLevels: 10, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (winningPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
 
 						var deadPlayer = GetPlayer( Globals.GetOpponentPlayerNum( _roundWinnerPlayerNum ) );
-						if(deadPlayer != null)
+						if ( deadPlayer != null )
 							SpawnMoneyPickup( GetConnection( deadPlayer.PlayerNum ), numLevels: 5, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (deadPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
 					}
 				}
@@ -355,7 +355,7 @@ public sealed class Manager : Component, Component.INetworkListener
 				{
 					if ( DoesPlayerExist0 && CurrentScore >= SCORE_NEEDED_TO_WIN )
 						Victory( winningPlayerNum: 0 );
-					else if ( DoesPlayerExist1 && CurrentScore <= -SCORE_NEEDED_TO_WIN)
+					else if ( DoesPlayerExist1 && CurrentScore <= -SCORE_NEEDED_TO_WIN )
 						Victory( winningPlayerNum: 1 );
 					else
 						StartBuyPhase();
@@ -400,7 +400,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	}
 
 	[Broadcast]
-	public void PlayerDied(Guid id)
+	public void PlayerDied( Guid id )
 	{
 		Slowmo( 0.125f, 2f, EasingType.SineOut );
 
@@ -419,10 +419,10 @@ public sealed class Manager : Component, Component.INetworkListener
 		FinishRound();
 	}
 
-	void ChangeScore(int winningPlayerNum)
+	void ChangeScore( int winningPlayerNum )
 	{
 		if ( winningPlayerNum == 0 )
-			CurrentScore = Math.Min(CurrentScore + 1, SCORE_NEEDED_TO_WIN);
+			CurrentScore = Math.Min( CurrentScore + 1, SCORE_NEEDED_TO_WIN );
 		else
 			CurrentScore = Math.Max( CurrentScore - 1, -SCORE_NEEDED_TO_WIN );
 	}
@@ -465,7 +465,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		_hasIncrementedScore = false;
 	}
 
-	void Victory(int winningPlayerNum)
+	void Victory( int winningPlayerNum )
 	{
 		PlayVictoryEffects();
 
@@ -526,14 +526,14 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 	}
 
-	void CreateShopItems(int playerNum, int numItems)
+	void CreateShopItems( int playerNum, int numItems )
 	{
-		for(int i = 0; i < numItems; i++)
+		for ( int i = 0; i < numItems; i++ )
 		{
 			var rarity = GetRandomRarity();
 			var upgradeType = GetRandomUpgradeType( rarity );
-			int numLevels = GetRandomAmountForUpgrade(upgradeType);
-			int pricePerLevel = GetRandomPricePerAmountForUpgrade(upgradeType);
+			int numLevels = GetRandomAmountForUpgrade( upgradeType );
+			int pricePerLevel = GetRandomPricePerAmountForUpgrade( upgradeType );
 			var price = numLevels * pricePerLevel;
 
 			// bulk discount
@@ -568,7 +568,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		var pos = GetPosForShopItem( playerNum, itemNum );
 
-		var shopItemObj = IsUpgradePassive(upgradeType)
+		var shopItemObj = IsUpgradePassive( upgradeType )
 			? ShopItemPassivePrefab.Clone( new Vector3( pos.x, pos.y, 0f ) )
 			: ShopItemPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
 
@@ -576,7 +576,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		shopItemObj.Components.Get<ShopItem>().Init( upgradeType, numLevels, price, playerNum );
 	}
 
-	Vector2 GetPosForShopItem(int playerNum, int itemNum)
+	Vector2 GetPosForShopItem( int playerNum, int itemNum )
 	{
 		var topPos = new Vector2( -215f * (playerNum == 0 ? 1f : -1f), 65f );
 		var interval = 41f;
@@ -595,7 +595,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		var pos = new Vector2( 0f, 150f * (startAtTop ? 1f : -1f) );
 
-		var pickupItemObj = PickupItemPrefab.Clone( new Vector3( pos.x, pos.y, 120f * (startAtTop ? 1f : -1f)) );
+		var pickupItemObj = PickupItemPrefab.Clone( new Vector3( pos.x, pos.y, 120f * (startAtTop ? 1f : -1f) ) );
 		pickupItemObj.NetworkSpawn( connection );
 		pickupItemObj.Components.Get<PickupItem>().Init( upgradeType, numLevels, startAtTop );
 	}
@@ -624,7 +624,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		_numBuyPhaseSkips++;
 
-		if( _numBuyPhaseSkips >= NumActivePlayers )
+		if ( _numBuyPhaseSkips >= NumActivePlayers )
 		{
 			FinishBuyPhase();
 		}
@@ -636,7 +636,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	}
 
 	[Broadcast]
-	public void RerollButtonHit(int playerNum)
+	public void RerollButtonHit( int playerNum )
 	{
 		if ( IsProxy || GamePhase != GamePhase.BuyPhase )
 			return;
@@ -653,27 +653,27 @@ public sealed class Manager : Component, Component.INetworkListener
 		RespawnRerollButton( playerNum );
 	}
 
-	async void RespawnRerollButton(int playerNum)
+	async void RespawnRerollButton( int playerNum )
 	{
 		await Task.Delay( 1000 );
 
-		if( GamePhase == GamePhase.BuyPhase)
+		if ( GamePhase == GamePhase.BuyPhase )
 			CreateRerollButton( playerNum );
 	}
 
-	void DestroyShopItems(int playerNum)
+	void DestroyShopItems( int playerNum )
 	{
 		foreach ( var shopItem in Scene.GetAllComponents<ShopItem>() )
 		{
-			if((playerNum == 0 && shopItem.Transform.Position.x < 0f) || (playerNum == 1 && shopItem.Transform.Position.x > 0f) )
+			if ( (playerNum == 0 && shopItem.Transform.Position.x < 0f) || (playerNum == 1 && shopItem.Transform.Position.x > 0f) )
 				shopItem.DestroyButton();
 		}
 	}
 
-	public void SpawnBall(Vector2 pos, Vector2 velocity, int playerNum)
+	public void SpawnBall( Vector2 pos, Vector2 velocity, int playerNum )
 	{
 		var height = (playerNum == 0 && pos.x > CenterLineOffset || playerNum == 1 && pos.x < CenterLineOffset) ? BALL_HEIGHT_OPPONENT : BALL_HEIGHT_SELF;
-		var ballObj = BallPrefab.Clone( new Vector3(pos.x, pos.y, height ) );
+		var ballObj = BallPrefab.Clone( new Vector3( pos.x, pos.y, height ) );
 		var ball = ballObj.Components.Get<Ball>();
 
 		ball.Velocity = velocity;
@@ -694,7 +694,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		ballObj.Network.SetOrphanedMode( NetworkOrphaned.Destroy );
 
 		var connection = GetConnection( side );
-		if(connection != null)
+		if ( connection != null )
 		{
 			ballObj.NetworkSpawn( connection );
 		}
@@ -707,9 +707,9 @@ public sealed class Manager : Component, Component.INetworkListener
 	}
 
 	[Broadcast]
-	public void SetPlayerActive(int playerNum, Guid id)
+	public void SetPlayerActive( int playerNum, Guid id )
 	{
-		if (IsProxy)
+		if ( IsProxy )
 			return;
 
 		if ( (DoesPlayerExist0 && PlayerId0 == id) || (DoesPlayerExist0 && PlayerId0 == id) )
@@ -746,40 +746,40 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Broadcast]
 	public void PlayerHit( Guid id )
 	{
-		Slowmo(0.025f, 1f, EasingType.SineOut);
+		Slowmo( 0.025f, 1f, EasingType.SineOut );
 
 		if ( IsProxy )
 			return;
 	}
 
-	public Connection GetConnection(int playerNum)
+	public Connection GetConnection( int playerNum )
 	{
-		if( playerNum == 0 && DoesPlayerExist0)
+		if ( playerNum == 0 && DoesPlayerExist0 )
 			return Scene.Directory.FindByGuid( PlayerId0 ).Network.OwnerConnection;
-		else if(playerNum == 1 && DoesPlayerExist1)
+		else if ( playerNum == 1 && DoesPlayerExist1 )
 			return Scene.Directory.FindByGuid( PlayerId1 ).Network.OwnerConnection;
 
 		return null;
 	}
 
-	public PlayerController GetPlayer(int playerNum)
+	public PlayerController GetPlayer( int playerNum )
 	{
-		if(playerNum == 0 && DoesPlayerExist0)
+		if ( playerNum == 0 && DoesPlayerExist0 )
 			return Scene.Directory.FindByGuid( PlayerId0 ).Components.Get<PlayerController>();
-		else if(playerNum == 1 && DoesPlayerExist1)
+		else if ( playerNum == 1 && DoesPlayerExist1 )
 			return Scene.Directory.FindByGuid( PlayerId1 ).Components.Get<PlayerController>();
 
 		return null;
 	}
 
-	public static int GetOtherPlayerNum(int playerNum)
+	public static int GetOtherPlayerNum( int playerNum )
 	{
 		return playerNum == 0 ? 1 : 0;
 	}
 
 	public void OnDisconnected( Connection channel )
 	{
-		if(IsProxy)
+		if ( IsProxy )
 			return;
 
 		Log.Info( $"OnDisconnected: {channel.DisplayName} (local = {channel == Connection.Local}) (host = {channel.IsHost})" );
@@ -793,7 +793,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			PlayerId0 = Guid.Empty;
 			activePlayerLeft = true;
 		}
-		else if (DoesPlayerExist1 && channel == GetConnection( 1 ) )
+		else if ( DoesPlayerExist1 && channel == GetConnection( 1 ) )
 		{
 			DoesPlayerExist1 = false;
 			Player1 = null;
@@ -801,12 +801,12 @@ public sealed class Manager : Component, Component.INetworkListener
 			activePlayerLeft = true;
 		}
 
-		if( activePlayerLeft )
+		if ( activePlayerLeft )
 		{
 			StopCurrentMatch();
 		}
 
-		Log.Info( $"Player1: {Player1}, (1GetConnection): {GetConnection( 1 )}, channel 1? {(GetConnection(1) == channel)}" );
+		Log.Info( $"Player1: {Player1}, (1GetConnection): {GetConnection( 1 )}, channel 1? {(GetConnection( 1 ) == channel)}" );
 
 		// check if active players still exist, and stop match if one of them left
 		// if spectators exist, fill the spot with one of them who has played the least matches
@@ -823,6 +823,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		DespawnBalls();
 		DestroyShopStuff();
+		DestroyPickups();
+		DestroyFadingText();
 
 		GamePhase = GamePhase.WaitingForPlayers;
 	}
@@ -833,7 +835,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		Slowmo( timeScale, time, easingType );
 	}
 
-	public void Slowmo(float timeScale, float time, EasingType easingType)
+	public void Slowmo( float timeScale, float time, EasingType easingType )
 	{
 		IsSlowmo = true;
 		Scene.TimeScale = timeScale;
@@ -868,6 +870,13 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		foreach ( var pickup in Scene.GetAllComponents<MoneyPickup>() )
 			pickup.DestroyRPC();
+	}
+
+	[Broadcast]
+	void DestroyFadingText()
+	{
+		foreach ( var fadingText in Scene.GetAllComponents<FadingText>() )
+			fadingText.GameObject.Destroy();
 	}
 
 	void DestroyShopStuff()
@@ -971,16 +980,24 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		await Task.Delay( 400 );
 
-		var localPlayerNum = GetLocalPlayer()?.PlayerNum ?? 0;
+		if ( GamePhase == GamePhase.WaitingForPlayers )
+			return;
 
-		if(localPlayerNum == 0)
+		var localPlayer = GetLocalPlayer();
+		if ( localPlayer == null || localPlayer.IsSpectator )
+			return;
+
+		if( localPlayer.PlayerNum == 0)
 			SpawnFadingText( new Vector3( -120f, 40f, 180f ), $"AVOID {green_circle}", 4f );
 		else
 			SpawnFadingText( new Vector3( 120f, 40f, 180f ), $"AVOID {blue_circle}", 3f );
 
 		await Task.Delay( 1200 );
 
-		if ( localPlayerNum == 0 )
+		if ( GamePhase == GamePhase.WaitingForPlayers )
+			return;
+
+		if ( localPlayer.PlayerNum == 0 )
 			SpawnFadingText( new Vector3( -120f, -10f, 180f ), $"BUMP {blue_circle}", 4f );
 		else
 			SpawnFadingText( new Vector3( 120f, -10f, 180f ), $"BUMP {green_circle}", 3f );

@@ -34,7 +34,9 @@ Hud {
 		font-size: 25px;
 		font-family: Poppins;
 		//background-color: #00665511;
-		font-family: "Budokan Rounded";
+		//font-family: "Budokan Rounded";
+		font-family: Poppins;
+		font-weight: 700;
 	}
 
 	.player_avatar {
@@ -124,8 +126,8 @@ Hud {
 
 	.tab_indicator {
 		position: absolute;
-		left:0px;
-		top:0px;
+		left: 0px;
+		top: 0px;
 		width: 80px;
 		height: 30px;
 		background-color: #333;
