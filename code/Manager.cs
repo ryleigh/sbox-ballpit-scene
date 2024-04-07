@@ -172,9 +172,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Repel, numLevels: 1, price: 0 );
 
-		//StartBuyPhase();
-		StartNewMatch();
-		StartNewRound();
+		StartBuyPhase();
+		//StartNewMatch();
+		//StartNewRound();
 	}
 
 	public void OnActive( Connection channel )
@@ -215,7 +215,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		playerObj.NetworkSpawn( channel );
 
 		//player.AdjustUpgradeLevel( UpgradeType.Autoball, 1 );
-		//player.AdjustUpgradeLevel( UpgradeType.Volley, 2 );
+		player.AdjustUpgradeLevel( UpgradeType.Blink, 2 );
+		//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 2 );
 
 		//if ( channel.IsHost )
 		//{
@@ -292,7 +293,7 @@ public sealed class Manager : Component, Component.INetworkListener
 						}
 
 						_timeSincePickupSpawn = 0f;
-						_pickupSpawnDelay = Game.Random.Float( 3.5f, 30f ) * Utils.Map( TimeSincePhaseChange, 0f, 300f, 1f, 0.4f, EasingType.SineIn );
+						_pickupSpawnDelay = Game.Random.Float( 6.5f, 32f ) * Utils.Map( TimeSincePhaseChange, 0f, 320f, 1f, 0.4f, EasingType.SineIn );
 					}
 				}
 
@@ -450,7 +451,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		GamePhase = GamePhase.RoundActive;
 		TimeSincePhaseChange = 0f;
 		_timeSincePickupSpawn = 0f;
-		_pickupSpawnDelay = Game.Random.Float( 1f, 20f );
+		_pickupSpawnDelay = Game.Random.Float( 2.5f, 20f );
 
 		Player0?.ResetRerollPrice();
 		Player1?.ResetRerollPrice();

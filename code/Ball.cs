@@ -1,5 +1,4 @@
 using Sandbox;
-using System.Numerics;
 
 public class Ball : Component
 {
@@ -121,6 +120,8 @@ public class Ball : Component
 
 		if ( IsProxy )
 			return;
+
+		//SetRadius( Radius + 5f * Time.Delta );
 
 		if(_timeScaleActive)
 		{

@@ -64,6 +64,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	[Sync] public int CurrRerollPrice { get; set; }
 
+	public Dictionary<UpgradeType, Upgrade> LocalUpgrades { get; set; } = new(); // not networked
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -308,135 +310,8 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( !useableNow || !ActiveUpgrades.ContainsKey( upgradeType ) )
 			return;
 
-		switch( upgradeType )
-		{
-			case UpgradeType.None: default:
-				break;
-			case UpgradeType.Volley:
-				Manager.Instance.PlaySfx( "bubble", Transform.Position );
-
-				var currDegrees = -30f;
-				for(int i = 0; i < 5; i++)
-				{
-					//var forwardDegrees = Utils.VectorToDegrees( ForwardVec2D );
-					var forwardDegrees = Utils.VectorToDegrees( Manager.Instance.MouseWorldPos - (Vector2)Transform.Position );
-					var vec = Utils.DegreesToVector( currDegrees + forwardDegrees );
-					var speed = 85f;
-					Manager.Instance.SpawnBall( Pos2D + vec * 25f, vec * speed, PlayerNum, radius: 8f );
-					currDegrees += 15f;
-				}
-
-				break;
-			case UpgradeType.Gather:
-				Manager.Instance.PlaySfx( "bubble", Transform.Position );
-
-				foreach ( var ball in Scene.GetAllComponents<Ball>() )
-				{
-					if ( ball.IsActive && ball.PlayerNum == PlayerNum )
-					{
-						var speed = ball.Velocity.Length;
-						var dir = ((Vector2)Transform.Position - (Vector2)ball.Transform.Position).Normal;
-						ball.SetVelocity( dir * speed, timeScale: 0f, duration: 0.2f, EasingType.Linear );
-					}
-				}
-
-				break;
-			case UpgradeType.Repel:
-				Manager.Instance.PlaySfx( "bubble", Transform.Position );
-
-				foreach ( var ball in Scene.GetAllComponents<Ball>() )
-				{
-					if(!ball.IsActive)
-						continue;
-
-					var distSqr = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).LengthSquared;
-					if(distSqr < MathF.Pow(100f, 2f))
-					{
-						var speed = ball.Velocity.Length * 1.15f;
-						var dir = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal;
-						ball.SetVelocity( dir * speed, timeScale: 0f, duration: 0.1f, EasingType.ExpoIn );
-					}
-				}
-
-				break;
-			case UpgradeType.Replace:
-				Manager.Instance.PlaySfx( "bubble", Transform.Position );
-
-				foreach ( var ball in Scene.GetAllComponents<Ball>() )
-				{
-					if ( !ball.IsActive )
-						continue;
-
-					ball.SetTimeScaleRPC( timeScale: 0f, duration: 0.75f, EasingType.QuadIn );
-					ball.SetPlayerNum( Globals.GetOpponentPlayerNum( ball.PlayerNum ) );
-				}
-
-				break;
-			case UpgradeType.Blink:
-				Transform.Position = new Vector3( Manager.Instance.MouseWorldPos.x, Manager.Instance.MouseWorldPos.y, Transform.Position.z );
-				CheckBoundsPlaying();
-
-				Manager.Instance.PlaySfx( "bubble", Transform.Position );
-
-				break;
-			case UpgradeType.Scatter:
-				Manager.Instance.PlaySfx( "bubble", Transform.Position );
-
-				foreach ( var ball in Scene.GetAllComponents<Ball>() )
-				{
-					if ( !ball.IsActive )
-						continue;
-
-					var speed = ball.Velocity.Length;
-					var dir = Utils.GetRandomVector();
-					ball.SetVelocity( dir * speed, timeScale: 0f, duration: 0.66f, EasingType.QuadIn );
-				}
-
-				break;
-			case UpgradeType.Slowmo:
-				Manager.Instance.PlaySfx( "bubble", Transform.Position );
-				Manager.Instance.SlowmoRPC( 0.2f, 3f, EasingType.QuadIn );
-				break;
-			case UpgradeType.Dash:
-				Manager.Instance.PlaySfx( "bubble", Transform.Position );
-
-				var vel = (Manager.Instance.MouseWorldPos - (Vector2)Transform.Position).Normal * 400f;
-				Dash( vel, 0.5f );
-
-				break;
-			case UpgradeType.Redirect:
-				Manager.Instance.PlaySfx( "bubble", Transform.Position );
-
-				var redirectDir = (Manager.Instance.MouseWorldPos - (Vector2)Transform.Position).Normal;
-
-				foreach ( var ball in Scene.GetAllComponents<Ball>() )
-				{
-					if ( ball.IsActive && ball.PlayerNum == PlayerNum )
-					{
-						var speed = ball.Velocity.Length;
-						ball.SetVelocity( redirectDir * speed, timeScale: 0f, duration: 0.5f, EasingType.QuadIn );
-					}
-				}
-
-				break;
-			case UpgradeType.Converge:
-				Manager.Instance.PlaySfx( "bubble", Transform.Position );
-
-				var enemy = Manager.Instance.GetPlayer( Globals.GetOpponentPlayerNum( PlayerNum ) );
-				var enemyPos = enemy?.Transform.Position ?? Vector3.Zero;
-
-				foreach ( var ball in Scene.GetAllComponents<Ball>() )
-				{
-					if ( ball.IsActive && ball.PlayerNum == PlayerNum )
-					{
-						var dir = ((Vector2)enemyPos - (Vector2)ball.Transform.Position).Normal;
-						var speed = ball.Velocity.Length;
-						ball.SetVelocity( dir * speed, timeScale: 0f, duration: 0.5f, EasingType.QuadIn );
-					}
-				}
-
-				break;
-		}
+		var upgrade = LocalUpgrades[upgradeType];
+		upgrade.Use();
 
 		if ( upgradeType != UpgradeType.None )
 			AdjustUpgradeLevel( upgradeType, -1 );
@@ -455,7 +330,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		
 	}
 
-	void CheckBoundsPlaying()
+	public void CheckBoundsPlaying()
 	{
 		var center = Manager.Instance.CenterLineOffset;
 
@@ -862,6 +737,30 @@ public class PlayerController : Component, Component.ITriggerListener
 					break;
 				}
 			}
+		}
+
+		if( LocalUpgrades.ContainsKey( upgradeType ) )
+		{
+			var upgrade = LocalUpgrades[upgradeType];
+
+			var newLevel = Math.Min( upgrade.Level + amount, maxLevel );
+			if ( newLevel <= 0 )
+			{
+				upgrade.Remove();
+				LocalUpgrades.Remove( upgradeType );
+			}
+			else if ( newLevel != upgrade.Level )
+			{
+				upgrade.SetLevel( newLevel );
+			}
+		}
+		else
+		{
+			var className = $"{upgradeType}Upgrade";
+			var upgrade = TypeLibrary.Create<Upgrade>( className );
+			upgrade.Init( this, Manager.Instance, Scene, isPassive );
+			upgrade.SetLevel( amount );
+			LocalUpgrades.Add( upgradeType, upgrade );
 		}
 	}
 
