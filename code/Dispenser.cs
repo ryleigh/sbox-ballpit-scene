@@ -130,7 +130,7 @@ public sealed class Dispenser : Component
 	void SpawnBall(int playerNum, bool toLeft, float speed)
 	{
 		var dir = toLeft ? new Vector2( -1f, 0f ) : new Vector2( 1f, 0f );
-		Manager.Instance.SpawnBall( (Vector2)Transform.Position + dir, dir * speed, playerNum );
+		Manager.Instance.SpawnBall( (Vector2)Transform.Position + dir, dir * speed, playerNum, radius: 8f );
 	}
 
 	[Broadcast]

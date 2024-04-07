@@ -39,6 +39,6 @@
 		if (Player == null || Connection == null)
 			return 0;
 
-		return System.HashCode.Combine(Player.HP, Player.Money, Connection.DisplayName);
+		return System.HashCode.Combine(Player.HP, Player.Money, Connection.DisplayName, Player.PlayerNum);
 	}
 }

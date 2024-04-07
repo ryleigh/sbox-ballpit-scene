@@ -173,8 +173,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Repel, numLevels: 1, price: 0 );
 
 		//StartBuyPhase();
-		//StartNewMatch();
-		//StartNewRound();
+		StartNewMatch();
+		StartNewRound();
 	}
 
 	public void OnActive( Connection channel )
@@ -670,14 +670,14 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 	}
 
-	public void SpawnBall( Vector2 pos, Vector2 velocity, int playerNum )
+	public void SpawnBall( Vector2 pos, Vector2 velocity, int playerNum, float radius )
 	{
 		var height = (playerNum == 0 && pos.x > CenterLineOffset || playerNum == 1 && pos.x < CenterLineOffset) ? BALL_HEIGHT_OPPONENT : BALL_HEIGHT_SELF;
 		var ballObj = BallPrefab.Clone( new Vector3( pos.x, pos.y, height ) );
 		var ball = ballObj.Components.Get<Ball>();
 
 		ball.Velocity = velocity;
-		ball.Radius = 8f;
+		ball.SetRadius( radius );
 
 		//Log.Info( $"SpawnBall - connection: {connection}" );
 

@@ -119,14 +119,21 @@
         {
           "__type": "EnvmapProbe",
           "__guid": "5985538d-831e-4f88-9504-15933c62919c",
+          "Texture": "textures/cubemaps/default2.vtex",
           "Bounds": {
             "Mins": "-512,-512,-512",
             "Maxs": "512,512,512"
           },
+          "DelayBetweenUpdates": 0.1,
           "Feathering": 0.02,
+          "FrameInterval": 5,
+          "MaxDistance": 512,
           "Projection": "Sphere",
-          "Texture": "textures/cubemaps/default2.vtex",
-          "TintColor": "1,1,1,1"
+          "RenderDynamically": false,
+          "TintColor": "1,1,1,1",
+          "UpdateStrategy": "OnEnabled",
+          "ZFar": 4096,
+          "ZNear": 16
         }
       ]
     },
@@ -1001,7 +1008,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-04T04:55:56.6906228-07:00",
+  "LastSaved": "2024-04-06T20:35:30.6753114-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

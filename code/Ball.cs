@@ -27,7 +27,7 @@ public class Ball : Component
 
 	private Vector3 _localScaleStart;
 
-	[Sync] public float Radius { get; set; }
+	[Sync] public float Radius { get; private set; }
 
 	private bool _timeScaleActive;
 	private float TimeScale;
@@ -59,6 +59,13 @@ public class Ball : Component
 			return;
 
 		//Velocity = (new Vector2( Game.Random.Float( -1f, 1f ), Game.Random.Float( -1f, 1f ) )).Normal * 100f;
+	}
+
+	public void SetRadius( float radius)
+	{
+		Radius = radius;
+		var scale = radius * (0.25f / 8f);
+		Transform.LocalScale = _localScaleStart = new Vector3( scale );
 	}
 
 	protected override void OnUpdate()
@@ -94,13 +101,9 @@ public class Ball : Component
 		}
 		else
 		{
-
-
 			// don't move if IsProxy?
 			if(!IsProxy)
 				Transform.Position += (Vector3)Velocity * Time.Delta * TimeScale;
-
-
 
 			// todo: change height when changing ownership
 			var height = (PlayerNum == 0 && Transform.Position.x > Manager.Instance.CenterLineOffset || PlayerNum == 1 && Transform.Position.x < Manager.Instance.CenterLineOffset) ? Manager.BALL_HEIGHT_OPPONENT : Manager.BALL_HEIGHT_SELF;

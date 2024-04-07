@@ -245,7 +245,7 @@ public class PlayerController : Component, Component.ITriggerListener
 					{
 						var speed = 85f;
 						var dir = Utils.GetRandomVector();
-						Manager.Instance.SpawnBall( Pos2D + dir * 15f, dir * speed, PlayerNum );
+						Manager.Instance.SpawnBall( Pos2D + dir * 15f, dir * speed, PlayerNum, radius: 8f );
 
 						_autoballTimer = 0f;
 					}
@@ -322,7 +322,7 @@ public class PlayerController : Component, Component.ITriggerListener
 					var forwardDegrees = Utils.VectorToDegrees( Manager.Instance.MouseWorldPos - (Vector2)Transform.Position );
 					var vec = Utils.DegreesToVector( currDegrees + forwardDegrees );
 					var speed = 85f;
-					Manager.Instance.SpawnBall( Pos2D + vec * 25f, vec * speed, PlayerNum );
+					Manager.Instance.SpawnBall( Pos2D + vec * 25f, vec * speed, PlayerNum, radius: 8f );
 					currDegrees += 15f;
 				}
 
