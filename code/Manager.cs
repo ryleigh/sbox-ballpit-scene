@@ -17,7 +17,6 @@ public struct UpgradeData
 {
 	public string name;
 	public string icon;
-	public string description;
 	public UpgradeRarity rarity;
 	public int maxLevel;
 	public bool isPassive;
@@ -27,11 +26,10 @@ public struct UpgradeData
 	public int pricePerAmountMin;
 	public int pricePerAmountMax;
 
-	public UpgradeData( string _name, string _icon, string _description, UpgradeRarity _rarity, int _maxLevel, int _amountMin, int _amountMax, int _pricePerAmountMin, int _pricePerAmountMax, bool _isPassive, bool _usableInBuyPhase )
+	public UpgradeData( string _name, string _icon, UpgradeRarity _rarity, int _maxLevel, int _amountMin, int _amountMax, int _pricePerAmountMin, int _pricePerAmountMax, bool _isPassive, bool _usableInBuyPhase )
 	{
 		name = _name;
 		icon = _icon;
-		description = _description;
 		rarity = _rarity;
 		maxLevel = _maxLevel;
 		amountMin = _amountMin;
@@ -175,6 +173,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		StartBuyPhase();
 		//StartNewMatch();
 		//StartNewRound();
+
+		//var upgrade = TypeLibrary.Create<Upgrade>( name );
+		//upgrade.Test();
 	}
 
 	public void OnActive( Connection channel )
@@ -214,9 +215,11 @@ public sealed class Manager : Component, Component.INetworkListener
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
 
-		player.AdjustUpgradeLevel( UpgradeType.Dash, 6 );
+		player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
+		player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );
+		//player.AdjustUpgradeLevel( UpgradeType.Dash, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Blink, 2 );
-		//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 2 );
+		player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 2 );
 
 		//if ( channel.IsHost )
 		//{
@@ -1079,10 +1082,24 @@ public sealed class Manager : Component, Component.INetworkListener
 		return "";
 	}
 
-	public string GetDescriptionForUpgrade( UpgradeType upgradeType )
+	public string GetDescriptionForUpgrade( UpgradeType upgradeType, int level )
 	{
-		if ( UpgradeDatas.ContainsKey( upgradeType ) )
-			return UpgradeDatas[upgradeType].description;
+		switch(upgradeType)
+		{
+			case UpgradeType.MoveSpeed: return $"Move {Math.Floor((MoveSpeedUpgrade.GetIncrease(level) - 1f) * 100f)}% faster";
+			case UpgradeType.BumpStrength: return $"Bumping speeds up balls by {Math.Round( BumpStrengthUpgrade.GetIncrease( level ) )}";
+			case UpgradeType.Autoball: return $"Release a ball every {(float)Math.Round( AutoballUpgrade.GetDelay( level ), 1 )}s";
+
+			case UpgradeType.Volley: return $"Shoot some balls forward";
+			case UpgradeType.Gather: return $"Your balls target you";
+			case UpgradeType.Repel: return $"Push nearby balls away";
+			case UpgradeType.Blink: return $"Teleport to your cursor";
+			case UpgradeType.Scatter: return $"Redirect all balls randomly";
+			case UpgradeType.Slowmo: return $"Briefly slow time";
+			case UpgradeType.Dash: return $"Move forward quicky";
+			case UpgradeType.Redirect: return $"All your balls move in the direction from you to cursor";
+			case UpgradeType.Converge: return $"Your balls target enemy";
+		}
 
 		return "";
 	}
@@ -1161,20 +1178,20 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void GenerateUpgrades()
 	{
-		CreateUpgrade( UpgradeType.MoveSpeed, "Cardio", "🏃🏻", "Move faster", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5, isPassive: true );
-		CreateUpgrade( UpgradeType.BumpStrength, "Muscles", "💪", "Bumping a ball increases its speed", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 6, isPassive: true );
-		CreateUpgrade( UpgradeType.Autoball, "Autoball", "⏲️", "Release a ball every few seconds", UpgradeRarity.Rare, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7, isPassive: true );
+		CreateUpgrade( UpgradeType.MoveSpeed, "Cardio", "🏃🏻", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5, isPassive: true );
+		CreateUpgrade( UpgradeType.BumpStrength, "Muscles", "💪", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 6, isPassive: true );
+		CreateUpgrade( UpgradeType.Autoball, "Autoball", "⏲️", UpgradeRarity.Rare, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7, isPassive: true );
 
-		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", "Shoot some balls", UpgradeRarity.Common, maxLevel: 5, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 5 );
-		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", "Your balls target you", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
-		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", "Push nearby balls away", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5 );
-		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", "Swap balls with enemy", UpgradeRarity.Uncommon, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 6, pricePerAmountMax: 8 );
-		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", "Teleport to your cursor", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 4, useableInBuyPhase: true );
-		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", "Redirect all balls randomly", UpgradeRarity.Uncommon, amountMin: 1, amountMax: 1, pricePerAmountMin: 2, pricePerAmountMax: 5, maxLevel: 3 );
-		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", "Briefly slow time", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 1, pricePerAmountMax: 3 );
-		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", "Move quicky toward cursor", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 3, pricePerAmountMin: 1, pricePerAmountMax: 2, useableInBuyPhase: true );
-		CreateUpgrade( UpgradeType.Redirect, "Redirect", "⤴️", "All your balls move in the direction from you to cursor", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7 );
-		CreateUpgrade( UpgradeType.Converge, "Converge", "📍", "Your balls target enemy", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 4, pricePerAmountMax: 6 );
+		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", UpgradeRarity.Common, maxLevel: 5, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 5 );
+		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
+		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5 );
+		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", UpgradeRarity.Uncommon, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 6, pricePerAmountMax: 8 );
+		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 4, useableInBuyPhase: true );
+		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", UpgradeRarity.Uncommon, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5, maxLevel: 3 );
+		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 1, pricePerAmountMax: 3 );
+		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 3, pricePerAmountMin: 1, pricePerAmountMax: 2, useableInBuyPhase: true );
+		CreateUpgrade( UpgradeType.Redirect, "Redirect", "⤴️", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7 );
+		CreateUpgrade( UpgradeType.Converge, "Converge", "📍", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 4, pricePerAmountMax: 6 );
 
 		foreach (var upgradeData in UpgradeDatas)
 		{
@@ -1229,11 +1246,11 @@ public sealed class Manager : Component, Component.INetworkListener
 		return UpgradeRarity.Common;
 	}
 
-	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, string description, UpgradeRarity rarity, int maxLevel, 
+	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, UpgradeRarity rarity, int maxLevel, 
 		int amountMin, int amountMax, int pricePerAmountMin, int pricePerAmountMax,
 		bool isPassive = false, bool useableInBuyPhase = false)
 	{
-		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, description, rarity, maxLevel, amountMin, amountMax, pricePerAmountMin, pricePerAmountMax, isPassive, useableInBuyPhase));
+		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, rarity, maxLevel, amountMin, amountMax, pricePerAmountMin, pricePerAmountMax, isPassive, useableInBuyPhase));
 	}
 
 	UpgradeType GetRandomPickupType()

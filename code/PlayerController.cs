@@ -145,7 +145,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		var wishMoveDir = new Vector2( -Input.AnalogMove.y, Input.AnalogMove.x ).Normal;
 
-		float moveSpeed = Utils.Map( GetUpgradeLevel( UpgradeType.MoveSpeed ), 0, 9, 90f, 125f, EasingType.SineOut );
+		float moveSpeed = 90f * MoveSpeedUpgrade.GetIncrease( GetUpgradeLevel( UpgradeType.MoveSpeed ) );
 		Velocity = Utils.DynamicEaseTo( Velocity, wishMoveDir * moveSpeed, 0.2f, Time.Delta );
 		Transform.Position += (Vector3)Velocity * Time.Delta;
 		Transform.Position = Transform.Position.WithZ( IsSpectator ? Manager.SPECTATOR_HEIGHT : 0f );
@@ -193,9 +193,9 @@ public class PlayerController : Component, Component.ITriggerListener
 							var currVel = ball.Velocity.Length;
 							var speed = Math.Max( currVel, Math.Min(GetTotalVelocity().Length, currVel * BUMP_SPEED_INCREASE_FACTOR_MAX ) );
 
-							int bumpStrength = GetUpgradeLevel( UpgradeType.BumpStrength );
-							if ( bumpStrength > 0 )
-								speed += Utils.Map( bumpStrength, 0, 9, 4f, 16f );
+							int bumpStrengthLvl = GetUpgradeLevel( UpgradeType.BumpStrength );
+							if ( bumpStrengthLvl > 0 )
+								speed += BumpStrengthUpgrade.GetIncrease( bumpStrengthLvl );
 
 							speed = Math.Min( speed, Ball.MAX_SPEED );
 							ball.Velocity = dir * speed;

@@ -3,15 +3,19 @@ using System;
 
 public class AutoballUpgrade : Upgrade
 {
+	public static float GetDelay( int level ) => Utils.Map( level, 1, 9, 5f, 1f );
+
 	private float _autoballTimer;
 
 	public override void Update( float dt )
 	{
 		base.Update( dt );
 
+		if ( Manager.GamePhase != GamePhase.RoundActive )
+			return;
+
 		_autoballTimer += Time.Delta;
-		float reqTime = Utils.Map( Level, 1, Manager.GetMaxLevelForUpgrade( UpgradeType.Autoball ), 5f, 1f );
-		if ( _autoballTimer > reqTime )
+		if ( _autoballTimer > GetDelay(Level) )
 		{
 			var speed = 85f;
 			var dir = Utils.GetRandomVector();
