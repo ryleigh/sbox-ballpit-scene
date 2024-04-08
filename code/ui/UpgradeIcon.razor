@@ -27,10 +27,13 @@
 
 	@if(Level > 1)
 	{
+		var isMaxed = Level >= Manager.Instance.GetMaxLevelForUpgrade(UpgradeType);
+
 		<div class="level" style="opacity:@((Manager.Instance.IsUpgradePassive(UpgradeType) || player.SelectedUpgradeType == UpgradeType ? 1f : 0.3f) );
-							font-size:@((isSelected ? 36f : 28f) * (isHovered ? 1.1f : 1f))px;">
-		@($"{Level}")
-	</div>
+							font-size:@((isSelected ? 36f : 28f) * (isHovered ? 1.1f : 1f))px;
+							color:@((isMaxed ? new Color(1f, 0.4f, 0.4f) : new Color(1f, 1f, 1f)).Rgba);">
+			@Level
+		</div>
 	}
 </root>
 
