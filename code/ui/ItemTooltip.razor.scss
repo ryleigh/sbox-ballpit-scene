@@ -71,6 +71,11 @@ ItemTooltip {
         padding: 6px;
         margin: 2px;
         background-color: #ffffff55;
+        white-space: pre;
+        //justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px;
     }
     //.level {
     //    position: absolute;

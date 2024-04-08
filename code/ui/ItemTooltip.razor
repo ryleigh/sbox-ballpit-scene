@@ -11,6 +11,7 @@
 		var rarity = manager.GetRarityForUpgrade(UpgradeType);
 		var rarityColor = Manager.GetColorForRarity(rarity);
 		var maxLevel = manager.GetMaxLevelForUpgrade(UpgradeType);
+		var playerLevel = manager.GetPlayer(PlayerNum)?.GetUpgradeLevel(UpgradeType) ?? 0;
 	}
 
 	<div class="top_row">
@@ -26,7 +27,21 @@
 	</div>
 
 	<div class="description">
-		@($"{manager.GetDescriptionForUpgrade(UpgradeType, Level)}")
+		@if(IsShopItem && isPassive && manager.GetPlayer(PlayerNum) != null && playerLevel > 0)
+		{
+			var newLevel = Math.Min(playerLevel + Level, maxLevel);
+
+			var strings = manager.GetImprovementDescriptionForUpgrade(UpgradeType, playerLevel, newLevel);
+
+			@foreach(var pair in strings) 
+			{
+				<div style="color:@((pair.Value).Rgba);">@(pair.Key)</div>
+			}
+		}
+		else 
+		{
+			@($"{manager.GetDescriptionForUpgrade(UpgradeType, Level)}")
+		}
 	</div>
 </root>
 
@@ -35,7 +50,7 @@
 	public UpgradeType UpgradeType { get; set; }
 	public int Level { get; set; }
 	public int PlayerNum { get; set; }
-	// public bool IsShopItem { get; set; }
+	public bool IsShopItem { get; set; }
 
 	protected override int BuildHash()
 	{

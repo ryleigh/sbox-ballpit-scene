@@ -101,7 +101,7 @@
 			var pos = Scene.Camera.PointToScreenNormal(manager.HoveredObject.Transform.Position);
 			var shopItem = manager.HoveredObject.Components.Get<ShopItem>();
 
-			<ItemTooltip UpgradeType=@shopItem.UpgradeType Level=@shopItem.NumLevels PlayerNum=@shopItem.PlayerNum style="left:@(Mouse.Position.x * Panel.ScaleFromScreen - 135)px; top:@(Mouse.Position.y * Panel.ScaleFromScreen - 100)px;" />
+			<ItemTooltip UpgradeType=@shopItem.UpgradeType Level=@shopItem.NumLevels PlayerNum=@shopItem.PlayerNum @IsShopItem=@(true) style="left:@(Mouse.Position.x * Panel.ScaleFromScreen - 135)px; top:@(Mouse.Position.y * Panel.ScaleFromScreen - 100)px;" />
 		}
 	}
 
@@ -113,7 +113,7 @@
 		bool isPassive = manager.IsUpgradePassive(manager.HoveredUpgradeType);
 		float xPos = Mouse.Position.x * Panel.ScaleFromScreen - 135f + (isPassive ? (player.PlayerNum == 0 ? 120f : -120f) : 0f);
 
-		<ItemTooltip UpgradeType=@manager.HoveredUpgradeType Level=@level PlayerNum=@manager.HoveredUpgradePlayerNum style="left:@(xPos)px; top:@(Mouse.Position.y * Panel.ScaleFromScreen - 100)px;" />
+		<ItemTooltip UpgradeType=@manager.HoveredUpgradeType Level=@level PlayerNum=@manager.HoveredUpgradePlayerNum @IsShopItem=@(false) style="left:@(xPos)px; top:@(Mouse.Position.y * Panel.ScaleFromScreen - 100)px;" />
 	}
 
 	@{

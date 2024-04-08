@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.IO;
 using System.Numerics;
+using System.Reflection.Emit;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
@@ -1093,6 +1094,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			case UpgradeType.Volley: return $"Shoot some balls forward";
 			case UpgradeType.Gather: return $"Your balls target you";
 			case UpgradeType.Repel: return $"Push nearby balls away";
+			case UpgradeType.Replace: return $"Swap balls with enemy";
 			case UpgradeType.Blink: return $"Teleport to your cursor";
 			case UpgradeType.Scatter: return $"Redirect all balls randomly";
 			case UpgradeType.Slowmo: return $"Briefly slow time";
@@ -1102,6 +1104,43 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 
 		return "";
+	}
+
+
+	public const string DESCRIPTION_ARROW = "➜";
+	public Dictionary<string, Color> GetImprovementDescriptionForUpgrade( UpgradeType upgradeType, int oldLevel, int newLevel )
+	{
+		var DEFAULT_COLOR = new Color( 0.15f, 0.15f, 0.15f );
+		var OLD_COLOR = new Color( 0.7f, 0f, 0f);
+		var NEW_COLOR = new Color( 0f, 0.64f, 0f );
+
+		Dictionary<string, Color> strings = new();
+
+		switch ( upgradeType )
+		{
+			case UpgradeType.MoveSpeed:
+				strings.Add( "Move ", DEFAULT_COLOR );
+				strings.Add( $"{Math.Floor( (MoveSpeedUpgrade.GetIncrease( oldLevel ) - 1f) * 100f )}%", OLD_COLOR );
+				strings.Add( DESCRIPTION_ARROW, DEFAULT_COLOR );
+				strings.Add( $"{Math.Floor( (MoveSpeedUpgrade.GetIncrease( newLevel ) - 1f) * 100f )}%", NEW_COLOR );
+				strings.Add( " faster", DEFAULT_COLOR );
+				break;
+			case UpgradeType.BumpStrength:
+				strings.Add( "Bumping speeds up balls by ", DEFAULT_COLOR );
+				strings.Add( $"{Math.Round( BumpStrengthUpgrade.GetIncrease( oldLevel ) )}", OLD_COLOR );
+				strings.Add( DESCRIPTION_ARROW, DEFAULT_COLOR );
+				strings.Add( $"{Math.Round( BumpStrengthUpgrade.GetIncrease( newLevel ) )}", NEW_COLOR );
+				break;
+			case UpgradeType.Autoball:
+				strings.Add( "Release a ball every", DEFAULT_COLOR );
+				strings.Add( $"{(float)Math.Round( AutoballUpgrade.GetDelay( oldLevel ), 1 )}", OLD_COLOR );
+				strings.Add( DESCRIPTION_ARROW, DEFAULT_COLOR );
+				strings.Add( $"{(float)Math.Round( AutoballUpgrade.GetDelay( newLevel ), 1 )}", NEW_COLOR );
+				strings.Add( "s", DEFAULT_COLOR );
+				break;
+		}
+
+		return strings;
 	}
 
 	public UpgradeRarity GetRarityForUpgrade( UpgradeType upgradeType )
