@@ -1,8 +1,6 @@
 ﻿using Sandbox;
 using Sandbox.Citizen;
 using Sandbox.UI;
-using System.Numerics;
-using System.Reflection.Metadata;
 
 public class PlayerController : Component, Component.ITriggerListener
 {
@@ -15,7 +13,6 @@ public class PlayerController : Component, Component.ITriggerListener
 	public int OpponentPlayerNum => PlayerNum == 0 ? 1 : 0;
 
 	[Sync] public Vector2 Velocity { get; set; }
-	public Vector2 TotalVelocity => Velocity + (_isDashing ? _dashVelocity : Vector2.Zero);
 	[Sync] public float FacingAngle { get; set; }
 
 	public Vector2 Pos2D => (Vector2)Transform.Position;
@@ -52,13 +49,6 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public float RadiusLarge { get; set; } = 6f;
 	public float RadiusSmall { get; set; } = 1.2f;
-
-	private bool _isDashing;
-	private TimeSince _timeSinceDashStarted;
-	private float _dashTime;
-	private Vector2 _dashVelocity;
-
-	private float _autoballTimer;
 
 	public const float BUMP_SPEED_INCREASE_FACTOR_MAX = 1.2f;
 
@@ -100,7 +90,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		//}
 
 		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
-		//Gizmo.Draw.Text( $"{GetUpgradeLevel(UpgradeType.MoveSpeed)}", new global::Transform( Transform.Position ) );
+		//Gizmo.Draw.Text( $"{Math.Floor(GetTotalVelocity().Length)}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity );
 
@@ -160,19 +150,6 @@ public class PlayerController : Component, Component.ITriggerListener
 		Transform.Position += (Vector3)Velocity * Time.Delta;
 		Transform.Position = Transform.Position.WithZ( IsSpectator ? Manager.SPECTATOR_HEIGHT : 0f );
 
-		if(_isDashing)
-		{
-			if(_timeSinceDashStarted > _dashTime)
-			{
-				_isDashing = false;
-			}
-			else
-			{
-				Transform.Position += (Vector3)_dashVelocity * Utils.Map(_timeSinceDashStarted, 0f, _dashTime, 1f, 0f, EasingType.SineOut) * Time.Delta;
-				Transform.Position = Transform.Position.WithZ( IsSpectator ? Manager.SPECTATOR_HEIGHT : 0f );
-			}
-		}
-
 		if ( IsSpectator )
 		{
 			CheckCollisionWithPlayers();
@@ -214,7 +191,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 							//Log.Info( $"ball.Velocity: {ball.Velocity.Length} player.Velocity: {Velocity.Length}" );
 							var currVel = ball.Velocity.Length;
-							var speed = Math.Max( currVel, Math.Min(TotalVelocity.Length, currVel * BUMP_SPEED_INCREASE_FACTOR_MAX ) );
+							var speed = Math.Max( currVel, Math.Min(GetTotalVelocity().Length, currVel * BUMP_SPEED_INCREASE_FACTOR_MAX ) );
 
 							int bumpStrength = GetUpgradeLevel( UpgradeType.BumpStrength );
 							if ( bumpStrength > 0 )
@@ -236,23 +213,13 @@ public class PlayerController : Component, Component.ITriggerListener
 						}
 					}
 				}
-
-				// autoball upgrade
-				var autoballLevel = GetUpgradeLevel( UpgradeType.Autoball );
-				if ( autoballLevel > 0 )
-				{
-					_autoballTimer += Time.Delta;
-					float reqTime = Utils.Map( autoballLevel, 1, Manager.Instance.GetMaxLevelForUpgrade( UpgradeType.Autoball ), 5f, 1f );
-					if ( _autoballTimer > reqTime )
-					{
-						var speed = 85f;
-						var dir = Utils.GetRandomVector();
-						Manager.Instance.SpawnBall( Pos2D + dir * 15f, dir * speed, PlayerNum, radius: 8f );
-
-						_autoballTimer = 0f;
-					}
-				}
 			}
+		}
+
+		foreach(var pair in LocalUpgrades)
+		{
+			var upgrade = pair.Value;
+			upgrade.Update( Time.Delta );
 		}
 	}
 
@@ -744,15 +711,8 @@ public class PlayerController : Component, Component.ITriggerListener
 			var upgrade = LocalUpgrades[upgradeType];
 
 			var newLevel = Math.Min( upgrade.Level + amount, maxLevel );
-			if ( newLevel <= 0 )
-			{
-				upgrade.Remove();
-				LocalUpgrades.Remove( upgradeType );
-			}
-			else if ( newLevel != upgrade.Level )
-			{
+			if ( newLevel != upgrade.Level )
 				upgrade.SetLevel( newLevel );
-			}
 		}
 		else
 		{
@@ -863,11 +823,15 @@ public class PlayerController : Component, Component.ITriggerListener
 			renderer.Tint = Color.White.WithAlpha( visible ? 1f : 0.1f );
 	}
 
-	public void Dash(Vector2 vel, float time)
+	public Vector2 GetTotalVelocity()
 	{
-		_isDashing = true;
-		_timeSinceDashStarted = 0f;
-		_dashTime = time;
-		_dashVelocity = vel;
+		var vel = Velocity;
+
+		if( LocalUpgrades.ContainsKey(UpgradeType.Dash) )
+		{
+			vel += ((DashUpgrade)LocalUpgrades[UpgradeType.Dash]).DashVelocity;
+		}
+
+		return vel;
 	}
 }

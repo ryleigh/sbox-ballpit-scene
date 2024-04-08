@@ -214,8 +214,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
 
-		//player.AdjustUpgradeLevel( UpgradeType.Autoball, 1 );
-		player.AdjustUpgradeLevel( UpgradeType.Blink, 2 );
+		player.AdjustUpgradeLevel( UpgradeType.Dash, 6 );
+		//player.AdjustUpgradeLevel( UpgradeType.Blink, 2 );
 		//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 2 );
 
 		//if ( channel.IsHost )
