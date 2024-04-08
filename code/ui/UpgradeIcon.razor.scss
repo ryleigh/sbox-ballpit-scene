@@ -39,4 +39,15 @@ UpgradeIcon {
         //text-shadow: 2px 2px 2px black;
         text-stroke: 12px black;
     }
+
+    .progress {
+        position: absolute;
+        width: 10%;
+        height: 12%;
+        bottom: -5px;
+        left: 0px;
+        background-color: #00000099;
+        border-radius: 4px;
+        border: 1px solid black;
+    }
 }

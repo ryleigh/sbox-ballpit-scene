@@ -16,6 +16,7 @@
 		var rarity = Manager.Instance.GetRarityForUpgrade(UpgradeType);
 		var isSelected = player.SelectedUpgradeType == UpgradeType && player.PlayerNum == PlayerNum;
 		var isHovered = Manager.Instance.HoveredUpgradeType == UpgradeType && Manager.Instance.HoveredUpgradePlayerNum == PlayerNum;
+		var progress = player.PassiveUpgradeProgress.ContainsKey(UpgradeType) ? player.PassiveUpgradeProgress[UpgradeType] : 0f;
 	}
 
 	<!-- <div class="bg" style="background-image: url(@($"materials/icons/{Globals.GetIconForUpgrade(UpgradeType)}.png"));"></div> -->
@@ -35,6 +36,11 @@
 			@Level
 		</div>
 	}
+
+	@if(progress > 0f) 
+	{
+		<div class="progress" style="width:@(Math.Clamp(progress, 0f, 1f) * 100f)%;"></div>
+	}
 </root>
 
 @code
@@ -42,14 +48,6 @@
 	public UpgradeType UpgradeType { get; set; }
 	public int Level { get; set; }
 	public int PlayerNum { get; set; }
-
-	protected override int BuildHash() 
-	{
-		var player = Manager.Instance.GetPlayer(PlayerNum);
-		var isHovered = Manager.Instance.HoveredUpgradeType == UpgradeType;
-		var isSelected = (player?.SelectedUpgradeType ?? UpgradeType.None) == UpgradeType;
-		return System.HashCode.Combine(UpgradeType, Level, isHovered, isSelected);
-	}
 
 	protected override void OnMouseOver(MousePanelEvent e)
 	{
@@ -82,5 +80,14 @@
 			return;
 
 		localPlayer.AdjustSelectedActiveUpgrade(up: value.y > 0f);
+	}
+
+	protected override int BuildHash()
+	{
+		var player = Manager.Instance.GetPlayer(PlayerNum);
+		var isHovered = Manager.Instance.HoveredUpgradeType == UpgradeType;
+		var isSelected = (player?.SelectedUpgradeType ?? UpgradeType.None) == UpgradeType;
+		var progress = (player != null && player.PassiveUpgradeProgress.ContainsKey(UpgradeType)) ? player.PassiveUpgradeProgress[UpgradeType] : 0f;
+		return System.HashCode.Combine(UpgradeType, Level, isHovered, isSelected, progress);
 	}
 }

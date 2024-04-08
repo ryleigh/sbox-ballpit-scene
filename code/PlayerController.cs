@@ -36,6 +36,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	[Sync] public NetDictionary<UpgradeType, int> PassiveUpgrades { get; set; } = new();
 	[Sync] public NetDictionary<UpgradeType, int> ActiveUpgrades { get; set; } = new();
+	[Sync] public NetDictionary<UpgradeType, float> PassiveUpgradeProgress { get; set; } = new();
 
 	[Sync] public UpgradeType SelectedUpgradeType { get; set; }
 
@@ -734,6 +735,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		HP = MaxHP;
 		PassiveUpgrades.Clear();
 		ActiveUpgrades.Clear();
+		PassiveUpgradeProgress.Clear();
 		IsInvulnerable = false;
 		NumShopItems = 4;
 		CurrRerollPrice = 1;

@@ -15,13 +15,20 @@ public class AutoballUpgrade : Upgrade
 			return;
 
 		_autoballTimer += Time.Delta;
-		if ( _autoballTimer > GetDelay(Level) )
+		var delay = GetDelay( Level );
+		if ( _autoballTimer > delay )
 		{
 			var speed = 85f;
 			var dir = Utils.GetRandomVector();
 			Manager.SpawnBall( Player.Pos2D + dir * 15f, dir * speed, Player.PlayerNum, radius: 8f );
 
 			_autoballTimer = 0f;
+
+			Player.PassiveUpgradeProgress[UpgradeType.Autoball] = 0f;
+		}
+		else
+		{
+			Player.PassiveUpgradeProgress[UpgradeType.Autoball] = Math.Clamp( _autoballTimer / delay, 0f, 1f );
 		}
 	}
 }
