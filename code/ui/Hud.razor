@@ -30,7 +30,7 @@
 		}
 	}
 
-	<var class="round_display" style="opacity:@(manager.GamePhase == GamePhase.RoundActive ? 1f : 0.7f);">@(roundLabel)</var>
+	<var class="round_display" style="color:@((manager.GamePhase == GamePhase.RoundActive ? new Color(1f, 1f, 1f) : new Color(0.75f, 0.75f, 0.75f)).Rgba);">@(roundLabel)</var>
 
 	@if(manager.DoesPlayerExist0)
 	{
@@ -142,7 +142,7 @@
 
 	@if(!Input.Down("Score"))
 	{
-		<div class="tab_indicator">TAB</div>
+		<div class="tab_indicator">Tab</div>
 	}
 </root>
 

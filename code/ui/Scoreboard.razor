@@ -23,46 +23,35 @@
 		@foreach(var player in Scene.GetAllComponents<PlayerController>().ToList().OrderByDescending(x => x.NumMatchWins))
 		{
 			var connection = player.Network.OwnerConnection;
+			var nameColor = (Manager.Instance.GetConnection(0) == connection ? Manager.Player0NameColor : (Manager.Instance.GetConnection(1) == connection ? Manager.Player1NameColor : new Color(1f, 1f, 1f)));
 
 			string specialClass = "";
 			if(connection == Connection.Local)
 				specialClass = "me";
 
-			<div class="row @specialClass @(rowNum % 2 == 0 ? "even_row" : "odd_row")">
+			<div class="row @(rowNum % 2 == 0 ? "even_row" : "odd_row")">
 				<div class="avatar" style="background-image: url( avatar:@connection.SteamId )"></div>
-				<div class="name">
+				<div class="name @specialClass" style="color:@(nameColor.Rgba);">
 					@connection.DisplayName
-
-					@if(Manager.Instance.GetConnection(0) == connection)
-					{
-						<div style="padding-left: 4px; font-family: W10Emoji;">@("🟦")</div>
-					}
-					else 
-					{
-						@if(Manager.Instance.GetConnection(1) == connection)
-						{
-							<div style="padding-left: 4px; font-family: W10Emoji;">@("🟩")</div>
-						}
-					}
 
 					@if(connection.IsHost)
 					{
-						<div style="opacity:0.1; padding-left: 8px; font-family: Budokan Rounded; padding-top: 3px;">@("(host)")</div>
+						<div style="color: #fff; opacity:0.1; padding-left: 8px; font-family: Proxima Soft;">@("(host)")</div>
 					}
 				</div>
 				<div class="stat_container">
 					<div class="stat_kills">@($"{player.NumMatchWins}")</div>
-					<div style="font-family: W10Emoji;">@("🏆")</div>
+					<div style="font-family: W10Emoji; font-size:18px;">@("🏆")</div>
 				</div>
 				<div class="stat_container">
 					<div class="stat">@($"{player.NumMatchLosses}")</div>
-					<div style="font-family: W10Emoji;">@("💀")</div>
+					<div style="font-family: W10Emoji; font-size:18px;">@("💀")</div>
 				</div>
 				<div class="stat_container">
-					<div class="stat">@GetTime(connection)</div>
+					<div class="stat" style="opacity:0.3;">@GetTime(connection)</div>
 				</div>
 				<div class="stat_container">
-					<div class="stat">@(MathF.Round(connection.Ping))</div>
+					<div class="stat" style="opacity:0.3;">@(MathF.Round(connection.Ping))</div>
 				</div>
 			</div>
 

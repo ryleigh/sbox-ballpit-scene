@@ -127,6 +127,9 @@ public sealed class Manager : Component, Component.INetworkListener
 	private TimeSince _timeSincePickupSpawn;
 	private float _pickupSpawnDelay;
 
+	public static Color Player0NameColor = new Color( 0.5f, 0.5f, 1f );
+	public static Color Player1NameColor = new Color( 0.4f, 1f, 0.4f );
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();

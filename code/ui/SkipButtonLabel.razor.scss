@@ -10,14 +10,14 @@ SkipButtonLabel {
 	.title {
 		width: 95%;
 		height: 95%;
-		font-size: 25px;
-		font-family: Poppins;
+		font-size: 28px;
 		color: #fff;
-		font-family: "Budokan Rounded";
+		font-family: "Proxima Soft";
+		font-weight: 700;
 		background-color: #444;
 		border-radius: 20px;
 		justify-content: center;
 		align-items: center;
-		font-weight: bold;
+		text-stroke: 6px black;
 	}
 }

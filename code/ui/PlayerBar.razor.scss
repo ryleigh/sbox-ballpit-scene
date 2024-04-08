@@ -12,7 +12,8 @@ PlayerBar {
     //backdrop-filter: blur( 5px );
     //box-shadow: -5px 5px 16px 4px #00000033;
     flex-direction: column;
-    font-family: "Budokan Rounded";
+    font-family: "Proxima Soft";
+    font-weight: 700;
 
     .avatar {
         width: 32px;
@@ -20,15 +21,15 @@ PlayerBar {
         background-position: center;
         background-size: cover;
         border-radius: 10px;
-        margin-right: 4px;
+        //margin-right: 4px;
     }
 
     .name {
         font-size: 25px;
-        font-family: Poppins;
         //background-color: #00665511;
-        //font-family: Budokan Rounded;
-        font-weight: 700;
+        font-family: "Proxima Soft";
+        font-weight: 800;
+        text-stroke: 6px black;
     }
 
     .lower_row {
@@ -36,15 +37,19 @@ PlayerBar {
     }
 
     .money_icon {
-        font-size: 26px;
-        font-family: W10Emoji;
+        font-size: 30px;
+        //font-family: W10Emoji;
         //margin-bottom: 14px;
-        text-stroke: 4px black;
+        font-family: "Proxima Soft";
+        font-weight: 600;
+        text-stroke: 8px black;
+        color: #aaaa00;
     }
 
     .money {
         font-size: 30px;
-        font-family: Budokan Rounded;
+        font-family: "Proxima Soft";
+        font-weight: 700;
         //padding-right: 16px;
         //padding-top: 2px;
         color: #ffff00;
@@ -52,7 +57,6 @@ PlayerBar {
     }
 
     .hp_container {
-
     }
 
     .hp {

@@ -28,14 +28,13 @@ ShopItemLabel {
 
 	.price {
 		position: absolute;
-		font-size: 32px;
-		font-family: Poppins;
 		left: -2px;
 		top: -10px;
-		text-shadow: 2px 2px 4px black;
-		font-weight: 500;
-		font-family: "Budokan Rounded";
+		font-size: 33px;
+		font-family: "Proxima Soft";
+		font-weight: 600;
 		text-stroke: 8px black;
+		text-shadow: 2px 2px 4px black;
 	}
 
 	.level {
@@ -43,14 +42,14 @@ ShopItemLabel {
 		width: 40px;
 		height: 40px;
 		font-size: 38px;
-		font-family: Poppins;
 		color: #fff;
 		text-align: center;
 		justify-content: center;
 		align-items: center;
 		//background-color: #0000ff;
 		overflow: visible;
-		font-family: "Budokan Rounded";
+		font-family: "Proxima Soft";
+		font-weight: 700;
 		text-stroke: 12px black;
 	}
 

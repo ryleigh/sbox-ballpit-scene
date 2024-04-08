@@ -5,12 +5,12 @@
     }
 
     50% {
-        opacity: 1;
+        opacity: 0.9;
         transform: scale(1.02);
     }
 
     70% {
-        opacity: 1;
+        opacity: 0.95;
         transform: scale(0.99);
     }
 
@@ -33,7 +33,6 @@ ItemTooltip {
     backdrop-filter: blur( 5px );
     box-shadow: -5px 5px 16px 4px #00000033;
     flex-direction: column;
-    //font-family: "Budokan Rounded";
     font-family: "Proxima Soft";
     font-weight: 800;
     animation: scaleBounce 0.25s ease-out forwards;

@@ -7,13 +7,13 @@ Scoreboard {
 	//background-color: #1115;
 	justify-content: center;
 	align-items: center;
-	font-family: Poppins;
+	font-family: "Proxima Soft";
+	font-weight: 600;
 	font-size: 22px;
-	color: #ffffffff;
+	color: #ffffff;
 	backdrop-filter: blur( 3px );
 	transform: scale( 1 );
 	transition: all 0.085s ease-out;
-	font-family: "Budokan Rounded";
 	border: 1px solid #000000bb;
 	overflow: hidden;
 
@@ -57,7 +57,8 @@ Scoreboard {
 
 			> .name {
 				flex-grow: 1;
-				font-family: Poppins;
+				font-family: "Proxima Soft";
+				font-weight: 800;
 			}
 
 			> .stat_container {
@@ -88,8 +89,9 @@ Scoreboard {
 		}
 
 		.me {
-			color: #88ff88ff;
-			//font-weight: bold;
+			//color: #88ff88ff;
+			//font-weight: 600;
+			text-stroke: 5px black;
 		}
 	}
 

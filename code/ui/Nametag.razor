@@ -13,19 +13,20 @@
 		var numWins = player?.NumMatchWins ?? 0;
 		var numLosses = player?.NumMatchLosses ?? 0;
 		var maxLetters = 10 + (numWins > 0 ? 0 : 3) + (numLosses > 0 ? 0 : 3);
+		var nameColor = player.IsSpectator ? new Color(1f, 1f, 1f) : (player.PlayerNum == 0 ? Manager.Player0NameColor : Manager.Player1NameColor);
 	}
 
 	<div class="avatar" style="background-image: url( avatar:@owner.SteamId )"></div>
-	<div class="title">@($"{GetNameText(owner.DisplayName, maxLetters)}")</div>
+	<div class="name" style="color:@(nameColor.Rgba);">@($"{GetNameText(owner.DisplayName, maxLetters)}")</div>
 
 	@if(numWins > 0)
 	{
-		<div class="victories">@($"{numWins} 🏆")</div>
+		<div class="victories_losses">@($"{numWins} 🏆")</div>
 	}
 
 	@if(numLosses > 0) 
 	{
-		<div class="victories">@($"{numLosses} 💀")</div>
+		<div class="victories_losses">@($"{numLosses} 💀")</div>
 	}
 </root>
 
