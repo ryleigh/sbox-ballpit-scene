@@ -35,7 +35,7 @@
 
 			@foreach(var pair in strings) 
 			{
-				<div style="color:@((pair.Value).Rgba);">@(pair.Key)</div>
+				<div style="color:@((pair.Value).Rgba); font-size:@(pair.Key == Manager.DESCRIPTION_ARROW ? 13f : 16f);">@(pair.Key)</div>
 			}
 		}
 		else 

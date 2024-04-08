@@ -1,6 +1,28 @@
+@keyframes scaleBounce {
+    0% {
+        opacity: 0.5;
+        transform: scale(0.97);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.02);
+    }
+
+    70% {
+        opacity: 1;
+        transform: scale(0.99);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1.0);
+    }
+}
+
 ItemTooltip {
     position: absolute;
-    width: 270px;
+    width: 300px;
     //height: 80px;
     //background-color: #00000011;
     background-color: #ffffff11;
@@ -11,8 +33,10 @@ ItemTooltip {
     backdrop-filter: blur( 5px );
     box-shadow: -5px 5px 16px 4px #00000033;
     flex-direction: column;
-    font-family: "Budokan Rounded";
-    //font-family: "Discoteca Rounded";
+    //font-family: "Budokan Rounded";
+    font-family: "Proxima Soft";
+    font-weight: 800;
+    animation: scaleBounce 0.25s ease-out forwards;
 
     .top_row {
         flex-direction: row;
@@ -77,20 +101,4 @@ ItemTooltip {
         flex-wrap: wrap;
         gap: 3px;
     }
-    //.level {
-    //    position: absolute;
-    //    top: -15px;
-    //    right: -15px;
-    //    width: 40px;
-    //    height: 40px;
-    //    font-family: Poppins;
-    //    font-family: "Budokan Rounded";
-    //    color: #fff;
-    //    text-align: center;
-    //    justify-content: center;
-    //    align-items: center;
-    //    pointer-events: none;
-    //    text-shadow: 2px 2px 2px black;
-    //    text-stroke: 12px black;
-    //}
 }

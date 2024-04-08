@@ -1,13 +1,6 @@
 ﻿using Sandbox;
 using Sandbox.Network;
 using Sandbox.UI;
-using System.Diagnostics;
-using System.Diagnostics.Metrics;
-using System.IO;
-using System.Numerics;
-using System.Reflection.Emit;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
@@ -218,8 +211,10 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
 		player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );
-		//player.AdjustUpgradeLevel( UpgradeType.Dash, 6 );
-		//player.AdjustUpgradeLevel( UpgradeType.Blink, 2 );
+		player.AdjustUpgradeLevel( UpgradeType.Dash, 6 );
+		player.AdjustUpgradeLevel( UpgradeType.Blink, 2 );
+		player.AdjustUpgradeLevel( UpgradeType.Volley, 2 );
+		player.AdjustUpgradeLevel( UpgradeType.Redirect, 2 );
 		player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 2 );
 
 		//if ( channel.IsHost )
@@ -1119,14 +1114,14 @@ public sealed class Manager : Component, Component.INetworkListener
 		switch ( upgradeType )
 		{
 			case UpgradeType.MoveSpeed:
-				strings.Add( "Move ", DEFAULT_COLOR );
+				strings.Add( "Move", DEFAULT_COLOR );
 				strings.Add( $"{Math.Floor( (MoveSpeedUpgrade.GetIncrease( oldLevel ) - 1f) * 100f )}%", OLD_COLOR );
 				strings.Add( DESCRIPTION_ARROW, DEFAULT_COLOR );
 				strings.Add( $"{Math.Floor( (MoveSpeedUpgrade.GetIncrease( newLevel ) - 1f) * 100f )}%", NEW_COLOR );
-				strings.Add( " faster", DEFAULT_COLOR );
+				strings.Add( "faster", DEFAULT_COLOR );
 				break;
 			case UpgradeType.BumpStrength:
-				strings.Add( "Bumping speeds up balls by ", DEFAULT_COLOR );
+				strings.Add( "Bumping speeds up balls by", DEFAULT_COLOR );
 				strings.Add( $"{Math.Round( BumpStrengthUpgrade.GetIncrease( oldLevel ) )}", OLD_COLOR );
 				strings.Add( DESCRIPTION_ARROW, DEFAULT_COLOR );
 				strings.Add( $"{Math.Round( BumpStrengthUpgrade.GetIncrease( newLevel ) )}", NEW_COLOR );
