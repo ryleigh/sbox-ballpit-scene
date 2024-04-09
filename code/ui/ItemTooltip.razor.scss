@@ -97,7 +97,9 @@ ItemTooltip {
         justify-content: center;
         //font-size: 12px;
         font-style: italic;
-        opacity:0.8;
+        opacity: 0.9;
+        box-shadow: -2px 2px 4px #00000033;
+        //text-shadow: -2px 2px 2px #00000066;
     }
 
     .description {

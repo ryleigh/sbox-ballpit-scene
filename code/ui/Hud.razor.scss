@@ -54,17 +54,21 @@ Hud {
 		font-weight: 700;
 		border-radius: 8px;
 		white-space: nowrap;
+		transform: scale( 1 );
+		transition: all 0.05s ease-out;
 
 		&:hover {
 			background-color: #153582;
 			color: #eee;
 			opacity: 0.8;
+			transform: scale( 1.03 );
 		}
 
 		&:active {
 			background-color: #3555d2;
 			color: #fff;
 			opacity: 1;
+			transform: scale( 1.06 );
 		}
 	}
 
@@ -82,17 +86,21 @@ Hud {
 		font-family: "Proxima Soft";
 		font-weight: 700;
 		border-radius: 8px;
+		transform: scale( 1 );
+		transition: all 0.05s ease-out;
 
 		&:hover {
 			background-color: #153582;
 			color: #eee;
 			opacity: 0.8;
+			transform: scale( 1.03 );
 		}
 
 		&:active {
 			background-color: #3555d2;
 			color: #fff;
 			opacity: 1;
+			transform: scale( 1.06 );
 		}
 	}
 

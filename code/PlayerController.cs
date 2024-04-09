@@ -61,6 +61,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	public const float SCALE_SPECTATOR = 1.05f;
 
 	[Sync] public float MoneyChangedTime { get; set; }
+	[Sync] public float HpChangedTime { get; set; }
 
 	protected override void OnAwake()
 	{
@@ -492,6 +493,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		HP--;
 
+		HpChangedTime = RealTime.Now;
+
 		if ( HP <= 0 )
 		{
 			Die( force );
@@ -537,6 +540,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		}
 		
 		HP = MaxHP;
+		HpChangedTime = RealTime.Now;
 		IsInvulnerable = false;
 	}
 
@@ -744,6 +748,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		Money = 0;
 		HP = MaxHP;
+		HpChangedTime = RealTime.Now;
 		PassiveUpgrades.Clear();
 		ActiveUpgrades.Clear();
 		PassiveUpgradeProgress.Clear();

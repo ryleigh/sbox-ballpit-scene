@@ -56,10 +56,17 @@ PlayerBar {
 
     .hp_container {
         position: absolute;
+        width: 120px;
+        height: 40px;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        text-align: center;
+        //border: 1px solid black;
+        white-space: nowrap;
     }
 
     .hp {
-        font-size: 25px;
         color: #ffffff;
         text-stroke: 6px black;
         //background-color: #0000ff11;
