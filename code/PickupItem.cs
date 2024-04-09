@@ -39,6 +39,9 @@ public class PickupItem : Component
 			return;
 
 		Transform.Position = new Vector3( Utils.FastSin( Time.Now * _frequency ) * _amplitude, Transform.Position.y - 25f * ( _startAtTop ? 1f : -1f ) * Time.Delta, HEIGHT );
+
+		if ( (_startAtTop && Transform.Position.y < -120f) || (!_startAtTop && Transform.Position.y > 120f) )
+			GameObject.Destroy();
 	}
 
 	[Broadcast]

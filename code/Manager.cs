@@ -4,7 +4,7 @@ using Sandbox.UI;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
-public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, MoreShopItems, }
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, MoreShopItems, Endow, }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 
 public struct UpgradeData
@@ -224,11 +224,11 @@ public sealed class Manager : Component, Component.INetworkListener
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
 
+		player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
 		player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
 		player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );
 		player.AdjustUpgradeLevel( UpgradeType.Dash, 6 );
 		player.AdjustUpgradeLevel( UpgradeType.Blink, 2 );
-		player.AdjustUpgradeLevel( UpgradeType.Volley, 2 );
 		player.AdjustUpgradeLevel( UpgradeType.Redirect, 2 );
 		player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 2 );
 
@@ -307,7 +307,7 @@ public sealed class Manager : Component, Component.INetworkListener
 						}
 						else
 						{
-							SpawnMoneyPickup( connection, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+							SpawnMoneySineWave( connection, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 						}
 
 						_timeSincePickupSpawn = 0f;
@@ -370,11 +370,11 @@ public sealed class Manager : Component, Component.INetworkListener
 
 						var winningPlayer = GetPlayer( _roundWinnerPlayerNum );
 						if ( winningPlayer != null )
-							SpawnMoneyPickup( GetConnection( winningPlayer.PlayerNum ), numLevels: 10, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (winningPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
+							SpawnMoneyTossed( GetConnection( winningPlayer.PlayerNum ), numLevels: 10, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (winningPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
 
 						var deadPlayer = GetPlayer( Globals.GetOpponentPlayerNum( _roundWinnerPlayerNum ) );
 						if ( deadPlayer != null )
-							SpawnMoneyPickup( GetConnection( deadPlayer.PlayerNum ), numLevels: 5, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (deadPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
+							SpawnMoneyTossed( GetConnection( deadPlayer.PlayerNum ), numLevels: 5, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * (deadPlayer.PlayerNum == 0 ? -1f : 1f) + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
 					}
 				}
 
@@ -627,20 +627,27 @@ public sealed class Manager : Component, Component.INetworkListener
 		pickupItemObj.Components.Get<PickupItem>().Init( upgradeType, numLevels, startAtTop );
 	}
 
-	public void SpawnMoneyPickup( Connection connection, int numLevels, bool startAtTop )
+	public void SpawnMoneySineWave( Connection connection, int numLevels, bool startAtTop )
 	{
 		var pos = new Vector2( 0f, 150f * (startAtTop ? 1f : -1f) );
 
 		var moneyPickupObj = MoneyPickupPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
 		moneyPickupObj.NetworkSpawn( connection );
-		moneyPickupObj.Components.Get<MoneyPickup>().Init( numLevels, startAtTop );
+		moneyPickupObj.Components.Get<MoneyPickup>().InitSineWave( numLevels, startAtTop );
 	}
 
-	public void SpawnMoneyPickup( Connection connection, int numLevels, Vector2 startPos, Vector2 endPos, float time )
+	public void SpawnMoneyTossed( Connection connection, int numLevels, Vector2 startPos, Vector2 endPos, float time )
 	{
 		var moneyPickupObj = MoneyPickupPrefab.Clone( new Vector3( startPos.x, startPos.y, 0f ) );
 		moneyPickupObj.NetworkSpawn( connection );
-		moneyPickupObj.Components.Get<MoneyPickup>().Init( numLevels, startPos, endPos, time );
+		moneyPickupObj.Components.Get<MoneyPickup>().InitTossed( numLevels, startPos, endPos, time );
+	}
+
+	public void SpawnMoneyEndow( Connection connection, int numLevels, Vector2 startPos )
+	{
+		var moneyPickupObj = MoneyPickupPrefab.Clone( new Vector3( startPos.x, startPos.y, 0f ) );
+		moneyPickupObj.NetworkSpawn( connection );
+		moneyPickupObj.Components.Get<MoneyPickup>().InitEndow( numLevels, startPos );
 	}
 
 	[Broadcast]
@@ -1135,6 +1142,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			case UpgradeType.Dash: return $"Move forward quicky";
 			case UpgradeType.Redirect: return $"All your balls move in the direction from you to cursor";
 			case UpgradeType.Converge: return $"Your balls target enemy";
+			case UpgradeType.Endow: return $"Send bouncing money toward your opponent";
 		}
 
 		return "";
@@ -1273,6 +1281,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 3, pricePerAmountMin: 1, pricePerAmountMax: 2, useableInBuyPhase: true );
 		CreateUpgrade( UpgradeType.Redirect, "Redirect", "⤴️", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7 );
 		CreateUpgrade( UpgradeType.Converge, "Converge", "📍", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 4, pricePerAmountMax: 6 );
+		CreateUpgrade( UpgradeType.Endow, "Endow", "💰", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 4, pricePerAmountMax: 6 );
 
 		foreach (var upgradeData in UpgradeDatas)
 		{

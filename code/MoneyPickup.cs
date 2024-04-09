@@ -1,6 +1,7 @@
 using Sandbox;
+using System.Numerics;
 
-public enum MoneyMoveMode { SineWave, Tossed, }
+public enum MoneyMoveMode { SineWave, Tossed, Endow }
 
 public class MoneyPickup : Component
 {
@@ -10,22 +11,28 @@ public class MoneyPickup : Component
 
 	public MoneyMoveMode MoneyMoveMode { get; set; }
 
+	// SineWave
 	private float _frequency;
 	private float _amplitude;
 	private bool _startAtTop;
 
+	// Tossed
 	private Vector2 _startPos;
 	private Vector2 _endPos;
 	private bool _isTossed;
 	private float _tossTime;
 	private TimeSince _timeSinceToss;
 
+	// Endow
+	private int _startingSide;
+	private Vector2 _dir;
+
 	[Sync] public bool CanBePickedUp { get; private set; }
 	[Sync] public bool IsFlying { get; private set; }
 
 
 	[Broadcast]
-	public void Init( int numLevels, bool startAtTop )
+	public void InitSineWave( int numLevels, bool startAtTop )
 	{
 		if ( IsProxy )
 			return;
@@ -43,7 +50,7 @@ public class MoneyPickup : Component
 	}
 
 	[Broadcast]
-	public void Init( int numLevels, Vector2 startPos, Vector2 endPos, float time )
+	public void InitTossed( int numLevels, Vector2 startPos, Vector2 endPos, float time )
 	{
 		if ( IsProxy )
 			return;
@@ -62,6 +69,23 @@ public class MoneyPickup : Component
 		IsFlying = true;
 	}
 
+	[Broadcast]
+	public void InitEndow( int numLevels, Vector2 startPos )
+	{
+		if ( IsProxy )
+			return;
+
+		MoneyMoveMode = MoneyMoveMode.Endow;
+
+		NumLevels = numLevels;
+
+		CanBePickedUp = false;
+		IsFlying = true;
+
+		_startingSide = startPos.x < 0f ? 0 : 1;
+		_dir = _startingSide == 0 ? new Vector2( 1f, 0f ) : new Vector2( -1f, 0f );
+	}
+
 	protected override void OnUpdate()
 	{
 		base.OnUpdate();
@@ -73,6 +97,10 @@ public class MoneyPickup : Component
 		{
 			case MoneyMoveMode.SineWave:
 				Transform.Position = new Vector3( Utils.FastSin( Time.Now * _frequency ) * _amplitude, Transform.Position.y - 25f * (_startAtTop ? 1f : -1f) * Time.Delta, HEIGHT );
+
+				if ( (_startAtTop && Transform.Position.y < -120f) || (!_startAtTop && Transform.Position.y > 120f) )
+					GameObject.Destroy();
+
 				break;
 			case MoneyMoveMode.Tossed:
 				if(_isTossed)
@@ -91,6 +119,26 @@ public class MoneyPickup : Component
 						Transform.Position = new Vector3( pos.x, pos.y + yOffset, HEIGHT );
 					}
 				}
+				break;
+			case MoneyMoveMode.Endow:
+				Transform.Position += (Vector3)_dir * 160f * Time.Delta;
+
+				if( !CanBePickedUp )
+				{
+					if ( ( _startingSide == 0 && Transform.Position.x > 0f) || (_startingSide == 1 && Transform.Position.x < 0f) )
+						CanBePickedUp = true;
+				}
+
+				if( ( _startingSide == 0 && Transform.Position.x > Manager.X_FAR ) || (_startingSide == 1 && Transform.Position.x < -Manager.X_FAR) )
+				{
+					_dir = _dir.WithX( _dir.x * -1f );
+					Manager.Instance.PlaySfx( "bubble", Transform.Position, volume: 0.3f, pitch: Game.Random.Float( 1.2f, 1.3f ) );
+				}
+					
+
+				if ( (_startingSide == 0 && Transform.Position.x < -Manager.X_FAR) || (_startingSide == 1 && Transform.Position.x > Manager.X_FAR) )
+					GameObject.Destroy();
+
 				break;
 		}
 	}
