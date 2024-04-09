@@ -8,7 +8,7 @@
 		return;
 	}
 
-	<div class="icon">💸</div>
+	<div class="icon">@(MoneyPickup.IsFlying ? "💸" : "💵")</div>
 
 	@if(MoneyPickup.NumLevels > 1)
 	{
@@ -37,6 +37,6 @@
 
 	protected override int BuildHash()
 	{
-		return System.HashCode.Combine(TargetObject, MoneyPickup.NumLevels);
+		return System.HashCode.Combine(TargetObject, MoneyPickup.NumLevels, MoneyPickup.IsFlying);
 	}
 }

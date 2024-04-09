@@ -20,7 +20,8 @@ public class MoneyPickup : Component
 	private float _tossTime;
 	private TimeSince _timeSinceToss;
 
-	[Sync] public bool HasLanded { get; private set; }
+	[Sync] public bool CanBePickedUp { get; private set; }
+	[Sync] public bool IsFlying { get; private set; }
 
 
 	[Broadcast]
@@ -37,7 +38,8 @@ public class MoneyPickup : Component
 		_amplitude = Game.Random.Float( 70f, 135f ) * (Game.Random.Int( 0, 1 ) == 0 ? 1f : -1f);
 		_startAtTop = startAtTop;
 
-		HasLanded = true;
+		CanBePickedUp = true;
+		IsFlying = true;
 	}
 
 	[Broadcast]
@@ -56,7 +58,8 @@ public class MoneyPickup : Component
 		_tossTime = time;
 		_timeSinceToss = 0f;
 
-		HasLanded = false;
+		CanBePickedUp = false;
+		IsFlying = true;
 	}
 
 	protected override void OnUpdate()
@@ -78,7 +81,8 @@ public class MoneyPickup : Component
 					{
 						Transform.Position = new Vector3( _endPos.x, _endPos.y, HEIGHT );
 						_isTossed = false;
-						HasLanded = true;
+						CanBePickedUp = true;
+						IsFlying = false;
 					}
 					else
 					{

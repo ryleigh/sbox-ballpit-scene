@@ -423,7 +423,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		{
 			var moneyPickup = other.Components.Get<MoneyPickup>();
 
-			if(moneyPickup.HasLanded || moneyPickup.Transform.Position.y < 20f)
+			if(moneyPickup.CanBePickedUp || moneyPickup.Transform.Position.y < 20f)
 			{
 				Manager.Instance.PlaySfx( "bubble", Transform.Position );
 				AdjustMoney( moneyPickup.NumLevels );
