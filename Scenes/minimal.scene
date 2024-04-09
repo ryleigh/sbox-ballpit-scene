@@ -64,10 +64,18 @@
           "SlidingGround": {
             "_type": "gameobject",
             "go": "a6c7246a-4f7b-44dd-927a-0190c61f1bdb"
+          },
+          "WallLeft": {
+            "_type": "gameobject",
+            "go": "5bcfadd0-3533-47ae-bd63-5d9a6594be02"
+          },
+          "WallRight": {
+            "_type": "gameobject",
+            "go": "7567ac62-ee13-4f31-b15e-104725a78dae"
           }
         },
         {
-          "__type": "ScreenPanel",
+          "__type": "Sandbox.ScreenPanel",
           "__guid": "399f1b2b-3ae6-4716-8b2f-aa84313db96b",
           "AutoScreenScale": true,
           "Opacity": 1,
@@ -93,7 +101,7 @@
       "NetworkMode": 2,
       "Components": [
         {
-          "__type": "DirectionalLight",
+          "__type": "Sandbox.DirectionalLight",
           "__guid": "fede1076-16d0-4535-a1da-76dea5612de4",
           "FogMode": "Enabled",
           "FogStrength": 1,
@@ -111,13 +119,13 @@
       "NetworkMode": 2,
       "Components": [
         {
-          "__type": "SkyBox2D",
+          "__type": "Sandbox.SkyBox2D",
           "__guid": "c54fa58d-597f-45b8-9b68-fbd8520166d5",
           "SkyMaterial": "materials/skybox/light_test_sky_sunny03.vmat",
           "Tint": "1,1,1,1"
         },
         {
-          "__type": "EnvmapProbe",
+          "__type": "Sandbox.EnvmapProbe",
           "__guid": "5985538d-831e-4f88-9504-15933c62919c",
           "Texture": "textures/cubemaps/default2.vtex",
           "Bounds": {
@@ -146,7 +154,7 @@
       "NetworkMode": 2,
       "Components": [
         {
-          "__type": "ModelRenderer",
+          "__type": "Sandbox.ModelRenderer",
           "__guid": "34d07958-cf53-4c31-9a3c-2bd8dadfb4c7",
           "BodyGroups": 18446744073709551615,
           "MaterialOverride": "materials/default.vmat",
@@ -165,7 +173,7 @@
       "NetworkMode": 2,
       "Components": [
         {
-          "__type": "ModelRenderer",
+          "__type": "Sandbox.ModelRenderer",
           "__guid": "c6102a7b-8e0a-421d-a44b-a07a9cb1ea7e",
           "BodyGroups": 18446744073709551615,
           "MaterialOverride": "materials/default.vmat",
@@ -184,7 +192,7 @@
       "NetworkMode": 2,
       "Components": [
         {
-          "__type": "ModelRenderer",
+          "__type": "Sandbox.ModelRenderer",
           "__guid": "35446fc3-8676-410c-8a1c-f7bf0135efed",
           "BodyGroups": 18446744073709551615,
           "MaterialOverride": "materials/default.vmat",
@@ -203,7 +211,7 @@
       "NetworkMode": 2,
       "Components": [
         {
-          "__type": "ModelRenderer",
+          "__type": "Sandbox.ModelRenderer",
           "__guid": "c815f19c-93a9-49ef-856a-632d40368cd2",
           "BodyGroups": 18446744073709551615,
           "MaterialOverride": "materials/default.vmat",
@@ -222,7 +230,7 @@
       "NetworkMode": 2,
       "Components": [
         {
-          "__type": "CameraComponent",
+          "__type": "Sandbox.CameraComponent",
           "__guid": "5a754e4d-95ee-4c35-97aa-35fbaf23c2db",
           "BackgroundColor": "0.33333,0.46275,0.52157,1",
           "ClearFlags": "All",
@@ -239,7 +247,7 @@
           "ZNear": 10
         },
         {
-          "__type": "Bloom",
+          "__type": "Sandbox.Bloom",
           "__guid": "0bf7c0df-25ad-4b2e-a143-5c7d6cdc5936",
           "BloomColor": {
             "color": [
@@ -268,7 +276,7 @@
           "ThresholdWidth": 0.5
         },
         {
-          "__type": "Tonemapping",
+          "__type": "Sandbox.Tonemapping",
           "__guid": "92251529-0b5c-4168-b93e-5f5d0da3c3d3",
           "ExposureCompensation": 0,
           "MaximumExposure": 2,
@@ -276,12 +284,12 @@
           "Rate": 1
         },
         {
-          "__type": "Sharpen",
+          "__type": "Sandbox.Sharpen",
           "__guid": "bc608051-c127-4bcf-aaf2-c92e3aaa7240",
           "Scale": 0.2
         },
         {
-          "__type": "Highlight",
+          "__type": "Sandbox.Highlight",
           "__guid": "36816886-1e41-4675-80ed-da637c23aa9f",
           "__enabled": false
         }
@@ -296,7 +304,7 @@
       "NetworkMode": 2,
       "Components": [
         {
-          "__type": "ModelRenderer",
+          "__type": "Sandbox.ModelRenderer",
           "__guid": "a2ff3f15-8a5a-4c27-9a62-0a2671765424",
           "BodyGroups": 18446744073709551615,
           "Model": "models/dev/box.vmdl",
@@ -304,7 +312,7 @@
           "Tint": "0,0,0,1"
         },
         {
-          "__type": "BoxCollider",
+          "__type": "Sandbox.BoxCollider",
           "__guid": "83ec2c37-4951-4e26-aa76-f9acfaa623a9",
           "Center": "0,0,0",
           "IsTrigger": false,
@@ -322,7 +330,7 @@
       "NetworkMode": 2,
       "Components": [
         {
-          "__type": "ModelRenderer",
+          "__type": "Sandbox.ModelRenderer",
           "__guid": "fddd7f46-f4da-4d74-bfa6-a6aaca1cd0ae",
           "BodyGroups": 18446744073709551615,
           "Model": "models/dev/box.vmdl",
@@ -330,7 +338,7 @@
           "Tint": "0,0.24651,0.07395,1"
         },
         {
-          "__type": "BoxCollider",
+          "__type": "Sandbox.BoxCollider",
           "__guid": "fc81dafb-fbec-41e3-a5ca-8e6b80960e0f",
           "Center": "0,0,0",
           "IsTrigger": false,
@@ -348,7 +356,7 @@
       "NetworkMode": 2,
       "Components": [
         {
-          "__type": "ModelRenderer",
+          "__type": "Sandbox.ModelRenderer",
           "__guid": "1b7d0926-0f13-4845-881d-0ca1c36ac36b",
           "BodyGroups": 18446744073709551615,
           "Model": "models/dev/box.vmdl",
@@ -356,7 +364,7 @@
           "Tint": "0,0,0,1"
         },
         {
-          "__type": "BoxCollider",
+          "__type": "Sandbox.BoxCollider",
           "__guid": "b7647085-44b3-4268-b487-db3c3597ca5b",
           "Center": "0,0,0",
           "IsTrigger": false,
@@ -374,7 +382,7 @@
       "NetworkMode": 2,
       "Components": [
         {
-          "__type": "ModelRenderer",
+          "__type": "Sandbox.ModelRenderer",
           "__guid": "09f6e64a-46db-4c3c-a77d-800a16713422",
           "BodyGroups": 18446744073709551615,
           "Model": "models/dev/box.vmdl",
@@ -382,7 +390,7 @@
           "Tint": "0,0.05969,0.32558,1"
         },
         {
-          "__type": "BoxCollider",
+          "__type": "Sandbox.BoxCollider",
           "__guid": "b31e36bc-242c-437e-bc8a-e450e936dddd",
           "Center": "0,0,0",
           "IsTrigger": false,
@@ -400,7 +408,7 @@
       "NetworkMode": 2,
       "Components": [
         {
-          "__type": "ModelRenderer",
+          "__type": "Sandbox.ModelRenderer",
           "__guid": "3d012adf-0596-420c-afb2-710e9d048e50",
           "BodyGroups": 18446744073709551615,
           "Model": "models/dev/box.vmdl",
@@ -408,7 +416,7 @@
           "Tint": "0,0,0,1"
         },
         {
-          "__type": "BoxCollider",
+          "__type": "Sandbox.BoxCollider",
           "__guid": "2d6ad031-7469-41bc-800e-316611eaed6a",
           "Center": "0,0,0",
           "IsTrigger": false,
@@ -426,7 +434,7 @@
       "NetworkMode": 2,
       "Components": [
         {
-          "__type": "ModelRenderer",
+          "__type": "Sandbox.ModelRenderer",
           "__guid": "53696897-a3c8-45da-a1e1-9b33d17f9557",
           "BodyGroups": 18446744073709551615,
           "Model": "models/dev/box.vmdl",
@@ -434,7 +442,7 @@
           "Tint": "0,0,0,1"
         },
         {
-          "__type": "BoxCollider",
+          "__type": "Sandbox.BoxCollider",
           "__guid": "c227d366-6cb4-41a5-84f5-dc6896ec4634",
           "Center": "0,0,0",
           "IsTrigger": false,
@@ -451,7 +459,7 @@
       "NetworkMode": 2,
       "Components": [
         {
-          "__type": "BoxCollider",
+          "__type": "Sandbox.BoxCollider",
           "__guid": "01d29087-3ada-468e-b7ea-8cd2fd2f4375",
           "Center": "0,0,-5",
           "IsTrigger": false,
@@ -475,7 +483,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "f17a9c1e-b06d-4646-9545-808baf7a257d",
               "BodyGroups": 18446744073709551615,
               "MaterialOverride": "materials/default.vmat",
@@ -494,7 +502,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "7face56c-b95a-4d03-89ba-996ce35163ba",
               "BodyGroups": 18446744073709551615,
               "MaterialOverride": "materials/default.vmat",
@@ -513,7 +521,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "c9995b59-9dcc-476a-a1d3-c42335d97e09",
               "BodyGroups": 18446744073709551615,
               "MaterialOverride": "materials/default.vmat",
@@ -532,7 +540,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "e3460d62-f631-4e70-8631-5e4ae9547982",
               "BodyGroups": 18446744073709551615,
               "MaterialOverride": "materials/default.vmat",
@@ -551,7 +559,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "4ab69b5b-83eb-46ce-b878-df4cd0c8625c",
               "BodyGroups": 18446744073709551615,
               "MaterialOverride": "materials/default.vmat",
@@ -570,7 +578,7 @@
           "NetworkMode": 1,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "97a5f3e8-633f-498f-ace8-a9686affc83d",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -601,7 +609,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "f8d8edd7-176e-4ca5-bb97-ea3c0ac8141b",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -619,7 +627,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "480daafb-cb66-4808-ae03-7966b480eed0",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -637,7 +645,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "77153e4e-5310-4ae8-972a-1eab89419782",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -655,7 +663,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "a402c2be-1b89-4280-a0e5-9cdccdbc456c",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -673,7 +681,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "c563d4ed-6e01-4049-9327-3ebb4db29594",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -701,7 +709,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "efff9fd5-7694-431a-8471-2ebc0fd51333",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -719,7 +727,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "840df11f-5eac-42ce-9793-a5c05f0e5c23",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -737,7 +745,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "4b1cb143-4a8a-493a-be9d-757b3d51a702",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -755,7 +763,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "b886b148-b25a-408c-8f03-685cdcb19888",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -773,7 +781,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "38179b34-0c62-4592-b332-9cf6fcec05a6",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -801,7 +809,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "be716b13-42cd-4c0f-aab7-e8b710c5daac",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -819,7 +827,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "4a9973f0-3ae8-40a8-80eb-9ed9d16902b1",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -837,7 +845,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "1dbb0803-142d-4cf2-a902-2a7b3fdfa704",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -855,7 +863,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "958152e5-7ec4-4037-9bbb-ef8ddd4a68c8",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -873,7 +881,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "a2a555f0-3c70-47f8-8864-7cc8ce9fccbc",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -901,7 +909,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "bc70358e-2874-44a0-91e8-e855b504972a",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -919,7 +927,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "dc312ce3-209e-432e-aedb-22b4d60b9f99",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -937,7 +945,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "56f3939d-6e00-47c9-a482-2e54d7c53e43",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -955,7 +963,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "aecfb460-19b8-459d-9bb8-434ffbf99430",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -973,7 +981,7 @@
           "NetworkMode": 2,
           "Components": [
             {
-              "__type": "ModelRenderer",
+              "__type": "Sandbox.ModelRenderer",
               "__guid": "27287feb-b9c5-4a02-9c73-98694ce5f2d7",
               "BodyGroups": 18446744073709551615,
               "Model": "models/dev/box.vmdl",
@@ -1008,7 +1016,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-07T15:44:47.9600899-07:00",
+  "LastSaved": "2024-04-08T22:23:34.1957176-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

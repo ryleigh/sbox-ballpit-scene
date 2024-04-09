@@ -52,6 +52,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject BallExplosionParticles { get; set; }
 	[Property] public GameObject BallGutterParticles { get; set; }
 	[Property] public GameObject SlidingGround { get; set; }
+	[Property] public GameObject WallLeft { get; set; }
+	[Property] public GameObject WallRight { get; set; }
 
 	[Property, Sync] public Color ColorPlayer0 { get; set; }
 	[Property, Sync] public Color ColorPlayer1 { get; set; }
@@ -132,6 +134,10 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public bool IsMouseDown { get; set; }
 
+	private float _sideWallXScale;
+	public TimeSince TimeSinceLeftWallRebound { get; set; }
+	public TimeSince TimeSinceRightWallRebound { get; set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -143,6 +149,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		OriginalCameraRot = Camera.Transform.Rotation;
 
 		Dispenser = Scene.GetAllComponents<Dispenser>().FirstOrDefault();
+
+		_sideWallXScale = WallLeft.Transform.Scale.x;
 
 		GenerateUpgrades();
 	}
@@ -246,6 +254,10 @@ public sealed class Manager : Component, Component.INetworkListener
 		//Gizmo.Draw.Text( $"IsMouseDown: {IsMouseDown}", new global::Transform( Vector3.Zero ) );
 
 		SlidingGround.Transform.Position = new Vector3( CenterLineOffset, 0f, 0f );
+
+		float REBOUND_TIME = 0.3f;
+		WallLeft.Transform.Scale = WallLeft.Transform.Scale.WithX( Utils.Map( TimeSinceLeftWallRebound, 0f, REBOUND_TIME, _sideWallXScale * 1.75f, _sideWallXScale, EasingType.BounceOut ) );
+		WallRight.Transform.Scale = WallRight.Transform.Scale.WithX( Utils.Map( TimeSinceRightWallRebound, 0f, REBOUND_TIME, _sideWallXScale * 1.75f, _sideWallXScale, EasingType.BounceOut ) );
 
 		if ( IsSlowmo )
 		{

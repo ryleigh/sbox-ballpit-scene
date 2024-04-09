@@ -169,7 +169,7 @@ public class Ball : Component
 			}
 			else
 			{
-				HitBarrier();
+				HitSideWall(left: true);
 				Transform.Position = Transform.Position.WithX( xMin );
 				Velocity = Velocity.WithX( MathF.Abs( Velocity.x ) );
 			}
@@ -178,7 +178,7 @@ public class Ball : Component
 		{
 			if ( PlayerNum == 0 )
 			{
-				HitBarrier();
+				HitSideWall(left: false);
 				Transform.Position = Transform.Position.WithX( xMax );
 				Velocity = Velocity.WithX( -MathF.Abs( Velocity.x ) );
 			}
@@ -268,9 +268,14 @@ public class Ball : Component
 	}
 
 	[Broadcast]
-	public void HitBarrier()
+	public void HitSideWall(bool left)
 	{
 		Sound.Play( "frame-bounce", Transform.Position.WithZ(Globals.SFX_HEIGHT) );
+
+		if(left)
+			Manager.Instance.TimeSinceLeftWallRebound = 0f;
+		else
+			Manager.Instance.TimeSinceRightWallRebound = 0f;
 	}
 
 	[Broadcast]
