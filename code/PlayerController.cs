@@ -60,6 +60,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public const float SCALE_SPECTATOR = 1.05f;
 
+	[Sync] public float MoneyChangedTime { get; set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -285,8 +287,6 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		var upgrade = LocalUpgrades[upgradeType];
 		upgrade.Use();
-
-		UpgradeUseTimes[upgradeType] = RealTime.Now;
 
 		if ( upgradeType != UpgradeType.None )
 			AdjustUpgradeLevel( upgradeType, -1 );
@@ -562,6 +562,8 @@ public class PlayerController : Component, Component.ITriggerListener
 			return;
 
 		Money += amount;
+
+		MoneyChangedTime = RealTime.Now;
 	}
 
 	//[Broadcast]
@@ -730,6 +732,8 @@ public class PlayerController : Component, Component.ITriggerListener
 			upgrade.SetLevel( amount );
 			LocalUpgrades.Add( upgradeType, upgrade );
 		}
+
+		UpgradeUseTimes[upgradeType] = RealTime.Now;
 	}
 
 	[Broadcast]

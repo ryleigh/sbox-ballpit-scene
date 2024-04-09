@@ -37,7 +37,6 @@ PlayerBar {
     }
 
     .money_icon {
-        font-size: 30px;
         //font-family: W10Emoji;
         //margin-bottom: 14px;
         font-family: "Proxima Soft";
@@ -47,7 +46,6 @@ PlayerBar {
     }
 
     .money {
-        font-size: 30px;
         font-family: "Proxima Soft";
         font-weight: 700;
         //padding-right: 16px;
@@ -57,6 +55,7 @@ PlayerBar {
     }
 
     .hp_container {
+        position: absolute;
     }
 
     .hp {

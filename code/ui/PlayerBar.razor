@@ -6,6 +6,8 @@
 <root>
 	@{
 		var playerNum = Player.PlayerNum;
+		var moneySize = Utils.Map(RealTime.Now - Player.MoneyChangedTime, 0f, 0.33f, 35f, 30f, EasingType.BounceOut);
+		var hpAlign = playerNum == 0 ? "left: 100px;" : "right: 100px;";
 	}
 
 	<div style="flex-direction: @(playerNum == 0 ? "row" : "row-reverse"); gap: 6px;">
@@ -14,12 +16,12 @@
 	</div>
 
 	<div class="lower_row" style="flex-direction: @(playerNum == 0 ? "row" : "row-reverse");">
-		<div style="flex-direction: row; gap: 2px;">
+		<div style="flex-direction: row; gap: 2px; font-size: @(moneySize)px;">
 			<div class="money_icon">@($"$")</div>
 			<div class="money">@($"{Player.Money}")</div>
 		</div>
 
-		<div class="hp_container" style="flex-direction: @(playerNum == 0 ? "row" : "row-reverse");">
+		<div class="hp_container" style="flex-direction: @(playerNum == 0 ? "row" : "row-reverse"); @hpAlign">
 			@for(int i = 0; i < Player.MaxHP; i++)
 			{
 				<div class="hp" style="opacity:@(Player.HP > i ? 1f : 0.15f);">@(Player.HP > i ? "❤️" : "🖤")</div>
@@ -39,6 +41,7 @@
 		if (Player == null || Connection == null)
 			return 0;
 
-		return System.HashCode.Combine(Player.HP, Player.Money, Connection.DisplayName, Player.PlayerNum);
+		var moneySize = Utils.Map(RealTime.Now - Player.MoneyChangedTime, 0f, 0.4f, 36f, 30f, EasingType.BounceOut);
+		return System.HashCode.Combine(Player.HP, Player.Money, Connection.DisplayName, Player.PlayerNum, moneySize);
 	}
 }
