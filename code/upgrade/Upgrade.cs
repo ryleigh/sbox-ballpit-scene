@@ -36,4 +36,9 @@ public class Upgrade
 	{
 
 	}
+
+	public virtual void ClearProgress()
+	{
+
+	}
 }

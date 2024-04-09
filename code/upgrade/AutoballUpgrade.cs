@@ -31,4 +31,11 @@ public class AutoballUpgrade : Upgrade
 			Player.PassiveUpgradeProgress[UpgradeType.Autoball] = Math.Clamp( _autoballTimer / delay, 0f, 1f );
 		}
 	}
+
+	public override void ClearProgress()
+	{
+		base.ClearProgress();
+
+		_autoballTimer = 0f;
+	}
 }

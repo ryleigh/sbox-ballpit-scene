@@ -743,6 +743,21 @@ public class PlayerController : Component, Component.ITriggerListener
 		Money = 118;
 	}
 
+	[Broadcast]
+	public void ClearUpgradeProgress()
+	{
+		if ( IsProxy ) 
+			return;
+
+		PassiveUpgradeProgress.Clear();
+
+		foreach ( var pair in LocalUpgrades )
+		{
+			var upgrade = pair.Value;
+			upgrade.ClearProgress();
+		}
+	}
+
 	public int GetUpgradeHash()
 	{
 		int hash = 0;

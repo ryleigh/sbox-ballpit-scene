@@ -340,6 +340,9 @@ public sealed class Manager : Component, Component.INetworkListener
 
 					DestroyPickups();
 
+					Player0?.ClearUpgradeProgress();
+					Player1?.ClearUpgradeProgress();
+
 					if ( Math.Abs( CurrentScore ) < SCORE_NEEDED_TO_WIN )
 					{
 						SpawnScoreText( _roundWinnerPlayerNum, CurrentScore );
