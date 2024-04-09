@@ -135,7 +135,6 @@ public class MoneyPickup : Component
 					Manager.Instance.PlaySfx( "bubble", Transform.Position, volume: 0.3f, pitch: Game.Random.Float( 1.2f, 1.3f ) );
 				}
 					
-
 				if ( (_startingSide == 0 && Transform.Position.x < -Manager.X_FAR) || (_startingSide == 1 && Transform.Position.x > Manager.X_FAR) )
 					GameObject.Destroy();
 

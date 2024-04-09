@@ -19,7 +19,7 @@ public class EndowUpgrade : Upgrade
 		{
 			await Task.Delay( 125 );
 
-			if ( Manager.Instance.GamePhase == GamePhase.RoundActive )
+			if ( Manager.Instance.GamePhase == GamePhase.RoundActive && !Player.IsDead && !Player.IsSpectator )
 			{
 				Manager.SpawnMoneyEndow( Manager.Instance.GetConnection( Player.PlayerNum ), 1, Player.Transform.Position );
 				Manager.PlaySfx( "bubble", Player.Transform.Position, volume: 0.3f, pitch: Game.Random.Float(0.8f, 0.95f) );

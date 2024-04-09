@@ -8,7 +8,11 @@
 		return;
 	}
 
-	<div class="icon">@(MoneyPickup.IsFlying ? "💸" : "💵")</div>
+	@{
+		var opacity = (MoneyPickup.MoneyMoveMode == MoneyMoveMode.Endow && !MoneyPickup.CanBePickedUp) ? 0.2f : 1f;
+	}
+
+	<div class="icon" style="opacity:@opacity;">@(MoneyPickup.IsFlying ? "💸" : "💵")</div>
 
 	@if(MoneyPickup.NumLevels > 1)
 	{
@@ -37,6 +41,6 @@
 
 	protected override int BuildHash()
 	{
-		return System.HashCode.Combine(TargetObject, MoneyPickup.NumLevels, MoneyPickup.IsFlying);
+		return System.HashCode.Combine(TargetObject, MoneyPickup.NumLevels, MoneyPickup.IsFlying, MoneyPickup.CanBePickedUp);
 	}
 }

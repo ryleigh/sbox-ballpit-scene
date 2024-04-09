@@ -1,6 +1,9 @@
 ﻿using Sandbox;
 using Sandbox.Citizen;
 using Sandbox.UI;
+using System.Numerics;
+using System.Threading;
+using System.Threading.Tasks;
 
 public class PlayerController : Component, Component.ITriggerListener
 {
@@ -63,6 +66,8 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Sync] public float MoneyChangedTime { get; set; }
 	[Sync] public float HpChangedTime { get; set; }
 
+	public bool IsIntangible { get; set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -99,7 +104,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		//}
 
 		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
-		//Gizmo.Draw.Text( $"{Math.Floor(GetTotalVelocity().Length)}", new global::Transform( Transform.Position ) );
+		//Gizmo.Draw.Text( $"{IsIntangible}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity );
 
@@ -116,10 +121,13 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		if( _isFlashing && _timeSinceFlashToggle > 0.04f )
 		{
-			SetRendererVisibility( !_renderersVisible );
 			_renderersVisible = !_renderersVisible;
+			SetRenderOpacity( _renderersVisible ? 1f : 0.1f );
 			_timeSinceFlashToggle = 0f;
 		}
+
+		if ( _isFading )
+			HandleFading();
 
 		if ( IsProxy )
 			return;
@@ -183,7 +191,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 			CheckBoundsPlaying();
 
-			if ( Manager.Instance.GamePhase == GamePhase.RoundActive )
+			if ( !IsIntangible && Manager.Instance.GamePhase == GamePhase.RoundActive )
 			{
 				// collide with balls
 				foreach ( var ball in Scene.GetAllComponents<Ball>() )
@@ -296,16 +304,6 @@ public class PlayerController : Component, Component.ITriggerListener
 			Manager.Instance.HoveredUpgradeType = UpgradeType.None;
 	}
 
-	protected override void OnFixedUpdate()
-	{
-		base.OnFixedUpdate();
-
-		if ( IsProxy || IsDead )
-			return;
-
-		
-	}
-
 	public void CheckBoundsPlaying()
 	{
 		var center = Manager.Instance.CenterLineOffset;
@@ -368,9 +366,12 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	void CheckCollisionWithPlayers()
 	{
+		if ( IsIntangible )
+			return;
+
 		foreach ( var player in Scene.GetAllComponents<PlayerController>() )
 		{
-			if ( player == this )
+			if ( player == this || player.IsIntangible )
 				continue;
 
 			var radius = player.Components.Get<CapsuleCollider>().Radius;
@@ -398,7 +399,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public void OnTriggerEnter( Collider other )
 	{
-		if ( IsProxy || IsDead || IsSpectator )
+		if ( IsProxy || IsDead || IsSpectator || IsIntangible )
 			return;
 
 		if ( other.GameObject.Tags.Has( "item" ) && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 0.5f )
@@ -527,7 +528,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	public void Respawn()
 	{
 		_isFlashing = false;
-		SetRendererVisibility( visible: true );
+		SetRenderOpacity( 1f );
 
 		if ( IsProxy )
 			return;
@@ -542,6 +543,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		HP = MaxHP;
 		HpChangedTime = RealTime.Now;
 		IsInvulnerable = false;
+		IsIntangible = false;
 	}
 
 	[Broadcast]
@@ -754,6 +756,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		PassiveUpgradeProgress.Clear();
 		UpgradeUseTimes.Clear();
 		IsInvulnerable = false;
+		IsIntangible = false;
 		NumShopItems = 4;
 		CurrRerollPrice = 1;
 
@@ -842,7 +845,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	public void EndInvulnerability()
 	{
 		_isFlashing = false;
-		SetRendererVisibility( visible: true );
+		SetRenderOpacity( 1f );
 
 		if ( IsProxy )
 			return;
@@ -851,10 +854,16 @@ public class PlayerController : Component, Component.ITriggerListener
 		//InnerHitbox.Components.Get<Collider>(includeDisabled: true).Enabled = true;
 	}
 
-	void SetRendererVisibility(bool visible)
+	[Broadcast]
+	public void SetRenderOpacityRPC( float opacity )
+	{
+		SetRenderOpacity( opacity );
+	}
+
+	public void SetRenderOpacity(float opacity)
 	{
 		foreach ( var renderer in Model.Components.GetAll<SkinnedModelRenderer>( FindMode.EnabledInSelfAndDescendants ) )
-			renderer.Tint = Color.White.WithAlpha( visible ? 1f : 0.1f );
+			renderer.Tint = Color.White.WithAlpha( opacity );
 	}
 
 	public Vector2 GetTotalVelocity()
@@ -868,4 +877,84 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		return vel;
 	}
+
+	private bool _isFading;
+	private bool _wasAlreadyFading;
+	private TimeSince _timeSinceFade;
+
+	[Broadcast]
+	public void FadeStart()
+	{
+		IsIntangible = true;
+		_isFlashing = false;
+
+		_wasAlreadyFading = _isFading;
+
+		_isFading = true;
+		_timeSinceFade = 0f;
+	}
+
+	void HandleFading()
+	{
+		if(_timeSinceFade < 0.2f && !_wasAlreadyFading)
+		{
+			SetRenderOpacityRPC( Utils.Map( _timeSinceFade, 0, 0.2f, 1f, 0.2f ) );
+		}
+		else if(_timeSinceFade < 0.8f)
+		{
+			// do nothing
+		}
+		else if( _timeSinceFade < 1f)
+		{
+			SetRenderOpacityRPC( Utils.Map( _timeSinceFade, 0.8f, 1f, 0.2f, 1f ) );
+		}
+		else
+		{
+			_isFading = false;
+			IsIntangible = false;
+			SetRenderOpacityRPC( 1f );
+		}
+	}
+
+	//private CancellationTokenSource _fadeCts;
+
+	//[Broadcast]
+	//public void FadeStart()
+	//{
+	//	IsIntangible = true;
+	//	_isFlashing = false;
+
+	//	if( _fadeCts != null )
+	//		_fadeCts.Cancel();
+
+	//	_fadeCts = new CancellationTokenSource();
+	//	_ = Fade( _fadeCts.Token );
+	//}
+
+	//async Task Fade(CancellationToken cts)
+	//{
+	//	try
+	//	{
+	//		for ( int i = 0; i < 5; i++ )
+	//		{
+	//			SetRenderOpacityRPC( Utils.Map( i, 0, 5, 0.8f, 0.2f ) );
+	//			await Task.Delay( 20 );
+	//		}
+
+	//		await Task.Delay( 800 );
+
+	//		for ( int i = 0; i < 5; i++ )
+	//		{
+	//			SetRenderOpacityRPC( Utils.Map( i, 0, 5, 0.2f, 0.8f ) );
+	//			await Task.Delay( 20 );
+	//		}
+
+	//		SetRenderOpacityRPC( 1f );
+	//		IsIntangible = false;
+	//	}
+	//	catch( OperationCanceledException )
+	//	{
+	//		Log.Info( $"canceled!" );
+	//	}
+	//}
 }
