@@ -88,6 +88,18 @@ ItemTooltip {
     .level_amount {
     }
 
+    .passive {
+        border-radius: 8px;
+        color: #444466;
+        padding: 2px;
+        margin: 2px;
+        background-color: #ddccff44;
+        justify-content: center;
+        //font-size: 12px;
+        font-style: italic;
+        opacity:0.8;
+    }
+
     .description {
         border-radius: 8px;
         color: #333;

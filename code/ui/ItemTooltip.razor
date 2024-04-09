@@ -26,6 +26,13 @@
 		</div>
 	</div>
 
+	@if(isPassive)
+	{
+		<div class="passive">
+			Passive
+		</div>
+	}
+
 	<div class="description">
 		@if(IsShopItem && isPassive && manager.GetPlayer(PlayerNum) != null && playerLevel > 0)
 		{
