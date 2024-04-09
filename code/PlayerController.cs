@@ -37,6 +37,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Sync] public NetDictionary<UpgradeType, int> PassiveUpgrades { get; set; } = new();
 	[Sync] public NetDictionary<UpgradeType, int> ActiveUpgrades { get; set; } = new();
 	[Sync] public NetDictionary<UpgradeType, float> PassiveUpgradeProgress { get; set; } = new();
+	[Sync] public NetDictionary<UpgradeType, float> UpgradeUseTimes { get; set; } = new();
 
 	[Sync] public UpgradeType SelectedUpgradeType { get; set; }
 
@@ -57,6 +58,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public Dictionary<UpgradeType, Upgrade> LocalUpgrades { get; set; } = new(); // not networked
 
+	public const float SCALE_SPECTATOR = 1.05f;
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -71,6 +74,8 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( IsProxy )
 			return;
 
+
+		Model.Transform.LocalScale = Vector3.One * SCALE_SPECTATOR;
 	}
 
 	protected override void OnUpdate()
@@ -129,13 +134,13 @@ public class PlayerController : Component, Component.ITriggerListener
 			{
 				IsJumping = false;
 				Transform.Position = _jumpTargetPos;
-				Model.Transform.LocalScale = Vector3.One;
+				Model.Transform.LocalScale = Vector3.One * (IsSpectator ? SCALE_SPECTATOR : 1f);
 			}
 			else
 			{
 				var progress = Utils.Map( _timeSinceJump, 0f, _jumpTime, 0f, 1f, EasingType.QuadInOut );
 				Transform.Position = Vector3.Lerp( _jumpStartPos, _jumpTargetPos, progress );
-				Model.Transform.LocalScale = Vector3.One * Utils.MapReturn(progress, 0f, 1f, 1f, 1.6f, EasingType.Linear);
+				Model.Transform.LocalScale = Vector3.One * (IsSpectator ? SCALE_SPECTATOR : 1f) * Utils.MapReturn(progress, 0f, 1f, 1f, 1.6f, EasingType.Linear);
 			}
 
 			return;
@@ -280,6 +285,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		var upgrade = LocalUpgrades[upgradeType];
 		upgrade.Use();
+
+		UpgradeUseTimes[upgradeType] = RealTime.Now;
 
 		if ( upgradeType != UpgradeType.None )
 			AdjustUpgradeLevel( upgradeType, -1 );
@@ -736,6 +743,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		PassiveUpgrades.Clear();
 		ActiveUpgrades.Clear();
 		PassiveUpgradeProgress.Clear();
+		UpgradeUseTimes.Clear();
 		IsInvulnerable = false;
 		NumShopItems = 4;
 		CurrRerollPrice = 1;

@@ -53,6 +53,7 @@ Hud {
 		font-family: "Proxima Soft";
 		font-weight: 700;
 		border-radius: 8px;
+		white-space: nowrap;
 
 		&:hover {
 			background-color: #153582;

@@ -25,6 +25,10 @@ public class AutoballUpgrade : Upgrade
 			_autoballTimer = 0f;
 
 			Player.PassiveUpgradeProgress[UpgradeType.Autoball] = 0f;
+
+			Manager.Instance.PlaySfx( "bubble", Player.Transform.Position, volume: 0.5f, pitch: 1.4f );
+
+			Player.UpgradeUseTimes[UpgradeType.Autoball] = RealTime.Now;
 		}
 		else
 		{

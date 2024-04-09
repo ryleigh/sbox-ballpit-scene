@@ -12,7 +12,7 @@
 		switch(manager.GamePhase)
 		{
 			case GamePhase.WaitingForPlayers:
-				roundLabel = "Waiting for players...";
+				roundLabel = "Waiting for ballers...";
 				break;
 			case GamePhase.StartingNewMatch:
 				roundLabel = $"Starting match in {MathX.CeilToInt(Manager.START_NEW_MATCH_DELAY - manager.TimeSincePhaseChange)}...";
@@ -136,7 +136,9 @@
 		}
 		else
 		{
-			<div class="leave_button" onclick=@(() => LeaveButtonClicked() )>Forfeit</div>
+			<div class="leave_button" onclick=@(() => LeaveButtonClicked() )>
+				Forfeit
+			</div>
 		}
 	}
 

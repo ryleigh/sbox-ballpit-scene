@@ -16,22 +16,27 @@
 		var rarity = Manager.Instance.GetRarityForUpgrade(UpgradeType);
 		var isSelected = player.SelectedUpgradeType == UpgradeType && player.PlayerNum == PlayerNum;
 		var isHovered = Manager.Instance.HoveredUpgradeType == UpgradeType && Manager.Instance.HoveredUpgradePlayerNum == PlayerNum;
+		var isPassive = Manager.Instance.IsUpgradePassive(UpgradeType);
 		var progress = player.PassiveUpgradeProgress.ContainsKey(UpgradeType) ? player.PassiveUpgradeProgress[UpgradeType] : 0f;
+		var useScale = player.UpgradeUseTimes.ContainsKey(UpgradeType) && RealTime.Now - player.UpgradeUseTimes[UpgradeType] < 0.5f
+			? Utils.Map(RealTime.Now - player.UpgradeUseTimes[UpgradeType], 0f, 0.4f, 1.25f, 1f, EasingType.BounceOut)
+			: 1f;
 	}
 
 	<!-- <div class="bg" style="background-image: url(@($"materials/icons/{Globals.GetIconForUpgrade(UpgradeType)}.png"));"></div> -->
-	<div class="icon" style="opacity:@((Manager.Instance.IsUpgradePassive(UpgradeType) || isSelected ? 1f : 0.7f) );
+	<div class="icon" style="opacity:@((isPassive || isSelected ? 1f : 0.7f) );
 						text-stroke: @(Manager.GetOutlineSizeForRarity(rarity))px @(Manager.GetColorForRarity(rarity).Rgba);
-						font-size:@((isSelected ? 60f : 40f) * (isHovered ? 1.1f : 1f))px;">
+						font-size:@((isSelected ? 60f : 40f) * (isHovered ? 1.1f : 1f) * useScale)px;">
 		@(Manager.Instance.GetIconForUpgrade(UpgradeType))
 	</div>
 
 	@if(Level > 1)
 	{
 		var isMaxed = Level >= Manager.Instance.GetMaxLevelForUpgrade(UpgradeType);
+		
 
 		<div class="level" style="opacity:@((Manager.Instance.IsUpgradePassive(UpgradeType) || player.SelectedUpgradeType == UpgradeType ? 1f : 0.3f) );
-							font-size:@((isSelected ? 36f : 28f) * (isHovered ? 1.1f : 1f))px;
+							font-size:@((isSelected ? 36f : 28f) * (isHovered ? 1.1f : 1f) * (isPassive ? 1f : useScale))px;
 							color:@((isMaxed ? new Color(1f, 0.4f, 0.4f) : new Color(1f, 1f, 1f)).Rgba);">
 			@Level
 		</div>
@@ -105,6 +110,10 @@
 		var isHovered = Manager.Instance.HoveredUpgradeType == UpgradeType;
 		var isSelected = (player?.SelectedUpgradeType ?? UpgradeType.None) == UpgradeType;
 		var progress = (player != null && player.PassiveUpgradeProgress.ContainsKey(UpgradeType)) ? player.PassiveUpgradeProgress[UpgradeType] : 0f;
-		return System.HashCode.Combine(UpgradeType, Level, isHovered, isSelected, progress);
+		var useScale = player.UpgradeUseTimes.ContainsKey(UpgradeType) && RealTime.Now - player.UpgradeUseTimes[UpgradeType] < 0.5f
+			? Utils.Map(RealTime.Now - player.UpgradeUseTimes[UpgradeType], 0f, 0.4f, 1.25f, 1f, EasingType.BounceOut)
+			: 1f;
+
+		return System.HashCode.Combine(UpgradeType, Level, isHovered, isSelected, progress, useScale);
 	}
 }

@@ -192,6 +192,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		clothing.Deserialize( channel.GetUserData( "avatar" ) );
 		clothing.Apply( playerObj.Components.GetInChildren<SkinnedModelRenderer>() );
 
+		//player.IsSpectator = true;
+
 		if ( !DoesPlayerExist0 )
 		{
 			Player0 = player;
@@ -1073,6 +1075,17 @@ public sealed class Manager : Component, Component.INetworkListener
 		var sfx = Sound.Play( name, pos );
 		if ( sfx != null )
 			sfx.Pitch = pitch;
+	}
+
+	[Broadcast]
+	public void PlaySfx( string name, Vector3 pos, float volume, float pitch )
+	{
+		var sfx = Sound.Play( name, pos );
+		if ( sfx != null )
+		{
+			sfx.Volume = volume;
+			sfx.Pitch = pitch;
+		}
 	}
 
 	public string GetNameForUpgrade( UpgradeType upgradeType )
