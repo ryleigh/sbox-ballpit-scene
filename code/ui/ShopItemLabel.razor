@@ -18,7 +18,9 @@
 	<!-- <div class="icon" style="opacity:@((Manager.Instance.HoveredObject == TargetObject ? 1f : 0.9f) * (money >= ShopItem.Price ? 1f : 0.4f));">@(Manager.Instance.GetIconForUpgrade(ShopItem.UpgradeType))</div> -->
 	<div class="icon" style="opacity:@((money >= ShopItem.Price ? 1f : 0.4f)); text-stroke: @(Manager.GetOutlineSizeForRarity(rarity))px @(Manager.GetColorForRarity(rarity).Rgba);">@(Manager.Instance.GetIconForUpgrade(ShopItem.UpgradeType))</div>
 
-	<div class="price" style="color: @((money >= ShopItem.Price ? new Color(0.8f, 0.8f, 0f) : new Color(1f, 0.3f, 0.3f)).Rgba);">@($"${ShopItem.Price}")</div>
+	<div class="price" style="color: @((money >= ShopItem.Price ? new Color(0.8f, 0.8f, 0f) : new Color(1f, 0.3f, 0.3f)).Rgba); left: -2px; top: -10px;">
+		@($"${ShopItem.Price}")
+	</div>
 
 	@if(ShopItem.NumLevels > 1) 
 	{

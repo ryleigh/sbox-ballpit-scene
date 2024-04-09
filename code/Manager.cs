@@ -130,6 +130,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	public static Color Player0NameColor = new Color( 0.5f, 0.5f, 1f );
 	public static Color Player1NameColor = new Color( 0.4f, 1f, 0.4f );
 
+	public bool IsMouseDown { get; set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -239,7 +241,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 
 		//Gizmo.Draw.Color = Color.White;
-		//Gizmo.Draw.Text( $"CurrentScore: {CurrentScore}", new global::Transform( Vector3.Zero ) );
+		//Gizmo.Draw.Text( $"IsMouseDown: {IsMouseDown}", new global::Transform( Vector3.Zero ) );
 
 		SlidingGround.Transform.Position = new Vector3( CenterLineOffset, 0f, 0f );
 
@@ -315,6 +317,11 @@ public sealed class Manager : Component, Component.INetworkListener
 			case GamePhase.Victory:
 				break;
 		}
+
+		if ( Input.Pressed( "attack1" ) )
+			IsMouseDown = true;
+		else if ( Input.Released( "attack1" ) )
+			IsMouseDown = false;
 
 		if ( IsProxy )
 			return;

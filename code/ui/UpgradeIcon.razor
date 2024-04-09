@@ -54,6 +54,9 @@
 		Manager.Instance.HoveredUpgradeType = UpgradeType;
 		Manager.Instance.HoveredUpgradePlayerNum = PlayerNum;
 		// Manager.Instance.HoveredUpgradePos = new Vector2(Position.x, Position.y);
+
+		if(Manager.Instance.IsMouseDown)
+			Manager.Instance.GetLocalPlayer()?.SetSelectedActiveUpgrade(UpgradeType);
 	}
 
 	protected override void OnMouseOut(MousePanelEvent e)
@@ -67,10 +70,24 @@
 		if( PlayerNum != localPlayer.PlayerNum )
 			return;
 
-		if (e.MouseButton == MouseButtons.Left)
+		if (e.MouseButton == MouseButtons.Left) 
+		{
 			localPlayer.SetSelectedActiveUpgrade(UpgradeType);
+			Manager.Instance.IsMouseDown = true;
+		}
+			
 		// else if (e.MouseButton == MouseButtons.Right)
 		// 	localPlayer.TryUseItem(UpgradeType);
+	}
+
+	protected override void OnMouseUp(MousePanelEvent e)
+	{
+		var localPlayer = Manager.Instance.GetLocalPlayer();
+		if(PlayerNum != localPlayer.PlayerNum)
+			return;
+
+		if(e.MouseButton == MouseButtons.Left)
+			Manager.Instance.IsMouseDown = false;
 	}
 
 	public override void OnMouseWheel(Vector2 value)
