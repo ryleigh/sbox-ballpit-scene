@@ -4,7 +4,7 @@ using Sandbox.UI;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
-public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, }
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, MoreShopItems, }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 
 public struct UpgradeData
@@ -542,14 +542,14 @@ public sealed class Manager : Component, Component.INetworkListener
 		{
 			CreateSkipButton( 0 );
 			CreateRerollButton( 0 );
-			CreateShopItems( playerNum: 0, numItems: Player0.NumShopItems );
+			CreateShopItems( playerNum: 0, numItems: Player0.NumShopItems + Player0.GetUpgradeLevel(UpgradeType.MoreShopItems) );
 		}
 
 		if ( DoesPlayerExist1 )
 		{
 			CreateSkipButton( 1 );
 			CreateRerollButton( 1 );
-			CreateShopItems( playerNum: 1, numItems: Player1.NumShopItems );
+			CreateShopItems( playerNum: 1, numItems: Player1.NumShopItems + Player1.GetUpgradeLevel( UpgradeType.MoreShopItems ) );
 		}
 	}
 
@@ -676,7 +676,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		player.IncreaseRerollPrice();
 
-		CreateShopItems( playerNum, numItems: player.NumShopItems );
+		CreateShopItems( playerNum, numItems: player.NumShopItems + player.GetUpgradeLevel(UpgradeType.MoreShopItems) );
 		RespawnRerollButton( playerNum );
 	}
 
@@ -1123,6 +1123,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			case UpgradeType.MoveSpeed: return $"Move {Math.Floor((MoveSpeedUpgrade.GetIncrease(level) - 1f) * 100f)}% faster";
 			case UpgradeType.BumpStrength: return $"Bumping speeds up balls by {Math.Round( BumpStrengthUpgrade.GetIncrease( level ) )}";
 			case UpgradeType.Autoball: return $"Release a ball every {(float)Math.Round( AutoballUpgrade.GetDelay( level ), 1 )}s";
+			case UpgradeType.MoreShopItems: return $"Your shop offers {level} more {(level == 1 ? "item" : "items")}";
 
 			case UpgradeType.Volley: return $"Shoot some balls forward";
 			case UpgradeType.Gather: return $"Your balls target you";
@@ -1170,6 +1171,13 @@ public sealed class Manager : Component, Component.INetworkListener
 				strings.Add( DESCRIPTION_ARROW, DEFAULT_COLOR );
 				strings.Add( $"{(float)Math.Round( AutoballUpgrade.GetDelay( newLevel ), 1 )}", NEW_COLOR );
 				strings.Add( "s", DEFAULT_COLOR );
+				break;
+			case UpgradeType.MoreShopItems:
+				strings.Add( "Your shop offers", DEFAULT_COLOR );
+				strings.Add( $"{oldLevel}", OLD_COLOR );
+				strings.Add( DESCRIPTION_ARROW, DEFAULT_COLOR );
+				strings.Add( $"{newLevel}", NEW_COLOR );
+				strings.Add( "more items", DEFAULT_COLOR );
 				break;
 		}
 
@@ -1253,6 +1261,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.MoveSpeed, "Cardio", "🏃🏻", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5, isPassive: true );
 		CreateUpgrade( UpgradeType.BumpStrength, "Muscles", "💪", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 6, isPassive: true );
 		CreateUpgrade( UpgradeType.Autoball, "Autoball", "⏲️", UpgradeRarity.Rare, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7, isPassive: true );
+		CreateUpgrade( UpgradeType.MoreShopItems, "Shopper", "🛒", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 9, pricePerAmountMax: 16, isPassive: true );
 
 		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", UpgradeRarity.Common, maxLevel: 5, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 5 );
 		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
@@ -1296,7 +1305,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			{ UpgradeRarity.Common, 100f },
 			{ UpgradeRarity.Uncommon, 58f },
 			{ UpgradeRarity.Rare, 27f },
-			//{ UpgradeRarity.Epic, 16f },
+			{ UpgradeRarity.Epic, 16f },
 			//{ UpgradeRarity.Legendary, 2f },
 		};
 
