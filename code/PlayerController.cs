@@ -67,6 +67,11 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Sync] public float HpChangedTime { get; set; }
 
 	public bool IsIntangible { get; set; }
+	private bool _isFading;
+	private bool _wasAlreadyFading;
+	private TimeSince _timeSinceFade;
+
+	public bool IsBarrierActive { get; set; }
 
 	protected override void OnAwake()
 	{
@@ -878,10 +883,6 @@ public class PlayerController : Component, Component.ITriggerListener
 		return vel;
 	}
 
-	private bool _isFading;
-	private bool _wasAlreadyFading;
-	private TimeSince _timeSinceFade;
-
 	[Broadcast]
 	public void FadeStart()
 	{
@@ -914,6 +915,14 @@ public class PlayerController : Component, Component.ITriggerListener
 			IsIntangible = false;
 			SetRenderOpacityRPC( 1f );
 		}
+	}
+
+	public void SetBarrierVisible( bool visible )
+	{
+		var barrier = PlayerNum == 0 ? Manager.Instance.BarrierLeft : Manager.Instance.BarrierRight;
+
+		barrier.Enabled = visible;
+		//barrier.Components.Get<ModelRenderer>( FindMode.EverythingInSelf ).Enabled = visible;
 	}
 
 	//private CancellationTokenSource _fadeCts;

@@ -23,6 +23,14 @@
             "_type": "gameobject",
             "prefab": "prefabs/ball.prefab"
           },
+          "BarrierLeft": {
+            "_type": "gameobject",
+            "go": "dfb53710-7619-4007-9dac-e2fe97f15dcc"
+          },
+          "BarrierRight": {
+            "_type": "gameobject",
+            "go": "f51bce49-d888-468d-9bdc-a8963d64c5e3"
+          },
           "ColorPlayer0": "0,0,0.73333,1",
           "ColorPlayer1": "0,0.6,0,1",
           "FadingTextPrefab": {
@@ -348,6 +356,42 @@
       ]
     },
     {
+      "__guid": "dfb53710-7619-4007-9dac-e2fe97f15dcc",
+      "Name": "barrier_left",
+      "Position": "-231.5,0,-2.5",
+      "Scale": "0.05,4.95,2.99",
+      "NetworkMode": 2,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "07a1bccf-2fe4-4c4a-9037-3263e532a2c4",
+          "BodyGroups": 18446744073709551615,
+          "Model": "models/dev/box.vmdl",
+          "RenderType": "Off",
+          "Tint": "1,1,1,1"
+        },
+        {
+          "__type": "Sandbox.BoxCollider",
+          "__guid": "8baf8d88-368b-48c4-a679-a01b63db4f45",
+          "Center": "0,0,0",
+          "IsTrigger": false,
+          "Scale": "50,50,50",
+          "Static": false
+        },
+        {
+          "__type": "GutterBarrier",
+          "__guid": "886abad4-69e9-460f-a0ca-8d627b66c25e",
+          "PlayerNum": 0,
+          "Renderer": {
+            "_type": "component",
+            "component_id": "07a1bccf-2fe4-4c4a-9037-3263e532a2c4",
+            "go": "dfb53710-7619-4007-9dac-e2fe97f15dcc",
+            "component_type": "ModelRenderer"
+          }
+        }
+      ]
+    },
+    {
       "__guid": "adeed76a-8fe9-490b-a503-186c2fd7b006",
       "Name": "wall (1)",
       "Position": "235,0,0",
@@ -396,6 +440,42 @@
           "IsTrigger": false,
           "Scale": "50,50,50",
           "Static": false
+        }
+      ]
+    },
+    {
+      "__guid": "f51bce49-d888-468d-9bdc-a8963d64c5e3",
+      "Name": "barrier_right",
+      "Position": "231.5,0,-2.5",
+      "Scale": "0.05,4.95,2.99",
+      "NetworkMode": 2,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "0be77797-d478-4a62-9b95-0ed063bb1652",
+          "BodyGroups": 18446744073709551615,
+          "Model": "models/dev/box.vmdl",
+          "RenderType": "Off",
+          "Tint": "1,1,1,1"
+        },
+        {
+          "__type": "Sandbox.BoxCollider",
+          "__guid": "3707f47a-953d-4756-8840-031465c70f87",
+          "Center": "0,0,0",
+          "IsTrigger": false,
+          "Scale": "50,50,50",
+          "Static": false
+        },
+        {
+          "__type": "GutterBarrier",
+          "__guid": "c674029b-80dd-4df3-ae9c-dcabe6c95368",
+          "PlayerNum": 1,
+          "Renderer": {
+            "_type": "component",
+            "component_id": "0be77797-d478-4a62-9b95-0ed063bb1652",
+            "go": "f51bce49-d888-468d-9bdc-a8963d64c5e3",
+            "component_type": "ModelRenderer"
+          }
         }
       ]
     },
@@ -1016,7 +1096,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-09T02:36:35.8786395-07:00",
+  "LastSaved": "2024-04-09T22:28:50.6062819-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

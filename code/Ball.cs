@@ -156,10 +156,37 @@ public class Ball : Component
 	void CheckBounds()
 	{
 		var xMin = -Manager.X_FAR + (PlayerNum == 0 ? -10f : 0f);
+		var xMinBarrier = -Manager.X_FAR + 5f;
 		var xMax = Manager.X_FAR + (PlayerNum == 1 ? 10f : 0f);
+		var xMaxBarrier = Manager.X_FAR - 5f;
 		var yMin = -Manager.Y_LIMIT - 8f;
 		var yMax = Manager.Y_LIMIT + 8f;
 
+		// barrier
+		if( Transform.Position.x < xMinBarrier && PlayerNum == 0 )
+		{
+			var leftBarrierActive = Manager.Instance.GetPlayer( 0 )?.IsBarrierActive ?? false;
+			if ( leftBarrierActive )
+			{
+				HitSideGutterBarrier( left: true );
+				Transform.Position = Transform.Position.WithX( xMinBarrier );
+				Velocity = Velocity.WithX( MathF.Abs( Velocity.x ) );
+				return;
+			}
+		}
+		else if( Transform.Position.x > xMaxBarrier && PlayerNum == 1 )
+		{
+			var rightBarrierActive = Manager.Instance.GetPlayer( 1 )?.IsBarrierActive ?? false;
+			if ( rightBarrierActive )
+			{
+				HitSideGutterBarrier( left: false );
+				Transform.Position = Transform.Position.WithX( xMaxBarrier );
+				Velocity = Velocity.WithX( -MathF.Abs( Velocity.x ) );
+				return;
+			}
+		}
+
+		// wall & gutter
 		if ( Transform.Position.x < xMin )
 		{
 			if ( PlayerNum == 0 )
@@ -176,16 +203,16 @@ public class Ball : Component
 		}
 		else if ( Transform.Position.x > xMax )
 		{
-			if ( PlayerNum == 0 )
+			if ( PlayerNum == 1 )
+			{
+				EnterGutter();
+				return;
+			}
+			else
 			{
 				HitSideWall(left: false);
 				Transform.Position = Transform.Position.WithX( xMax );
 				Velocity = Velocity.WithX( -MathF.Abs( Velocity.x ) );
-			}
-			else
-			{
-				EnterGutter();
-				return;
 			}
 		}
 
@@ -272,10 +299,21 @@ public class Ball : Component
 	{
 		Sound.Play( "frame-bounce", Transform.Position.WithZ(Globals.SFX_HEIGHT) );
 
-		if(left)
+		if ( left )
 			Manager.Instance.TimeSinceLeftWallRebound = 0f;
 		else
 			Manager.Instance.TimeSinceRightWallRebound = 0f;
+	}
+
+	[Broadcast]
+	public void HitSideGutterBarrier( bool left )
+	{
+		Sound.Play( "frame-bounce", Transform.Position.WithZ( Globals.SFX_HEIGHT ) );
+
+		if ( left )
+			Manager.Instance.TimeSinceLeftGutterBarrierRebound = 0f;
+		else
+			Manager.Instance.TimeSinceRightGutterBarrierRebound = 0f;
 	}
 
 	[Broadcast]

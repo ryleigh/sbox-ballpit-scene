@@ -10,10 +10,10 @@ public class EndowUpgrade : Upgrade
 
 		Manager.PlaySfx( "bubble", Player.Transform.Position );
 
-		SpawnTutorialTextAsync();
+		EndowAsync();
 	}
 
-	async void SpawnTutorialTextAsync()
+	async void EndowAsync()
 	{
 		for(int i = 0; i < 10; i++)
 		{
