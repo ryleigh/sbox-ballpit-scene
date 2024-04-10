@@ -4,16 +4,15 @@ public class Explosion : Component
 {
 	[Property] public ModelRenderer Renderer { get; set; }
 
-	private TimeSince _timeSinceColorChange;
-	private bool _colorToggled;
-
 	private Color _colorA;
 	private Color _colorB;
 
 	public TimeSince TimeSinceSpawn { get; set; }
-	public float Lifetime = 1.5f;
+	public float Lifetime = 1f;
 
 	public float Scale { get; set; }
+
+	public bool DealtDamage { get; set; }
 
 	protected override void OnStart()
 	{
@@ -26,14 +25,9 @@ public class Explosion : Component
 
 	protected override void OnUpdate()
 	{
-		if ( _timeSinceColorChange > 0.05f )
-		{
-			Renderer.Tint = (_colorToggled ? _colorA : _colorB).WithAlpha(Utils.Map( TimeSinceSpawn, 0f, Lifetime, 1f, 0f, EasingType.Linear));
-			_colorToggled = !_colorToggled;
-			_timeSinceColorChange = 0f;
-		}
+		Renderer.Tint = Color.Lerp( _colorA, _colorB, Utils.FastSin(TimeSinceSpawn * 32f) ).WithAlpha( Utils.Map( TimeSinceSpawn, 0f, Lifetime, 1f, 0f, EasingType.QuadOut ) );
 
-		Transform.Scale = Utils.Map( TimeSinceSpawn, 0f, Lifetime, Scale, Scale * 0.7f, EasingType.SineOut ) * Utils.MapReturn( TimeSinceSpawn, 0f, 0.1f, 1.2f, 1f);
+		Transform.Scale = Utils.Map( TimeSinceSpawn, 0f, Lifetime, Scale, Scale * 1.25f, EasingType.QuadIn ) * Utils.MapReturn( TimeSinceSpawn, 0f, 0.1f, 1.3f, 0.7f, EasingType.Linear);
 
 		if ( IsProxy )
 			return;

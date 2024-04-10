@@ -658,11 +658,11 @@ public sealed class Manager : Component, Component.INetworkListener
 		moneyPickupObj.Components.Get<MoneyPickup>().InitEndow( numLevels, startPos );
 	}
 
-	public void SpawnExplosion( Connection connection, Vector2 pos, float scale )
+	[Broadcast]
+	public void SpawnExplosion( Vector2 pos, float scale )
 	{
 		var explosionObj = ExplosionPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
 		explosionObj.Components.Get<Explosion>().Scale = scale;
-		explosionObj.NetworkSpawn( connection );
 	}
 
 	[Broadcast]

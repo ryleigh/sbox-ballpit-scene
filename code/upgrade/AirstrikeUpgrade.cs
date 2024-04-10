@@ -7,8 +7,7 @@ public class AirstrikeUpgrade : Upgrade
 	{
 		base.Use();
 
-		var connection = Manager.Instance.GetConnection( Manager.Instance.MouseWorldPos.x < 0f ? 0 : 1 );
-		Manager.Instance.SpawnExplosion( connection, (Vector2)Manager.Instance.MouseWorldPos, 1f );
+		Manager.Instance.SpawnExplosion( Manager.Instance.MouseWorldPos, 0.7f );
 
 		Manager.Instance.PlaySfx( "bubble", Player.Transform.Position );
 	}
