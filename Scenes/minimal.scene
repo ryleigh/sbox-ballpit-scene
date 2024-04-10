@@ -33,6 +33,10 @@
           },
           "ColorPlayer0": "0,0,0.73333,1",
           "ColorPlayer1": "0,0.6,0,1",
+          "ExplosionPrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/explosion.prefab"
+          },
           "FadingTextPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/fading_text.prefab"
@@ -1096,7 +1100,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-09T22:28:50.6062819-07:00",
+  "LastSaved": "2024-04-09T23:39:36.4346568-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

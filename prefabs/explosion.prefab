@@ -1,0 +1,43 @@
+{
+  "RootObject": {
+    "__guid": "49808225-a1a1-425e-ac37-2e4d54295ed9",
+    "Name": "explosion",
+    "Position": "-100,0,0",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "Components": [
+      {
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "3d000b4e-c81e-4f7f-ad0f-b22cebebf1a1",
+        "BodyGroups": 18446744073709551615,
+        "Model": "models/dev/sphere.vmdl",
+        "RenderType": "Off",
+        "Tint": "1,0,0,1"
+      },
+      {
+        "__type": "Explosion",
+        "__guid": "862f884e-3850-4e11-a838-eeff11e9f265",
+        "Renderer": {
+          "_type": "component",
+          "component_id": "3d000b4e-c81e-4f7f-ad0f-b22cebebf1a1",
+          "go": "49808225-a1a1-425e-ac37-2e4d54295ed9",
+          "component_type": "ModelRenderer"
+        }
+      },
+      {
+        "__type": "Sandbox.SphereCollider",
+        "__guid": "f941d178-3332-4886-bb0a-73df4ec595fc",
+        "Center": "0,0,0",
+        "IsTrigger": true,
+        "Radius": 30,
+        "Static": false
+      }
+    ]
+  },
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "ResourceVersion": 1,
+  "__version": 1,
+  "__references": []
+}

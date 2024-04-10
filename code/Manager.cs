@@ -4,7 +4,7 @@ using Sandbox.UI;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
-public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, MoreShopItems, Endow, Fade, Barrier, }
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, MoreShopItems, Endow, Fade, Barrier, Airstrike, }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 
 public struct UpgradeData
@@ -47,6 +47,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject ShopItemPassivePrefab { get; set; }
 	[Property] public GameObject PickupItemPrefab { get; set; }
 	[Property] public GameObject MoneyPickupPrefab { get; set; }
+	[Property] public GameObject ExplosionPrefab { get; set; }
 	[Property] public GameObject FadingTextPrefab { get; set; }
 	[Property] public GameObject FloaterTextPrefab { get; set; }
 	[Property] public GameObject BallExplosionParticles { get; set; }
@@ -228,6 +229,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
 
+		player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
 		player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
 		player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
 		player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
@@ -654,6 +656,13 @@ public sealed class Manager : Component, Component.INetworkListener
 		var moneyPickupObj = MoneyPickupPrefab.Clone( new Vector3( startPos.x, startPos.y, 0f ) );
 		moneyPickupObj.NetworkSpawn( connection );
 		moneyPickupObj.Components.Get<MoneyPickup>().InitEndow( numLevels, startPos );
+	}
+
+	public void SpawnExplosion( Connection connection, Vector2 pos, float scale )
+	{
+		var explosionObj = ExplosionPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
+		explosionObj.Components.Get<Explosion>().Scale = scale;
+		explosionObj.NetworkSpawn( connection );
 	}
 
 	[Broadcast]
@@ -1151,6 +1160,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			case UpgradeType.Endow: return $"Send bouncing money toward your opponent";
 			case UpgradeType.Fade: return $"Ignore collision for 1 second";
 			case UpgradeType.Barrier: return $"Briefly block your gutter";
+			case UpgradeType.Airstrike: return $"Drop bombs near your cursor";
 		}
 
 		return "";
@@ -1292,6 +1302,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.Endow, "Endow", "💰", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 4, pricePerAmountMax: 6 );
 		CreateUpgrade( UpgradeType.Fade, "Fade", "👥", UpgradeRarity.Uncommon, maxLevel: 6, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 4 );
 		CreateUpgrade( UpgradeType.Barrier, "Barrier", "🚧", UpgradeRarity.Uncommon, maxLevel: 6, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
+		CreateUpgrade( UpgradeType.Airstrike, "Airstrike", "🚀", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 8, pricePerAmountMax: 11 );
 
 		foreach (var upgradeData in UpgradeDatas)
 		{
