@@ -705,7 +705,7 @@ public class PlayerController : Component, Component.ITriggerListener
 			Transform.Position.WithZ( 150f ),
 			//$"{(amount > 0 ? "+" : "-")}{Manager.Instance.GetFloaterTextForUpgrade( upgradeType )}", 
 			$"{icon}",
-			lifetime: amount > 0 ? 1.5f : 1.1f, 
+			lifetime: amount > 0 ? 1f : 0.75f, 
 			color: Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ) ), 
 			velocity: new Vector2( 0f, amount > 0 ? 35f : -65f ), 
 			deceleration: amount > 0 ? 1.8f : 2.1f, 

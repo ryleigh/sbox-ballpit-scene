@@ -21,14 +21,15 @@ public class Explosion : Component
 	{
 		base.OnStart();
 
-		_colorA = new Color( 0.8f, 0f, 0f );
-		_colorB = new Color( 1f, 1f, 0f );
+		_colorA = new Color( 0.8f, 0.1f, 0.01f );
+		_colorB = new Color( 1f, 1f, 0.01f );
 		TimeSinceSpawn = 0f;
+
 	}
 
 	protected override void OnUpdate()
 	{
-		Renderer.Tint = Color.Lerp( _colorA, _colorB, Utils.FastSin(TimeSinceSpawn * 32f) ).WithAlpha( Utils.Map( TimeSinceSpawn, 0f, Lifetime, 1000f, 0f, EasingType.ExpoOut ) );
+		Renderer.Tint = Color.Lerp( _colorA, _colorB, Utils.FastSin(TimeSinceSpawn * 32f) ).WithAlpha( Utils.Map( TimeSinceSpawn, 0f, Lifetime, 9999f, 0f, EasingType.ExpoOut ) );
 		
 		Transform.Scale = Utils.Map( TimeSinceSpawn, 0f, Lifetime, Scale, Scale * 1.25f, EasingType.QuadIn ) * Utils.MapReturn( TimeSinceSpawn, 0f, 0.1f, 1.3f, 0.7f, EasingType.QuadOut);
 

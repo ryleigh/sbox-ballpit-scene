@@ -1,0 +1,34 @@
+{
+  "RootObject": {
+    "__guid": "0ad4ceec-c25c-4ce1-996c-78ed96adf5be",
+    "Name": "repel_effect",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "Components": [
+      {
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "dac9904c-5827-4127-9d99-b061838a7215",
+        "BodyGroups": 18446744073709551615,
+        "Model": "models/dev/sphere.vmdl",
+        "RenderType": "On",
+        "Tint": "0.24098,0.00333,0.71628,0"
+      },
+      {
+        "__type": "RepelEffect",
+        "__guid": "49d5f632-581d-40f4-8076-8257df6b4097",
+        "Renderer": {
+          "_type": "component",
+          "component_id": "dac9904c-5827-4127-9d99-b061838a7215",
+          "go": "0ad4ceec-c25c-4ce1-996c-78ed96adf5be",
+          "component_type": "ModelRenderer"
+        }
+      }
+    ]
+  },
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "ResourceVersion": 1,
+  "__version": 1,
+  "__references": []
+}

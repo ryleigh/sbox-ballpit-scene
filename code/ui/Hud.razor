@@ -56,9 +56,11 @@
 			{
 				var upgradeType = pair.Key;
 				var level = pair.Value;
+				var isSelected = player0.SelectedUpgradeType == upgradeType;
+
 				if(level > 0)
 				{
-					<UpgradeIcon UpgradeType=@upgradeType Level=@level PlayerNum=@(0) />		
+					<UpgradeIcon UpgradeType=@upgradeType Level=@level PlayerNum=@(0) style="z-index:@(isSelected ? 99 : 0);"/>		
 				}
 			}
 		</div>
@@ -192,11 +194,14 @@
 		var buyPhaseTimer = manager.GamePhase == GamePhase.BuyPhase ? MathX.FloorToInt(manager.BuyPhaseDuration - manager.TimeSincePhaseChange) : 0;
 		var newMatchTimer = manager.GamePhase == GamePhase.StartingNewMatch ? MathX.CeilToInt(Manager.START_NEW_MATCH_DELAY - manager.TimeSincePhaseChange) : 0;
 		var tooltipPos = (manager.HoveredObject != null || manager.HoveredUpgradeType != UpgradeType.None) ? Mouse.Position : Vector2.Zero;
+		var upgradeType0 = player0?.SelectedUpgradeType ?? UpgradeType.None;
+		var upgradeType1 = player1?.SelectedUpgradeType ?? UpgradeType.None;
 
 		return HashCode.Combine(
 			HashCode.Combine(playerName0, playerName1, hp0, hp1, Input.Down("Score")),
 			HashCode.Combine(money0, money1, upgrades0, upgrades1, manager.RoundNum),
-			HashCode.Combine(manager.GamePhase, buyPhaseTimer, newMatchTimer, manager.HoveredObject, tooltipPos)
+			HashCode.Combine(manager.GamePhase, buyPhaseTimer, newMatchTimer, manager.HoveredObject, tooltipPos),
+			HashCode.Combine(upgradeType0, upgradeType1)
 		);
 	}
 }

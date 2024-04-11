@@ -1,6 +1,7 @@
 ﻿using Sandbox;
 using Sandbox.Network;
 using Sandbox.UI;
+using System.Numerics;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
@@ -48,6 +49,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject PickupItemPrefab { get; set; }
 	[Property] public GameObject MoneyPickupPrefab { get; set; }
 	[Property] public GameObject ExplosionPrefab { get; set; }
+	[Property] public GameObject RepelEffectPrefab { get; set; }
 	[Property] public GameObject FallingShadowPrefab { get; set; }
 	[Property] public GameObject FadingTextPrefab { get; set; }
 	[Property] public GameObject FloaterTextPrefab { get; set; }
@@ -232,6 +234,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
 
+		player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
 		player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
 		player.AdjustUpgradeLevel( UpgradeType.Volley, 10 );
 		player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
@@ -684,6 +687,20 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Broadcast]
 	public void StartAirstrike(Vector2 pos)
 	{
+		SpawnFloaterText(
+			new Vector3( pos.x, pos.y, 120f ),
+			"⚠️",
+			lifetime: 1.5f,
+			color: Color.White,
+			velocity: Vector2.Zero,
+			deceleration: 0f,
+			startScale: 0.2f,
+			endScale: 0.5f,
+			isEmoji: true
+		);
+
+		PlaySfx( "warning", new Vector3( pos.x, pos.y, 0f ), volume: 1f, pitch: 0.9f );
+
 		if ( IsProxy )
 			return;
 
@@ -714,6 +731,12 @@ public sealed class Manager : Component, Component.INetworkListener
 					_airstrikes.Remove(strike);
 			}
 		}
+	}
+
+	[Broadcast]
+	public void SpawnRepelEffect( Vector2 pos )
+	{
+		RepelEffectPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
 	}
 
 	[Broadcast]
@@ -1343,7 +1366,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		CreateUpgrade( UpgradeType.Volley, "Throw", "🥏", UpgradeRarity.Common, maxLevel: 5, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 6 );
 		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
-		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5 );
+		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", UpgradeRarity.Common, maxLevel: 18, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5 );
 		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", UpgradeRarity.Uncommon, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 6, pricePerAmountMax: 8 );
 		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 4, useableInBuyPhase: true );
 		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", UpgradeRarity.Uncommon, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5, maxLevel: 3 );
