@@ -18,6 +18,8 @@
 				roundLabel = $"Starting match in {MathX.CeilToInt(Manager.START_NEW_MATCH_DELAY - manager.TimeSincePhaseChange)}...";
 				break;
 			case GamePhase.RoundActive:
+				roundLabel = $"Round {manager.RoundNum} ({FormatTime(MathX.FloorToInt(manager.TimeSincePhaseChange))})";
+				break;
 			case GamePhase.AfterRoundDelay:
 				roundLabel = $"Round {manager.RoundNum}";
 				break;
@@ -178,6 +180,14 @@
 		Manager.Instance.PlayerHitJoinButton(playerNum, localPlayer.GameObject.Id);
 	}
 
+	public static string FormatTime(int totalSeconds)
+	{
+		int minutes = totalSeconds / 60;
+		int seconds = totalSeconds % 60;
+
+		return $"{minutes:D2}:{seconds:D2}";
+	}
+
 	protected override int BuildHash()
 	{
 		var manager = Manager.Instance;
@@ -201,7 +211,7 @@
 			HashCode.Combine(playerName0, playerName1, hp0, hp1, Input.Down("Score")),
 			HashCode.Combine(money0, money1, upgrades0, upgrades1, manager.RoundNum),
 			HashCode.Combine(manager.GamePhase, buyPhaseTimer, newMatchTimer, manager.HoveredObject, tooltipPos),
-			HashCode.Combine(upgradeType0, upgradeType1)
+			HashCode.Combine(upgradeType0, upgradeType1, MathX.FloorToInt(manager.TimeSincePhaseChange))
 		);
 	}
 }
