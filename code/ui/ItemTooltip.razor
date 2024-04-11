@@ -9,7 +9,7 @@
 		var isPassive = manager.IsUpgradePassive(UpgradeType);
 		var amount_name = isPassive ? "LVL" : "AMMO";
 		var rarity = manager.GetRarityForUpgrade(UpgradeType);
-		var rarityColor = Manager.GetColorForRarity(rarity);
+		var rarityColor = Manager.GetColorForRarityLabelBg(rarity);
 		var maxLevel = manager.GetMaxLevelForUpgrade(UpgradeType);
 		var playerLevel = manager.GetPlayer(PlayerNum)?.GetUpgradeLevel(UpgradeType) ?? 0;
 	}
@@ -34,7 +34,7 @@
 	}
 
 	<div class="description">
-		@if(IsShopItem && isPassive && manager.GetPlayer(PlayerNum) != null && playerLevel > 0)
+		@if(IsShopItem && isPassive && manager.GetPlayer(PlayerNum) != null && playerLevel > 0 && playerLevel < maxLevel)
 		{
 			var newLevel = Math.Min(playerLevel + Level, maxLevel);
 

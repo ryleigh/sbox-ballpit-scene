@@ -5,7 +5,7 @@ using System.Numerics;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
-public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, MoreShopItems, Endow, Fade, Barrier, Airstrike, }
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, MoreShopItems, Endow, Fade, Barrier, Airstrike, ShorterBuyPhase, }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 
 public struct UpgradeData
@@ -109,7 +109,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public const float BETWEEN_ROUNDS_DELAY = 4f;
 	public const float VICTORY_DELAY = 10f;
-	public float BuyPhaseDuration { get; private set; } = 30f;
+	public float BuyPhaseDuration { get; private set; }
 
 	public GameObject HoveredObject { get; private set; }
 	public UpgradeType HoveredUpgradeType { get; set; }
@@ -548,6 +548,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	void StartBuyPhase()
 	{
 		GamePhase = GamePhase.BuyPhase;
+		BuyPhaseDuration = 30f - (Player0?.GetUpgradeLevel( UpgradeType.ShorterBuyPhase ) ?? 0) * 10f - (Player1?.GetUpgradeLevel( UpgradeType.ShorterBuyPhase ) ?? 0) * 10f;
 		TimeSincePhaseChange = 0f;
 
 		Player0?.Respawn();
@@ -1221,6 +1222,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			case UpgradeType.BumpStrength: return $"Bumping speeds up balls by {Math.Round( BumpStrengthUpgrade.GetIncrease( level ) )}";
 			case UpgradeType.Autoball: return $"Release a ball every {(float)Math.Round( AutoballUpgrade.GetDelay( level ), 1 )}s";
 			case UpgradeType.MoreShopItems: return $"Your shop offers {level} more {(level == 1 ? "item" : "items")}";
+			case UpgradeType.ShorterBuyPhase: return $"Buy phase duration reduced by 10s";
 
 			case UpgradeType.Volley: return $"Launch 5 balls forward";
 			case UpgradeType.Gather: return $"Your balls target you";
@@ -1341,7 +1343,19 @@ public sealed class Manager : Component, Component.INetworkListener
 			case UpgradeRarity.Uncommon: return new Color( 0.5f, 0.5f, 0.8f );
 			case UpgradeRarity.Rare: return new Color( 0.8f, 0.3f, 0f );
 			case UpgradeRarity.Epic: return new Color( 0.6f, 0f, 0.8f );
-			case UpgradeRarity.Legendary: return new Color( 1f, 1f, 0f );
+			case UpgradeRarity.Legendary: return new Color( 0.75f, 0.75f, 0f );
+		}
+	}
+
+	public static Color GetColorForRarityLabelBg( UpgradeRarity rarity )
+	{
+		switch ( rarity )
+		{
+			case UpgradeRarity.Common: default: return new Color( 0f, 0f, 0f );
+			case UpgradeRarity.Uncommon: return new Color( 0.5f, 0.5f, 0.8f );
+			case UpgradeRarity.Rare: return new Color( 0.8f, 0.3f, 0f );
+			case UpgradeRarity.Epic: return new Color( 0.6f, 0f, 0.8f );
+			case UpgradeRarity.Legendary: return new Color( 0.7f, 0.7f, 0f );
 		}
 	}
 
@@ -1363,6 +1377,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.BumpStrength, "Muscles", "💪", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 6, isPassive: true );
 		CreateUpgrade( UpgradeType.Autoball, "Autoball", "⏲️", UpgradeRarity.Rare, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7, isPassive: true );
 		CreateUpgrade( UpgradeType.MoreShopItems, "Shopper", "🛒", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 9, pricePerAmountMax: 16, isPassive: true );
+		CreateUpgrade( UpgradeType.ShorterBuyPhase, "Closing Early", "🔜", UpgradeRarity.Legendary, maxLevel: 1, amountMin: 1, amountMax: 1, pricePerAmountMin: 8, pricePerAmountMax: 15, isPassive: true );
 
 		CreateUpgrade( UpgradeType.Volley, "Throw", "🥏", UpgradeRarity.Common, maxLevel: 5, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 6 );
 		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
@@ -1411,7 +1426,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			{ UpgradeRarity.Uncommon, 58f },
 			{ UpgradeRarity.Rare, 27f },
 			{ UpgradeRarity.Epic, 16f },
-			//{ UpgradeRarity.Legendary, 2f },
+			{ UpgradeRarity.Legendary, 112f },
 		};
 
 		var total = 0f;
