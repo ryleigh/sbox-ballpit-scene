@@ -91,7 +91,6 @@ public sealed class Manager : Component, Component.INetworkListener
 	private int _numBuyPhaseSkips;
 
 	public const float START_NEW_MATCH_DELAY = 5f;
-	//public const int MATCH_MAX_SCORE = 10;
 
 	[Sync] public string WinningPlayerName { get; set; }
 
@@ -411,7 +410,10 @@ public sealed class Manager : Component, Component.INetworkListener
 				break;
 			case GamePhase.Victory:
 				if ( TimeSincePhaseChange > VICTORY_DELAY )
-					StartNewMatch();
+				{
+					GamePhase = GamePhase.WaitingForPlayers;
+					_targetCenterLineOffset = 0f;
+				}
 				break;
 		}
 
@@ -521,21 +523,52 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( DoesPlayerExist0 )
 		{
 			if ( winningPlayerNum == 0 )
+			{
 				Player0.AddMatchVictory();
+			}
 			else
+			{
 				Player0.AddMatchLoss();
+				ForcePlayerExit( Player0 );
+			}
 		}
 
 		if ( DoesPlayerExist1 )
 		{
 			if ( winningPlayerNum == 1 )
+			{
 				Player1.AddMatchVictory();
+			}
 			else
+			{
 				Player1.AddMatchLoss();
+				ForcePlayerExit( Player1 );
+			}
 		}
 
 		GamePhase = GamePhase.Victory;
 		WinningPlayerName = GetPlayer( winningPlayerNum ).GameObject.Network.OwnerConnection.DisplayName;
+	}
+
+	void ForcePlayerExit(PlayerController player)
+	{
+		player.SetSpectator( true );
+		player.Transform.Position = player.Transform.Position.WithZ( SPECTATOR_HEIGHT );
+		var targetPos = player.GetClosestSpectatorPos( player.Transform.Position );
+		player.Jump( targetPos );
+
+		if(player.PlayerNum == 0)
+		{
+			DoesPlayerExist0 = false;
+			Player0 = null;
+			PlayerId0 = Guid.Empty;
+		}
+		else
+		{
+			DoesPlayerExist1 = false;
+			Player1 = null;
+			PlayerId1 = Guid.Empty;
+		}
 	}
 
 	[Broadcast]

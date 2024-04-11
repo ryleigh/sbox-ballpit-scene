@@ -1089,13 +1089,6 @@
           ]
         }
       ]
-    },
-    {
-      "__guid": "0ad4ceec-c25c-4ce1-996c-78ed96adf5be",
-      "Name": "repel_effect",
-      "Enabled": true,
-      "NetworkMode": 2,
-      "__Prefab": "prefabs/repel_effect.prefab"
     }
   ],
   "SceneProperties": {
@@ -1121,7 +1114,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-11T02:02:25.9892638-07:00",
+  "LastSaved": "2024-04-11T05:37:07.6327364-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []
