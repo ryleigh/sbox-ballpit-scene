@@ -15,7 +15,7 @@
 				roundLabel = "Waiting for ballers...";
 				break;
 			case GamePhase.StartingNewMatch:
-				roundLabel = $"Starting match in {MathX.CeilToInt(Manager.START_NEW_MATCH_DELAY - manager.TimeSincePhaseChange)}...";
+				roundLabel = $"Starting match in {MathX.CeilToInt(Math.Max(Manager.START_NEW_MATCH_DELAY - manager.TimeSincePhaseChange, 0))}...";
 				break;
 			case GamePhase.RoundActive:
 				roundLabel = $"Round {manager.RoundNum} ({FormatTime(MathX.FloorToInt(manager.TimeSincePhaseChange))})";
@@ -24,7 +24,7 @@
 				roundLabel = $"Round {manager.RoundNum}";
 				break;
 			case GamePhase.BuyPhase:
-				roundLabel = $"Buy Phase ({MathX.CeilToInt(manager.BuyPhaseDuration - manager.TimeSincePhaseChange)})";
+				roundLabel = $"Buy Phase ({MathX.CeilToInt(Math.Max(manager.BuyPhaseDuration - manager.TimeSincePhaseChange, 0))})";
 				break;
 			case GamePhase.Victory:
 				roundLabel = $"{manager.WinningPlayerName} wins! 🏆";

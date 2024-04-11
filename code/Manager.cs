@@ -109,7 +109,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public const float BETWEEN_ROUNDS_DELAY = 4f;
 	public const float VICTORY_DELAY = 10f;
-	public float BuyPhaseDuration { get; private set; }
+	[Sync] public float BuyPhaseDuration { get; private set; }
 
 	public GameObject HoveredObject { get; private set; }
 	public UpgradeType HoveredUpgradeType { get; set; }
@@ -187,12 +187,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Repel, numLevels: 1, price: 0 );
 
-		StartBuyPhase();
+		//StartBuyPhase();
 		//StartNewMatch();
 		//StartNewRound();
-
-		//var upgrade = TypeLibrary.Create<Upgrade>( name );
-		//upgrade.Test();
 	}
 
 	public void OnActive( Connection channel )
@@ -210,42 +207,44 @@ public sealed class Manager : Component, Component.INetworkListener
 		clothing.Deserialize( channel.GetUserData( "avatar" ) );
 		clothing.Apply( playerObj.Components.GetInChildren<SkinnedModelRenderer>() );
 
-		//player.IsSpectator = true;
+		player.IsSpectator = true;
 
-		if ( !DoesPlayerExist0 )
-		{
-			Player0 = player;
-			PlayerId0 = player.GameObject.Id;
-			DoesPlayerExist0 = true;
-			player.PlayerNum = 0;
-		}
-		else if ( !DoesPlayerExist1 )
-		{
-			Player1 = player;
-			PlayerId1 = player.GameObject.Id;
-			DoesPlayerExist1 = true;
-			player.PlayerNum = 1;
-		}
-		else
-		{
-			player.IsSpectator = true;
-		}
+		//if ( !DoesPlayerExist0 )
+		//{
+		//	Player0 = player;
+		//	PlayerId0 = player.GameObject.Id;
+		//	DoesPlayerExist0 = true;
+		//	player.PlayerNum = 0;
+		//}
+		//else if ( !DoesPlayerExist1 )
+		//{
+		//	Player1 = player;
+		//	PlayerId1 = player.GameObject.Id;
+		//	DoesPlayerExist1 = true;
+		//	player.PlayerNum = 1;
+		//}
+		//else
+		//{
+		//	player.IsSpectator = true;
+		//}
+
+		player.Transform.Position = new Vector3( Game.Random.Float( -220f, 220f ), Game.Random.Float( -100f, 100f ), 0f );
 
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
 
-		player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
-		player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
-		player.AdjustUpgradeLevel( UpgradeType.Volley, 10 );
-		player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
-		player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
-		player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
-		player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
-		player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );
-		player.AdjustUpgradeLevel( UpgradeType.Dash, 6 );
-		player.AdjustUpgradeLevel( UpgradeType.Blink, 2 );
-		player.AdjustUpgradeLevel( UpgradeType.Redirect, 2 );
-		player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 2 );
+		//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
+		//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
+		//player.AdjustUpgradeLevel( UpgradeType.Volley, 10 );
+		//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
+		//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
+		//player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
+		//player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
+		//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );
+		//player.AdjustUpgradeLevel( UpgradeType.Dash, 6 );
+		//player.AdjustUpgradeLevel( UpgradeType.Blink, 2 );
+		//player.AdjustUpgradeLevel( UpgradeType.Redirect, 2 );
+		//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 2 );
 
 		//if ( channel.IsHost )
 		//{
@@ -1440,7 +1439,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			{ UpgradeRarity.Uncommon, 58f },
 			{ UpgradeRarity.Rare, 27f },
 			{ UpgradeRarity.Epic, 16f },
-			{ UpgradeRarity.Legendary, 112f },
+			{ UpgradeRarity.Legendary, 3f },
 		};
 
 		var total = 0f;

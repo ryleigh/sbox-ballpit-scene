@@ -405,7 +405,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	public void HitOpponentBall( Ball ball )
 	{
 		ball.HitPlayer( GameObject.Id );
-		TakeDamage( ball.Velocity * 0.025f );
+		TakeDamage( ball.Velocity * Game.Random.Float(0.015f, 0.032f) );
 	}
 
 	public void OnTriggerEnter( Collider other )
@@ -521,7 +521,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		if ( HP <= 0 )
 		{
-			Die( force );
+			Die( force + Velocity * Game.Random.Float(0f, 0.025f) );
 		}
 		else
 		{
@@ -783,7 +783,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		NumShopItems = 4;
 		CurrRerollPrice = 1;
 
-		Money = 118;
+		//Money = 118;
 	}
 
 	[Broadcast]
