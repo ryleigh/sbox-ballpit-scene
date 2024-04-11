@@ -416,7 +416,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( other.GameObject.Tags.Has( "item" ) && Manager.Instance.GamePhase == GamePhase.BuyPhase && Manager.Instance.TimeSincePhaseChange > 0.5f )
 		{
 			var item = other.Components.Get<ShopItem>();
-			if ( item.Price <= Money )
+			if ( item.Price <= Money && GetUpgradeLevel( item.UpgradeType ) < Manager.Instance.GetMaxLevelForUpgrade( item.UpgradeType) )
 			{
 				AdjustMoney(-item.Price);
 				AdjustUpgradeLevel( item.UpgradeType, item.NumLevels );

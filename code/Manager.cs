@@ -1377,7 +1377,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.BumpStrength, "Muscles", "💪", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 6, isPassive: true );
 		CreateUpgrade( UpgradeType.Autoball, "Autoball", "⏲️", UpgradeRarity.Rare, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7, isPassive: true );
 		CreateUpgrade( UpgradeType.MoreShopItems, "Shopper", "🛒", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 9, pricePerAmountMax: 16, isPassive: true );
-		CreateUpgrade( UpgradeType.ShorterBuyPhase, "Closing Early", "🔜", UpgradeRarity.Legendary, maxLevel: 1, amountMin: 1, amountMax: 1, pricePerAmountMin: 8, pricePerAmountMax: 15, isPassive: true );
+		CreateUpgrade( UpgradeType.ShorterBuyPhase, "Closing Early", "🔜", UpgradeRarity.Legendary, maxLevel: 1, amountMin: 1, amountMax: 1, pricePerAmountMin: 7, pricePerAmountMax: 15, isPassive: true );
 
 		CreateUpgrade( UpgradeType.Volley, "Throw", "🥏", UpgradeRarity.Common, maxLevel: 5, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 6 );
 		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
