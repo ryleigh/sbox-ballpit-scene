@@ -295,9 +295,15 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public void TryUseItem(UpgradeType upgradeType)
 	{
-		bool useableNow = Manager.Instance.GamePhase == GamePhase.RoundActive || Manager.Instance.CanUseUpgradeInBuyPhase( upgradeType );
-		if ( !useableNow || !ActiveUpgrades.ContainsKey( upgradeType ) )
+		if ( !ActiveUpgrades.ContainsKey( upgradeType ) )
 			return;
+
+		bool useableNow = Manager.Instance.GamePhase == GamePhase.RoundActive || Manager.Instance.CanUseUpgradeInBuyPhase( upgradeType );
+		if ( !useableNow )
+		{
+			Manager.Instance.PlaySfx( "bubble", Transform.Position, volume: 0.7f, pitch: Game.Random.Float(0.35f, 0.45f) );
+			return;
+		}
 
 		var upgrade = LocalUpgrades[upgradeType];
 		upgrade.Use();
@@ -471,7 +477,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		else if ( other.GameObject.Tags.Has( "explosion" ) && !IsInvulnerable && Manager.Instance.GamePhase == GamePhase.RoundActive && Manager.Instance.TimeSincePhaseChange > 0.5f )
 		{
 			var explosion = other.Components.Get<Explosion>();
-			if( !explosion.DealtDamage && explosion.TimeSinceSpawn > 0.075f && explosion.TimeSinceSpawn < 0.3f )
+			if( !explosion.DealtDamage && explosion.TimeSinceSpawn > 0.04f && explosion.TimeSinceSpawn < 0.37f )
 			{
 				var dir = (Transform.Position - other.Transform.Position).Normal;
 				var force = (Vector2)dir * Game.Random.Float( 7f, 12f );

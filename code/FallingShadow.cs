@@ -20,13 +20,19 @@ public sealed class FallingShadow : Component
 
 	protected override void OnUpdate()
 	{
+		if(Manager.Instance.GamePhase != GamePhase.RoundActive)
+		{
+			GameObject.Destroy();
+			return;
+		}
+
 		Renderer.Tint = Color.Black.WithAlpha( Utils.Map( TimeSinceSpawn, 0f, Lifetime, 0f, 0.75f, EasingType.QuadIn ) );
 
 		Transform.Scale = Utils.Map( TimeSinceSpawn, 0f, Lifetime, 0.15f, Scale, EasingType.QuadIn );
 
 		if ( TimeSinceSpawn > Lifetime )
 		{
-			Manager.Instance.SpawnExplosion( (Vector2)Transform.Position, Scale * 1.1f );
+			Manager.Instance.SpawnExplosion( (Vector2)Transform.Position, Scale * 0.8f );
 			GameObject.Destroy();
 		}
 	}

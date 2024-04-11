@@ -144,6 +144,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	public TimeSince TimeSinceLeftGutterBarrierRebound { get; set; }
 	public TimeSince TimeSinceRightGutterBarrierRebound { get; set; }
 
+	public List<AirstrikeData> _airstrikes = new();
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -231,6 +233,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		playerObj.NetworkSpawn( channel );
 
 		player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
+		player.AdjustUpgradeLevel( UpgradeType.Volley, 10 );
 		player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
 		player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
 		player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
@@ -360,6 +363,9 @@ public sealed class Manager : Component, Component.INetworkListener
 					StartNewRound();
 				break;
 			case GamePhase.RoundActive:
+				if ( _airstrikes.Count > 0 )
+					HandleAirstrikes();
+
 				break;
 			case GamePhase.AfterRoundDelay:
 				if ( !_hasIncrementedScore && TimeSincePhaseChange > BETWEEN_ROUNDS_DELAY / 2f )
@@ -470,6 +476,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		Player1?.ClearStats();
 		_targetCenterLineOffset = 0f;
 		CurrentScore = 0;
+		_airstrikes.Clear();
 
 		GamePhase = GamePhase.StartingNewMatch;
 		TimeSincePhaseChange = 0f;
@@ -499,6 +506,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		DespawnBalls();
 		GamePhase = GamePhase.AfterRoundDelay;
 		_hasIncrementedScore = false;
+		_airstrikes.Clear();
 	}
 
 	void Victory( int winningPlayerNum )
@@ -671,6 +679,41 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		var fallingShadowObj = FallingShadowPrefab.Clone( new Vector3( pos.x, pos.y, FallingShadow.HEIGHT ) );
 		fallingShadowObj.Components.Get<FallingShadow>().Scale = scale;
+	}
+
+	[Broadcast]
+	public void StartAirstrike(Vector2 pos)
+	{
+		if ( IsProxy )
+			return;
+
+		_airstrikes.Add( new AirstrikeData() { pos = pos, totalNumStrikes = Game.Random.Int( 9, 11 ), delay = Game.Random.Float( 0.05f, 0.3f ), timeSinceLastStrike = 0f } );
+	}
+
+	void HandleAirstrikes()
+	{
+		for(int i = _airstrikes.Count - 1; i >= 0; i-- )
+		{
+			var strike = _airstrikes[i];
+
+			if(strike.timeSinceLastStrike > strike.delay)
+			{
+				var pos = strike.pos + Utils.GetRandomVector() * Game.Random.Float( 0f, 85f );
+				var BUFFER = 4f;
+				pos = new Vector2(
+					Math.Clamp( pos.x, -X_FAR + BUFFER, X_FAR - BUFFER ),
+					Math.Clamp( pos.y, -Y_LIMIT + BUFFER, Y_LIMIT - BUFFER )
+				);
+
+				SpawnFallingShadow( pos, scale: Game.Random.Float( 0.35f, 0.6f ) );
+
+				strike.timeSinceLastStrike = 0f;
+				strike.delay = Game.Random.Float( 0.5f, 2f );
+				strike.currNumStrikes++;
+				if(strike.currNumStrikes >= strike.totalNumStrikes)
+					_airstrikes.Remove(strike);
+			}
+		}
 	}
 
 	[Broadcast]
@@ -874,6 +917,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		//Log.Info( $"StopCurrentMatch" );
 		_targetCenterLineOffset = 0f;
 		CurrentScore = 0;
+		_airstrikes.Clear();
 
 		Player0?.Respawn();
 		Player1?.Respawn();
@@ -1155,7 +1199,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			case UpgradeType.Autoball: return $"Release a ball every {(float)Math.Round( AutoballUpgrade.GetDelay( level ), 1 )}s";
 			case UpgradeType.MoreShopItems: return $"Your shop offers {level} more {(level == 1 ? "item" : "items")}";
 
-			case UpgradeType.Volley: return $"Shoot some balls forward";
+			case UpgradeType.Volley: return $"Launch 5 balls forward";
 			case UpgradeType.Gather: return $"Your balls target you";
 			case UpgradeType.Repel: return $"Push nearby balls away";
 			case UpgradeType.Replace: return $"Swap balls with enemy";
@@ -1297,7 +1341,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.Autoball, "Autoball", "⏲️", UpgradeRarity.Rare, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7, isPassive: true );
 		CreateUpgrade( UpgradeType.MoreShopItems, "Shopper", "🛒", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 9, pricePerAmountMax: 16, isPassive: true );
 
-		CreateUpgrade( UpgradeType.Volley, "Volley", "🔴", UpgradeRarity.Common, maxLevel: 5, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 5 );
+		CreateUpgrade( UpgradeType.Volley, "Throw", "🥏", UpgradeRarity.Common, maxLevel: 5, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 6 );
 		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
 		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5 );
 		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", UpgradeRarity.Uncommon, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 6, pricePerAmountMax: 8 );

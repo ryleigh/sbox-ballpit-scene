@@ -135,8 +135,33 @@ public class MoneyPickup : Component
 					Manager.Instance.PlaySfx( "bubble", Transform.Position, volume: 0.3f, pitch: Game.Random.Float( 1.2f, 1.3f ) );
 				}
 					
-				if ( (_startingSide == 0 && Transform.Position.x < -Manager.X_FAR) || (_startingSide == 1 && Transform.Position.x > Manager.X_FAR) )
-					GameObject.Destroy();
+				if ( _startingSide == 0 && Transform.Position.x < -Manager.X_FAR - 20f )
+				{
+					var leftBarrierActive = Manager.Instance.GetPlayer( 0 )?.IsBarrierActive ?? false;
+					if ( leftBarrierActive )
+					{
+						_dir = _dir.WithX( _dir.x * -1f );
+						Manager.Instance.PlaySfx( "bubble", Transform.Position, volume: 0.3f, pitch: Game.Random.Float( 1.2f, 1.3f ) );
+					}
+					else 
+					{
+						GameObject.Destroy();
+					}
+				}
+
+				if ( _startingSide == 1 && Transform.Position.x > Manager.X_FAR + 20f )
+				{
+					var rightBarrierActive = Manager.Instance.GetPlayer( 1 )?.IsBarrierActive ?? false;
+					if ( rightBarrierActive )
+					{
+						_dir = _dir.WithX( _dir.x * -1f );
+						Manager.Instance.PlaySfx( "bubble", Transform.Position, volume: 0.3f, pitch: Game.Random.Float( 1.2f, 1.3f ) );
+					}
+					else
+					{
+						GameObject.Destroy();
+					}
+				}
 
 				break;
 		}

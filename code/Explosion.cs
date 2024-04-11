@@ -8,7 +8,7 @@ public class Explosion : Component
 	private Color _colorB;
 
 	public TimeSince TimeSinceSpawn { get; set; }
-	public float Lifetime = 1f;
+	public float Lifetime = 0.4f;
 
 	public float Scale { get; set; }
 
@@ -25,9 +25,9 @@ public class Explosion : Component
 
 	protected override void OnUpdate()
 	{
-		Renderer.Tint = Color.Lerp( _colorA, _colorB, Utils.FastSin(TimeSinceSpawn * 32f) ).WithAlpha( Utils.Map( TimeSinceSpawn, 0f, Lifetime, 1f, 0f, EasingType.QuadOut ) );
-
-		Transform.Scale = Utils.Map( TimeSinceSpawn, 0f, Lifetime, Scale, Scale * 1.25f, EasingType.QuadIn ) * Utils.MapReturn( TimeSinceSpawn, 0f, 0.1f, 1.3f, 0.7f, EasingType.Linear);
+		Renderer.Tint = Color.Lerp( _colorA, _colorB, Utils.FastSin(TimeSinceSpawn * 32f) ).WithAlpha( Utils.Map( TimeSinceSpawn, 0f, Lifetime, 1000f, 0f, EasingType.ExpoOut ) );
+		
+		Transform.Scale = Utils.Map( TimeSinceSpawn, 0f, Lifetime, Scale, Scale * 1.25f, EasingType.QuadIn ) * Utils.MapReturn( TimeSinceSpawn, 0f, 0.1f, 1.3f, 0.7f, EasingType.QuadOut);
 
 		if ( TimeSinceSpawn > Lifetime )
 			GameObject.Destroy();
