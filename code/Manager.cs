@@ -576,10 +576,24 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void CreateShopItems( int playerNum, int numItems )
 	{
+		var player = GetPlayer( playerNum );
+		if ( player == null )
+			return;
+
+		int MAX_TRIES = 100;
 		for ( int i = 0; i < numItems; i++ )
 		{
 			var rarity = GetRandomRarity();
 			var upgradeType = GetRandomUpgradeType( rarity );
+
+			int numTries = 0;
+			while(player.GetUpgradeLevel(upgradeType) >= GetMaxLevelForUpgrade(upgradeType) && numTries < MAX_TRIES )
+			{
+				rarity = GetRandomRarity();
+				upgradeType = GetRandomUpgradeType( rarity );
+				numTries++;
+			}
+			
 			int numLevels = GetRandomAmountForUpgrade( upgradeType );
 			int pricePerLevel = GetRandomPricePerAmountForUpgrade( upgradeType );
 			var price = numLevels * pricePerLevel;
