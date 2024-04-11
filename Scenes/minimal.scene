@@ -279,7 +279,13 @@
           },
           "BloomCurve": [
             {
-              "y": 0.5
+              "y": 0.31382978
+            },
+            {
+              "x": 0.6785714,
+              "y": 0.5352371,
+              "in": -1.4696441,
+              "out": 1.4696441
             },
             {
               "x": 1,
@@ -287,8 +293,8 @@
             }
           ],
           "Mode": "Additive",
-          "Strength": 0.55,
-          "Threshold": 0.75,
+          "Strength": 1,
+          "Threshold": 0.9,
           "ThresholdWidth": 0.5
         },
         {
@@ -1104,7 +1110,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-10T17:16:17.9049156-07:00",
+  "LastSaved": "2024-04-10T19:33:33.5837208-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

@@ -8,6 +8,6 @@ public class SlowmoUpgrade : Upgrade
 		base.Use();
 
 		Manager.PlaySfx( "bubble", Player.Transform.Position );
-		Manager.SlowmoRPC( 0.2f, 3f, EasingType.QuadIn );
+		Manager.SlowmoRPC( 0.2f, 2.5f, EasingType.ExpoIn );
 	}
 }

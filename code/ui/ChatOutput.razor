@@ -19,7 +19,7 @@
 			@foreach(var entry in Entries)
 			{
 				<div class="chat_entry" style="opacity:@(Utils.Map(entry.timeSinceAdded, 0f, 12f, 1f, 0f));">
-					<div class="message" style="font-size:@(Utils.Map(entry.timeSinceAdded, 0f, 0.5f, 35f, 20f, EasingType.QuadOut));">@entry.message</div>
+					<div class="message" style="font-size:@(Utils.Map(entry.timeSinceAdded, 0f, 0.5f, 34f, 24f, EasingType.QuadOut));">@entry.message</div>
 				</div>
 			}
 		}

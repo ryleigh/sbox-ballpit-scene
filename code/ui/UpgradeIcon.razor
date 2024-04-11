@@ -24,9 +24,9 @@
 	}
 
 	<!-- <div class="bg" style="background-image: url(@($"materials/icons/{Globals.GetIconForUpgrade(UpgradeType)}.png"));"></div> -->
-	<div class="icon" style="opacity:@((isPassive || isSelected ? 1f : 0.7f) );
+	<div class="icon" style="opacity:@((isPassive || isSelected ? 1f : 0.5f) );
 						text-stroke: @(Manager.GetOutlineSizeForRarity(rarity))px @(Manager.GetColorForRarity(rarity).Rgba);
-						font-size:@((isSelected ? 60f : 40f) * (isHovered ? 1.1f : 1f) * useScale)px;">
+						font-size:@((isSelected ? 60f : 38f) * (isHovered ? 1.1f : 1f) * useScale)px;">
 		@(Manager.Instance.GetIconForUpgrade(UpgradeType))
 	</div>
 

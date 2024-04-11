@@ -1354,7 +1354,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.Endow, "Endow", "💰", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 4, pricePerAmountMax: 6 );
 		CreateUpgrade( UpgradeType.Fade, "Fade", "👥", UpgradeRarity.Uncommon, maxLevel: 6, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 4 );
 		CreateUpgrade( UpgradeType.Barrier, "Barrier", "🚧", UpgradeRarity.Uncommon, maxLevel: 6, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
-		CreateUpgrade( UpgradeType.Airstrike, "Airstrike", "🚀", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 8, pricePerAmountMax: 11 );
+		CreateUpgrade( UpgradeType.Airstrike, "Airstrike", "🚀", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 8, pricePerAmountMax: 12 );
 
 		foreach (var upgradeData in UpgradeDatas)
 		{
