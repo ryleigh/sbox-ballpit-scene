@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "4683b45a-43e5-4461-9e94-1fb1619f719b",
+    "__guid": "8866fdde-84b8-4a03-ae6c-1b65e12c3c6d",
     "Name": "explosion",
     "Tags": "explosion",
     "Enabled": true,
@@ -8,7 +8,7 @@
     "Components": [
       {
         "__type": "Sandbox.ModelRenderer",
-        "__guid": "30f46492-abe4-447f-b150-b550a5078ada",
+        "__guid": "2d1fc79e-090f-4383-bb94-2260d0f215a9",
         "BodyGroups": 18446744073709551615,
         "Model": "models/dev/sphere.vmdl",
         "RenderType": "Off",
@@ -16,20 +16,20 @@
       },
       {
         "__type": "Explosion",
-        "__guid": "2d939328-11a8-4059-afdb-7fe5914297bf",
+        "__guid": "987cedb0-6f7f-470a-ae05-b2c54253b3a2",
         "Renderer": {
           "_type": "component",
-          "component_id": "30f46492-abe4-447f-b150-b550a5078ada",
-          "go": "4683b45a-43e5-4461-9e94-1fb1619f719b",
+          "component_id": "2d1fc79e-090f-4383-bb94-2260d0f215a9",
+          "go": "8866fdde-84b8-4a03-ae6c-1b65e12c3c6d",
           "component_type": "ModelRenderer"
         }
       },
       {
         "__type": "Sandbox.SphereCollider",
-        "__guid": "e2ea5388-2bfc-4eba-a7a2-ec705ea92d8e",
+        "__guid": "b1740a9c-76ab-4afc-8f18-872067c1e5c3",
         "Center": "0,0,0",
         "IsTrigger": true,
-        "Radius": 30,
+        "Radius": 27,
         "Static": false
       }
     ],

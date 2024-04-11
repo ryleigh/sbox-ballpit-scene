@@ -468,10 +468,10 @@ public class PlayerController : Component, Component.ITriggerListener
 				HitRerollButton( success: false );
 			}
 		}
-		else if ( other.GameObject.Tags.Has( "explosion" ) && Manager.Instance.GamePhase == GamePhase.RoundActive && Manager.Instance.TimeSincePhaseChange > 0.5f )
+		else if ( other.GameObject.Tags.Has( "explosion" ) && !IsInvulnerable && Manager.Instance.GamePhase == GamePhase.RoundActive && Manager.Instance.TimeSincePhaseChange > 0.5f )
 		{
 			var explosion = other.Components.Get<Explosion>();
-			if( !explosion.DealtDamage && explosion.TimeSinceSpawn > 0.05f && explosion.TimeSinceSpawn < 0.4f )
+			if( !explosion.DealtDamage && explosion.TimeSinceSpawn > 0.075f && explosion.TimeSinceSpawn < 0.3f )
 			{
 				var dir = (Transform.Position - other.Transform.Position).Normal;
 				var force = (Vector2)dir * Game.Random.Float( 7f, 12f );

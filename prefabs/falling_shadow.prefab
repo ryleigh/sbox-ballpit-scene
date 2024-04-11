@@ -1,0 +1,35 @@
+{
+  "RootObject": {
+    "__guid": "eeb0446e-a90b-42fe-95ae-b4a046f3d9f2",
+    "Name": "falling_shadow",
+    "Position": "0,0,100",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "Components": [
+      {
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "3516c334-b328-4d9f-969f-62d7e42bc8ed",
+        "BodyGroups": 18446744073709551615,
+        "Model": "models/dev/sphere.vmdl",
+        "RenderType": "Off",
+        "Tint": "0,0,0,0.13"
+      },
+      {
+        "__type": "FallingShadow",
+        "__guid": "c063bffd-4428-4f71-8b2a-c800c83e9cba",
+        "Renderer": {
+          "_type": "component",
+          "component_id": "3516c334-b328-4d9f-969f-62d7e42bc8ed",
+          "go": "eeb0446e-a90b-42fe-95ae-b4a046f3d9f2",
+          "component_type": "ModelRenderer"
+        }
+      }
+    ]
+  },
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "ResourceVersion": 1,
+  "__version": 1,
+  "__references": []
+}

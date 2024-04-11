@@ -7,7 +7,8 @@ public class AirstrikeUpgrade : Upgrade
 	{
 		base.Use();
 
-		Manager.Instance.SpawnExplosion( Manager.Instance.MouseWorldPos, 0.7f );
+		//Manager.Instance.SpawnExplosion( Manager.Instance.MouseWorldPos, 0.7f );
+		Manager.Instance.SpawnFallingShadow( Manager.Instance.MouseWorldPos, 0.5f );
 
 		Manager.Instance.PlaySfx( "bubble", Player.Transform.Position );
 	}

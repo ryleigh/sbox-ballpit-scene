@@ -48,6 +48,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject PickupItemPrefab { get; set; }
 	[Property] public GameObject MoneyPickupPrefab { get; set; }
 	[Property] public GameObject ExplosionPrefab { get; set; }
+	[Property] public GameObject FallingShadowPrefab { get; set; }
 	[Property] public GameObject FadingTextPrefab { get; set; }
 	[Property] public GameObject FloaterTextPrefab { get; set; }
 	[Property] public GameObject BallExplosionParticles { get; set; }
@@ -663,6 +664,13 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		var explosionObj = ExplosionPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
 		explosionObj.Components.Get<Explosion>().Scale = scale;
+	}
+
+	[Broadcast]
+	public void SpawnFallingShadow( Vector2 pos, float scale )
+	{
+		var fallingShadowObj = FallingShadowPrefab.Clone( new Vector3( pos.x, pos.y, FallingShadow.HEIGHT ) );
+		fallingShadowObj.Components.Get<FallingShadow>().Scale = scale;
 	}
 
 	[Broadcast]

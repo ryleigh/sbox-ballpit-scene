@@ -41,6 +41,10 @@
             "_type": "gameobject",
             "prefab": "prefabs/fading_text.prefab"
           },
+          "FallingShadowPrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/falling_shadow.prefab"
+          },
           "FloaterTextPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/floater_text.prefab"
@@ -1100,7 +1104,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-10T03:55:29.4227933-07:00",
+  "LastSaved": "2024-04-10T17:16:17.9049156-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

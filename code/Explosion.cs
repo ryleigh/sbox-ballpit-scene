@@ -29,9 +29,6 @@ public class Explosion : Component
 
 		Transform.Scale = Utils.Map( TimeSinceSpawn, 0f, Lifetime, Scale, Scale * 1.25f, EasingType.QuadIn ) * Utils.MapReturn( TimeSinceSpawn, 0f, 0.1f, 1.3f, 0.7f, EasingType.Linear);
 
-		if ( IsProxy )
-			return;
-
 		if ( TimeSinceSpawn > Lifetime )
 			GameObject.Destroy();
 	}
