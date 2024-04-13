@@ -14,7 +14,7 @@ public class ConvergeUpgrade : Upgrade
 
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )
 		{
-			if ( ball.IsActive && ball.PlayerNum == Player.PlayerNum )
+			if ( !ball.IsDespawning && ball.PlayerNum == Player.PlayerNum )
 			{
 				var dir = ((Vector2)enemyPos - (Vector2)ball.Transform.Position).Normal;
 				var speed = ball.Velocity.Length;

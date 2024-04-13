@@ -11,8 +11,6 @@ public class Ball : Component
 	//public HighlightOutline HighlightOutline { get; private set; }
 	public ModelRenderer ModelRenderer { get; private set; }
 
-	[Sync] public bool IsActive { get; set; }
-
 	public bool IsDespawning { get; private set; }
 	public TimeSince TimeSinceDespawnStart { get; private set; }
 	private float _despawnTime = 3f;
@@ -22,7 +20,7 @@ public class Ball : Component
 	public TimeSince TimeSinceWobble { get; private set; }
 	private float _wobbleTime = 0.5f;
 
-	public TimeSince TimeSinceBumped { get; private set; }
+	public TimeSince TimeSinceBumped { get; set; }
 
 	private Vector3 _localScaleStart;
 
@@ -49,7 +47,6 @@ public class Ball : Component
 	{
 		base.OnStart();
 
-		IsActive = true;
 		TimeScale = 1f;
 
 		_localScaleStart = Transform.LocalScale;
@@ -69,8 +66,11 @@ public class Ball : Component
 
 	protected override void OnUpdate()
 	{
-		//Gizmo.Draw.Color = Color.White;
-		//Gizmo.Draw.Text( $"{Velocity.Length}", new global::Transform( Transform.Position + new Vector3(0f, 1f, 1f)) );
+		//if(IsDespawning)
+		//{
+		//	Gizmo.Draw.Color = Color.White;
+		//	Gizmo.Draw.Text( $"IsDespawning: {IsDespawning}", new global::Transform( Transform.Position + new Vector3( 0f, 1f, 1f ) ) );
+		//}
 
 		if(IsWobbling)
 		{
@@ -263,7 +263,7 @@ public class Ball : Component
 	[Broadcast]
 	public void HitPlayer(Guid hitPlayerId)
 	{
-		if ( !IsActive )
+		if ( IsDespawning )
 			return;
 
 		Manager.Instance.CreateBallExplosionParticles( Transform.Position, PlayerNum );
@@ -272,13 +272,6 @@ public class Ball : Component
 		TimeSinceDespawnStart = 0f;
 		_despawnTime = 0.1f;
 		_moveWhileDespawning = false;
-
-		if ( IsProxy )
-			return;
-
-		//GameObject.Destroy();
-
-		IsActive = false;
 	}
 
 	[Broadcast]
@@ -319,16 +312,12 @@ public class Ball : Component
 	[Broadcast]
 	public void Despawn()
 	{
-		if(!IsActive)
+		if(IsDespawning)
 			return;
 
 		IsDespawning = true;
 		TimeSinceDespawnStart = 0f;
-
-		if ( IsProxy )
-			return;
-
-		IsActive = false;
+		_moveWhileDespawning = true;
 	}
 
 	//[Broadcast]
@@ -342,7 +331,7 @@ public class Ball : Component
 	{
 		IsWobbling = true;
 		TimeSinceWobble = 0f;
-		TimeSinceBumped = 0f;
+		//TimeSinceBumped = 0f;
 	}
 
 	[Broadcast]
@@ -377,7 +366,7 @@ public class Ball : Component
 
 	public void SetTimeScale( float timeScale, float time, EasingType easingType = EasingType.Linear )
 	{
-		if ( IsDespawning || !IsActive || (_timeScaleActive && TimeScale < timeScale) )
+		if ( IsDespawning || (_timeScaleActive && TimeScale < timeScale) )
 			return;
 
 		_timeScaleActive = true;

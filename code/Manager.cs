@@ -227,7 +227,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		//	player.IsSpectator = true;
 		//}
 
-		player.Transform.Position = new Vector3( Game.Random.Float( -220f, 220f ), Game.Random.Float( -100f, 100f ), 0f );
+		player.Transform.Position = player.GetClosestSpectatorPos(new Vector3( Game.Random.Float( -220f, 220f ), Game.Random.Float( -100f, 100f ), 0f ));
 
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
@@ -507,7 +507,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void FinishRound()
 	{
-		DespawnBalls();
+		DespawnBallsRPC();
 		GamePhase = GamePhase.AfterRoundDelay;
 		_hasIncrementedScore = false;
 		_airstrikes.Clear();
@@ -995,7 +995,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		Player0?.ClearStats();
 		Player1?.ClearStats();
 
-		DespawnBalls();
+		DespawnBallsRPC();
 		DestroyShopStuff();
 		DestroyPickups();
 		DestroyFadingText();
@@ -1020,13 +1020,12 @@ public sealed class Manager : Component, Component.INetworkListener
 		_slowmoEasingType = easingType;
 	}
 
-	void DespawnBalls()
+	[Broadcast]
+	void DespawnBallsRPC()
 	{
+		Log.Info( $"DespawnBallsRPC: {Scene.GetAllComponents<Ball>().Count()}" );
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )
-		{
-			if ( ball.IsActive )
-				ball.Despawn();
-		}
+			ball.Despawn();
 	}
 
 	//void DestroyBalls()

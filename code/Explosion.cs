@@ -39,7 +39,7 @@ public class Explosion : Component
 
 			foreach ( var ball in Scene.GetAllComponents<Ball>() )
 			{
-				if ( !ball.IsActive )
+				if ( ball.IsDespawning )
 					continue;
 
 				var distSqr = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).LengthSquared;

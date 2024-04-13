@@ -201,7 +201,7 @@ public class PlayerController : Component, Component.ITriggerListener
 				// collide with balls
 				foreach ( var ball in Scene.GetAllComponents<Ball>() )
 				{
-					if ( !ball.IsActive )
+					if ( ball.IsDespawning )
 						continue;
 
 					if ( ball.PlayerNum == PlayerNum )
@@ -224,6 +224,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 							ball.BumpedByPlayer();
 							BumpOwnBall( (Vector2)ball.Transform.Position );
+
+							ball.TimeSinceBumped = 0f;
 						}
 					}
 					else

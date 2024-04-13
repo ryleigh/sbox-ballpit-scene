@@ -13,7 +13,7 @@ public class RedirectUpgrade : Upgrade
 
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )
 		{
-			if ( ball.IsActive && ball.PlayerNum == Player.PlayerNum )
+			if ( !ball.IsDespawning && ball.PlayerNum == Player.PlayerNum )
 			{
 				var speed = ball.Velocity.Length;
 				ball.SetVelocity( redirectDir * speed, timeScale: 0f, duration: 0.5f, EasingType.QuadIn );

@@ -11,7 +11,7 @@ public class ScatterUpgrade : Upgrade
 
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )
 		{
-			if ( !ball.IsActive )
+			if ( ball.IsDespawning )
 				continue;
 
 			var speed = ball.Velocity.Length;

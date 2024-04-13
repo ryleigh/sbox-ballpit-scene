@@ -11,7 +11,7 @@ public class GatherUpgrade : Upgrade
 
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )
 		{
-			if ( ball.IsActive && ball.PlayerNum == Player.PlayerNum )
+			if ( !ball.IsDespawning && ball.PlayerNum == Player.PlayerNum )
 			{
 				var speed = ball.Velocity.Length;
 				var dir = ((Vector2)Player.Transform.Position - (Vector2)ball.Transform.Position).Normal;

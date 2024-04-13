@@ -11,7 +11,7 @@ public class ReplaceUpgrade : Upgrade
 
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )
 		{
-			if ( !ball.IsActive )
+			if ( ball.IsDespawning )
 				continue;
 
 			ball.SetTimeScaleRPC( timeScale: 0f, duration: 0.75f, EasingType.QuadIn );
