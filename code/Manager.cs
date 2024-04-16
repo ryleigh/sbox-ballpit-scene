@@ -138,6 +138,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	public static Color Player1NameColor = new Color( 0.4f, 1f, 0.4f );
 
 	public bool IsMouseDown { get; set; }
+	public bool IsTabIndicatorHovered { get; set; }
 
 	private float _sideWallXScale;
 	public TimeSince TimeSinceLeftWallRebound { get; set; }
@@ -264,7 +265,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 
 		//Gizmo.Draw.Color = Color.White;
-		//Gizmo.Draw.Text( $"IsMouseDown: {IsMouseDown}", new global::Transform( Vector3.Zero ) );
+		//Gizmo.Draw.Text( $"IsTabIndicatorHovered: {IsTabIndicatorHovered}", new global::Transform( Vector3.Zero ) );
 
 		SlidingGround.Transform.Position = new Vector3( CenterLineOffset, 0f, 0f );
 

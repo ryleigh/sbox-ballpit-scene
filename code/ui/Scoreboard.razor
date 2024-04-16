@@ -82,7 +82,7 @@
 
 	protected override void OnUpdate()
 	{
-		SetClass("hidden", !Input.Down("Score"));
+		SetClass("hidden", !(Input.Down("Score") || Manager.Instance.IsTabIndicatorHovered));
 	}
 
 	protected override int BuildHash() 
