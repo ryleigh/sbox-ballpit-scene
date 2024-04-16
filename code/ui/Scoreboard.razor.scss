@@ -5,6 +5,8 @@ Scoreboard {
 	right: 0px;
 	bottom: 0px;
 	//background-color: #1115;
+	flex-direction: column;
+	//justify-content: flex-start;
 	justify-content: center;
 	align-items: center;
 	font-family: "Proxima Soft";
@@ -17,17 +19,43 @@ Scoreboard {
 	border: 1px solid #000000bb;
 	overflow: hidden;
 
+	.title {
+		position: absolute;
+		left: 40px;
+		top: 7%;
+		width: 400px;
+		height: 10%;
+		border-radius: 10px;
+		background-color: #004455bb;
+		justify-content: center;
+		align-items: center;
+		font-size: 64px;
+		font-weight: 1000;
+		color: #ffffffaa;
+	}
+
+	.info {
+		position: absolute;
+		left: 40px;
+		top: 20%;
+		width: 400px;
+		height: 60%;
+		border-radius: 10px;
+		background-color: #000055bb;
+	}
+
 	.table {
 		flex-direction: column;
 		width: 40%;
 		//border: 3px solid #333;
 		border-radius: 5px;
-		//height: 100%;
+		//height: 60%;
+		//margin-top: 3%;
 		//top: 0px;
 		//justify-content: flex-start;
 		//mix-blend-mode: lighten;
 		//align-items: flex-start;
-		box-shadow: -8px 8px 24px 8px #00000066;
+		box-shadow: -8px 8px 24px 8px #00000044;
 
 		.header {
 			//opacity: 0.3;
@@ -81,11 +109,11 @@ Scoreboard {
 		}
 
 		.even_row {
-			background-color: #00000011;
+			background-color: #00000022;
 		}
 
 		.odd_row {
-			background-color: #00000033;
+			background-color: #00000044;
 		}
 
 		.me {

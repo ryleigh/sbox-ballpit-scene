@@ -3,6 +3,14 @@
 @inherits PanelComponent
 
 <root>
+	<div class="title">
+		Ball Pit
+	</div>
+
+	<div class="info">
+
+	</div>
+
 	<div class="table">
 		<div class="header row">
 			<div style="justify-content: flex-start; flex-grow: 1;">
@@ -22,6 +30,8 @@
 
 		@foreach(var player in Scene.GetAllComponents<PlayerController>().ToList().OrderByDescending(x => x.NumMatchWins))
 		{
+			// todo: need to handle displaying a large amount of players
+
 			var connection = player.Network.OwnerConnection;
 			var nameColor = (Manager.Instance.GetConnection(0) == connection ? Manager.Player0NameColor : (Manager.Instance.GetConnection(1) == connection ? Manager.Player1NameColor : new Color(1f, 1f, 1f)));
 
