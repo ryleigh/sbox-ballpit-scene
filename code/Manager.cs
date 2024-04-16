@@ -1024,7 +1024,6 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Broadcast]
 	void DespawnBallsRPC()
 	{
-		Log.Info( $"DespawnBallsRPC: {Scene.GetAllComponents<Ball>().Count()}" );
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )
 			ball.Despawn();
 	}
