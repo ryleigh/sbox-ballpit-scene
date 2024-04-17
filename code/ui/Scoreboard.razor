@@ -19,7 +19,7 @@
 		<div class="section" style="padding: 8px;">@($"Avoid balls of your opponent's color")</div>
 		<div class="section" style="background-color: #448844; color: #448844;">@(_anim1[_tick % _anim1.Length])</div>
 		<div class="spacer"></div>
-		<div class="section" style="padding: 8px;">@($"Spend $ to buy and reroll items\n\nPress space to use active items, and mouse wheel to swap")</div>
+		<div class="section" style="padding: 8px;">@($"Between rounds, spend $ to buy and reroll items\n\nPress space to use active items, and mouse wheel to swap")</div>
 		<div class="section" style="background-color: #4444aa; color: #4444aa;">@(_anim2[_tick % _anim2.Length])</div>
 		<div class="spacer"></div>
 		<div class="section" style="padding: 8px;">@($"Winning rounds moves the center line towards you\n\nMove it 5 notches on your side to claim victory!")</div>
@@ -46,8 +46,6 @@
 
 		@foreach(var player in Scene.GetAllComponents<PlayerController>().ToList().OrderByDescending(x => x.NumMatchWins))
 		{
-			// todo: need to handle displaying a large amount of players
-
 			var connection = player.Network.OwnerConnection;
 			var nameColor = (Manager.Instance.GetConnection(0) == connection ? Manager.Player0NameColor : (Manager.Instance.GetConnection(1) == connection ? Manager.Player1NameColor : new Color(1f, 1f, 1f)));
 
@@ -83,6 +81,8 @@
 
 			rowNum++;
 		}
+
+		
 	</div>
 
 </root>

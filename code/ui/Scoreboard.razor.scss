@@ -26,11 +26,12 @@ Scoreboard {
 		width: 382px;
 		height: 70%;
 		border-radius: 10px;
-		background-color: #000000aa;
+		background-color: #000000dd;
 		box-shadow: -5px 5px 8px 2px #00000066;
 		flex-direction: column;
 		gap: -12px;
 		//pointer-events: all;
+		color: #cccccc;
 	}
 
 	.section {
@@ -86,6 +87,7 @@ Scoreboard {
 		//mix-blend-mode: lighten;
 		//align-items: flex-start;
 		box-shadow: -4px 4px 12px 4px #00000044;
+		overflow: scroll;
 
 		.header {
 			//opacity: 0.3;
@@ -96,6 +98,7 @@ Scoreboard {
 			justify-content: center;
 			align-items: center;
 			width: 100%;
+			flex-shrink: 0;
 		}
 
 		.row {

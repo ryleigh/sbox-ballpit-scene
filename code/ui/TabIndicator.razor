@@ -5,7 +5,7 @@
 
 <root style="@(Input.Down("Score") || Manager.Instance.IsTabIndicatorHovered ? "color: #ffffff; transform: scale( 1.05 )" : "color: #bbbbbb; transform: scale( 1 )");">
 	<div class="title">
-		ℹ️ Tab
+		@($"{(Input.Down("Score") || Manager.Instance.IsTabIndicatorHovered ? "🆒" : "ℹ")} Tab")
 	</div>
 </root>
 
