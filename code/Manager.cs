@@ -148,6 +148,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public List<AirstrikeData> _airstrikes = new();
 
+	public float TrophyIndicatorOpacity { get; set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -331,6 +333,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 				break;
 			case GamePhase.AfterRoundDelay:
+				TrophyIndicatorOpacity = Utils.Map( Utils.MapReturn( TimeSincePhaseChange, 0f, BETWEEN_ROUNDS_DELAY, 0f, 1f, EasingType.Linear ), 0f, 1f, 0f, 1f, EasingType.SineOut );
 				break;
 			case GamePhase.BuyPhase:
 				var numSecondsLeftBuyPhase = MathX.CeilToInt( BuyPhaseDuration - TimeSincePhaseChange );

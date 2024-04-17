@@ -126,8 +126,12 @@ Hud {
 
 	.trophy_icon {
 		position: absolute;
-		width: 164px;
-		height: 164px;
-		background-color: magenta;
+		//width: 64px;
+		//height: 64px;
+		//background-color: magenta;
+		justify-content: center;
+		align-items: center;
+		font-size: 32px;
+		font-family: W10Emoji;
 	}
 }
