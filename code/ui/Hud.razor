@@ -148,7 +148,14 @@
 
 	<TabIndicator />
 
-	
+	@{
+		var worldPos = Manager.Instance.GetPlayer(0).Transform.Position;
+		var screenPos = Scene.Camera.PointToScreenPixels(worldPos) * Panel.ScaleFromScreen;
+	}
+
+	<div class="trophy_icon" style="left: @(Math.Round(screenPos.x))px; top: @(Math.Round(screenPos.y))px;"></div>
+
+
 </root>
 
 @code
@@ -210,7 +217,8 @@
 			HashCode.Combine(playerName0, playerName1, hp0, hp1, Input.Down("Score")),
 			HashCode.Combine(money0, money1, upgrades0, upgrades1, manager.RoundNum),
 			HashCode.Combine(manager.GamePhase, buyPhaseTimer, newMatchTimer, manager.HoveredObject, tooltipPos),
-			HashCode.Combine(upgradeType0, upgradeType1, MathX.FloorToInt(manager.TimeSincePhaseChange))
+			HashCode.Combine(upgradeType0, upgradeType1, MathX.FloorToInt(manager.TimeSincePhaseChange)),
+			Manager.Instance.GetPlayer(0).Transform.Position
 		);
 	}
 }

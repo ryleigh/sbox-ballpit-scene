@@ -187,9 +187,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Repel, numLevels: 1, price: 0 );
 
-		StartBuyPhase();
-		//StartNewMatch();
-		//StartNewRound();
+		//StartBuyPhase();
+		StartNewMatch();
+		StartNewRound();
 	}
 
 	public void OnActive( Connection channel )
@@ -1160,10 +1160,10 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( localPlayer == null || localPlayer.IsSpectator )
 			return;
 
-		if( localPlayer.PlayerNum == 0)
-			SpawnFadingText( new Vector3( -120f, 40f, 180f ), $"AVOID {green_circle}", 4f );
+		if ( localPlayer.PlayerNum == 0 )
+			SpawnFadingText( new Vector3( -120f, 40f, 180f ), $"BUMP {blue_circle}", 4f );
 		else
-			SpawnFadingText( new Vector3( 120f, 40f, 180f ), $"AVOID {blue_circle}", 3f );
+			SpawnFadingText( new Vector3( 120f, -40f, 180f ), $"BUMP {green_circle}", 4f );
 
 		await Task.Delay( 1200 );
 
@@ -1171,9 +1171,9 @@ public sealed class Manager : Component, Component.INetworkListener
 			return;
 
 		if ( localPlayer.PlayerNum == 0 )
-			SpawnFadingText( new Vector3( -120f, -10f, 180f ), $"BUMP {blue_circle}", 4f );
+			SpawnFadingText( new Vector3( -120f, -10f, 180f ), $"AVOID {green_circle}", 3f );
 		else
-			SpawnFadingText( new Vector3( 120f, -10f, 180f ), $"BUMP {green_circle}", 3f );
+			SpawnFadingText( new Vector3( 120f, -10f, 180f ), $"AVOID {blue_circle}", 3f );
 	}
 
 	[Broadcast]
