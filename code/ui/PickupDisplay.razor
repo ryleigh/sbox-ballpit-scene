@@ -3,6 +3,22 @@
 @inherits PanelComponent
 
 <root>
+	@foreach(var pickupItem in Scene.GetAllComponents<PickupItem>())
+	{
+		var pos = pickupItem.Transform.Position;
+		var screenPos = Scene.Camera.PointToScreenPixels(pos) * Panel.ScaleFromScreen;
+		var rarity = Manager.Instance.GetRarityForUpgrade(pickupItem.UpgradeType);
+
+		<div class="icon" style="left: @(Math.Round(screenPos.x) - 40)px; top: @(Math.Round(screenPos.y) - 40)px; opacity: @(pickupItem.Opacity); text-stroke: @(Manager.GetOutlineSizeForRarity(rarity))px @(Manager.GetColorForRarity(rarity).Rgba);">
+			@(Manager.Instance.GetIconForUpgrade(pickupItem.UpgradeType))
+		</div>
+
+		@if(pickupItem.NumLevels > 1)
+		{
+			<div class="level" style="left: @(Math.Round(screenPos.x) + 5)px; top: @(Math.Round(screenPos.y) - 40)px; opacity: @(pickupItem.Opacity);">@($"{pickupItem.NumLevels}")</div>
+		}
+	}
+
 	@foreach(var moneyPickup in Scene.GetAllComponents<MoneyPickup>()) 
 	{
 		var pos = moneyPickup.Transform.Position;

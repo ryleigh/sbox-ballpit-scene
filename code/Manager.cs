@@ -258,9 +258,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 		SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 
-		//SpawnPickupItem( channel, GetRandomPickupType(), 1, startAtTop: Game.Random.Int( 0, 1 ) == 0 );
-		//SpawnPickupItem( channel, GetRandomPickupType(), 1, startAtTop: Game.Random.Int( 0, 1 ) == 0 );
-		//SpawnPickupItem( channel, GetRandomPickupType(), 1, startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+		SpawnPickupItem( channel, GetRandomPickupType(), Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+		SpawnPickupItem( channel, GetRandomPickupType(), Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+		SpawnPickupItem( channel, GetRandomPickupType(), Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 	}
 
 	protected override void OnUpdate()

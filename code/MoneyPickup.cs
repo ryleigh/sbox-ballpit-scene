@@ -95,6 +95,13 @@ public class MoneyPickup : Component
 	{
 		base.OnUpdate();
 
+		switch ( MoneyMoveMode )
+		{
+			case MoneyMoveMode.SineWave:
+				Opacity = Utils.MapReturn( Transform.Position.y, -120f, 120f, 0f, 1f, EasingType.ExpoOut );
+				break;
+		}
+
 		if ( IsProxy )
 			return;
 
@@ -105,8 +112,6 @@ public class MoneyPickup : Component
 
 				if ( (_startAtTop && Transform.Position.y < -120f) || (!_startAtTop && Transform.Position.y > 120f) )
 					GameObject.Destroy();
-
-				Opacity = Utils.MapReturn( Transform.Position.y, -120f, 120f, 0f, 1f, EasingType.ExpoOut );
 				break;
 			case MoneyMoveMode.Tossed:
 				if(_isTossed)

@@ -17,6 +17,8 @@ public class PickupItem : Component
 	//	Gizmo.Draw.Text( $"{NumLevels}\n${Price}", new global::Transform( Transform.Position + new Vector3( 0f, 20f, 1f ) ) );
 	//}
 
+	public float Opacity { get; private set; }
+
 	[Broadcast]
 	public void Init( UpgradeType upgradeType, int numLevels, bool startAtTop )
 	{
@@ -29,11 +31,15 @@ public class PickupItem : Component
 		_frequency = Game.Random.Float( 1.5f, 2.5f ) * Utils.Map(Manager.Instance.TimeSincePhaseChange, 0f, 120f, 0.95f, 1.4f);
 		_amplitude = Game.Random.Float( 70f, 135f ) * ( Game.Random.Int( 0, 1 ) == 0 ? 1f : -1f );
 		_startAtTop = startAtTop;
+
+		Opacity = 0f;
 	}
 
 	protected override void OnUpdate()
 	{
 		base.OnUpdate();
+
+		Opacity = Utils.MapReturn( Transform.Position.y, -120f, 120f, 0f, 1f, EasingType.ExpoOut );
 
 		if ( IsProxy )
 			return;
