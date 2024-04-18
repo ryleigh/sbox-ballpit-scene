@@ -582,15 +582,17 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( amount == 0 )
 			return;
 
+		float fontSizeScale = Utils.Map( Math.Abs( amount ), 1, 15, 0.9f, 1.4f, EasingType.SineOut );
+
 		Manager.Instance.SpawnFloaterText(
 			Transform.Position.WithZ( 150f ),
 			$"{(amount > 0 ? "+" : "-")}${Math.Abs(amount)}",
 			lifetime: amount > 0 ? 1f : 0.9f,
-			color: new Color(1f, 1f, 0f),
+			color: amount > 0 ? new Color(1f, 1f, 0f) : new Color( 1f, 0.6f, 0f ),
 			velocity: new Vector2( 0f, amount > 0 ? 30f : -35f ),
 			deceleration: amount > 0 ? 1.8f : 1.9f,
-			startScale: amount > 0 ? 0.15f : 0.16f,
-			endScale: amount > 0 ? 0.19f : 0.12f,
+			startFontSize: (amount > 0 ? 25f : 35f) * fontSizeScale,
+			endFontSize: (amount > 0 ? 30f : 30f) * fontSizeScale,
 			isEmoji: false
 		);
 
@@ -697,7 +699,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Broadcast]
 	public void AdjustUpgradeLevel(UpgradeType upgradeType, int amount)
 	{
-		if ( amount == 0 )
+		if ( amount <= 0 )
 			return;
 
 		var isPassive = Manager.Instance.IsUpgradePassive( upgradeType );
@@ -705,21 +707,35 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		var maxLevel = Manager.Instance.GetMaxLevelForUpgrade( upgradeType );
 		var currLevel = upgrades.ContainsKey( upgradeType ) ? upgrades[upgradeType] : 0;
+		var isMax = currLevel >= maxLevel;
 
-		var icon = (currLevel >= maxLevel && amount > 0) ? "🚫" : Manager.Instance.GetIconForUpgrade( upgradeType );
+		//var icon = (currLevel >= maxLevel && amount > 0) ? "🚫" : Manager.Instance.GetIconForUpgrade( upgradeType );
+		var str = (currLevel >= maxLevel && amount > 0) ? "MAX!" : Manager.Instance.GetIconForUpgrade( upgradeType );
 
-		Manager.Instance.SpawnFloaterText( 
-			Transform.Position.WithZ( 150f ),
-			//$"{(amount > 0 ? "+" : "-")}{Manager.Instance.GetFloaterTextForUpgrade( upgradeType )}", 
-			$"{icon}",
-			lifetime: amount > 0 ? 1f : 0.75f, 
-			color: Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ) ), 
-			velocity: new Vector2( 0f, amount > 0 ? 35f : -65f ), 
-			deceleration: amount > 0 ? 1.8f : 2.1f, 
-			startScale: amount > 0 ? 0.25f : 0.27f, 
-			endScale: amount > 0 ? 0.3f : 0.2f,
-			isEmoji: true
+		Manager.Instance.SpawnFloaterText(
+			Transform.Position,
+			isMax ? "MAX!" : $"+{Manager.Instance.GetNameForUpgrade( upgradeType )}",
+			lifetime: 0.75f,
+			color: Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ), isTextColor: true ),
+			velocity: new Vector2( Game.Random.Float(-5f, 5f), Game.Random.Float(100f, 135f) ),
+			deceleration: 10f,
+			startFontSize: 27,
+			endFontSize: 27,
+			isEmoji: false
 		);
+
+		//Manager.Instance.SpawnFloaterText(
+		//	Transform.Position.WithZ( 150f ),
+		//	//$"{(amount > 0 ? "+" : "-")}{Manager.Instance.GetFloaterTextForUpgrade( upgradeType )}", 
+		//	$"{icon}",
+		//	lifetime: amount > 0 ? 1f : 0.75f,
+		//	color: Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ) ),
+		//	velocity: new Vector2( 0f, amount > 0 ? 35f : -65f ),
+		//	deceleration: amount > 0 ? 1.8f : 2.1f,
+		//	startFontSize: amount > 0 ? 32f : 35f,
+		//	endFontSize: amount > 0 ? 40f : 35f,
+		//	isEmoji: true
+		//);
 
 		if ( IsProxy )
 			return;

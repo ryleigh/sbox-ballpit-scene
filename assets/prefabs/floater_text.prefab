@@ -1,26 +1,17 @@
 {
   "RootObject": {
-    "__guid": "f50b2db4-f5b8-4fba-bfa4-d63f08280646",
+    "__guid": "14348c83-ff2a-4395-aa92-90e943f8258c",
     "Name": "floater_text",
     "Enabled": true,
     "NetworkMode": 2,
     "Components": [
       {
-        "__type": "TextRenderer",
-        "__guid": "46cade38-1406-4dbe-b567-4c4a431e0dd4",
-        "Color": "0,0,0,0",
-        "FontFamily": "Proxima Soft",
-        "FontSize": 64,
-        "Scale": 0.3,
-        "Text": "\u002BTEXT"
-      },
-      {
         "__type": "FloaterText",
-        "__guid": "5f38dd03-b54f-494b-9066-ef071a609be1",
+        "__guid": "8199444d-8f3a-40f1-a37c-4f20e933fa5d",
         "TextRenderer": {
           "_type": "component",
-          "component_id": "46cade38-1406-4dbe-b567-4c4a431e0dd4",
-          "go": "f50b2db4-f5b8-4fba-bfa4-d63f08280646",
+          "component_id": "840797c5-41ae-4827-8306-5461bcf24cdb",
+          "go": "14348c83-ff2a-4395-aa92-90e943f8258c",
           "component_type": "TextRenderer"
         }
       }

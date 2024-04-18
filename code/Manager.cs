@@ -236,7 +236,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		playerObj.NetworkSpawn( channel );
 
 		//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
-		//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
+		player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Volley, 10 );
 		//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
@@ -740,14 +740,14 @@ public sealed class Manager : Component, Component.INetworkListener
 	public void StartAirstrike(Vector2 pos)
 	{
 		SpawnFloaterText(
-			new Vector3( pos.x, pos.y, 120f ),
+			new Vector3( pos.x, pos.y + 3f, 120f ),
 			"⚠️",
 			lifetime: 1.5f,
 			color: Color.White,
 			velocity: Vector2.Zero,
 			deceleration: 0f,
-			startScale: 0.2f,
-			endScale: 0.5f,
+			startFontSize: 40,
+			endFontSize: 140,
 			isEmoji: true
 		);
 
@@ -1198,12 +1198,12 @@ public sealed class Manager : Component, Component.INetworkListener
 		textObj.Components.Get<FadingText>().Init( text, lifetime );
 	}
 
-	public void SpawnFloaterText( Vector3 pos, string text, float lifetime, Color color, Vector2 velocity, float deceleration, float startScale, float endScale, bool isEmoji  )
+	public void SpawnFloaterText( Vector3 pos, string text, float lifetime, Color color, Vector2 velocity, float deceleration, float startFontSize, float endFontSize, bool isEmoji  )
 	{
 		var textObj = FloaterTextPrefab.Clone( pos );
 		textObj.Transform.Rotation = Rotation.From( 90f, 90f, 0f );
 
-		textObj.Components.Get<FloaterText>().Init( text, lifetime, color, velocity, deceleration, startScale, endScale, isEmoji );
+		textObj.Components.Get<FloaterText>().Init( text, lifetime, color, velocity, deceleration, startFontSize, endFontSize, isEmoji );
 	}
 
 	public void CreateBallExplosionParticles(Vector3 pos, int playerNum )
@@ -1384,11 +1384,11 @@ public sealed class Manager : Component, Component.INetworkListener
 		return false;
 	}
 
-	public static Color GetColorForRarity( UpgradeRarity rarity )
+	public static Color GetColorForRarity( UpgradeRarity rarity, bool isTextColor = false )
 	{
 		switch ( rarity )
 		{
-			case UpgradeRarity.Common: default: return new Color( 0f, 0f, 0f );
+			case UpgradeRarity.Common: default: return isTextColor ? new Color(1f, 1f, 1f) : new Color( 0f, 0f, 0f );
 			case UpgradeRarity.Uncommon: return new Color( 0.5f, 0.5f, 0.8f );
 			case UpgradeRarity.Rare: return new Color( 0.8f, 0.3f, 0f );
 			case UpgradeRarity.Epic: return new Color( 0.6f, 0f, 0.8f );

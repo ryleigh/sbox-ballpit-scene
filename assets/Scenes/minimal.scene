@@ -69,10 +69,6 @@
             "_type": "gameobject",
             "prefab": "prefabs/reroll_button.prefab"
           },
-          "ShopItemPassivePrefab": {
-            "_type": "gameobject",
-            "prefab": "prefabs/shop_item_passive.prefab"
-          },
           "ShopItemPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/shop_item.prefab"
@@ -117,6 +113,10 @@
         {
           "__type": "ShopItemDisplay",
           "__guid": "58d87c67-4320-4fcf-b97a-041166071628"
+        },
+        {
+          "__type": "FloaterTextDisplay",
+          "__guid": "6fdf7c69-e1b0-4354-991c-3f2bf018453c"
         }
       ]
     },
@@ -1122,7 +1122,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-17T20:42:02.8077352-07:00",
+  "LastSaved": "2024-04-18T02:42:53.32043-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

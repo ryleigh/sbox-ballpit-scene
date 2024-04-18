@@ -1,0 +1,23 @@
+FloaterTextDisplay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+
+	.text {
+		position: absolute;
+		width: 400px;
+		height: 80px;
+		font-size: 38px;
+		color: #fff;
+		text-align: center;
+		justify-content: center;
+		align-items: center;
+		//background-color: #0000ff;
+		overflow: visible;
+		font-family: "Proxima Soft";
+		font-weight: 800;
+		text-stroke: 12px black;
+	}
+}
