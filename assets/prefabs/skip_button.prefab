@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "a33a97d1-8a5e-4e8c-b6c1-b5a0303017b9",
+    "__guid": "d88db324-02ea-43b4-ba99-71470a014b8e",
     "Name": "skip_button",
     "Scale": "0.5,0.5,0.5",
     "Tags": "skip_button",
@@ -8,16 +8,17 @@
     "NetworkMode": 2,
     "Components": [
       {
-        "__type": "ModelRenderer",
-        "__guid": "c9ac10e0-372f-42f3-ba7b-d8e9b057b1b2",
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "927cff37-9abd-4107-9b5d-bd7716c4df55",
+        "__enabled": false,
         "BodyGroups": 18446744073709551615,
         "Model": "models/dev/box.vmdl",
         "RenderType": "On",
         "Tint": "0.11163,0.11163,0.11163,1"
       },
       {
-        "__type": "BoxCollider",
-        "__guid": "b55a5608-396b-406f-a15a-79ca5635b0bb",
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "f87a8075-6627-4fee-a8c9-2ddaed8babd5",
         "Center": "0,0,0",
         "IsTrigger": true,
         "Scale": "50,50,50",
@@ -25,34 +26,10 @@
       },
       {
         "__type": "SkipButton",
-        "__guid": "d5f34c25-6a8d-4d4f-b116-52d75f90cc25"
+        "__guid": "bf933ea3-e296-482e-b050-a096dfea82b7"
       }
     ],
-    "Children": [
-      {
-        "__guid": "9dbd4a2e-95ef-45fb-a914-ab500303eee4",
-        "Name": "World",
-        "Position": "0,0,42",
-        "Rotation": "-0.4999999,-0.5,-0.5,0.5000001",
-        "Enabled": true,
-        "NetworkMode": 2,
-        "Components": [
-          {
-            "__type": "WorldPanel",
-            "__guid": "9dc47c02-41a2-4f81-abac-427bb4c35045",
-            "HorizontalAlign": "Center",
-            "LookAtCamera": false,
-            "PanelSize": "800,800",
-            "RenderScale": 5,
-            "VerticalAlign": "Center"
-          },
-          {
-            "__type": "SkipButtonLabel",
-            "__guid": "7b946be0-3dd9-4a76-a593-8a505e64919a"
-          }
-        ]
-      }
-    ]
+    "Children": []
   },
   "ShowInMenu": false,
   "MenuPath": null,

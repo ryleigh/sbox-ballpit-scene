@@ -1,24 +1,24 @@
 {
   "RootObject": {
-    "__guid": "1b0e5ba2-b6da-4538-b795-fec136d65caf",
+    "__guid": "8dff3d80-00b2-4b2f-bb3a-b123b5775ae7",
     "Name": "reroll_button",
-    "Position": "51.47238,-7.571976,13",
     "Scale": "0.5,0.5,0.5",
     "Tags": "reroll_button",
     "Enabled": true,
     "NetworkMode": 2,
     "Components": [
       {
-        "__type": "ModelRenderer",
-        "__guid": "fe83ac61-231d-4971-a6e3-c05f3b5a3ae7",
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "57d5fd85-fcf4-4522-aba0-e6fe785972f8",
+        "__enabled": false,
         "BodyGroups": 18446744073709551615,
         "Model": "models/dev/box.vmdl",
         "RenderType": "On",
         "Tint": "0.11163,0.11163,0.11163,1"
       },
       {
-        "__type": "BoxCollider",
-        "__guid": "9d1807be-3f57-4511-90cc-567d8ad7c4b1",
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "1b369368-4d46-4c38-808e-b8d8f4115682",
         "Center": "0,0,0",
         "IsTrigger": true,
         "Scale": "50,50,50",
@@ -26,34 +26,10 @@
       },
       {
         "__type": "RerollButton",
-        "__guid": "c1206be4-f8cf-4a10-a131-3cf9691a873f"
+        "__guid": "9b868914-9dd2-46af-a130-82dd55871577"
       }
     ],
-    "Children": [
-      {
-        "__guid": "00307daf-9ad9-49d0-9cdd-726b6575fa47",
-        "Name": "World",
-        "Position": "0,0,42",
-        "Rotation": "-0.4999999,-0.5,-0.5,0.5000001",
-        "Enabled": true,
-        "NetworkMode": 2,
-        "Components": [
-          {
-            "__type": "WorldPanel",
-            "__guid": "9c5097f4-ea1d-4b90-93cf-4acaaa1d2bc8",
-            "HorizontalAlign": "Center",
-            "LookAtCamera": false,
-            "PanelSize": "800,800",
-            "RenderScale": 5,
-            "VerticalAlign": "Center"
-          },
-          {
-            "__type": "RerollButtonLabel",
-            "__guid": "f911b74d-979f-48e4-95a1-94f3357249f3"
-          }
-        ]
-      }
-    ]
+    "Children": []
   },
   "ShowInMenu": false,
   "MenuPath": null,

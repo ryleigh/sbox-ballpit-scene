@@ -11,7 +11,7 @@ public class SkipButton : Component
 	{
 		base.OnUpdate();
 
-		if(ShouldFlash)
+		if ( ShouldFlash)
 		{
 			if(_timeSinceFlash > (FlashToggle ? 0.1f : 0.15f))
 			{

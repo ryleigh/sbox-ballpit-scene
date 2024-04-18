@@ -156,8 +156,8 @@
 		var screenPos0 = Scene.Camera.PointToScreenPixels(trophyPos0) * Panel.ScaleFromScreen;
 		var screenPos1 = Scene.Camera.PointToScreenPixels(trophyPos1) * Panel.ScaleFromScreen;
 
-		<div class="trophy_icon" style="left: @(Math.Round(screenPos0.x))px; top: @(Math.Round(screenPos0.y))px; opacity:@(manager.TrophyIndicatorOpacity);">🏆</div>
-		<div class="trophy_icon" style="left: @(Math.Round(screenPos1.x))px; top: @(Math.Round(screenPos1.y))px; opacity:@(manager.TrophyIndicatorOpacity);">🏆</div>
+		<div class="trophy_icon" style="left: @(screenPos0.x)px; top: @(screenPos0.y)px; opacity:@(manager.TrophyIndicatorOpacity);">🏆</div>
+		<div class="trophy_icon" style="left: @(screenPos1.x)px; top: @(screenPos1.y)px; opacity:@(manager.TrophyIndicatorOpacity);">🏆</div>
 	}
 </root>
 

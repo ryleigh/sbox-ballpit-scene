@@ -9,13 +9,13 @@
 		var screenPos = Scene.Camera.PointToScreenPixels(pos) * Panel.ScaleFromScreen;
 		var rarity = Manager.Instance.GetRarityForUpgrade(pickupItem.UpgradeType);
 
-		<div class="icon" style="left: @(Math.Round(screenPos.x) - 40)px; top: @(Math.Round(screenPos.y) - 40)px; opacity: @(pickupItem.Opacity); text-stroke: @(Manager.GetOutlineSizeForRarity(rarity))px @(Manager.GetColorForRarity(rarity).Rgba);">
+		<div class="icon" style="left: @(screenPos.x - 40)px; top: @(screenPos.y - 40)px; opacity: @(pickupItem.Opacity); text-stroke: @(Manager.GetOutlineSizeForRarity(rarity))px @(Manager.GetColorForRarity(rarity).Rgba);">
 			@(Manager.Instance.GetIconForUpgrade(pickupItem.UpgradeType))
 		</div>
 
 		@if(pickupItem.NumLevels > 1)
 		{
-			<div class="level" style="left: @(Math.Round(screenPos.x) + 5)px; top: @(Math.Round(screenPos.y) - 40)px; opacity: @(pickupItem.Opacity);">@($"{pickupItem.NumLevels}")</div>
+			<div class="level" style="left: @(screenPos.x + 5)px; top: @(screenPos.y - 40)px; opacity: @(pickupItem.Opacity);">@($"{pickupItem.NumLevels}")</div>
 		}
 	}
 
@@ -24,11 +24,11 @@
 		var pos = moneyPickup.Transform.Position;
 		var screenPos = Scene.Camera.PointToScreenPixels(pos) * Panel.ScaleFromScreen;
 
-		<div class="icon" style="left: @(Math.Round(screenPos.x) - 40)px; top: @(Math.Round(screenPos.y) - 40)px; opacity: @(moneyPickup.Opacity);">@(moneyPickup.IsFlying ? "💸" : "💵")</div>
+		<div class="icon" style="left: @(screenPos.x - 40)px; top: @(screenPos.y - 40)px; opacity: @(moneyPickup.Opacity);">@(moneyPickup.IsFlying ? "💸" : "💵")</div>
 
 		@if(moneyPickup.NumLevels > 1)
 		{
-			<div class="level" style="left: @(Math.Round(screenPos.x) + 0)px; top: @(Math.Round(screenPos.y) - 40)px; opacity: @(moneyPickup.Opacity);">@($"{moneyPickup.NumLevels}")</div>
+			<div class="level" style="left: @(screenPos.x + 0)px; top: @(screenPos.y - 40)px; opacity: @(moneyPickup.Opacity);">@($"{moneyPickup.NumLevels}")</div>
 		}
 	}
 </root>
@@ -43,7 +43,8 @@
 	protected override int BuildHash() 
 	{
 		var numPickups = 0;
-		numPickups += Scene.GetAllComponents<Ball>().Count();
+		numPickups += Scene.GetAllComponents<PickupItem>().Count();
+		numPickups += Scene.GetAllComponents<MoneyPickup>().Count();
 
 		return System.HashCode.Combine(numPickups > 0 ? Time.Now : 0f);
 	}
