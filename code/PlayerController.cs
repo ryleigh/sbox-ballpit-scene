@@ -785,7 +785,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		NumShopItems = 4;
 		CurrRerollPrice = 1;
 
-		Money = 118;
+		Money = 5;
 	}
 
 	[Broadcast]

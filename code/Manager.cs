@@ -45,7 +45,6 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject SkipButtonPrefab { get; set; }
 	[Property] public GameObject RerollButtonPrefab { get; set; }
 	[Property] public GameObject ShopItemPrefab { get; set; }
-	[Property] public GameObject ShopItemPassivePrefab { get; set; }
 	[Property] public GameObject PickupItemPrefab { get; set; }
 	[Property] public GameObject MoneyPickupPrefab { get; set; }
 	[Property] public GameObject ExplosionPrefab { get; set; }

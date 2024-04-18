@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "207263a0-0036-455a-bfb4-97967c7f540f",
+    "__guid": "8423f59c-f565-4226-bd65-b4eb65fadc75",
     "Name": "money_pickup",
     "Scale": "0.5,0.5,0.5",
     "Tags": "money_pickup",
@@ -9,7 +9,7 @@
     "Components": [
       {
         "__type": "Sandbox.ModelRenderer",
-        "__guid": "eee6c448-c757-4d27-afc9-57e11d352eda",
+        "__guid": "bc1662fb-b085-4d9a-8232-02afa0a6657f",
         "__enabled": false,
         "BodyGroups": 18446744073709551615,
         "Model": "models/dev/box.vmdl",
@@ -18,7 +18,7 @@
       },
       {
         "__type": "Sandbox.SphereCollider",
-        "__guid": "8dc628d6-9f0e-4bf3-8b93-06f8d5db0d04",
+        "__guid": "ecda2a52-2332-47c6-bcef-b7989ad02c2c",
         "Center": "0,0,0",
         "IsTrigger": true,
         "Radius": 27,
@@ -26,37 +26,10 @@
       },
       {
         "__type": "MoneyPickup",
-        "__guid": "5a14f3f1-703a-4e82-a8b9-c56b1ba67c32"
+        "__guid": "c2498198-b823-4537-b134-e39881525cc8"
       }
     ],
-    "Children": [
-      {
-        "__guid": "ef44a20c-e6eb-4038-9a0d-f6f2b810143e",
-        "Name": "World",
-        "Position": "0,0,26",
-        "Rotation": "-0.4999999,-0.5,-0.5,0.5000001",
-        "NetworkMode": 2,
-        "Components": [
-          {
-            "__type": "Sandbox.WorldPanel",
-            "__guid": "a449aa99-4800-4ebc-afd1-5e484cd0e92a",
-            "HorizontalAlign": "Center",
-            "LookAtCamera": false,
-            "PanelSize": "1000,1000",
-            "RenderScale": 5,
-            "VerticalAlign": "Center"
-          },
-          {
-            "__type": "MoneyPickupLabel",
-            "__guid": "34ed9dd7-24cd-4a85-baf4-f2b1baf5e3b3",
-            "TargetObject": {
-              "_type": "gameobject",
-              "go": "207263a0-0036-455a-bfb4-97967c7f540f"
-            }
-          }
-        ]
-      }
-    ]
+    "Children": []
   },
   "ShowInMenu": false,
   "MenuPath": null,

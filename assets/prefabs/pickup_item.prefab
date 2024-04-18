@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "ea758d89-0b23-427f-991b-bbdab4c568ec",
+    "__guid": "833297fd-fc30-4729-b0ca-7570da017450",
     "Name": "pickup_item",
     "Scale": "0.5,0.5,0.5",
     "Tags": "pickup_item",
@@ -9,7 +9,7 @@
     "Components": [
       {
         "__type": "Sandbox.ModelRenderer",
-        "__guid": "f731ce81-739e-47f3-8ba8-af9b0aaa3208",
+        "__guid": "25c61e93-8c27-4dc6-ba57-73027d628951",
         "__enabled": false,
         "BodyGroups": 18446744073709551615,
         "Model": "models/dev/box.vmdl",
@@ -18,7 +18,7 @@
       },
       {
         "__type": "Sandbox.SphereCollider",
-        "__guid": "55915e27-fc85-497b-8951-4eb0e5ddaf6e",
+        "__guid": "f9479b31-3080-465a-a85c-a370fe7b7894",
         "Center": "0,0,0",
         "IsTrigger": true,
         "Radius": 27,
@@ -26,37 +26,10 @@
       },
       {
         "__type": "PickupItem",
-        "__guid": "ab76f2e6-e287-4be5-9e37-69b354736bb0"
+        "__guid": "6c2f37bf-6c8a-41f1-a588-8b8bc5c26183"
       }
     ],
-    "Children": [
-      {
-        "__guid": "74da05a9-1595-48df-a930-2d11bf610d36",
-        "Name": "World",
-        "Position": "0,0,26",
-        "Rotation": "-0.4999999,-0.5,-0.5,0.5000001",
-        "NetworkMode": 2,
-        "Components": [
-          {
-            "__type": "Sandbox.WorldPanel",
-            "__guid": "577f063f-49b2-4cd7-a5cf-22e1165289da",
-            "HorizontalAlign": "Center",
-            "LookAtCamera": false,
-            "PanelSize": "1000,1000",
-            "RenderScale": 5,
-            "VerticalAlign": "Center"
-          },
-          {
-            "__type": "PickupItemLabel",
-            "__guid": "f4c941da-5a7f-4c33-9035-8c8a1bddff99",
-            "TargetObject": {
-              "_type": "gameobject",
-              "go": "ea758d89-0b23-427f-991b-bbdab4c568ec"
-            }
-          }
-        ]
-      }
-    ]
+    "Children": []
   },
   "ShowInMenu": false,
   "MenuPath": null,
