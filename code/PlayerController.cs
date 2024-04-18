@@ -162,6 +162,23 @@ public class PlayerController : Component, Component.ITriggerListener
 			return;
 		}
 
+		if(!IsSpectator) 
+		{
+			if ( Input.Pressed( "PrevItem" ) )				AdjustSelectedActiveUpgrade( up: false );
+			else if ( Input.Pressed( "NextItem" ) )			AdjustSelectedActiveUpgrade( up: true );
+			else if ( Input.Pressed( "Slot1" ) )			SetSelectedActiveUpgrade( 0 );
+			else if ( Input.Pressed( "Slot2" ) )			SetSelectedActiveUpgrade( 1 );
+			else if ( Input.Pressed( "Slot3" ) )			SetSelectedActiveUpgrade( 2 );
+			else if ( Input.Pressed( "Slot4" ) )			SetSelectedActiveUpgrade( 3 );
+			else if ( Input.Pressed( "Slot5" ) )			SetSelectedActiveUpgrade( 4 );
+			else if ( Input.Pressed( "Slot6" ) )			SetSelectedActiveUpgrade( 5 );
+			else if ( Input.Pressed( "Slot7" ) )			SetSelectedActiveUpgrade( 6 );
+			else if ( Input.Pressed( "Slot8" ) )			SetSelectedActiveUpgrade( 7 );
+			else if ( Input.Pressed( "Slot9" ) )			SetSelectedActiveUpgrade( 8 );
+			else if ( Input.Pressed( "Slot0" ) )			SetSelectedActiveUpgrade( 9 );
+			else if ( Input.MouseWheel != Vector2.Zero )	AdjustSelectedActiveUpgrade( up: Input.MouseWheel.y < 0f );
+		}
+
 		if ( IsDead )
 			return;
 
@@ -179,20 +196,8 @@ public class PlayerController : Component, Component.ITriggerListener
 		}
 		else
 		{
-			if ( Input.Pressed( "Jump" ) )				TryUseItem(SelectedUpgradeType);
-			else if(Input.Pressed("PrevItem"))			AdjustSelectedActiveUpgrade( up: false );
-			else if ( Input.Pressed( "NextItem" ) )		AdjustSelectedActiveUpgrade( up: true );
-			else if ( Input.Pressed( "Slot1" ) )		SetSelectedActiveUpgrade( 0 );
-			else if ( Input.Pressed( "Slot2" ) )		SetSelectedActiveUpgrade( 1 );
-			else if ( Input.Pressed( "Slot3" ) )		SetSelectedActiveUpgrade( 2 );
-			else if ( Input.Pressed( "Slot4" ) )		SetSelectedActiveUpgrade( 3 );
-			else if ( Input.Pressed( "Slot5" ) )		SetSelectedActiveUpgrade( 4 );
-			else if ( Input.Pressed( "Slot6" ) )		SetSelectedActiveUpgrade( 5 );
-			else if ( Input.Pressed( "Slot7" ) )		SetSelectedActiveUpgrade( 6 );
-			else if ( Input.Pressed( "Slot8" ) )		SetSelectedActiveUpgrade( 7 );
-			else if ( Input.Pressed( "Slot9" ) )		SetSelectedActiveUpgrade( 8 );
-			else if ( Input.Pressed( "Slot0" ) )		SetSelectedActiveUpgrade( 9 );
-			else if(Input.MouseWheel != Vector2.Zero)	AdjustSelectedActiveUpgrade( up: Input.MouseWheel.y < 0f );
+			if ( Input.Pressed( "Jump" ) )				
+				TryUseItem(SelectedUpgradeType);
 
 			CheckBoundsPlaying();
 
