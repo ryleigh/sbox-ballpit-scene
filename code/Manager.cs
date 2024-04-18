@@ -189,9 +189,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Repel, numLevels: 1, price: 0 );
 
-		//StartBuyPhase();
-		StartNewMatch();
-		StartNewRound();
+		StartBuyPhase();
+		//StartNewMatch();
+		//StartNewRound();
 
 	}
 
@@ -254,13 +254,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		//	CopterGameManager.Instance.HostConnected();
 		//}
 
-		SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
-		SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
-		SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
-
-		SpawnPickupItem( channel, GetRandomPickupType(), Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
-		SpawnPickupItem( channel, GetRandomPickupType(), Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
-		SpawnPickupItem( channel, GetRandomPickupType(), Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+		//SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+		//SpawnPickupItem( channel, GetRandomPickupType(), Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 	}
 
 	protected override void OnUpdate()
@@ -675,10 +670,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		var pos = GetPosForShopItem( playerNum, itemNum );
 
-		var shopItemObj = IsUpgradePassive( upgradeType )
-			? ShopItemPassivePrefab.Clone( new Vector3( pos.x, pos.y, 0f ) )
-			: ShopItemPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
-
+		var shopItemObj = ShopItemPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
 		shopItemObj.NetworkSpawn( GetConnection( playerNum ) );
 		shopItemObj.Components.Get<ShopItem>().Init( upgradeType, numLevels, price, playerNum );
 	}

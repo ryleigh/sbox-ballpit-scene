@@ -1,0 +1,43 @@
+@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+
+<root>
+	@{
+		var itemNum = 0;
+	}
+
+	@foreach(var shopItem in Scene.GetAllComponents<ShopItem>())
+	{
+		var pos = shopItem.Transform.Position;
+		var screenPos = Scene.Camera.PointToScreenPixels(pos) * Panel.ScaleFromScreen;
+		var rarity = Manager.Instance.GetRarityForUpgrade(shopItem.UpgradeType);
+
+		var player = Manager.Instance.GetPlayer(shopItem.PlayerNum);
+		var money = player?.Money ?? 0;
+
+		<div class="icon" style="left: @(Math.Round(screenPos.x) - 40)px; top: @(Math.Round(screenPos.y) - 40)px; opacity:@((money >= shopItem.Price ? 1f : 0.4f)); text-stroke: @(Manager.GetOutlineSizeForRarity(rarity))px @(Manager.GetColorForRarity(rarity).Rgba);">@(Manager.Instance.GetIconForUpgrade(shopItem.UpgradeType))</div>
+
+		<div class="price" style="left: @(Math.Round(screenPos.x) - 60)px; top: @(Math.Round(screenPos.y) - 44 + Utils.FastSin(itemNum + shopItem.PlayerNum + Time.Now * 3f) * 3.5f)px; color: @((money >= shopItem.Price ? new Color(0.8f, 0.8f, 0f) : new Color(1f, 0.3f, 0.3f)).Rgba);">
+			@($"${shopItem.Price}")
+		</div>
+
+		@if(shopItem.NumLevels > 1)
+		{
+			<div class="level" style="left: @(Math.Round(screenPos.x) + 5)px; top: @(Math.Round(screenPos.y) - 40)px; opacity:@((money >= shopItem.Price ? 1f : 0.4f));">@($"{shopItem.NumLevels}")</div>
+		}
+
+		itemNum++;
+	}
+</root>
+
+@code
+{
+	protected override int BuildHash() 
+	{
+		var numItems = 0;
+		numItems += Scene.GetAllComponents<ShopItem>().Count();
+
+		return System.HashCode.Combine(numItems > 0 ? Time.Now : 0f);
+	}
+}
