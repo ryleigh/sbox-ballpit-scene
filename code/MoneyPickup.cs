@@ -30,6 +30,8 @@ public class MoneyPickup : Component
 	[Sync] public bool CanBePickedUp { get; private set; }
 	[Sync] public bool IsFlying { get; private set; }
 
+	public float Opacity { get; private set;  }
+
 
 	[Broadcast]
 	public void InitSineWave( int numLevels, bool startAtTop )
@@ -47,6 +49,7 @@ public class MoneyPickup : Component
 
 		CanBePickedUp = true;
 		IsFlying = true;
+		Opacity = 0f;
 	}
 
 	[Broadcast]
@@ -67,6 +70,7 @@ public class MoneyPickup : Component
 
 		CanBePickedUp = false;
 		IsFlying = true;
+		Opacity = 1f;
 	}
 
 	[Broadcast]
@@ -84,6 +88,7 @@ public class MoneyPickup : Component
 
 		_startingSide = startPos.x < 0f ? 0 : 1;
 		_dir = _startingSide == 0 ? new Vector2( 1f, 0f ) : new Vector2( -1f, 0f );
+		Opacity = 1f;
 	}
 
 	protected override void OnUpdate()
@@ -101,6 +106,7 @@ public class MoneyPickup : Component
 				if ( (_startAtTop && Transform.Position.y < -120f) || (!_startAtTop && Transform.Position.y > 120f) )
 					GameObject.Destroy();
 
+				Opacity = Utils.MapReturn( Transform.Position.y, -120f, 120f, 0f, 1f, EasingType.ExpoOut );
 				break;
 			case MoneyMoveMode.Tossed:
 				if(_isTossed)

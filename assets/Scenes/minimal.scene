@@ -109,6 +109,10 @@
         {
           "__type": "Scoreboard",
           "__guid": "8453d7d8-37a7-4b5c-bb8b-8ec1b8c42aac"
+        },
+        {
+          "__type": "PickupDisplay",
+          "__guid": "163a8149-aff3-49dd-b7b8-3e01f2ea1ff8"
         }
       ]
     },
@@ -1114,7 +1118,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-15T13:06:01.4243905-07:00",
+  "LastSaved": "2024-04-17T19:00:03.5285369-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

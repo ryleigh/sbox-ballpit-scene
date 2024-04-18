@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "49d3c0b1-f18f-446e-99d4-fbf18d999e9b",
+    "__guid": "ea758d89-0b23-427f-991b-bbdab4c568ec",
     "Name": "pickup_item",
     "Scale": "0.5,0.5,0.5",
     "Tags": "pickup_item",
@@ -8,8 +8,8 @@
     "NetworkMode": 2,
     "Components": [
       {
-        "__type": "ModelRenderer",
-        "__guid": "eaada8ce-e331-4aa6-b2ea-51f2086feb61",
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "f731ce81-739e-47f3-8ba8-af9b0aaa3208",
         "__enabled": false,
         "BodyGroups": 18446744073709551615,
         "Model": "models/dev/box.vmdl",
@@ -17,30 +17,29 @@
         "Tint": "0,0.21705,0.81395,1"
       },
       {
-        "__type": "SphereCollider",
-        "__guid": "fe83e815-d543-494f-87f2-6ad83af47db6",
+        "__type": "Sandbox.SphereCollider",
+        "__guid": "55915e27-fc85-497b-8951-4eb0e5ddaf6e",
         "Center": "0,0,0",
         "IsTrigger": true,
-        "Radius": 30,
+        "Radius": 27,
         "Static": false
       },
       {
         "__type": "PickupItem",
-        "__guid": "797ebdb6-92a8-4761-a801-0a8ffd4bf87d"
+        "__guid": "ab76f2e6-e287-4be5-9e37-69b354736bb0"
       }
     ],
     "Children": [
       {
-        "__guid": "a8ff2ec6-ae51-4b9a-b0e2-c65f94da5f30",
+        "__guid": "74da05a9-1595-48df-a930-2d11bf610d36",
         "Name": "World",
         "Position": "0,0,26",
         "Rotation": "-0.4999999,-0.5,-0.5,0.5000001",
-        "Enabled": true,
         "NetworkMode": 2,
         "Components": [
           {
-            "__type": "WorldPanel",
-            "__guid": "6b4f58bb-192a-46a4-93f4-735da77923d2",
+            "__type": "Sandbox.WorldPanel",
+            "__guid": "577f063f-49b2-4cd7-a5cf-22e1165289da",
             "HorizontalAlign": "Center",
             "LookAtCamera": false,
             "PanelSize": "1000,1000",
@@ -49,10 +48,10 @@
           },
           {
             "__type": "PickupItemLabel",
-            "__guid": "0b5759d8-f045-476e-8059-dc1713449532",
+            "__guid": "f4c941da-5a7f-4c33-9035-8c8a1bddff99",
             "TargetObject": {
               "_type": "gameobject",
-              "go": "49d3c0b1-f18f-446e-99d4-fbf18d999e9b"
+              "go": "ea758d89-0b23-427f-991b-bbdab4c568ec"
             }
           }
         ]

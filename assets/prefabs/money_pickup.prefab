@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "bc8b5f4c-49a1-461e-bd31-daf159ae57a8",
+    "__guid": "207263a0-0036-455a-bfb4-97967c7f540f",
     "Name": "money_pickup",
     "Scale": "0.5,0.5,0.5",
     "Tags": "money_pickup",
@@ -8,8 +8,8 @@
     "NetworkMode": 2,
     "Components": [
       {
-        "__type": "ModelRenderer",
-        "__guid": "5d5fd9e2-304d-4ef0-97b2-33ba5fd05234",
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "eee6c448-c757-4d27-afc9-57e11d352eda",
         "__enabled": false,
         "BodyGroups": 18446744073709551615,
         "Model": "models/dev/box.vmdl",
@@ -17,30 +17,29 @@
         "Tint": "0,0.21705,0.81395,1"
       },
       {
-        "__type": "SphereCollider",
-        "__guid": "11d0547a-0ffa-4b1b-9727-d64efae41e69",
+        "__type": "Sandbox.SphereCollider",
+        "__guid": "8dc628d6-9f0e-4bf3-8b93-06f8d5db0d04",
         "Center": "0,0,0",
         "IsTrigger": true,
-        "Radius": 30,
+        "Radius": 27,
         "Static": false
       },
       {
         "__type": "MoneyPickup",
-        "__guid": "c9330df1-e81e-4e52-9a4e-b25f19ef4517"
+        "__guid": "5a14f3f1-703a-4e82-a8b9-c56b1ba67c32"
       }
     ],
     "Children": [
       {
-        "__guid": "07862bba-3327-41bf-8053-363cd3499e72",
+        "__guid": "ef44a20c-e6eb-4038-9a0d-f6f2b810143e",
         "Name": "World",
         "Position": "0,0,26",
         "Rotation": "-0.4999999,-0.5,-0.5,0.5000001",
-        "Enabled": true,
         "NetworkMode": 2,
         "Components": [
           {
-            "__type": "WorldPanel",
-            "__guid": "3826e96d-8888-4afe-9b12-a00d5fdf3f9a",
+            "__type": "Sandbox.WorldPanel",
+            "__guid": "a449aa99-4800-4ebc-afd1-5e484cd0e92a",
             "HorizontalAlign": "Center",
             "LookAtCamera": false,
             "PanelSize": "1000,1000",
@@ -49,10 +48,10 @@
           },
           {
             "__type": "MoneyPickupLabel",
-            "__guid": "58890bf5-0420-4ad6-85ed-baf02c6cbacd",
+            "__guid": "34ed9dd7-24cd-4a85-baf4-f2b1baf5e3b3",
             "TargetObject": {
               "_type": "gameobject",
-              "go": "bc8b5f4c-49a1-461e-bd31-daf159ae57a8"
+              "go": "207263a0-0036-455a-bfb4-97967c7f540f"
             }
           }
         ]

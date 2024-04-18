@@ -1,0 +1,34 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+
+<root>
+	@foreach(var moneyPickup in Scene.GetAllComponents<MoneyPickup>()) 
+	{
+		var pos = moneyPickup.Transform.Position;
+		var screenPos = Scene.Camera.PointToScreenPixels(pos) * Panel.ScaleFromScreen;
+
+		<div class="icon" style="left: @(Math.Round(screenPos.x) - 40)px; top: @(Math.Round(screenPos.y) - 40)px; opacity: @(moneyPickup.Opacity);">@(moneyPickup.IsFlying ? "💸" : "💵")</div>
+
+		@if(moneyPickup.NumLevels > 1)
+		{
+			<div class="level" style="left: @(Math.Round(screenPos.x) + 0)px; top: @(Math.Round(screenPos.y) - 40)px; opacity: @(moneyPickup.Opacity);">@($"{moneyPickup.NumLevels}")</div>
+		}
+	}
+</root>
+
+@code
+{
+	// protected override void OnUpdate()
+	// {
+		
+	// }
+
+	protected override int BuildHash() 
+	{
+		var numPickups = 0;
+		numPickups += Scene.GetAllComponents<Ball>().Count();
+
+		return System.HashCode.Combine(numPickups > 0 ? Time.Now : 0f);
+	}
+}

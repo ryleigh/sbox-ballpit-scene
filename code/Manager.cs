@@ -192,6 +192,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		//StartBuyPhase();
 		StartNewMatch();
 		StartNewRound();
+
 	}
 
 	public void OnActive( Connection channel )
@@ -252,6 +253,14 @@ public sealed class Manager : Component, Component.INetworkListener
 		//{
 		//	CopterGameManager.Instance.HostConnected();
 		//}
+
+		SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+		SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+		SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+
+		//SpawnPickupItem( channel, GetRandomPickupType(), 1, startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+		//SpawnPickupItem( channel, GetRandomPickupType(), 1, startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+		//SpawnPickupItem( channel, GetRandomPickupType(), 1, startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 	}
 
 	protected override void OnUpdate()
