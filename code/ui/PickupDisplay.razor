@@ -9,14 +9,14 @@
 		var screenPos = Scene.Camera.PointToScreenPixels(pos) * Panel.ScaleFromScreen;
 		var rarity = Manager.Instance.GetRarityForUpgrade(pickupItem.UpgradeType);
 
-		<div class="icon" style="left: @(screenPos.x - 40)px; top: @(screenPos.y - 40 - pickupItem.IconOffset.y)px; opacity: @(pickupItem.Opacity); text-stroke: @(Manager.GetOutlineSizeForRarity(rarity))px @(Manager.GetColorForRarity(rarity).Rgba);
+		<div class="icon" style="left: @(screenPos.x - 40 + pickupItem.IconOffset.x)px; top: @(screenPos.y - 40 - pickupItem.IconOffset.y)px; opacity: @(pickupItem.Opacity); text-stroke: @(Manager.GetOutlineSizeForRarity(rarity))px @(Manager.GetColorForRarity(rarity).Rgba);
 			text-shadow: @(-pickupItem.ShadowDistance)px @(pickupItem.ShadowDistance)px @(pickupItem.ShadowBlur)px @(Color.Black.WithAlpha(pickupItem.ShadowOpacity).Rgba);">
 			@(Manager.Instance.GetIconForUpgrade(pickupItem.UpgradeType))
 		</div>
 
 		@if(pickupItem.NumLevels > 1)
 		{
-			<div class="level" style="left: @(screenPos.x + 5)px; top: @(screenPos.y - 40 - pickupItem.IconOffset.y)px; opacity: @(pickupItem.Opacity);">@($"{pickupItem.NumLevels}")</div>
+			<div class="level" style="left: @(screenPos.x + 5 + pickupItem.IconOffset.x)px; top: @(screenPos.y - 40 - pickupItem.IconOffset.y)px; opacity: @(pickupItem.Opacity);">@($"{pickupItem.NumLevels}")</div>
 		}
 	}
 
@@ -25,12 +25,12 @@
 		var pos = moneyPickup.Transform.Position;
 		var screenPos = Scene.Camera.PointToScreenPixels(pos) * Panel.ScaleFromScreen;
 
-		<div class="icon" style="left: @(screenPos.x - 40)px; top: @(screenPos.y - 40 - moneyPickup.IconOffset.y)px; opacity: @(moneyPickup.Opacity); 
+		<div class="icon" style="left: @(screenPos.x - 40 + moneyPickup.IconOffset.x)px; top: @(screenPos.y - 40 - moneyPickup.IconOffset.y)px; opacity: @(moneyPickup.Opacity);
 			text-shadow: @(-moneyPickup.ShadowDistance)px @(moneyPickup.ShadowDistance)px @(moneyPickup.ShadowBlur)px @(Color.Black.WithAlpha(moneyPickup.ShadowOpacity).Rgba);">@(moneyPickup.IsFlying ? "💸" : "💵")</div>
 
 		@if(moneyPickup.NumLevels > 1)
 		{
-			<div class="level" style="left: @(screenPos.x + 0)px; top: @(screenPos.y - 40 - moneyPickup.IconOffset.y)px; opacity: @(moneyPickup.Opacity);">@($"{moneyPickup.NumLevels}")</div>
+			<div class="level" style="left: @(screenPos.x + 0 + moneyPickup.IconOffset.x)px; top: @(screenPos.y - 40 - moneyPickup.IconOffset.y)px; opacity: @(moneyPickup.Opacity);">@($"{moneyPickup.NumLevels}")</div>
 		}
 	}
 </root>
