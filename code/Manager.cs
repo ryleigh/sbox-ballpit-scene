@@ -237,13 +237,13 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
 		player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
-		//player.AdjustUpgradeLevel( UpgradeType.Volley, 10 );
+		player.AdjustUpgradeLevel( UpgradeType.Volley, 4 );
 		//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
 		//player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
 		//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );
-		//player.AdjustUpgradeLevel( UpgradeType.Dash, 6 );
+		player.AdjustUpgradeLevel( UpgradeType.Dash, 8 );
 		//player.AdjustUpgradeLevel( UpgradeType.Blink, 2 );
 		//player.AdjustUpgradeLevel( UpgradeType.Redirect, 2 );
 		//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 2 );
@@ -655,13 +655,13 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void CreateSkipButton( int playerNum )
 	{
-		var skipButtonObj = SkipButtonPrefab.Clone( new Vector3( 212f * (playerNum == 0 ? -1f : 1f), 103f, 0f ) );
+		var skipButtonObj = SkipButtonPrefab.Clone( new Vector3( 212f * (playerNum == 0 ? -1f : 1f), 106f, 0f ) );
 		skipButtonObj.NetworkSpawn( GetConnection( playerNum ) );
 	}
 
 	void CreateRerollButton( int playerNum )
 	{
-		var rerollButtonObj = RerollButtonPrefab.Clone( new Vector3( 114f * (playerNum == 0 ? -1f : 1f), 103f, 0f ) );
+		var rerollButtonObj = RerollButtonPrefab.Clone( new Vector3( 114f * (playerNum == 0 ? -1f : 1f), 106f, 0f ) );
 		rerollButtonObj.NetworkSpawn( GetConnection( playerNum ) );
 		rerollButtonObj.Components.Get<RerollButton>().Init( playerNum );
 	}
@@ -677,7 +677,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	Vector2 GetPosForShopItem( int playerNum, int itemNum )
 	{
-		var topPos = new Vector2( -215f * (playerNum == 0 ? 1f : -1f), 65f );
+		var topPos = new Vector2( -213f * (playerNum == 0 ? 1f : -1f), 65f );
 		var interval = 41f;
 
 		Vector2 offset;

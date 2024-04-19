@@ -709,33 +709,17 @@ public class PlayerController : Component, Component.ITriggerListener
 		var currLevel = upgrades.ContainsKey( upgradeType ) ? upgrades[upgradeType] : 0;
 		var isMax = currLevel >= maxLevel;
 
-		//var icon = (currLevel >= maxLevel && amount > 0) ? "🚫" : Manager.Instance.GetIconForUpgrade( upgradeType );
-		var str = (currLevel >= maxLevel && amount > 0) ? "MAX!" : Manager.Instance.GetIconForUpgrade( upgradeType );
-
 		Manager.Instance.SpawnFloaterText(
 			Transform.Position,
 			isMax ? "MAX!" : $"+{Manager.Instance.GetNameForUpgrade( upgradeType )}",
 			lifetime: 0.75f,
-			color: Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ), isTextColor: true ),
+			color: isMax ? Color.Red : Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ), isTextColor: true ),
 			velocity: new Vector2( Game.Random.Float(-5f, 5f), Game.Random.Float(100f, 135f) ),
 			deceleration: 10f,
 			startFontSize: 27,
 			endFontSize: 27,
 			isEmoji: false
 		);
-
-		//Manager.Instance.SpawnFloaterText(
-		//	Transform.Position.WithZ( 150f ),
-		//	//$"{(amount > 0 ? "+" : "-")}{Manager.Instance.GetFloaterTextForUpgrade( upgradeType )}", 
-		//	$"{icon}",
-		//	lifetime: amount > 0 ? 1f : 0.75f,
-		//	color: Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ) ),
-		//	velocity: new Vector2( 0f, amount > 0 ? 35f : -65f ),
-		//	deceleration: amount > 0 ? 1.8f : 2.1f,
-		//	startFontSize: amount > 0 ? 32f : 35f,
-		//	endFontSize: amount > 0 ? 40f : 35f,
-		//	isEmoji: true
-		//);
 
 		if ( IsProxy )
 			return;
