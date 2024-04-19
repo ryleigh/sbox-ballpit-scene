@@ -582,7 +582,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( amount == 0 )
 			return;
 
-		float fontSizeScale = Utils.Map( Math.Abs( amount ), 1, 15, 0.9f, 1.4f, EasingType.SineOut );
+		float scaleFactor = Utils.Map( Math.Abs( amount ), 1, 15, 1f, 1.4f, EasingType.SineOut );
 
 		Manager.Instance.SpawnFloaterText(
 			Transform.Position.WithZ( 150f ),
@@ -591,8 +591,9 @@ public class PlayerController : Component, Component.ITriggerListener
 			color: amount > 0 ? new Color(1f, 1f, 0f) : new Color( 1f, 0.6f, 0f ),
 			velocity: new Vector2( 0f, amount > 0 ? 30f : -35f ),
 			deceleration: amount > 0 ? 1.8f : 1.9f,
-			startFontSize: (amount > 0 ? 25f : 35f) * fontSizeScale,
-			endFontSize: (amount > 0 ? 30f : 30f) * fontSizeScale,
+			fontSize: 30f * scaleFactor,
+			startScale: 1f,
+			endScale: 1f,
 			isEmoji: false
 		);
 
@@ -716,8 +717,9 @@ public class PlayerController : Component, Component.ITriggerListener
 			color: isMax ? Color.Red : Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ), isTextColor: true ),
 			velocity: new Vector2( Game.Random.Float(-5f, 5f), Game.Random.Float(100f, 135f) ),
 			deceleration: 10f,
-			startFontSize: 27,
-			endFontSize: 27,
+			fontSize: 27,
+			startScale: 0.6f,
+			endScale: 1.2f,
 			isEmoji: false
 		);
 

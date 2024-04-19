@@ -9,7 +9,7 @@
 		var screenPos = Scene.Camera.PointToScreenPixels(pos) * Panel.ScaleFromScreen;
 
 		<div class="container" style="left: @(screenPos.x - 200)px; top: @(screenPos.y - 40)px; opacity:@(tutorialText.Opacity); transform: scale( @(tutorialText.Scale) );">
-			<div class="text" style="font-family:"Proxima Soft";">@(tutorialText.Text0)</div>
+			<div class="text" style="font-family:Proxima Soft;">@(tutorialText.Text0)</div>
 			<div class="icon" style="font-family:W10Emoji;">@(tutorialText.Text1)</div>
 		</div>
 	}

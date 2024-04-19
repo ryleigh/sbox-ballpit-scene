@@ -50,8 +50,6 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject ExplosionPrefab { get; set; }
 	[Property] public GameObject RepelEffectPrefab { get; set; }
 	[Property] public GameObject FallingShadowPrefab { get; set; }
-	[Property] public GameObject FadingTextPrefab { get; set; }
-	[Property] public GameObject FloaterTextPrefab { get; set; }
 	[Property] public GameObject BallExplosionParticles { get; set; }
 	[Property] public GameObject BallGutterParticles { get; set; }
 	[Property] public GameObject SlidingGround { get; set; }
@@ -188,9 +186,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Repel, numLevels: 1, price: 0 );
 
-		//StartBuyPhase();
-		StartNewMatch();
-		StartNewRound();
+		StartBuyPhase();
+		//StartNewMatch();
+		//StartNewRound();
 	}
 
 	public void OnActive( Connection channel )
@@ -255,6 +253,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		//SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 		SpawnMoneyTossed( channel, numLevels: 10, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * -1f + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
 		//SpawnPickupItem( channel, GetRandomPickupType(), Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+
+		SpawnScoreText( 0, 0 );
 	}
 
 	protected override void OnUpdate()
@@ -495,7 +495,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		TimeScale = 1f;
 
-		SpawnTutorialText();
+		SpawnTutorialLines();
 	}
 
 	void StartNewRound()
@@ -745,8 +745,9 @@ public sealed class Manager : Component, Component.INetworkListener
 			color: Color.White,
 			velocity: Vector2.Zero,
 			deceleration: 0f,
-			startFontSize: 40,
-			endFontSize: 140,
+			fontSize: 100,
+			startScale: 0.7f,
+			endScale: 1.4f,
 			isEmoji: true
 		);
 
@@ -1002,7 +1003,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		DespawnBallsRPC();
 		DestroyShopStuff();
 		DestroyPickups();
-		DestroyFadingText();
+		DestroyTutorialText();
 
 		GamePhase = GamePhase.WaitingForPlayers;
 	}
@@ -1049,10 +1050,10 @@ public sealed class Manager : Component, Component.INetworkListener
 	}
 
 	[Broadcast]
-	void DestroyFadingText()
+	void DestroyTutorialText()
 	{
-		foreach ( var fadingText in Scene.GetAllComponents<FadingText>() )
-			fadingText.GameObject.Destroy();
+		foreach ( var tutorialText in Scene.GetAllComponents<TutorialText>() )
+			tutorialText.GameObject.Destroy();
 	}
 
 	void DestroyShopStuff()
@@ -1144,12 +1145,12 @@ public sealed class Manager : Component, Component.INetworkListener
 	}
 
 	[Broadcast]
-	public void SpawnTutorialText()
+	public void SpawnTutorialLines()
 	{
-		SpawnTutorialTextAsync();
+		SpawnTutorialLinesAsync();
 	}
 
-	async void SpawnTutorialTextAsync()
+	async void SpawnTutorialLinesAsync()
 	{
 		string blue_circle = "🔵";
 		string green_circle = "🟢";
@@ -1187,23 +1188,17 @@ public sealed class Manager : Component, Component.INetworkListener
 		string name = connection != null ? $"{connection.DisplayName}" : (winningPlayerNum == 0 ? "🟦" : "🟩");
 		//int amountNeeded = SCORE_NEEDED_TO_WIN + CurrentScore * (winningPlayerNum == 0 ? -1 : 1);
 
-		SpawnFadingText( new Vector3( 0f, 20f, 180f ), $"{name} WON THE ROUND", 3f );
+		var color = winningPlayerNum == 0 ? new Color( 0.5f, 0.5f, 1f ) : new Color( 0.4f, 1f, 0.4f );
+
+		SpawnFloaterText( new Vector3( 0f, 20f, 0f ), $"{name} WON THE ROUND", 3f, color, new Vector2( 0f, 10f ), deceleration: 2f, fontSize: 40f, startScale: 0.95f, endScale: 1.05f, isEmoji: false );
 	}
 
-	public void SpawnFadingText(Vector3 pos, string text, float lifetime )
+	public void SpawnFloaterText( Vector3 pos, string text, float lifetime, Color color, Vector2 velocity, float deceleration, float fontSize, float startScale, float endScale, bool isEmoji  )
 	{
-		var textObj = FadingTextPrefab.Clone( pos );
-		textObj.Transform.Rotation = Rotation.From( 90f, 90f, 0f );
-
-		textObj.Components.Get<FadingText>().Init( text, lifetime );
-	}
-
-	public void SpawnFloaterText( Vector3 pos, string text, float lifetime, Color color, Vector2 velocity, float deceleration, float startFontSize, float endFontSize, bool isEmoji  )
-	{
-		var textObj = FloaterTextPrefab.Clone( pos );
-		textObj.Transform.Rotation = Rotation.From( 90f, 90f, 0f );
-
-		textObj.Components.Get<FloaterText>().Init( text, lifetime, color, velocity, deceleration, startFontSize, endFontSize, isEmoji );
+		var textObj = new GameObject();
+		textObj.Transform.Position = pos;
+		var floaterText = textObj.Components.Create<FloaterText>();
+		floaterText.Init( text, lifetime, color, velocity, deceleration, fontSize, startScale, endScale, isEmoji );
 	}
 
 	public void SpawnTutorialText( Vector3 pos, string text0, string text1, float lifetime )

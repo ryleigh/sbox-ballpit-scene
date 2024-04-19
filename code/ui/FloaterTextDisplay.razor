@@ -8,7 +8,7 @@
 		var pos = floaterText.Transform.Position;
 		var screenPos = Scene.Camera.PointToScreenPixels(pos) * Panel.ScaleFromScreen;
 
-		<div class="text" style="left: @(screenPos.x - 200)px; top: @(screenPos.y - 40)px; color:@(floaterText.TextColor.Rgba); opacity:@(floaterText.Opacity); font-size:@(floaterText.FontSize); font-family:@(floaterText.IsEmoji ? "W10Emoji" : "Proxima Soft");">@(floaterText.Text)</div>
+		<div class="text" style="left: @(screenPos.x - 200)px; top: @(screenPos.y - 40)px; color:@(floaterText.TextColor.Rgba); opacity:@(floaterText.Opacity); font-size:@(floaterText.FontSize); transform: scale( @(floaterText.Scale) ); font-family:@(floaterText.IsEmoji ? "W10Emoji" : "Proxima Soft");">@(floaterText.Text)</div>
 	}
 </root>
 

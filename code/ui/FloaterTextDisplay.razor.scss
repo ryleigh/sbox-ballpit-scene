@@ -9,7 +9,6 @@ FloaterTextDisplay {
 		position: absolute;
 		width: 400px;
 		height: 80px;
-		font-size: 38px;
 		color: #fff;
 		text-align: center;
 		justify-content: center;
@@ -19,5 +18,6 @@ FloaterTextDisplay {
 		font-family: "Proxima Soft";
 		font-weight: 800;
 		text-stroke: 12px black;
+		white-space: nowrap;
 	}
 }
