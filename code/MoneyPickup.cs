@@ -6,9 +6,6 @@ public enum MoneyMoveMode { SineWave, Tossed, Endow }
 public class MoneyPickup : Component
 {
 	[Sync] public int NumLevels { get; set; }
-
-	public const float HEIGHT = 20f;
-
 	public MoneyMoveMode MoneyMoveMode { get; set; }
 
 	// SineWave
@@ -70,7 +67,7 @@ public class MoneyPickup : Component
 
 		CanBePickedUp = false;
 		IsFlying = true;
-		Opacity = 1f;
+		Opacity = 0f;
 	}
 
 	[Broadcast]
@@ -100,6 +97,9 @@ public class MoneyPickup : Component
 			case MoneyMoveMode.SineWave:
 				Opacity = Utils.MapReturn( Transform.Position.y, -120f, 120f, 0f, 1f, EasingType.ExpoOut );
 				break;
+			case MoneyMoveMode.Tossed:
+				Opacity = Transform.Position.y > 100f ? Utils.Map( Transform.Position.y, 100f, 130f, 1f, 0f, EasingType.QuadOut ) : 1f;
+				break;
 		}
 
 		if ( IsProxy )
@@ -108,7 +108,7 @@ public class MoneyPickup : Component
 		switch(MoneyMoveMode)
 		{
 			case MoneyMoveMode.SineWave:
-				Transform.Position = new Vector3( Utils.FastSin( Time.Now * _frequency ) * _amplitude, Transform.Position.y - 25f * (_startAtTop ? 1f : -1f) * Time.Delta, HEIGHT );
+				Transform.Position = new Vector3( Utils.FastSin( Time.Now * _frequency ) * _amplitude, Transform.Position.y - 25f * (_startAtTop ? 1f : -1f) * Time.Delta, 0f );
 
 				if ( (_startAtTop && Transform.Position.y < -120f) || (!_startAtTop && Transform.Position.y > 120f) )
 					GameObject.Destroy();
@@ -118,16 +118,14 @@ public class MoneyPickup : Component
 				{
 					if ( _timeSinceToss > _tossTime )
 					{
-						Transform.Position = new Vector3( _endPos.x, _endPos.y, HEIGHT );
+						Transform.Position = new Vector3( _endPos.x, _endPos.y, 0f );
 						_isTossed = false;
 						CanBePickedUp = true;
 						IsFlying = false;
 					}
 					else
 					{
-						float yOffset = Utils.MapReturn( _timeSinceToss, 0f, _tossTime, 0f, 80f, EasingType.SineInOut );
-						Vector2 pos = Vector2.Lerp( _startPos, _endPos, Utils.Map( _timeSinceToss, 0f, _tossTime, 0f, 1f, EasingType.SineIn ) );
-						Transform.Position = new Vector3( pos.x, pos.y + yOffset, HEIGHT );
+						Transform.Position = new Vector3( Utils.Map( _timeSinceToss, 0f, _tossTime, _startPos.x, _endPos.x, EasingType.Linear ), Utils.Map( _timeSinceToss, 0f, _tossTime, _startPos.y, _endPos.y, EasingType.QuadIn ), 0f );
 					}
 				}
 				break;
