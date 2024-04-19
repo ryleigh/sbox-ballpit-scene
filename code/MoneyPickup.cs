@@ -29,7 +29,6 @@ public class MoneyPickup : Component
 
 	public float Opacity { get; private set;  }
 
-
 	[Broadcast]
 	public void InitSineWave( int numLevels, bool startAtTop )
 	{
@@ -85,7 +84,7 @@ public class MoneyPickup : Component
 
 		_startingSide = startPos.x < 0f ? 0 : 1;
 		_dir = _startingSide == 0 ? new Vector2( 1f, 0f ) : new Vector2( -1f, 0f );
-		Opacity = 1f;
+		Opacity = 0f;
 	}
 
 	protected override void OnUpdate()
@@ -99,6 +98,9 @@ public class MoneyPickup : Component
 				break;
 			case MoneyMoveMode.Tossed:
 				Opacity = Transform.Position.y > 100f ? Utils.Map( Transform.Position.y, 100f, 130f, 1f, 0f, EasingType.QuadOut ) : 1f;
+				break;
+			case MoneyMoveMode.Endow:
+				Opacity = Utils.Map( _timeSinceToss, 0f, 0.5f, 0f, 1f, EasingType.QuadOut ) * (CanBePickedUp ? 1f : 0.2f);
 				break;
 		}
 

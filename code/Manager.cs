@@ -237,7 +237,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		player.AdjustUpgradeLevel( UpgradeType.Volley, 4 );
 		//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
-		//player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
+		player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
 		//player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
 		//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );
 		player.AdjustUpgradeLevel( UpgradeType.Dash, 8 );

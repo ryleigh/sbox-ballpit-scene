@@ -700,7 +700,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Broadcast]
 	public void AdjustUpgradeLevel(UpgradeType upgradeType, int amount)
 	{
-		if ( amount <= 0 )
+		if ( amount == 0 )
 			return;
 
 		var isPassive = Manager.Instance.IsUpgradePassive( upgradeType );
@@ -710,18 +710,21 @@ public class PlayerController : Component, Component.ITriggerListener
 		var currLevel = upgrades.ContainsKey( upgradeType ) ? upgrades[upgradeType] : 0;
 		var isMax = currLevel >= maxLevel;
 
-		Manager.Instance.SpawnFloaterText(
-			Transform.Position,
-			isMax ? "MAX!" : $"+{Manager.Instance.GetNameForUpgrade( upgradeType )}",
-			lifetime: 0.75f,
-			color: isMax ? Color.Red : Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ), isTextColor: true ),
-			velocity: new Vector2( Game.Random.Float(-5f, 5f), Game.Random.Float(100f, 135f) ),
-			deceleration: 10f,
-			fontSize: 27,
-			startScale: 0.6f,
-			endScale: 1.2f,
-			isEmoji: false
-		);
+		if(amount > 0)
+		{
+			Manager.Instance.SpawnFloaterText(
+				Transform.Position,
+				isMax ? "MAX!" : $"+{Manager.Instance.GetNameForUpgrade( upgradeType )}",
+				lifetime: Game.Random.Float(0.8f, 1f),
+				color: isMax ? Color.Red : Manager.GetColorForRarity( Manager.Instance.GetRarityForUpgrade( upgradeType ), isTextColor: true ),
+				velocity: new Vector2( Game.Random.Float( -5f, 5f ), Game.Random.Float( 100f, 135f ) ),
+				deceleration: Game.Random.Float( 9f, 11f ),
+				fontSize: 27,
+				startScale: 0.6f,
+				endScale: 1.2f,
+				isEmoji: false
+			);
+		}
 
 		if ( IsProxy )
 			return;
