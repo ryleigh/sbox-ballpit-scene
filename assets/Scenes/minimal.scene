@@ -37,17 +37,9 @@
             "_type": "gameobject",
             "prefab": "prefabs/explosion.prefab"
           },
-          "FadingTextPrefab": {
-            "_type": "gameobject",
-            "prefab": "prefabs/fading_text.prefab"
-          },
           "FallingShadowPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/falling_shadow.prefab"
-          },
-          "FloaterTextPrefab": {
-            "_type": "gameobject",
-            "prefab": "prefabs/floater_text.prefab"
           },
           "MoneyPickupPrefab": {
             "_type": "gameobject",
@@ -120,8 +112,7 @@
         },
         {
           "__type": "TutorialTextDisplay",
-          "__guid": "b899458f-d029-4bf9-8e86-8535d17513b8",
-          "MyStringValue": "Hello World!"
+          "__guid": "b899458f-d029-4bf9-8e86-8535d17513b8"
         }
       ]
     },
@@ -1127,7 +1118,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-18T19:39:22.2803244-07:00",
+  "LastSaved": "2024-04-18T22:58:53.2604662-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []
