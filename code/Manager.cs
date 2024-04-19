@@ -188,10 +188,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Repel, numLevels: 1, price: 0 );
 
-		StartBuyPhase();
-		//StartNewMatch();
-		//StartNewRound();
-
+		//StartBuyPhase();
+		StartNewMatch();
+		StartNewRound();
 	}
 
 	public void OnActive( Connection channel )
@@ -1165,9 +1164,10 @@ public sealed class Manager : Component, Component.INetworkListener
 			return;
 
 		if ( localPlayer.PlayerNum == 0 )
-			SpawnFadingText( new Vector3( -120f, 40f, 180f ), $"BUMP {blue_circle}", 4f );
+			SpawnTutorialText( new Vector3( -120f, 40f, 180f ), "BUMP", $"{blue_circle}", 4f );
 		else
-			SpawnFadingText( new Vector3( 120f, -40f, 180f ), $"BUMP {green_circle}", 4f );
+			SpawnTutorialText( new Vector3( 120f, -40f, 180f ), "BUMP", $"{green_circle}", 4f );
+			
 
 		await Task.Delay( 1200 );
 
@@ -1175,9 +1175,9 @@ public sealed class Manager : Component, Component.INetworkListener
 			return;
 
 		if ( localPlayer.PlayerNum == 0 )
-			SpawnFadingText( new Vector3( -120f, -10f, 180f ), $"AVOID {green_circle}", 3f );
+			SpawnTutorialText( new Vector3( -120f, -10f, 180f ), "AVOID", $"{green_circle}", 3f );
 		else
-			SpawnFadingText( new Vector3( 120f, -10f, 180f ), $"AVOID {blue_circle}", 3f );
+			SpawnTutorialText( new Vector3( 120f, -10f, 180f ), "AVOID", $"{blue_circle}", 3f );
 	}
 
 	[Broadcast]
@@ -1204,6 +1204,15 @@ public sealed class Manager : Component, Component.INetworkListener
 		textObj.Transform.Rotation = Rotation.From( 90f, 90f, 0f );
 
 		textObj.Components.Get<FloaterText>().Init( text, lifetime, color, velocity, deceleration, startFontSize, endFontSize, isEmoji );
+	}
+
+	public void SpawnTutorialText( Vector3 pos, string text0, string text1, float lifetime )
+	{
+		var textObj = new GameObject();
+		textObj.Transform.Position = pos;
+		var tutorialText = textObj.Components.Create<TutorialText>();
+
+		tutorialText.Init( text0, text1, lifetime );
 	}
 
 	public void CreateBallExplosionParticles(Vector3 pos, int playerNum )

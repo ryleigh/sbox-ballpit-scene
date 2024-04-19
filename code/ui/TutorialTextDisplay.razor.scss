@@ -1,0 +1,48 @@
+TutorialTextDisplay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+
+	.container {
+		position: absolute;
+		flex-direction: row;
+		width: 400px;
+		height: 80px;
+		display: flex;
+		text-align: center;
+		justify-content: center;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.text {
+		//width: 400px;
+		//height: 80px;
+		color: #fff;
+		text-align: center;
+		justify-content: center;
+		align-items: center;
+		//background-color: #0000ff;
+		overflow: visible;
+		font-family: "Proxima Soft";
+		font-weight: 800;
+		text-shadow: -8px 8px 6px #000000ee;
+		text-stroke: 12px black;
+		font-size: 60px;
+	}
+
+	.icon {
+		//width: 100px;
+		//height: 100px;
+		//background-color: magenta;
+		justify-content: center;
+		align-items: center;
+		font-family: W10Emoji;
+		text-shadow: -6px 6px 1px #000000bb;
+		text-stroke: 6px black;
+		font-size: 60px;
+		padding-bottom: 10px;
+	}
+}

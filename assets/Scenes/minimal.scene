@@ -117,6 +117,11 @@
         {
           "__type": "FloaterTextDisplay",
           "__guid": "6fdf7c69-e1b0-4354-991c-3f2bf018453c"
+        },
+        {
+          "__type": "TutorialTextDisplay",
+          "__guid": "b899458f-d029-4bf9-8e86-8535d17513b8",
+          "MyStringValue": "Hello World!"
         }
       ]
     },
@@ -1122,7 +1127,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-18T03:24:53.225248-07:00",
+  "LastSaved": "2024-04-18T19:39:22.2803244-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []
