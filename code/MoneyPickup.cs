@@ -29,6 +29,21 @@ public class MoneyPickup : Component
 
 	public float Opacity { get; private set;  }
 
+	public float BobSpeed { get; private set; }
+	public float ShadowDistance { get; private set; }
+	public float ShadowBlur { get; private set; }
+	public float ShadowOpacity { get; private set; }
+	public Vector2 IconOffset { get; private set; }
+	private float _timingOffset;
+
+	protected override void OnAwake()
+	{
+		base.OnAwake();
+
+		Opacity = 0f;
+		ShadowOpacity = 1f;
+	}
+
 	[Broadcast]
 	public void InitSineWave( int numLevels, bool startAtTop )
 	{
@@ -45,7 +60,9 @@ public class MoneyPickup : Component
 
 		CanBePickedUp = true;
 		IsFlying = true;
-		Opacity = 0f;
+
+		BobSpeed = Game.Random.Float( 4f, 4.5f );
+		_timingOffset = Game.Random.Float( 0f, 5f );
 	}
 
 	[Broadcast]
@@ -66,7 +83,9 @@ public class MoneyPickup : Component
 
 		CanBePickedUp = false;
 		IsFlying = true;
-		Opacity = 0f;
+
+		BobSpeed = Game.Random.Float( 5f, 6f );
+		_timingOffset = Game.Random.Float( 0f, 5f );
 	}
 
 	[Broadcast]
@@ -84,7 +103,9 @@ public class MoneyPickup : Component
 
 		_startingSide = startPos.x < 0f ? 0 : 1;
 		_dir = _startingSide == 0 ? new Vector2( 1f, 0f ) : new Vector2( -1f, 0f );
-		Opacity = 0f;
+
+		BobSpeed = 7f;
+		_timingOffset = Time.Now * -5f;
 	}
 
 	protected override void OnUpdate()
@@ -112,6 +133,11 @@ public class MoneyPickup : Component
 			case MoneyMoveMode.SineWave:
 				Transform.Position = new Vector3( Utils.FastSin( Time.Now * _frequency ) * _amplitude, Transform.Position.y - 25f * (_startAtTop ? 1f : -1f) * Time.Delta, 0f );
 
+				IconOffset = new Vector2( 0f, Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 5f );
+				ShadowDistance = 8f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 3f;
+				ShadowBlur = 2.5f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 1f;
+				ShadowOpacity = 0.7f - Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 0.2f;
+
 				if ( (_startAtTop && Transform.Position.y < -120f) || (!_startAtTop && Transform.Position.y > 120f) )
 					GameObject.Destroy();
 				break;
@@ -129,6 +155,18 @@ public class MoneyPickup : Component
 					{
 						Transform.Position = new Vector3( Utils.Map( _timeSinceToss, 0f, _tossTime, _startPos.x, _endPos.x, EasingType.Linear ), Utils.Map( _timeSinceToss, 0f, _tossTime, _startPos.y, _endPos.y, EasingType.QuadIn ), 0f );
 					}
+
+					IconOffset = 0f;
+					ShadowDistance = Utils.Map( _timeSinceToss, 0f, _tossTime, 50f, 0f, EasingType.QuadIn );
+					ShadowBlur = Utils.Map( _timeSinceToss, 0f, _tossTime, 4f, 1f, EasingType.QuadIn );
+					ShadowOpacity = Utils.Map( _timeSinceToss, 0f, _tossTime, 0f, 1f, EasingType.QuadIn );
+				}
+				else
+				{
+					IconOffset = new Vector2(0f, Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 3f );
+					ShadowDistance = 5f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 3f;
+					ShadowBlur = 2f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 1f;
+					ShadowOpacity = 0.85f - Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 0.15f;
 				}
 				break;
 			case MoneyMoveMode.Endow:
@@ -145,7 +183,12 @@ public class MoneyPickup : Component
 					_dir = _dir.WithX( _dir.x * -1f );
 					Manager.Instance.PlaySfx( "bubble", Transform.Position, volume: 0.3f, pitch: Game.Random.Float( 1.2f, 1.3f ) );
 				}
-					
+
+				IconOffset = new Vector2( 0f, Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 5f );
+				ShadowDistance = 8f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 3f;
+				ShadowBlur = 2.5f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 1f;
+				ShadowOpacity = 0.7f - Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 0.2f;
+
 				if ( _startingSide == 0 && Transform.Position.x < -Manager.X_FAR - 20f )
 				{
 					var leftBarrierActive = Manager.Instance.GetPlayer( 0 )?.IsBarrierActive ?? false;

@@ -20,7 +20,17 @@
 		var maxLevel = Manager.Instance.GetMaxLevelForUpgrade(upgradeType);
 		var playerLevel = player?.GetUpgradeLevel(upgradeType) ?? 0;
 
-		<div class="icon @(isPassive ? "passive_icon" : "")" style="left: @(screenPos.x - 50)px; top: @(screenPos.y - 50)px; opacity:@((money >= shopItem.Price && playerLevel < maxLevel ? 1f : 0.4f)); text-stroke: @(Manager.GetOutlineSizeForRarity(rarity))px @(Manager.GetColorForRarity(rarity).Rgba);">@(Manager.Instance.GetIconForUpgrade(upgradeType))</div>
+		var timingOffset = 0f;
+		var bobSpeed = 2.75f;
+		var yOffset = Utils.FastSin(timingOffset + Time.Now * bobSpeed) * 3.5f;
+		var shadowDistance = 9f + Utils.FastSin(timingOffset + Time.Now * bobSpeed) * 3f;
+		var shadowBlur = 2.3f + Utils.FastSin(timingOffset + Time.Now * bobSpeed) * 1.2f;
+		var shadowOpacity = 0.85f - Utils.FastSin(timingOffset + Time.Now * bobSpeed) * 0.15f;
+
+		<div class="icon @(isPassive ? "passive_icon" : "")" style="left: @(screenPos.x - 50)px; top: @(screenPos.y - 50 - yOffset)px; opacity:@((money >= shopItem.Price && playerLevel < maxLevel ? 1f : 0.4f)); text-stroke: @(Manager.GetOutlineSizeForRarity(rarity))px @(Manager.GetColorForRarity(rarity).Rgba);
+		text-shadow: @(-shadowDistance)px @(shadowDistance)px @(shadowBlur)px @(Color.Black.WithAlpha(shadowOpacity).Rgba);">
+			@(Manager.Instance.GetIconForUpgrade(upgradeType))
+		</div>
 
 		<div class="price" style="left: @(screenPos.x - 60)px; top: @(screenPos.y - 44 + Utils.FastSin(itemNum + shopItem.PlayerNum + Time.Now * 3f) * 3.5f)px; color: @((money >= shopItem.Price ? new Color(0.8f, 0.8f, 0f) : new Color(1f, 0.2f, 0.2f)).Rgba);">
 			@($"${shopItem.Price}")
@@ -28,7 +38,7 @@
 
 		@if(shopItem.NumLevels > 1)
 		{
-			<div class="level" style="left: @(screenPos.x + 5)px; top: @(screenPos.y - 40)px; opacity:@((money >= shopItem.Price && playerLevel < maxLevel ? 1f : 0.4f));">@($"{shopItem.NumLevels}")</div>
+			<div class="level" style="left: @(screenPos.x + 5)px; top: @(screenPos.y - 40 - yOffset)px; opacity:@((money >= shopItem.Price && playerLevel < maxLevel ? 1f : 0.4f));">@($"{shopItem.NumLevels}")</div>
 		}
 
 		itemNum++;

@@ -24,9 +24,10 @@
 	}
 
 	<!-- <div class="bg" style="background-image: url(@($"materials/icons/{Globals.GetIconForUpgrade(UpgradeType)}.png"));"></div> -->
-	<div class="icon" style="opacity:@((isPassive || isSelected ? 1f : 0.5f) );
-						text-stroke: @(Manager.GetOutlineSizeForRarity(rarity))px @(Manager.GetColorForRarity(rarity).Rgba);
-						font-size:@((isSelected ? 60f : 38f) * (isHovered ? 1.1f : 1f) * useScale)px;">
+	<div class="icon @(isSelected ? "selected" : "")" 
+		style="opacity:@((isPassive || isSelected ? 1f : 0.5f) );
+		text-stroke: @(Manager.GetOutlineSizeForRarity(rarity) + (isSelected ? Utils.FastSin(Time.Now * 8f) * 2f : 0f))px @(Manager.GetColorForRarity(rarity).Rgba);
+		font-size:@((isSelected ? 60f : 38f) * (isHovered ? 1.1f : 1f) * useScale)px;">
 		@(Manager.Instance.GetIconForUpgrade(UpgradeType))
 	</div>
 
@@ -81,7 +82,7 @@
 			localPlayer.SetSelectedActiveUpgrade(UpgradeType);
 			Manager.Instance.IsMouseDown = true;
 		}
-			
+
 		// else if (e.MouseButton == MouseButtons.Right)
 		// 	localPlayer.TryUseItem(UpgradeType);
 	}
@@ -110,11 +111,12 @@
 		var player = Manager.Instance.GetPlayer(PlayerNum);
 		var isHovered = Manager.Instance.HoveredUpgradeType == UpgradeType;
 		var isSelected = (player?.SelectedUpgradeType ?? UpgradeType.None) == UpgradeType;
+		var selectedHash = isSelected ? Time.Now : 0f;
 		var progress = (player != null && player.PassiveUpgradeProgress.ContainsKey(UpgradeType)) ? player.PassiveUpgradeProgress[UpgradeType] : 0f;
 		var useScale = player.UpgradeUseTimes.ContainsKey(UpgradeType) && RealTime.Now - player.UpgradeUseTimes[UpgradeType] < 0.75f
 			? Utils.Map(RealTime.Now - player.UpgradeUseTimes[UpgradeType], 0f, 0.7f, 1.25f, 1f, EasingType.BounceOut)
 			: 1f;
 
-		return System.HashCode.Combine(UpgradeType, Level, isHovered, isSelected, progress, useScale);
+		return System.HashCode.Combine(UpgradeType, Level, isHovered, selectedHash, progress, useScale);
 	}
 }
