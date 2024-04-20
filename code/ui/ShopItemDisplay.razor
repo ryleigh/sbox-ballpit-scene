@@ -47,7 +47,11 @@
 		{
 			var canAfford = player.Money >= player.CurrRerollPrice;
 
-			<div class="reroll" style="left: @(screenPos.x - 58)px; top: @(screenPos.y - 20)px; opacity:@(canAfford ? 1f : 0.6f); color: @((canAfford ? Color.White : new Color(0.4f, 0f, 0f)).Rgba);">Reroll</div>
+			<div class="reroll" style="left: @(screenPos.x - 58 + rerollButton.IconOffset.x)px; top: @(screenPos.y - 20 - rerollButton.IconOffset.y)px; opacity:@(canAfford ? 1f : 0.6f); color: @((canAfford ? Color.White : new Color(0.4f, 0f, 0f)).Rgba);
+			text-shadow: @(-rerollButton.ShadowDistance)px @(rerollButton.ShadowDistance)px @(rerollButton.ShadowBlur)px @(Color.Black.WithAlpha(rerollButton.ShadowOpacity).Rgba);">
+				Reroll
+			</div>
+
 			<div class="price" style="left: @(screenPos.x - 72)px; top: @(screenPos.y - 46 + Utils.FastSin(0.75f + rerollButton.PlayerNum + Time.Now * 3f) * 3.5f)px; color: @((canAfford ? new Color(0.8f, 0.8f, 0f) : new Color(1f, 0.3f, 0.3f)).Rgba);">@($"${player.CurrRerollPrice}")</div>
 		}
 	}
@@ -57,7 +61,10 @@
 		var pos = skipButton.Transform.Position;
 		var screenPos = Scene.Camera.PointToScreenPixels(pos) * Panel.ScaleFromScreen;
 
-		<div class="skip" style="left: @(screenPos.x - 60)px; top: @(screenPos.y - 20)px; color:@((skipButton.FlashToggle ? new Color(0.6f, 0.6f, 0f) : new Color(1f, 1f, 1f)).Rgba);">Skip</div>
+		<div class="skip" style="left: @(screenPos.x - 60 + skipButton.IconOffset.x)px; top: @(screenPos.y - 20 - skipButton.IconOffset.y)px; color:@((skipButton.FlashToggle ? new Color(0.6f, 0.6f, 0f) : new Color(1f, 1f, 1f)).Rgba);
+		text-shadow: @(-skipButton.ShadowDistance)px @(skipButton.ShadowDistance)px @(skipButton.ShadowBlur)px @(Color.Black.WithAlpha(skipButton.ShadowOpacity).Rgba);">
+			Skip
+		</div>
 	}
 </root>
 

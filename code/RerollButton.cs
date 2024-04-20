@@ -4,13 +4,24 @@ public class RerollButton : Component
 {
 	[Sync] public int PlayerNum { get; set; }
 
-	private ModelRenderer _renderer;
+	public float BobSpeed { get; private set; }
+	public float ShadowDistance { get; private set; }
+	public float ShadowBlur { get; private set; }
+	public float ShadowOpacity { get; private set; }
+	public Vector2 IconOffset { get; private set; }
+	private float _timingOffset;
+
+	protected override void OnAwake()
+	{
+		base.OnAwake();
+
+		BobSpeed = Game.Random.Float( 3f, 3.5f );
+		_timingOffset = Game.Random.Float( 0f, 5f );
+	}
 
 	[Broadcast]
 	public void Init( int playerNum )
 	{
-		_renderer = Components.Get<ModelRenderer>();
-
 		if ( IsProxy )
 			return;
 
@@ -22,10 +33,17 @@ public class RerollButton : Component
 		base.OnUpdate();
 
 		var player = Manager.Instance.GetPlayer( PlayerNum );
-		if ( player == null || _renderer == null )
+		if ( player == null )
 			return;
 
-		_renderer.Tint = player.Money >= player.CurrRerollPrice ? new Color( 0.11f, 0.11f, 0.11f ) : new Color( 0.11f, 0.07f, 0.07f );
+		var cannotAfford = player.Money < player.CurrRerollPrice;
+
+		var bobSpeed = BobSpeed * (cannotAfford ? 0.5f : 1f);
+
+		IconOffset = new Vector2( 0f, Utils.FastSin( _timingOffset + Time.Now * bobSpeed ) * 3.5f );
+		ShadowDistance = 9f + Utils.FastSin( _timingOffset + Time.Now * bobSpeed ) * 3f;
+		ShadowBlur = 2.3f + Utils.FastSin( _timingOffset + Time.Now * bobSpeed ) * 1.2f;
+		ShadowOpacity = 0.85f - Utils.FastSin( _timingOffset + Time.Now * bobSpeed ) * 0.15f;
 	}
 
 	[Broadcast]
