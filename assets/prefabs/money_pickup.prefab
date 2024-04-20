@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "8423f59c-f565-4226-bd65-b4eb65fadc75",
+    "__guid": "67344c81-2351-4810-b092-df8ab3c95d49",
     "Name": "money_pickup",
     "Scale": "0.5,0.5,0.5",
     "Tags": "money_pickup",
@@ -8,17 +8,8 @@
     "NetworkMode": 2,
     "Components": [
       {
-        "__type": "Sandbox.ModelRenderer",
-        "__guid": "bc1662fb-b085-4d9a-8232-02afa0a6657f",
-        "__enabled": false,
-        "BodyGroups": 18446744073709551615,
-        "Model": "models/dev/box.vmdl",
-        "RenderType": "On",
-        "Tint": "0,0.21705,0.81395,1"
-      },
-      {
         "__type": "Sandbox.SphereCollider",
-        "__guid": "ecda2a52-2332-47c6-bcef-b7989ad02c2c",
+        "__guid": "9a49c513-0e0f-48a0-8da0-0fa10db8a4f4",
         "Center": "0,0,0",
         "IsTrigger": true,
         "Radius": 27,
@@ -26,7 +17,7 @@
       },
       {
         "__type": "MoneyPickup",
-        "__guid": "c2498198-b823-4537-b134-e39881525cc8"
+        "__guid": "ed5f1edd-6641-4367-8473-68b3a9428867"
       }
     ],
     "Children": []

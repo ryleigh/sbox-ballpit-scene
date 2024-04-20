@@ -22,6 +22,9 @@
 
 	@foreach(var moneyPickup in Scene.GetAllComponents<MoneyPickup>()) 
 	{
+		if (moneyPickup.TimeSinceSpawn < 0.01f) // fixes endow money square visible on first frame
+			continue;
+
 		var pos = moneyPickup.Transform.Position;
 		var screenPos = Scene.Camera.PointToScreenPixels(pos) * Panel.ScaleFromScreen;
 

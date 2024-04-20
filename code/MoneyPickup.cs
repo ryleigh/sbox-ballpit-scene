@@ -18,7 +18,7 @@ public class MoneyPickup : Component
 	private Vector2 _endPos;
 	private bool _isTossed;
 	private float _tossTime;
-	private TimeSince _timeSinceToss;
+	public TimeSince TimeSinceSpawn { get; set; }
 
 	// Endow
 	private int _startingSide;
@@ -42,14 +42,12 @@ public class MoneyPickup : Component
 
 		Opacity = 0f;
 		ShadowOpacity = 1f;
+		TimeSinceSpawn = 0f;
 	}
 
 	[Broadcast]
 	public void InitSineWave( int numLevels, bool startAtTop )
 	{
-		if ( IsProxy )
-			return;
-
 		MoneyMoveMode = MoneyMoveMode.SineWave;
 
 		NumLevels = numLevels;
@@ -68,9 +66,6 @@ public class MoneyPickup : Component
 	[Broadcast]
 	public void InitTossed( int numLevels, Vector2 startPos, Vector2 endPos, float time )
 	{
-		if ( IsProxy )
-			return;
-
 		MoneyMoveMode = MoneyMoveMode.Tossed;
 
 		NumLevels = numLevels;
@@ -79,7 +74,6 @@ public class MoneyPickup : Component
 		_endPos = endPos;
 		_isTossed = true;
 		_tossTime = time;
-		_timeSinceToss = 0f;
 
 		CanBePickedUp = false;
 		IsFlying = true;
@@ -91,9 +85,6 @@ public class MoneyPickup : Component
 	[Broadcast]
 	public void InitEndow( int numLevels, Vector2 startPos )
 	{
-		if ( IsProxy )
-			return;
-
 		MoneyMoveMode = MoneyMoveMode.Endow;
 
 		NumLevels = numLevels;
@@ -116,12 +107,38 @@ public class MoneyPickup : Component
 		{
 			case MoneyMoveMode.SineWave:
 				Opacity = Utils.MapReturn( Transform.Position.y, -120f, 120f, 0f, 1f, EasingType.ExpoOut );
+
+				IconOffset = new Vector2( 0f, Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 5f );
+				ShadowDistance = 8f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 3f;
+				ShadowBlur = 2.5f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 1f;
+				ShadowOpacity = 0.7f - Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 0.2f;
 				break;
 			case MoneyMoveMode.Tossed:
 				Opacity = Transform.Position.y > 100f ? Utils.Map( Transform.Position.y, 100f, 130f, 1f, 0f, EasingType.QuadOut ) : 1f;
+
+				if( IsFlying )
+				{
+					IconOffset = 0f;
+					ShadowDistance = Utils.Map( TimeSinceSpawn, 0f, _tossTime, 50f, 0f, EasingType.QuadIn );
+					ShadowBlur = Utils.Map( TimeSinceSpawn, 0f, _tossTime, 4f, 1f, EasingType.QuadIn );
+					ShadowOpacity = Utils.Map( TimeSinceSpawn, 0f, _tossTime, 0f, 1f, EasingType.QuadIn );
+				}
+				else
+				{
+					IconOffset = new Vector2( 0f, Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 3f );
+					ShadowDistance = 5f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 3f;
+					ShadowBlur = 2f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 1f;
+					ShadowOpacity = 0.85f - Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 0.15f;
+				}
+
 				break;
 			case MoneyMoveMode.Endow:
-				Opacity = Utils.Map( _timeSinceToss, 0f, 0.5f, 0f, 1f, EasingType.QuadOut ) * (CanBePickedUp ? 1f : 0.2f);
+				Opacity = Utils.Map( TimeSinceSpawn, 0f, 0.5f, 0f, 1f, EasingType.QuadOut ) * (CanBePickedUp ? 1f : 0.2f);
+
+				IconOffset = new Vector2( 0f, Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 5f );
+				ShadowDistance = 8f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 3f;
+				ShadowBlur = 2.5f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 1f;
+				ShadowOpacity = 0.7f - Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 0.2f;
 				break;
 		}
 
@@ -133,18 +150,13 @@ public class MoneyPickup : Component
 			case MoneyMoveMode.SineWave:
 				Transform.Position = new Vector3( Utils.FastSin( Time.Now * _frequency ) * _amplitude, Transform.Position.y - 25f * (_startAtTop ? 1f : -1f) * Time.Delta, 0f );
 
-				IconOffset = new Vector2( 0f, Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 5f );
-				ShadowDistance = 8f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 3f;
-				ShadowBlur = 2.5f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 1f;
-				ShadowOpacity = 0.7f - Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 0.2f;
-
 				if ( (_startAtTop && Transform.Position.y < -120f) || (!_startAtTop && Transform.Position.y > 120f) )
 					GameObject.Destroy();
 				break;
 			case MoneyMoveMode.Tossed:
 				if(_isTossed)
 				{
-					if ( _timeSinceToss > _tossTime )
+					if ( TimeSinceSpawn > _tossTime )
 					{
 						Transform.Position = new Vector3( _endPos.x, _endPos.y, 0f );
 						_isTossed = false;
@@ -153,21 +165,10 @@ public class MoneyPickup : Component
 					}
 					else
 					{
-						Transform.Position = new Vector3( Utils.Map( _timeSinceToss, 0f, _tossTime, _startPos.x, _endPos.x, EasingType.Linear ), Utils.Map( _timeSinceToss, 0f, _tossTime, _startPos.y, _endPos.y, EasingType.QuadIn ), 0f );
+						Transform.Position = new Vector3( Utils.Map( TimeSinceSpawn, 0f, _tossTime, _startPos.x, _endPos.x, EasingType.Linear ), Utils.Map( TimeSinceSpawn, 0f, _tossTime, _startPos.y, _endPos.y, EasingType.QuadIn ), 0f );
 					}
-
-					IconOffset = 0f;
-					ShadowDistance = Utils.Map( _timeSinceToss, 0f, _tossTime, 50f, 0f, EasingType.QuadIn );
-					ShadowBlur = Utils.Map( _timeSinceToss, 0f, _tossTime, 4f, 1f, EasingType.QuadIn );
-					ShadowOpacity = Utils.Map( _timeSinceToss, 0f, _tossTime, 0f, 1f, EasingType.QuadIn );
 				}
-				else
-				{
-					IconOffset = new Vector2(0f, Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 3f );
-					ShadowDistance = 5f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 3f;
-					ShadowBlur = 2f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 1f;
-					ShadowOpacity = 0.85f - Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 0.15f;
-				}
+				
 				break;
 			case MoneyMoveMode.Endow:
 				Transform.Position += (Vector3)_dir * 160f * Time.Delta;
@@ -183,11 +184,6 @@ public class MoneyPickup : Component
 					_dir = _dir.WithX( _dir.x * -1f );
 					Manager.Instance.PlaySfx( "bubble", Transform.Position, volume: 0.3f, pitch: Game.Random.Float( 1.2f, 1.3f ) );
 				}
-
-				IconOffset = new Vector2( 0f, Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 5f );
-				ShadowDistance = 8f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 3f;
-				ShadowBlur = 2.5f + Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 1f;
-				ShadowOpacity = 0.7f - Utils.FastSin( _timingOffset + Time.Now * BobSpeed ) * 0.2f;
 
 				if ( _startingSide == 0 && Transform.Position.x < -Manager.X_FAR - 20f )
 				{

@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "833297fd-fc30-4729-b0ca-7570da017450",
+    "__guid": "5637a973-b0b0-43fe-9ffe-5389c28bab84",
     "Name": "pickup_item",
     "Scale": "0.5,0.5,0.5",
     "Tags": "pickup_item",
@@ -8,17 +8,8 @@
     "NetworkMode": 2,
     "Components": [
       {
-        "__type": "Sandbox.ModelRenderer",
-        "__guid": "25c61e93-8c27-4dc6-ba57-73027d628951",
-        "__enabled": false,
-        "BodyGroups": 18446744073709551615,
-        "Model": "models/dev/box.vmdl",
-        "RenderType": "On",
-        "Tint": "0,0.21705,0.81395,1"
-      },
-      {
         "__type": "Sandbox.SphereCollider",
-        "__guid": "f9479b31-3080-465a-a85c-a370fe7b7894",
+        "__guid": "90be6a13-544d-4ec9-b83e-5ac385d90c3d",
         "Center": "0,0,0",
         "IsTrigger": true,
         "Radius": 27,
@@ -26,7 +17,7 @@
       },
       {
         "__type": "PickupItem",
-        "__guid": "6c2f37bf-6c8a-41f1-a588-8b8bc5c26183"
+        "__guid": "05f79967-202e-49ce-b4c5-58c21da372b1"
       }
     ],
     "Children": []
