@@ -147,6 +147,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public float TrophyIndicatorOpacity { get; set; }
 
+	[Sync] public float CurrRealTimeNow { get; set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -238,7 +240,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
 		player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
-		//player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
+		player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
 		//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );
 		player.AdjustUpgradeLevel( UpgradeType.Dash, 8 );
 		//player.AdjustUpgradeLevel( UpgradeType.Blink, 2 );
@@ -274,7 +276,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 
 		//Gizmo.Draw.Color = Color.White;
-		//Gizmo.Draw.Text( $"IsTabIndicatorHovered: {IsTabIndicatorHovered}", new global::Transform( Vector3.Zero ) );
+		//Gizmo.Draw.Text( $"RealTime.Now: {RealTime.Now}", new global::Transform( Vector3.Zero ) );
 
 		SlidingGround.Transform.Position = new Vector3( CenterLineOffset, 0f, 0f );
 
@@ -432,6 +434,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		//_targetCenterLineOffset = Utils.Map( CurrentScore, -SCORE_NEEDED_TO_WIN, SCORE_NEEDED_TO_WIN, 95f, -95f );
 
 		CenterLineOffset = Utils.DynamicEaseTo( CenterLineOffset, _targetCenterLineOffset, 0.05f, Time.Delta );
+
+		CurrRealTimeNow = RealTime.Now;
 	}
 
 	void DebugDisplay()

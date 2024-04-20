@@ -109,7 +109,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		//}
 
 		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
-		//Gizmo.Draw.Text( $"{IsIntangible}", new global::Transform( Transform.Position ) );
+		//Gizmo.Draw.Text( $"{str}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity );
 

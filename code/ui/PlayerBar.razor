@@ -6,8 +6,8 @@
 <root>
 	@{
 		var playerNum = Player.PlayerNum;
-		var moneySize = Utils.Map(RealTime.Now - Player.MoneyChangedTime, 0f, 0.33f, 35f, 30f, EasingType.BounceOut);
-		var hpSize = Utils.Map(RealTime.Now - Player.HpChangedTime, 0f, 0.33f, 35f, 28f, EasingType.BounceOut);
+		var moneySize = Utils.Map(Manager.Instance.CurrRealTimeNow - Player.MoneyChangedTime, 0f, 0.33f, 35f, 30f, EasingType.BounceOut);
+		var hpSize = Utils.Map(Manager.Instance.CurrRealTimeNow - Player.HpChangedTime, 0f, 0.33f, 35f, 28f, EasingType.BounceOut);
 		var hpAlign = playerNum == 0 ? "left: 100px;" : "right: 100px;";
 	}
 
@@ -42,8 +42,8 @@
 		if (Player == null || Connection == null)
 			return 0;
 
-		var moneySize = Utils.Map(RealTime.Now - Player.MoneyChangedTime, 0f, 0.4f, 36f, 30f, EasingType.BounceOut);
-		var hpSize = Utils.Map(RealTime.Now - Player.HpChangedTime, 0f, 0.33f, 35f, 28f, EasingType.BounceOut);
+		var moneySize = Utils.Map(Manager.Instance.CurrRealTimeNow - Player.MoneyChangedTime, 0f, 0.4f, 36f, 30f, EasingType.BounceOut);
+		var hpSize = Utils.Map(Manager.Instance.CurrRealTimeNow - Player.HpChangedTime, 0f, 0.33f, 35f, 28f, EasingType.BounceOut);
 		return System.HashCode.Combine(Player.HP, Player.Money, Connection.DisplayName, Player.PlayerNum, moneySize, hpSize);
 	}
 }
