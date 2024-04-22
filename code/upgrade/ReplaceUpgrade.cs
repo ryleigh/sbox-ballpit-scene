@@ -7,8 +7,6 @@ public class ReplaceUpgrade : Upgrade
 	{
 		base.Use();
 
-		Manager.PlaySfx( "bubble", Player.Transform.Position );
-
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )
 		{
 			if ( ball.IsDespawning )

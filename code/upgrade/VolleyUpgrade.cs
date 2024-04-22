@@ -9,8 +9,6 @@ public class VolleyUpgrade : Upgrade
 
 		var playerPos = Player.Transform.Position;
 
-		Manager.PlaySfx( "bubble", playerPos );
-
 		var currDegrees = -30f;
 		for ( int i = 0; i < 5; i++ )
 		{

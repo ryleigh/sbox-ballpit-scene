@@ -7,8 +7,6 @@ public class RedirectUpgrade : Upgrade
 	{
 		base.Use();
 
-		Manager.PlaySfx( "bubble", Player.Transform.Position );
-
 		var redirectDir = (Manager.Instance.MouseWorldPos - (Vector2)Player.Transform.Position).Normal;
 
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )

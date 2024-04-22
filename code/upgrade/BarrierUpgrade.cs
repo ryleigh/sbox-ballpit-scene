@@ -10,8 +10,6 @@ public class BarrierUpgrade : Upgrade
 	{
 		base.Use();
 
-		Manager.PlaySfx( "bubble", Player.Transform.Position );
-
 		BarrierAsync();
 	}
 

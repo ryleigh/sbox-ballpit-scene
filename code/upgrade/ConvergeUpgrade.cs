@@ -7,10 +7,10 @@ public class ConvergeUpgrade : Upgrade
 	{
 		base.Use();
 
-		Manager.PlaySfx( "bubble", Player.Transform.Position );
-
 		var enemy = Manager.GetPlayer( Globals.GetOpponentPlayerNum( Player.PlayerNum ) );
 		var enemyPos = enemy?.Transform.Position ?? Vector3.Zero;
+
+		Manager.PlaySfx( "enemyPos", Player.Transform.Position );
 
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )
 		{

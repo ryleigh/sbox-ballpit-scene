@@ -12,8 +12,6 @@ public class DashUpgrade : Upgrade
 	{
 		base.Use();
 
-		Manager.PlaySfx( "bubble", Player.Transform.Position );
-
 		var vel = (Manager.Instance.MouseWorldPos - (Vector2)Player.Transform.Position).Normal * 400f;
 		Dash( vel, 0.5f );
 	}

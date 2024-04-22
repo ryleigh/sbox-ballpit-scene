@@ -25,7 +25,5 @@ public class AirstrikeUpgrade : Upgrade
 		);
 
 		Manager.Instance.StartAirstrike(pos);
-
-		Manager.Instance.PlaySfx( "bubble", Player.Transform.Position );
 	}
 }

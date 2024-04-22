@@ -286,16 +286,19 @@ public class PlayerController : Component, Component.ITriggerListener
 		SetSelectedActiveUpgrade( ActiveUpgrades.Keys.ElementAt( index ) );
 	}
 
-	public void SetSelectedActiveUpgrade( UpgradeType upgradeType )
+	public void SetSelectedActiveUpgrade( UpgradeType upgradeType, bool playSfx = true )
 	{
 		if ( !ActiveUpgrades.ContainsKey(upgradeType) )
 			return;
 
 		SelectedUpgradeType = upgradeType;
 
-		var upgrade = LocalUpgrades[upgradeType];
-		if(upgrade != null && !string.IsNullOrEmpty(upgrade.SfxSelect))
-			Sound.Play( upgrade.SfxSelect );
+		if( playSfx )
+		{
+			var upgrade = LocalUpgrades[upgradeType];
+			if ( upgrade != null && !string.IsNullOrEmpty( upgrade.SfxSelect ) )
+				Sound.Play( upgrade.SfxSelect );
+		}
 
 		//Sound.Play( "bubble_ui" );
 	}
@@ -776,7 +779,7 @@ public class PlayerController : Component, Component.ITriggerListener
 			LocalUpgrades.Add( upgradeType, upgrade );
 		}
 
-		if ( upgrade != null && !string.IsNullOrEmpty( upgrade.SfxGet ) )
+		if ( amount > 0 && upgrade != null && !string.IsNullOrEmpty( upgrade.SfxGet ) )
 			Manager.Instance.PlaySfx( upgrade.SfxGet, Transform.Position );
 
 		UpgradeUseTimes[upgradeType] = RealTime.Now;

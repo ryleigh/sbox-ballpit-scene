@@ -7,8 +7,6 @@ public class GatherUpgrade : Upgrade
 	{
 		base.Use();
 
-		Manager.PlaySfx( "bubble", Player.Transform.Position );
-
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )
 		{
 			if ( !ball.IsDespawning && ball.PlayerNum == Player.PlayerNum )

@@ -8,8 +8,6 @@ public class EndowUpgrade : Upgrade
 	{
 		base.Use();
 
-		Manager.PlaySfx( "bubble", Player.Transform.Position );
-
 		EndowAsync();
 	}
 

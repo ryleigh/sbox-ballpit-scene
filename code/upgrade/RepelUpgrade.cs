@@ -7,8 +7,6 @@ public class RepelUpgrade : Upgrade
 	{
 		base.Use();
 
-		Manager.PlaySfx( "bubble", Player.Transform.Position );
-
 		Manager.Instance.SpawnRepelEffect((Vector2)Player.Transform.Position);
 
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )
