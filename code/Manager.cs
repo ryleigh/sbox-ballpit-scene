@@ -20,8 +20,11 @@ public struct UpgradeData
 	public int amountMax;
 	public int pricePerAmountMin;
 	public int pricePerAmountMax;
+	public string sfxGet;
+	public string sfxUse;
+	public string sfxSelect;
 
-	public UpgradeData( string _name, string _icon, UpgradeRarity _rarity, int _maxLevel, int _amountMin, int _amountMax, int _pricePerAmountMin, int _pricePerAmountMax, bool _isPassive, bool _usableInBuyPhase )
+	public UpgradeData( string _name, string _icon, UpgradeRarity _rarity, int _maxLevel, int _amountMin, int _amountMax, int _pricePerAmountMin, int _pricePerAmountMax, string _sfxGet, string _sfxUse, string _sfxSelect, bool _isPassive, bool _usableInBuyPhase )
 	{
 		name = _name;
 		icon = _icon;
@@ -31,6 +34,9 @@ public struct UpgradeData
 		amountMax = _amountMax;
 		pricePerAmountMin = _pricePerAmountMin;
 		pricePerAmountMax = _pricePerAmountMax;
+		sfxGet = _sfxGet;
+		sfxUse = _sfxUse;
+		sfxSelect = _sfxSelect;
 		isPassive = _isPassive;
 		useableInBuyPhase = _usableInBuyPhase;
 	}
@@ -1434,26 +1440,26 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void GenerateUpgrades()
 	{
-		CreateUpgrade( UpgradeType.MoveSpeed, "Cardio", "🏃🏻", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5, isPassive: true );
-		CreateUpgrade( UpgradeType.BumpStrength, "Muscles", "💪", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 6, isPassive: true );
-		CreateUpgrade( UpgradeType.Autoball, "Autoball", "⏲️", UpgradeRarity.Rare, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7, isPassive: true );
-		CreateUpgrade( UpgradeType.MoreShopItems, "Shopper", "🛒", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 9, pricePerAmountMax: 16, isPassive: true );
-		CreateUpgrade( UpgradeType.ShorterBuyPhase, "Closing Early", "🔜", UpgradeRarity.Legendary, maxLevel: 1, amountMin: 1, amountMax: 1, pricePerAmountMin: 7, pricePerAmountMax: 15, isPassive: true );
+		CreateUpgrade( UpgradeType.MoveSpeed, "Cardio", "🏃🏻", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui", isPassive: true );
+		CreateUpgrade( UpgradeType.BumpStrength, "Muscles", "💪", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 6, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui", isPassive: true );
+		CreateUpgrade( UpgradeType.Autoball, "Autoball", "⏲️", UpgradeRarity.Rare, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui", isPassive: true );
+		CreateUpgrade( UpgradeType.MoreShopItems, "Shopper", "🛒", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 9, pricePerAmountMax: 16, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui", isPassive: true );
+		CreateUpgrade( UpgradeType.ShorterBuyPhase, "Closing Early", "🔜", UpgradeRarity.Legendary, maxLevel: 1, amountMin: 1, amountMax: 1, pricePerAmountMin: 7, pricePerAmountMax: 15, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui", isPassive: true );
 
-		CreateUpgrade( UpgradeType.Volley, "Throw", "🥏", UpgradeRarity.Common, maxLevel: 5, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 6 );
-		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
-		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", UpgradeRarity.Common, maxLevel: 18, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5 );
-		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", UpgradeRarity.Uncommon, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 6, pricePerAmountMax: 8 );
-		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 4, useableInBuyPhase: true );
-		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", UpgradeRarity.Uncommon, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5, maxLevel: 3 );
-		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 1, pricePerAmountMax: 3 );
-		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 3, pricePerAmountMin: 1, pricePerAmountMax: 2, useableInBuyPhase: true );
-		CreateUpgrade( UpgradeType.Redirect, "Redirect", "⤴️", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7 );
-		CreateUpgrade( UpgradeType.Converge, "Converge", "📍", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 4, pricePerAmountMax: 6 );
-		CreateUpgrade( UpgradeType.Endow, "Endow", "💰", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 4, pricePerAmountMax: 6 );
-		CreateUpgrade( UpgradeType.Fade, "Fade", "👥", UpgradeRarity.Uncommon, maxLevel: 6, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 4 );
-		CreateUpgrade( UpgradeType.Barrier, "Barrier", "🚧", UpgradeRarity.Uncommon, maxLevel: 6, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
-		CreateUpgrade( UpgradeType.Airstrike, "Airstrike", "🚀", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 8, pricePerAmountMax: 12 );
+		CreateUpgrade( UpgradeType.Volley, "Balls", "🥏", UpgradeRarity.Common, maxLevel: 5, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 6, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui" );
+		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui" );
+		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", UpgradeRarity.Common, maxLevel: 18, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui" );
+		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", UpgradeRarity.Uncommon, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 6, pricePerAmountMax: 8, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui" );
+		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 4, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui", useableInBuyPhase: true );
+		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", UpgradeRarity.Uncommon, maxLevel: 3, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui" );
+		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 1, pricePerAmountMax: 3, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui" );
+		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 3, pricePerAmountMin: 1, pricePerAmountMax: 2, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui", useableInBuyPhase: true );
+		CreateUpgrade( UpgradeType.Redirect, "Redirect", "⤴️", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui" );
+		CreateUpgrade( UpgradeType.Converge, "Converge", "📍", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 4, pricePerAmountMax: 6, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui" );
+		CreateUpgrade( UpgradeType.Endow, "Endow", "💰", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 4, pricePerAmountMax: 6, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui" );
+		CreateUpgrade( UpgradeType.Fade, "Fade", "👥", UpgradeRarity.Uncommon, maxLevel: 6, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 4, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui" );
+		CreateUpgrade( UpgradeType.Barrier, "Barrier", "🚧", UpgradeRarity.Uncommon, maxLevel: 6, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui" );
+		CreateUpgrade( UpgradeType.Airstrike, "Airstrike", "🚀", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 8, pricePerAmountMax: 12, sfxGet: "bubble", sfxUse: "bubble", sfxSelect: "bubble_ui" );
 
 		foreach (var upgradeData in UpgradeDatas)
 		{
@@ -1510,9 +1516,10 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, UpgradeRarity rarity, int maxLevel, 
 		int amountMin, int amountMax, int pricePerAmountMin, int pricePerAmountMax,
+		string sfxGet, string sfxUse, string sfxSelect,
 		bool isPassive = false, bool useableInBuyPhase = false)
 	{
-		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, rarity, maxLevel, amountMin, amountMax, pricePerAmountMin, pricePerAmountMax, isPassive, useableInBuyPhase));
+		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, rarity, maxLevel, amountMin, amountMax, pricePerAmountMin, pricePerAmountMax, sfxGet, sfxUse, sfxSelect, isPassive, useableInBuyPhase));
 	}
 
 	UpgradeType GetRandomPickupType()

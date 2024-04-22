@@ -9,6 +9,10 @@ public class Upgrade
 	public int Level { get; set; }
 	public bool IsPassive { get; private set; }
 
+	public string SfxGet { get; set; }
+	public string SfxUse { get; set; }
+	public string SfxSelect { get; set; }
+
 	public virtual void Init(PlayerController player, Manager manager, Scene scene, bool isPassive)
 	{
 		Player = player;
@@ -34,7 +38,8 @@ public class Upgrade
 
 	public virtual void Use()
 	{
-
+		if(!string.IsNullOrEmpty(SfxUse))
+			Manager.Instance.PlaySfx( SfxUse, Player.Transform.Position );
 	}
 
 	public virtual void ClearProgress()

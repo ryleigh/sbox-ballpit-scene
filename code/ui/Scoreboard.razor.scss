@@ -18,6 +18,7 @@ Scoreboard {
 	transition: all 0.085s ease-out;
 	border: 1px solid #000000bb;
 	overflow: hidden;
+	z-index: 10;
 
 	.info {
 		position: absolute;

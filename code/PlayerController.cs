@@ -275,9 +275,7 @@ public class PlayerController : Component, Component.ITriggerListener
 			? (selectedIndex < ActiveUpgrades.Count - 1 ? selectedIndex + 1 : 0)
 			: (selectedIndex > 0 ? selectedIndex - 1 : upgradeTypes.Count - 1);
 
-		SelectedUpgradeType = upgradeTypes.ElementAt(nextIndex);
-
-		Sound.Play( "bubble_ui" );
+		SetSelectedActiveUpgrade( upgradeTypes.ElementAt( nextIndex ) );
 	}
 
 	public void SetSelectedActiveUpgrade(int index)
@@ -285,9 +283,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( index >= ActiveUpgrades.Count )
 			return;
 
-		SelectedUpgradeType = ActiveUpgrades.Keys.ElementAt( index );
-
-		Sound.Play( "bubble_ui" );
+		SetSelectedActiveUpgrade( ActiveUpgrades.Keys.ElementAt( index ) );
 	}
 
 	public void SetSelectedActiveUpgrade( UpgradeType upgradeType )
@@ -297,7 +293,11 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		SelectedUpgradeType = upgradeType;
 
-		Sound.Play( "bubble_ui" );
+		var upgrade = LocalUpgrades[upgradeType];
+		if(upgrade != null && !string.IsNullOrEmpty(upgrade.SfxSelect))
+			Sound.Play( upgrade.SfxSelect );
+
+		//Sound.Play( "bubble_ui" );
 	}
 
 	public void TryUseItem(UpgradeType upgradeType)
@@ -441,7 +441,6 @@ public class PlayerController : Component, Component.ITriggerListener
 		{ 
 			var pickupItem = other.Components.Get<PickupItem>();
 
-			Manager.Instance.PlaySfx( "bubble", Transform.Position );
 			AdjustUpgradeLevel( pickupItem.UpgradeType, pickupItem.NumLevels );
 
 			pickupItem.DestroyRPC();
@@ -757,9 +756,11 @@ public class PlayerController : Component, Component.ITriggerListener
 			}
 		}
 
+		Upgrade upgrade;
+
 		if( LocalUpgrades.ContainsKey( upgradeType ) )
 		{
-			var upgrade = LocalUpgrades[upgradeType];
+			upgrade = LocalUpgrades[upgradeType];
 
 			var newLevel = Math.Min( upgrade.Level + amount, maxLevel );
 			if ( newLevel != upgrade.Level )
@@ -768,11 +769,14 @@ public class PlayerController : Component, Component.ITriggerListener
 		else
 		{
 			var className = $"{upgradeType}Upgrade";
-			var upgrade = TypeLibrary.Create<Upgrade>( className );
+			upgrade = TypeLibrary.Create<Upgrade>( className );
 			upgrade.Init( this, Manager.Instance, Scene, isPassive );
 			upgrade.SetLevel( amount );
 			LocalUpgrades.Add( upgradeType, upgrade );
 		}
+
+		if ( upgrade != null && !string.IsNullOrEmpty( upgrade.SfxGet ) )
+			Manager.Instance.PlaySfx( upgrade.SfxGet, Transform.Position );
 
 		UpgradeUseTimes[upgradeType] = RealTime.Now;
 	}
