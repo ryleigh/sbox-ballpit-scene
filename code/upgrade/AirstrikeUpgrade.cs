@@ -12,6 +12,8 @@ public class AirstrikeData
 
 public class AirstrikeUpgrade : Upgrade
 {
+	public override string SfxSelect => "bubble";
+
 	public override void Use()
 	{
 		base.Use();

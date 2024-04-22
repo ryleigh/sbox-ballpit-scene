@@ -741,12 +741,13 @@ public class PlayerController : Component, Component.ITriggerListener
 				SelectedUpgradeType = UpgradeType.None;
 		}
 
-		if(!Manager.Instance.IsUpgradePassive( upgradeType ) )
+		if( SelectedUpgradeType == UpgradeType.None && !Manager.Instance.IsUpgradePassive( upgradeType ) )
 		{
-			if ( amount > 0 && SelectedUpgradeType == UpgradeType.None )
+			if ( amount > 0 )
+			{
 				SelectedUpgradeType = upgradeType;
-
-			if ( amount < 0 && SelectedUpgradeType == UpgradeType.None )
+			}
+			else
 			{
 				foreach ( var pair in ActiveUpgrades )
 				{

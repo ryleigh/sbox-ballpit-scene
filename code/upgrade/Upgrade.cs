@@ -9,9 +9,9 @@ public class Upgrade
 	public int Level { get; set; }
 	public bool IsPassive { get; private set; }
 
-	public string SfxGet { get; set; }
-	public string SfxUse { get; set; }
-	public string SfxSelect { get; set; }
+	public virtual string SfxGet => "bubble";
+	public virtual string SfxUse => "bubble";
+	public virtual string SfxSelect => "bubble";
 
 	public virtual void Init(PlayerController player, Manager manager, Scene scene, bool isPassive)
 	{
