@@ -234,11 +234,13 @@ public sealed class Manager : Component, Component.INetworkListener
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
 
+		player.AdjustUpgradeLevel( UpgradeType.Scatter, 6 );
+		player.AdjustUpgradeLevel( UpgradeType.Replace, 6 );
 		player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
-		//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
+		player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
 		player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
 		player.AdjustUpgradeLevel( UpgradeType.Volley, 4 );
-		//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
+		player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
 		player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
 		player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
 		//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );

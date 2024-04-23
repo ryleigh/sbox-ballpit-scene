@@ -3,6 +3,8 @@ using System;
 
 public class RepelUpgrade : Upgrade
 {
+	public override string SfxUse => "repel_use";
+
 	public override void Use()
 	{
 		base.Use();

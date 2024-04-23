@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 
 public class EndowUpgrade : Upgrade
 {
+	public override string SfxUse => "endow_use";
+
 	public override void Use()
 	{
 		base.Use();

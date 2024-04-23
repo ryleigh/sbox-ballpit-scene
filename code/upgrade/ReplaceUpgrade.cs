@@ -3,6 +3,8 @@ using System;
 
 public class ReplaceUpgrade : Upgrade
 {
+	public override string SfxUse => "replace_use";
+
 	public override void Use()
 	{
 		base.Use();

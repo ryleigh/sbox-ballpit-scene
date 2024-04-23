@@ -301,7 +301,7 @@ public class Ball : Component
 	[Broadcast]
 	public void HitSideGutterBarrier( bool left )
 	{
-		Sound.Play( "frame-bounce", Transform.Position.WithZ( Globals.SFX_HEIGHT ) );
+		Sound.Play( "barrier_impact", Transform.Position.WithZ( Globals.SFX_HEIGHT ) );
 
 		if ( left )
 			Manager.Instance.TimeSinceLeftGutterBarrierRebound = 0f;

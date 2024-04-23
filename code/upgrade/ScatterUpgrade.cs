@@ -3,6 +3,8 @@ using System;
 
 public class ScatterUpgrade : Upgrade
 {
+	public override string SfxUse => "scatter_use";
+
 	public override void Use()
 	{
 		base.Use();

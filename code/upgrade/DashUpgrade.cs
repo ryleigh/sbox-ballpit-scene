@@ -3,6 +3,8 @@ using System;
 
 public class DashUpgrade : Upgrade
 {
+	public override string SfxUse => "dash_use";
+
 	private bool _isDashing;
 	private TimeSince _timeSinceDashStarted;
 	private float _dashTime;

@@ -10,6 +10,8 @@ public class BarrierUpgrade : Upgrade
 	{
 		base.Use();
 
+		//Manager.Instance.PlaySfx( "barrier", new Vector3( 230f * (Player.PlayerNum == 0 ? -1f : 1f), 0f, 0f ), pitch: Game.Random.Float(1.2f, 1.25f) );
+
 		BarrierAsync();
 	}
 
@@ -26,6 +28,7 @@ public class BarrierUpgrade : Upgrade
 		{
 			Player.IsBarrierActive = false;
 			Player.SetBarrierVisible( false );
+			//Manager.Instance.PlaySfx( "barrier", new Vector3( 230f * (Player.PlayerNum == 0 ? -1f : 1f), 0f, 0f ), pitch: Game.Random.Float( 0.85f, 0.9f ) );
 		}
 	}
 }

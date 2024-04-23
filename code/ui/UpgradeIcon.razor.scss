@@ -36,6 +36,7 @@ UpgradeIcon {
         pointer-events: none;
         //text-shadow: 2px 2px 2px black;
         text-stroke: 12px black;
+        white-space: nowrap;
     }
 
     .progress {

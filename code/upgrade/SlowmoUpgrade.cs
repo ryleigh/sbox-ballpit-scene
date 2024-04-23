@@ -3,6 +3,8 @@ using System;
 
 public class SlowmoUpgrade : Upgrade
 {
+	public override string SfxUse => "slowmo_use";
+
 	public override void Use()
 	{
 		base.Use();

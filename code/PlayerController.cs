@@ -68,8 +68,9 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public bool IsIntangible { get; set; }
 	private bool _isFading;
-	private bool _wasAlreadyFading;
+	private float _fadeStartOpacity;
 	private TimeSince _timeSinceFade;
+	private float _currRenderOpacity;
 
 	public bool IsBarrierActive { get; set; }
 
@@ -78,6 +79,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		base.OnAwake();
 
 		Ragdoll = Components.GetInDescendantsOrSelf<RagdollController>();
+		_currRenderOpacity = 1f;
 	}
 
 	protected override void OnStart()
@@ -86,7 +88,6 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		if ( IsProxy )
 			return;
-
 
 		Model.Transform.LocalScale = Vector3.One * SCALE_SPECTATOR;
 	}
@@ -682,20 +683,30 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Broadcast]
 	public void HitRerollButton(bool success)
 	{
-		var sfx = Sound.Play( "bubble", Transform.Position );
-		if ( sfx != null )
+		if(success)
 		{
-			sfx.Pitch = success ? 1f : 0.5f;
+			var sfx = Sound.Play( "reroll", Transform.Position );
+			if ( sfx != null )
+				sfx.Pitch = success ? Game.Random.Float( 1.2f, 1.25f ) : Game.Random.Float( 0.65f, 0.7f );
+		}
+		else
+		{
+			Sound.Play( "error1", Transform.Position );
 		}
 	}
 
 	[Broadcast]
 	public void BuyItem( bool success )
 	{
-		var sfx = Sound.Play( "bubble", Transform.Position );
-		if ( sfx != null )
+		if(success)
 		{
-			sfx.Pitch = success ? 1.2f : 0.4f;
+			var sfx = Sound.Play( "bubble", Transform.Position );
+			if ( sfx != null )
+				sfx.Pitch = 1.2f;
+		}
+		else
+		{
+			Sound.Play( "error1", Transform.Position );
 		}
 	}
 
@@ -907,6 +918,8 @@ public class PlayerController : Component, Component.ITriggerListener
 	{
 		foreach ( var renderer in Model.Components.GetAll<SkinnedModelRenderer>( FindMode.EnabledInSelfAndDescendants ) )
 			renderer.Tint = Color.White.WithAlpha( opacity );
+
+		_currRenderOpacity = opacity;
 	}
 
 	public Vector2 GetTotalVelocity()
@@ -927,7 +940,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		IsIntangible = true;
 		_isFlashing = false;
 
-		_wasAlreadyFading = _isFading;
+		_fadeStartOpacity = _currRenderOpacity;
 
 		_isFading = true;
 		_timeSinceFade = 0f;
@@ -935,9 +948,9 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	void HandleFading()
 	{
-		if(_timeSinceFade < 0.2f && !_wasAlreadyFading)
+		if(_timeSinceFade < 0.2f)
 		{
-			SetRenderOpacityRPC( Utils.Map( _timeSinceFade, 0, 0.2f, 1f, 0.2f ) );
+			SetRenderOpacityRPC( Utils.Map( _timeSinceFade, 0, 0.2f, _fadeStartOpacity, 0.2f ) );
 		}
 		else if(_timeSinceFade < 0.8f)
 		{
