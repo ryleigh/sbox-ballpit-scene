@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "5637a973-b0b0-43fe-9ffe-5389c28bab84",
+    "__guid": "6d5dd49e-7bb9-40ed-ad2d-48287733fdc2",
     "Name": "pickup_item",
     "Scale": "0.5,0.5,0.5",
     "Tags": "pickup_item",
@@ -9,15 +9,15 @@
     "Components": [
       {
         "__type": "Sandbox.SphereCollider",
-        "__guid": "90be6a13-544d-4ec9-b83e-5ac385d90c3d",
+        "__guid": "59a4a526-6824-4f26-b962-1d6f9d6db4dc",
         "Center": "0,0,0",
         "IsTrigger": true,
-        "Radius": 27,
+        "Radius": 24,
         "Static": false
       },
       {
         "__type": "PickupItem",
-        "__guid": "05f79967-202e-49ce-b4c5-58c21da372b1"
+        "__guid": "ef05a394-ff5f-434a-85aa-45245ca3a017"
       }
     ],
     "Children": []

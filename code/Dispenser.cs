@@ -65,8 +65,9 @@ public sealed class Dispenser : Component
 				{
 					var ballSpeed =
 						Utils.Map( Manager.Instance.RoundNum, 1, 16, 75f, 100f, EasingType.Linear )
-						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, Utils.Map( Manager.Instance.RoundNum, 1, 16, 250f, 140f ), 1f, Utils.Map( Manager.Instance.RoundNum, 1, 32, 1.5f, 4f ) )
-						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, 720f, 1f, 2.2f, EasingType.SineIn );
+						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, Utils.Map( Manager.Instance.RoundNum, 1, 16, 250f, 140f ), 1f, Utils.Map( Manager.Instance.RoundNum, 1, 32, 1.5f, 3.5f ) )
+						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, 360f, 1f, 2.2f, EasingType.SineIn )
+						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, 120f, 1f, 1.25f, EasingType.Linear );
 
 					int playerNum;
 					switch(_dispenserPattern)

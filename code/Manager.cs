@@ -188,7 +188,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Repel, numLevels: 1, price: 0 );
 
-		StartBuyPhase();
+		//StartBuyPhase();
 		//StartNewMatch();
 		//StartNewRound();
 	}
@@ -208,43 +208,43 @@ public sealed class Manager : Component, Component.INetworkListener
 		clothing.Deserialize( channel.GetUserData( "avatar" ) );
 		clothing.Apply( playerObj.Components.GetInChildren<SkinnedModelRenderer>() );
 
-		//player.IsSpectator = true;
+		player.IsSpectator = true;
 
-		if ( !DoesPlayerExist0 )
-		{
-			Player0 = player;
-			PlayerId0 = player.GameObject.Id;
-			DoesPlayerExist0 = true;
-			player.PlayerNum = 0;
-		}
-		else if ( !DoesPlayerExist1 )
-		{
-			Player1 = player;
-			PlayerId1 = player.GameObject.Id;
-			DoesPlayerExist1 = true;
-			player.PlayerNum = 1;
-		}
-		else
-		{
-			player.IsSpectator = true;
-		}
+		//if ( !DoesPlayerExist0 )
+		//{
+		//	Player0 = player;
+		//	PlayerId0 = player.GameObject.Id;
+		//	DoesPlayerExist0 = true;
+		//	player.PlayerNum = 0;
+		//}
+		//else if ( !DoesPlayerExist1 )
+		//{
+		//	Player1 = player;
+		//	PlayerId1 = player.GameObject.Id;
+		//	DoesPlayerExist1 = true;
+		//	player.PlayerNum = 1;
+		//}
+		//else
+		//{
+		//	player.IsSpectator = true;
+		//}
 
 		player.Transform.Position = player.GetClosestSpectatorPos(new Vector3( Game.Random.Float( -220f, 220f ), Game.Random.Float( -100f, 100f ), 0f ));
 
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
 
-		player.AdjustUpgradeLevel( UpgradeType.Scatter, 6 );
-		player.AdjustUpgradeLevel( UpgradeType.Replace, 6 );
-		player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
-		player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
-		player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
-		player.AdjustUpgradeLevel( UpgradeType.Volley, 4 );
-		player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
-		player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
-		player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
+		//player.AdjustUpgradeLevel( UpgradeType.Scatter, 6 );
+		//player.AdjustUpgradeLevel( UpgradeType.Replace, 6 );
+		//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
+		//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
+		//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
+		//player.AdjustUpgradeLevel( UpgradeType.Volley, 4 );
+		//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
+		//player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
+		//player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
 		//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );
-		player.AdjustUpgradeLevel( UpgradeType.Dash, 8 );
+		//player.AdjustUpgradeLevel( UpgradeType.Dash, 8 );
 		//player.AdjustUpgradeLevel( UpgradeType.Blink, 2 );
 		//player.AdjustUpgradeLevel( UpgradeType.Redirect, 2 );
 		//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 2 );
@@ -254,15 +254,15 @@ public sealed class Manager : Component, Component.INetworkListener
 		//	CopterGameManager.Instance.HostConnected();
 		//}
 
-		SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
-		SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
-		SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
-		SpawnMoneyTossed( channel, numLevels: 10, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * -1f + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
-		SpawnMoneyTossed( channel, numLevels: 3, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * -1f + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
-		SpawnMoneyTossed( channel, numLevels: 1, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * -1f + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
-		SpawnPickupItem( channel, GetRandomPickupType(), Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+		//SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+		//SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+		//SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+		//SpawnMoneyTossed( channel, numLevels: 10, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * -1f + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
+		//SpawnMoneyTossed( channel, numLevels: 3, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * -1f + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
+		//SpawnMoneyTossed( channel, numLevels: 1, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * -1f + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
+		//SpawnPickupItem( channel, GetRandomPickupType(), Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 
-		SpawnScoreText( 0, 0 );
+		//SpawnScoreText( 0, 0 );
 	}
 
 	protected override void OnUpdate()
@@ -278,7 +278,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 
 		//Gizmo.Draw.Color = Color.White;
-		//Gizmo.Draw.Text( $"RealTime.Now: {RealTime.Now}", new global::Transform( Vector3.Zero ) );
+		//Gizmo.Draw.Text( $"{_timeSincePickupSpawn} / {_pickupSpawnDelay}", new global::Transform( Vector3.Zero ) );
 
 		SlidingGround.Transform.Position = new Vector3( CenterLineOffset, 0f, 0f );
 
@@ -322,26 +322,7 @@ public sealed class Manager : Component, Component.INetworkListener
 				}
 				break;
 			case GamePhase.RoundActive:
-				// pickups
-				if ( _timeSincePickupSpawn > _pickupSpawnDelay )
-				{
-					var connection = GetConnection( playerNum: Game.Random.Int( 0, 1 ) );
-					if ( connection != null )
-					{
-						if ( Game.Random.Float( 0f, 1f ) < 0.55f )
-						{
-							SpawnPickupItem( connection, GetRandomPickupType(), 1, startAtTop: Game.Random.Int( 0, 1 ) == 0 );
-						}
-						else
-						{
-							SpawnMoneySineWave( connection, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
-						}
-
-						_timeSincePickupSpawn = 0f;
-						_pickupSpawnDelay = Game.Random.Float( 6.5f, 32f ) * Utils.Map( TimeSincePhaseChange, 0f, 320f, 1f, 0.4f, EasingType.SineIn );
-					}
-				}
-
+				HandlePickups();
 				break;
 			case GamePhase.AfterRoundDelay:
 				TrophyIndicatorOpacity = Utils.Map( Utils.MapReturn( TimeSincePhaseChange, 0f, BETWEEN_ROUNDS_DELAY, 0f, 1f, EasingType.Linear ), 0f, 1f, 0f, 1f, EasingType.SineOut );
@@ -514,7 +495,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		GamePhase = GamePhase.RoundActive;
 		TimeSincePhaseChange = 0f;
 		_timeSincePickupSpawn = 0f;
-		_pickupSpawnDelay = Game.Random.Float( 2.5f, 20f );
+		_pickupSpawnDelay = Game.Random.Float( 8f, 18f ) * Utils.Map(RoundNum, 1, 20, 1f, 0.4f);
 
 		Player0?.ResetRerollPrice();
 		Player1?.ResetRerollPrice();
@@ -701,7 +682,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public void SpawnPickupItem( Connection connection, UpgradeType upgradeType, int numLevels, bool startAtTop )
 	{
-		var pos = new Vector2( 0f, 150f * (startAtTop ? 1f : -1f) );
+		var pos = new Vector2( 0f, 130f * (startAtTop ? 1f : -1f) );
 
 		var pickupItemObj = PickupItemPrefab.Clone( new Vector3( pos.x, pos.y, 120f * (startAtTop ? 1f : -1f) ) );
 		pickupItemObj.NetworkSpawn( connection );
@@ -710,7 +691,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public void SpawnMoneySineWave( Connection connection, int numLevels, bool startAtTop )
 	{
-		var pos = new Vector2( 0f, 150f * (startAtTop ? 1f : -1f) );
+		var pos = new Vector2( 0f, 130f * (startAtTop ? 1f : -1f) );
 
 		var moneyPickupObj = MoneyPickupPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
 		moneyPickupObj.NetworkSpawn( connection );
@@ -743,6 +724,29 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		var fallingShadowObj = FallingShadowPrefab.Clone( new Vector3( pos.x, pos.y, FallingShadow.HEIGHT ) );
 		fallingShadowObj.Components.Get<FallingShadow>().Scale = scale;
+	}
+
+	void HandlePickups()
+	{
+		if ( _timeSincePickupSpawn > _pickupSpawnDelay )
+		{
+			var playerNum = Game.Random.Int( 0, 1 );
+			var connection = GetConnection( playerNum );
+
+			if(connection == null)
+				connection = GetConnection( Globals.GetOpponentPlayerNum(playerNum) );
+
+			if ( connection != null )
+			{
+				if ( Game.Random.Float( 0f, 1f ) < Utils.Map( TimeSincePhaseChange, 0f, 60f, 0.25f, 0.65f, EasingType.SineOut ) * Utils.Map(RoundNum, 1, 12, 1f, 1.2f) )
+					SpawnPickupItem( connection, GetRandomPickupType(), 1, startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+				else
+					SpawnMoneySineWave( connection, Game.Random.Int( 1, MathX.FloorToInt(Utils.Map(RoundNum, 0, 20, 2.2f, 10f, EasingType.QuadIn)) ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
+
+				_timeSincePickupSpawn = 0f;
+				_pickupSpawnDelay = Game.Random.Float( 10f, 36f ) * Utils.Map( TimeSincePhaseChange, 0f, 320f, 1f, 0.4f, EasingType.SineIn ) * Utils.Map( RoundNum, 1, 30, 1f, 0.5f );
+			}
+		}
 	}
 
 	[Broadcast]
@@ -910,9 +914,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		var player = playerObj.Components.Get<PlayerController>();
 		player.SetPlayerNum( playerNum );
 		player.SetSpectator( false );
-		player.PassiveUpgrades.Clear();
-		player.ActiveUpgrades.Clear();
-		player.SelectedUpgradeType = UpgradeType.None;
+
+		player.ClearStats();
 
 		if ( playerNum == 0 )
 		{
@@ -1177,7 +1180,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( localPlayer.PlayerNum == 0 )
 			SpawnTutorialText( new Vector3( -120f, 40f, 180f ), "BUMP", $"{blue_circle}", 4f );
 		else
-			SpawnTutorialText( new Vector3( 120f, -40f, 180f ), "BUMP", $"{green_circle}", 4f );
+			SpawnTutorialText( new Vector3( 120f, 40f, 180f ), "BUMP", $"{green_circle}", 4f );
 			
 
 		await Task.Delay( 1200 );
@@ -1521,12 +1524,18 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		Dictionary<UpgradeType, float> weights = new Dictionary<UpgradeType, float>
 		{
-			{ UpgradeType.Blink, 10f },
-			{ UpgradeType.Dash, 12f },
-			{ UpgradeType.Volley, 4f },
-			{ UpgradeType.Repel, 5f },
+			{ UpgradeType.Blink, 10f * Utils.Map(TimeSincePhaseChange, 0f, 140f, 1f, 0.5f) * Utils.Map(RoundNum, 1, 30, 1f, 0.8f) },
+			{ UpgradeType.Dash, 12f * Utils.Map(TimeSincePhaseChange, 0f, 120f, 1f, 0.4f) * Utils.Map(RoundNum, 1, 20, 1f, 0.5f) },
+			{ UpgradeType.Volley, 4f * Utils.Map(TimeSincePhaseChange, 0f, 120f, 1f, 2f) * Utils.Map(RoundNum, 1, 22, 1f, 2f) },
+			{ UpgradeType.Repel, 5f * Utils.Map(TimeSincePhaseChange, 0f, 120f, 1f, 0.4f) * Utils.Map(RoundNum, 1, 20, 1f, 0.5f) },
 			{ UpgradeType.Gather, 3f },
-			{ UpgradeType.Slowmo, 5f },
+			{ UpgradeType.Slowmo, 5f * Utils.Map(TimeSincePhaseChange, 0f, 120f, 1f, 0.8f) * Utils.Map(RoundNum, 1, 22, 1f, 0.7f) },
+			{ UpgradeType.Scatter, RoundNum < 2 ? 0f : 4f * Utils.Map(TimeSincePhaseChange, 0f, 140f, 0f, 1.5f) * Utils.Map(RoundNum, 1, 22, 0f, 3f) },
+			{ UpgradeType.Barrier, RoundNum < 2 ? 0f : 4f * Utils.Map(TimeSincePhaseChange, 0f, 140f, 0f, 1.5f) },
+			{ UpgradeType.Airstrike, RoundNum < 2 ? 0f : 3f * Utils.Map(TimeSincePhaseChange, 0f, 140f, 0f, 1f) * Utils.Map(RoundNum, 1, 20, 0f, 3f) },
+			{ UpgradeType.Replace, RoundNum < 3 ? 0f : 3f * Utils.Map(TimeSincePhaseChange, 0f, 150f, 0f, 1f) * Utils.Map(RoundNum, 1, 20, 0f, 2.5f) },
+			{ UpgradeType.Redirect, RoundNum < 3 ? 0f : 4f * Utils.Map(TimeSincePhaseChange, 0f, 130f, 0f, 1.2f) * Utils.Map(RoundNum, 1, 30, 0f, 4f) },
+			{ UpgradeType.Converge, RoundNum < 4 ? 0f : 4f * Utils.Map(TimeSincePhaseChange, 0f, 140f, 0f, 1.2f) * Utils.Map(RoundNum, 1, 20, 0f, 4f) },
 		};
 
 		var total = 0f;

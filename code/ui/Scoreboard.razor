@@ -33,10 +33,9 @@
 				<div class="name">Name</div>
 			</div>
 			<div style="justify-content: flex-end; flex-grow: 1;">
-				<div class="stat_wins" style="padding-right: 30px;">Wins</div>
+				<div class="stat" style="padding-right: 30px;">Wins</div>
 				<div class="stat" style="padding-right: 40px;">Losses</div>
-				<div class="stat" style="padding-right: 52px;">Time</div>
-				<div class="stat" style="padding-right: 0px;">Ping</div>
+				<div class="stat" style="padding-right: 0px;">Time</div>
 			</div>
 		</div>
 
@@ -64,18 +63,15 @@
 					}
 				</div>
 				<div class="stat_container">
-					<div class="stat_kills">@($"{player.NumMatchWins}")</div>
+					<div class="stat" style="color:@((player.NumMatchWins > 0 ? new Color(1f, 1f, 0.6f) : new Color(0.7f, 0.7f, 0.7f)).Rgba);">@($"{player.NumMatchWins}")</div>
 					<div style="font-family: W10Emoji; font-size:18px;">@("🏆")</div>
 				</div>
 				<div class="stat_container">
-					<div class="stat">@($"{player.NumMatchLosses}")</div>
+						<div class="stat" style="color:@((player.NumMatchLosses > 0 ? new Color(1f, 0.7f, 0.7f) : new Color(0.7f, 0.7f, 0.7f)).Rgba);">@($"{player.NumMatchLosses}")</div>
 					<div style="font-family: W10Emoji; font-size:18px;">@("💀")</div>
 				</div>
 				<div class="stat_container">
 					<div class="stat" style="opacity:0.3;">@GetTime(connection)</div>
-				</div>
-				<div class="stat_container">
-					<div class="stat" style="opacity:0.3;">@(MathF.Round(connection.Ping))</div>
 				</div>
 			</div>
 

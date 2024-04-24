@@ -799,6 +799,8 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Broadcast]
 	public void ClearStats()
 	{
+		LocalUpgrades.Clear();
+
 		if ( IsProxy )
 			return;
 
@@ -813,8 +815,9 @@ public class PlayerController : Component, Component.ITriggerListener
 		IsIntangible = false;
 		NumShopItems = 4;
 		CurrRerollPrice = 1;
+		SelectedUpgradeType = UpgradeType.None;
 
-		Money = 5;
+		//Money = 5;
 	}
 
 	[Broadcast]

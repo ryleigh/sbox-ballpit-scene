@@ -129,6 +129,7 @@ Scoreboard {
 				flex-grow: 1;
 				font-family: "Proxima Soft";
 				font-weight: 800;
+				text-stroke: 5px black;
 			}
 
 			> .stat_container {
@@ -138,11 +139,6 @@ Scoreboard {
 
 			> .stat {
 				opacity: 0.7;
-			}
-
-			> .stat_wins {
-				opacity: 1;
-				font-weight: bold;
 			}
 
 			> * {
@@ -161,7 +157,6 @@ Scoreboard {
 		.me {
 			//color: #88ff88ff;
 			//font-weight: 600;
-			text-stroke: 5px black;
 		}
 	}
 

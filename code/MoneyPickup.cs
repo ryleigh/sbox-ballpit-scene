@@ -12,6 +12,9 @@ public class MoneyPickup : Component
 	private float _frequency;
 	private float _amplitude;
 	private bool _startAtTop;
+	private float _speed;
+	private float _startAmpModifier;
+	private float _endAmpModifier;
 
 	// Tossed
 	private Vector2 _startPos;
@@ -52,15 +55,24 @@ public class MoneyPickup : Component
 
 		NumLevels = numLevels;
 
-		_frequency = Game.Random.Float( 1.5f, 2.5f ) * Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, 120f, 0.95f, 1.4f );
-		_amplitude = Game.Random.Float( 70f, 135f ) * (Game.Random.Int( 0, 1 ) == 0 ? 1f : -1f);
-		_startAtTop = startAtTop;
-
 		CanBePickedUp = true;
 		IsFlying = true;
 
 		BobSpeed = Game.Random.Float( 4f, 4.5f );
 		_timingOffset = Game.Random.Float( 0f, 5f );
+
+		if ( IsProxy )
+			return;
+
+		_frequency = Game.Random.Float( 1.5f, 2.5f ) * Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, 120f, 0.95f, 1.4f );
+		_amplitude = Game.Random.Float( 70f, 135f ) * (Game.Random.Int( 0, 1 ) == 0 ? 1f : -1f);
+		_startAtTop = startAtTop;
+
+		_speed = Game.Random.Float( 20f, 30f ) * Utils.Map( Manager.Instance.RoundNum, 1, 20, 1f, 1.5f );
+
+		var totalAmpMod = Game.Random.Float( 1.9f, 2.4f );
+		_startAmpModifier = Game.Random.Float( 0.3f, 1.7f );
+		_endAmpModifier = totalAmpMod - _startAmpModifier;
 	}
 
 	[Broadcast]
@@ -148,7 +160,10 @@ public class MoneyPickup : Component
 		switch(MoneyMoveMode)
 		{
 			case MoneyMoveMode.SineWave:
-				Transform.Position = new Vector3( Utils.FastSin( Time.Now * _frequency ) * _amplitude, Transform.Position.y - 25f * (_startAtTop ? 1f : -1f) * Time.Delta, 0f );
+				var progress = _startAtTop ? Utils.Map( Transform.Position.y, 120f, -120f, 0f, 1f ) : Utils.Map( Transform.Position.y, -120f, 120f, 0f, 1f );
+				var ampModifier = Utils.Map( progress, 0f, 1f, _startAmpModifier, _endAmpModifier );
+
+				Transform.Position = new Vector3( Utils.FastSin( Time.Now * _frequency ) * _amplitude * ampModifier, Transform.Position.y - _speed * (_startAtTop ? 1f : -1f) * Time.Delta, 0f );
 
 				if ( (_startAtTop && Transform.Position.y < -120f) || (!_startAtTop && Transform.Position.y > 120f) )
 					GameObject.Destroy();

@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "820283b8-3725-4da8-9c2b-92da36e4e663",
+    "__guid": "39e2c94c-59d1-457b-9cba-3b6bddbbc74b",
     "Name": "ball",
     "Scale": "0.25,0.25,0.25",
     "Tags": "ball",
@@ -8,16 +8,16 @@
     "NetworkMode": 2,
     "Components": [
       {
-        "__type": "ModelRenderer",
-        "__guid": "455c6f6b-47c8-4451-ba1a-1072b714c359",
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "71e51edf-2abb-493d-aa99-03c005047d6d",
         "BodyGroups": 18446744073709551615,
         "Model": "models/dev/sphere.vmdl",
         "RenderType": "On",
         "Tint": "0,2,0,1"
       },
       {
-        "__type": "SphereCollider",
-        "__guid": "59ef4158-976d-4b68-80ca-4ebe8b9c7d9f",
+        "__type": "Sandbox.SphereCollider",
+        "__guid": "90331257-2076-42c7-9989-fda9a2544e93",
         "__enabled": false,
         "Center": "0,0,0",
         "IsTrigger": true,
@@ -26,18 +26,18 @@
       },
       {
         "__type": "Ball",
-        "__guid": "7f3ea986-e74e-451b-abd5-2dad3c5831e2",
+        "__guid": "f381bb56-8e7e-4bc2-ab0e-4fc1353a1781",
         "Color": "0,0,0,0"
       },
       {
-        "__type": "HighlightOutline",
-        "__guid": "7e66cbcf-1253-498d-98b2-c276096a0045",
+        "__type": "Sandbox.HighlightOutline",
+        "__guid": "f40c74d2-985e-4270-a749-7c53b75ea5f9",
         "__enabled": false,
-        "Color": "1,1,1,1",
+        "Color": "0,0,0,1",
         "InsideColor": "0,0,0,0",
         "InsideObscuredColor": "0,0,0,0",
         "ObscuredColor": "0,0,0,0",
-        "Width": 0.25
+        "Width": 3
       }
     ],
     "Children": []
@@ -45,5 +45,7 @@
   "ShowInMenu": false,
   "MenuPath": null,
   "MenuIcon": null,
+  "ResourceVersion": 1,
+  "__version": 1,
   "__references": []
 }

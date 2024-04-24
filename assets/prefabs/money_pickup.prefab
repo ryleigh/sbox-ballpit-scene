@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "67344c81-2351-4810-b092-df8ab3c95d49",
+    "__guid": "b93dd52f-9027-4933-a532-3fc31e14d4d3",
     "Name": "money_pickup",
     "Scale": "0.5,0.5,0.5",
     "Tags": "money_pickup",
@@ -9,15 +9,15 @@
     "Components": [
       {
         "__type": "Sandbox.SphereCollider",
-        "__guid": "9a49c513-0e0f-48a0-8da0-0fa10db8a4f4",
+        "__guid": "07412508-97ae-408a-908c-08d5e2c77637",
         "Center": "0,0,0",
         "IsTrigger": true,
-        "Radius": 27,
+        "Radius": 24,
         "Static": false
       },
       {
         "__type": "MoneyPickup",
-        "__guid": "ed5f1edd-6641-4367-8473-68b3a9428867"
+        "__guid": "4d611cb6-4483-4a33-a74e-eeb2f29732c8"
       }
     ],
     "Children": []
