@@ -63,15 +63,15 @@
 					}
 				</div>
 				<div class="stat_container">
-					<div class="stat" style="color:@((player.NumMatchWins > 0 ? new Color(1f, 1f, 0.6f) : new Color(0.7f, 0.7f, 0.7f)).Rgba);">@($"{player.NumMatchWins}")</div>
-					<div style="font-family: W10Emoji; font-size:18px;">@("🏆")</div>
+					<div class="stat" style="color:@((player.NumMatchWins > 0 ? new Color(1f, 1f, 0.6f) : new Color(0.7f, 0.7f, 0.7f)).Rgba); opacity:@(player.NumMatchWins > 0 ? 0.85f : 0.5f);">@($"{player.NumMatchWins}")</div>
+					<div style="font-family: W10Emoji; font-size:18px; opacity:@(player.NumMatchWins > 0 ? 0.85f : 0.5f);">@("🏆")</div>
 				</div>
 				<div class="stat_container">
-						<div class="stat" style="color:@((player.NumMatchLosses > 0 ? new Color(1f, 0.7f, 0.7f) : new Color(0.7f, 0.7f, 0.7f)).Rgba);">@($"{player.NumMatchLosses}")</div>
-					<div style="font-family: W10Emoji; font-size:18px;">@("💀")</div>
+					<div class="stat" style="color:@((player.NumMatchLosses > 0 ? new Color(1f, 0.6f, 0.6f) : new Color(0.7f, 0.7f, 0.7f)).Rgba); opacity:@(player.NumMatchLosses > 0 ? 0.85f : 0.5f);">@($"{player.NumMatchLosses}")</div>
+					<div style="font-family: W10Emoji; font-size:18px; opacity:@(player.NumMatchLosses > 0 ? 0.85f : 0.5f);">@("💀")</div>
 				</div>
 				<div class="stat_container">
-					<div class="stat" style="opacity:0.3;">@GetTime(connection)</div>
+					<div class="stat" style="opacity:0.2;">@GetTime(connection)</div>
 				</div>
 			</div>
 
@@ -204,7 +204,7 @@
 	string GetTime(Connection c)
 	{
 		TimeSpan time = DateTime.UtcNow - c.ConnectionTime;
-		return time.TotalSeconds > 3600 ? time.ToString(@"hh\:mm\:ss") : time.ToString(@"mm\:ss");
+		return time.TotalSeconds > 3600 ? time.ToString(@"h\:m\:ss") : time.ToString(@"m\:ss");
 	}
 
 	protected override void OnUpdate()
