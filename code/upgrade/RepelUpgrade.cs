@@ -11,6 +11,8 @@ public class RepelUpgrade : Upgrade
 
 		Manager.Instance.SpawnRepelEffect((Vector2)Player.Transform.Position);
 
+		Manager.Instance.CameraController.Shake( 1.4f, Game.Random.Float( 0.1f, 0.15f ) );
+
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )
 		{
 			if ( ball.IsDespawning )

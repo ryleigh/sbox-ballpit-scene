@@ -321,6 +321,10 @@
           "__type": "Sandbox.Highlight",
           "__guid": "36816886-1e41-4675-80ed-da637c23aa9f",
           "__enabled": false
+        },
+        {
+          "__type": "CameraController",
+          "__guid": "b8e573ab-9307-47e2-b1b3-6021b710dfe7"
         }
       ]
     },
@@ -1117,7 +1121,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-24T22:45:03.3559108-07:00",
+  "LastSaved": "2024-04-24T23:01:25.3027233-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

@@ -92,6 +92,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Sync] public string WinningPlayerName { get; set; }
 
 	public CameraComponent Camera { get; private set; }
+	public CameraController CameraController { get; private set; }
 	public Vector3 OriginalCameraPos { get; private set; }
 	public Rotation OriginalCameraRot { get; private set; }
 
@@ -159,6 +160,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		OriginalCameraPos = Camera.Transform.Position;
 		OriginalCameraRot = Camera.Transform.Rotation;
 
+		CameraController = Scene.GetAllComponents<CameraController>().FirstOrDefault();
+
 		Dispenser = Scene.GetAllComponents<Dispenser>().FirstOrDefault();
 
 		_sideWallXScale = WallLeft.Transform.Scale.x;
@@ -188,7 +191,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
 		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Repel, numLevels: 1, price: 0 );
 
-		//StartBuyPhase();
+		StartBuyPhase();
 		//StartNewMatch();
 		//StartNewRound();
 	}
@@ -208,26 +211,26 @@ public sealed class Manager : Component, Component.INetworkListener
 		clothing.Deserialize( channel.GetUserData( "avatar" ) );
 		clothing.Apply( playerObj.Components.GetInChildren<SkinnedModelRenderer>() );
 
-		player.IsSpectator = true;
+		//player.IsSpectator = true;
 
-		//if ( !DoesPlayerExist0 )
-		//{
-		//	Player0 = player;
-		//	PlayerId0 = player.GameObject.Id;
-		//	DoesPlayerExist0 = true;
-		//	player.PlayerNum = 0;
-		//}
-		//else if ( !DoesPlayerExist1 )
-		//{
-		//	Player1 = player;
-		//	PlayerId1 = player.GameObject.Id;
-		//	DoesPlayerExist1 = true;
-		//	player.PlayerNum = 1;
-		//}
-		//else
-		//{
-		//	player.IsSpectator = true;
-		//}
+		if ( !DoesPlayerExist0 )
+		{
+			Player0 = player;
+			PlayerId0 = player.GameObject.Id;
+			DoesPlayerExist0 = true;
+			player.PlayerNum = 0;
+		}
+		else if ( !DoesPlayerExist1 )
+		{
+			Player1 = player;
+			PlayerId1 = player.GameObject.Id;
+			DoesPlayerExist1 = true;
+			player.PlayerNum = 1;
+		}
+		else
+		{
+			player.IsSpectator = true;
+		}
 
 		player.Transform.Position = player.GetClosestSpectatorPos(new Vector3( Game.Random.Float( -220f, 220f ), Game.Random.Float( 50f, 100f ), 0f ));
 
@@ -237,8 +240,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		//player.AdjustUpgradeLevel( UpgradeType.Scatter, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Replace, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
-		//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
-		//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
+		player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
+		player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Volley, 4 );
 		//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );

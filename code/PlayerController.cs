@@ -522,6 +522,8 @@ public class PlayerController : Component, Component.ITriggerListener
 			Sound.Play( "hurt", Transform.Position.WithZ( Globals.SFX_HEIGHT ) );
 		}
 
+		Manager.Instance.CameraController.Shake( Utils.Map( HP, MaxHP, 1, 1f, 1.5f ), Game.Random.Float( 0.33f, 0.5f ));
+
 		if (IsProxy)
 			return;
 
