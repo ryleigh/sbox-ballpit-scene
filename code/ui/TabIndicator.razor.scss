@@ -17,6 +17,7 @@ TabIndicator {
     font-weight: 700;
     border-radius: 6px;
     pointer-events: all;
+    z-index: 30;
 
     .title {
         pointer-events: none;

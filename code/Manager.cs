@@ -137,6 +137,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public bool IsMouseDown { get; set; }
 	public bool IsTabIndicatorHovered { get; set; }
+	public bool ShouldBounceTabIndicator { get; set; }
 
 	private float _sideWallXScale;
 	public TimeSince TimeSinceLeftWallRebound { get; set; }
@@ -178,6 +179,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		if ( Networking.IsHost )
 			Network.TakeOwnership();
+
+		ShouldBounceTabIndicator = true;
 
 		if ( IsProxy )
 			return;
@@ -329,6 +332,9 @@ public sealed class Manager : Component, Component.INetworkListener
 			IsMouseDown = true;
 		else if ( Input.Released( "attack1" ) )
 			IsMouseDown = false;
+
+		if ( Input.Down( "Score" ) )
+			ShouldBounceTabIndicator = false;
 
 		if ( IsProxy )
 			return;
