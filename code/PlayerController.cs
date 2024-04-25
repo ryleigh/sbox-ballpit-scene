@@ -416,7 +416,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	public void HitOpponentBall( Ball ball )
 	{
 		ball.HitPlayer( GameObject.Id );
-		TakeDamage( ball.Velocity * Game.Random.Float(0.015f, 0.032f) );
+		TakeDamage( ball.Velocity * Game.Random.Float(0.015f, 0.032f), ((Vector2)(Transform.Position - ball.Transform.Position)).Normal * ball.Velocity.Length * Game.Random.Float( 0.015f, 0.032f ) );
 	}
 
 	public void OnTriggerEnter( Collider other )
@@ -491,7 +491,7 @@ public class PlayerController : Component, Component.ITriggerListener
 			{
 				var dir = (Transform.Position - other.Transform.Position).Normal;
 				var force = (Vector2)dir * Game.Random.Float( 7f, 12f );
-				TakeDamage( force );
+				TakeDamage( force, force );
 
 				explosion.DealtDamage = true;
 			}
@@ -508,7 +508,7 @@ public class PlayerController : Component, Component.ITriggerListener
 	}
 
 	[Broadcast]
-	public void TakeDamage( Vector2 force )
+	public void TakeDamage( Vector2 forceVel, Vector2 forceRepel )
 	{
 		if ( IsDead || Manager.Instance.GamePhase != GamePhase.RoundActive )
 			return;
@@ -531,10 +531,11 @@ public class PlayerController : Component, Component.ITriggerListener
 
 		if ( HP <= 0 )
 		{
-			Die( force + Velocity * Game.Random.Float(0f, 0.025f) );
+			Die( forceVel + Velocity * Game.Random.Float(0f, 0.025f) );
 		}
 		else
 		{
+			Velocity += Vector2.Lerp( forceVel, forceRepel, Game.Random.Float(0.25f, 1f) ) * 100f;
 			Manager.Instance.PlayerHit(GameObject.Id);
 			StartInvulnerability();
 		}

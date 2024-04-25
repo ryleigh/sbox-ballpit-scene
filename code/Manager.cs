@@ -229,7 +229,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		//	player.IsSpectator = true;
 		//}
 
-		player.Transform.Position = player.GetClosestSpectatorPos(new Vector3( Game.Random.Float( -220f, 220f ), Game.Random.Float( -100f, 100f ), 0f ));
+		player.Transform.Position = player.GetClosestSpectatorPos(new Vector3( Game.Random.Float( -220f, 220f ), Game.Random.Float( 50f, 100f ), 0f ));
 
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
@@ -495,7 +495,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		GamePhase = GamePhase.RoundActive;
 		TimeSincePhaseChange = 0f;
 		_timeSincePickupSpawn = 0f;
-		_pickupSpawnDelay = Game.Random.Float( 8f, 18f ) * Utils.Map(RoundNum, 1, 20, 1f, 0.4f);
+		_pickupSpawnDelay = Game.Random.Float( 14f, 22f ) * Utils.Map(RoundNum, 1, 20, 1f, 0.4f);
 
 		Player0?.ResetRerollPrice();
 		Player1?.ResetRerollPrice();

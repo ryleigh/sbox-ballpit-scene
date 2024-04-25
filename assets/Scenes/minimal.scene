@@ -139,13 +139,12 @@
       "__guid": "00344a8c-fa5e-45ae-b12a-10bb781a1dc3",
       "Name": "2D Skybox",
       "Tags": "skybox",
-      "Enabled": true,
       "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.SkyBox2D",
           "__guid": "c54fa58d-597f-45b8-9b68-fbd8520166d5",
-          "SkyMaterial": "materials/skybox/light_test_sky_sunny03.vmat",
+          "SkyMaterial": "materials/models/solids/black.vmat",
           "Tint": "1,1,1,1"
         },
         {
@@ -1118,7 +1117,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-23T03:40:27.4204617-07:00",
+  "LastSaved": "2024-04-24T22:45:03.3559108-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

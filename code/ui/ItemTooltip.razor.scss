@@ -36,6 +36,7 @@ ItemTooltip {
     font-family: "Proxima Soft";
     font-weight: 800;
     animation: scaleBounce 0.25s ease-out forwards;
+    z-index: 20;
 
     .top_row {
         flex-direction: row;
