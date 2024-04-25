@@ -9,7 +9,6 @@ public class PlayerController : Component, Component.ITriggerListener
 {
 	[Property] public CitizenAnimationHelper Animator { get; set; }
 	[Property] public GameObject Model { get; set; }
-	//[Property] public GameObject InnerHitbox { get; set; }
 	public RagdollController Ragdoll { get; private set; }
 
 	[Sync] public int PlayerNum { get; set; } = 0;
@@ -19,7 +18,6 @@ public class PlayerController : Component, Component.ITriggerListener
 	[Sync] public float FacingAngle { get; set; }
 
 	public Vector2 Pos2D => (Vector2)Transform.Position;
-	//public Vector2 ForwardVec2D => PlayerNum == 0 ? new Vector2( 1f, 0f ) : new Vector2( -1f, 0f );
 
 	[Sync] public bool IsDead { get; set; }
 	[Sync] public bool IsJumping { get; set; }
@@ -94,36 +92,13 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	protected override void OnUpdate()
 	{
-		//using ( Gizmo.Scope() )
-		//{
-		//	Gizmo.Draw.Color = Color.Red;
-		//	Gizmo.Draw.LineSphere( Transform.Position.WithZ(100f), RadiusSmall );
-
-		//	Gizmo.Draw.Color = Color.Blue;
-		//	Gizmo.Draw.LineSphere( Transform.Position.WithZ( 100f ), RadiusLarge );
-
-		//	foreach ( var ball in Scene.GetAllComponents<Ball>() )
-		//	{
-		//		Gizmo.Draw.Color = Color.White;
-		//		Gizmo.Draw.LineSphere( ball.Transform.Position.WithZ( 100f ), ball.Radius );
-		//	}
-		//}
-
 		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
 		//Gizmo.Draw.Text( $"{str}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity );
 
 		if(!IsJumping)
-		{
 			Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( FacingAngle ), 5f * Time.Delta );
-
-			//if ( IsSpectator )
-			//	Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( Utils.VectorToDegrees( Velocity ) ), Velocity.Length * 0.2f * Time.Delta );
-			//else
-			//	Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( Utils.VectorToDegrees( Manager.Instance.MouseWorldPos - (Vector2)Transform.Position ) ), 5f * Time.Delta );
-			//Model.Transform.LocalRotation = Rotation.Lerp( Model.Transform.LocalRotation, Rotation.FromYaw( PlayerNum == 0 ? 0f : 180f ), 5f * Time.Delta );
-		}
 
 		if( _isFlashing && _timeSinceFlashToggle > 0.04f )
 		{
@@ -141,9 +116,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		FacingAngle = Utils.VectorToDegrees( Manager.Instance.MouseWorldPos - (Vector2)Transform.Position );
 
 		if (IsInvulnerable && _timeSinceInvulnerableStart > InvulnerableTime)
-		{
 			EndInvulnerability();
-		}
 
 		if(IsJumping)
 		{
@@ -217,7 +190,6 @@ public class PlayerController : Component, Component.ITriggerListener
 						{
 							var dir = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal;
 
-							//Log.Info( $"ball.Velocity: {ball.Velocity.Length} player.Velocity: {Velocity.Length}" );
 							var currVel = ball.Velocity.Length;
 							var speed = Math.Max( currVel, Math.Min(GetTotalVelocity().Length, currVel * BUMP_SPEED_INCREASE_FACTOR_MAX ) );
 
@@ -496,15 +468,6 @@ public class PlayerController : Component, Component.ITriggerListener
 				explosion.DealtDamage = true;
 			}
 		}
-	}
-
-	public void OnTriggerExit( Collider other )
-	{
-		//Log.Info( $"OnTriggerExit {other.GameObject.Name} time: {Time.Now}" );
-
-		if ( IsProxy )
-			return;
-
 	}
 
 	[Broadcast]
@@ -940,6 +903,13 @@ public class PlayerController : Component, Component.ITriggerListener
 		return vel;
 	}
 
+	public void SetBarrierVisible( bool visible )
+	{
+		var barrier = PlayerNum == 0 ? Manager.Instance.BarrierLeft : Manager.Instance.BarrierRight;
+
+		barrier.Enabled = visible;
+	}
+
 	[Broadcast]
 	public void FadeStart()
 	{
@@ -954,15 +924,15 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	void HandleFading()
 	{
-		if(_timeSinceFade < 0.2f)
+		if ( _timeSinceFade < 0.2f )
 		{
 			SetRenderOpacityRPC( Utils.Map( _timeSinceFade, 0, 0.2f, _fadeStartOpacity, 0.2f ) );
 		}
-		else if(_timeSinceFade < 0.8f)
+		else if ( _timeSinceFade < 0.8f )
 		{
 			// do nothing
 		}
-		else if( _timeSinceFade < 1f)
+		else if ( _timeSinceFade < 1f )
 		{
 			SetRenderOpacityRPC( Utils.Map( _timeSinceFade, 0.8f, 1f, 0.2f, 1f ) );
 		}
@@ -972,14 +942,6 @@ public class PlayerController : Component, Component.ITriggerListener
 			IsIntangible = false;
 			SetRenderOpacityRPC( 1f );
 		}
-	}
-
-	public void SetBarrierVisible( bool visible )
-	{
-		var barrier = PlayerNum == 0 ? Manager.Instance.BarrierLeft : Manager.Instance.BarrierRight;
-
-		barrier.Enabled = visible;
-		//barrier.Components.Get<ModelRenderer>( FindMode.EverythingInSelf ).Enabled = visible;
 	}
 
 	//private CancellationTokenSource _fadeCts;

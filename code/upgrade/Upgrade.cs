@@ -11,7 +11,7 @@ public class Upgrade
 
 	public virtual string SfxGet => "bubble";
 	public virtual string SfxUse => "bubble";
-	public virtual string SfxSelect => "bubble";
+	public virtual string SfxSelect => "bubble_ui";
 
 	public virtual void Init(PlayerController player, Manager manager, Scene scene, bool isPassive)
 	{

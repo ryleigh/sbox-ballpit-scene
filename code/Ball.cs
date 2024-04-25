@@ -8,7 +8,6 @@ public class Ball : Component
 	[Sync] public Vector2 Velocity { get; set; }
 	[Property, Sync, Hide] public Color Color { get; set; }
 
-	//public HighlightOutline HighlightOutline { get; private set; }
 	public ModelRenderer ModelRenderer { get; private set; }
 
 	public bool IsDespawning { get; private set; }
@@ -39,7 +38,6 @@ public class Ball : Component
 	{
 		base.OnAwake();
 
-		//HighlightOutline = Components.Get<HighlightOutline>();
 		ModelRenderer = Components.Get<ModelRenderer>();
 	}
 
@@ -53,8 +51,6 @@ public class Ball : Component
 
 		if ( IsProxy )
 			return;
-
-		//Velocity = (new Vector2( Game.Random.Float( -1f, 1f ), Game.Random.Float( -1f, 1f ) )).Normal * 100f;
 	}
 
 	public void SetRadius( float radius)
@@ -100,23 +96,16 @@ public class Ball : Component
 		}
 		else
 		{
-			// don't move if IsProxy?
-			if(!IsProxy)
+			if(!IsProxy) // todo: still move even if proxy?
 				Transform.Position += (Vector3)Velocity * Time.Delta * TimeScale;
 
-			// todo: change height when changing ownership
+			// todo: change height when changing ownership instead of every frame
 			var height = (PlayerNum == 0 && Transform.Position.x > Manager.Instance.CenterLineOffset || PlayerNum == 1 && Transform.Position.x < Manager.Instance.CenterLineOffset) ? Manager.BALL_HEIGHT_OPPONENT : Manager.BALL_HEIGHT_SELF;
 			Transform.Position = Transform.Position.WithZ( height );
 
 			if ( ModelRenderer != null )
-				ModelRenderer.Tint = Color;
-
-			//if ( ModelRenderer != null )
-			//	ModelRenderer.Tint = Color.WithAlpha( Utils.Map( Utils.FastSin( PlayerNum * 16f + Time.Now * 8f ), -1f, 1f, 0.8f, 1.2f, EasingType.SineInOut ) );
+				ModelRenderer.Tint = Color; // todo: don't do every frame
 		}
-
-		//if(HighlightOutline != null)
-		//	HighlightOutline.Width = 0.2f + Utils.FastSin(Time.Now * 16f) * 0.05f;
 
 		if ( IsProxy )
 			return;
@@ -231,19 +220,7 @@ public class Ball : Component
 	{
 		Color = (playerNum == 0 ? Manager.Instance.ColorPlayer0 : Manager.Instance.ColorPlayer1);
 
-		//if ( IsProxy )
-		//	return;
-
 		PlayerNum = playerNum;
-		
-		//Log.Info( $"Color: {Color} Manager.Instance.ColorPlayer0: {Manager.Instance.ColorPlayer0} Manager.Instance.ColorPlayer1: {Manager.Instance.ColorPlayer1} IsProxy: {IsProxy}" );
-
-		//Components.Get<ModelRenderer>().Tint = Color;
-
-		//var highlightOutline = Components.Get<HighlightOutline>();
-		//highlightOutline.Width = 0.2f;
-		//highlightOutline.Color = Color;
-		//highlightOutline.InsideColor = Color.WithAlpha( 0.75f );
 	}
 
 	public void SetSide( int side )
@@ -319,12 +296,6 @@ public class Ball : Component
 		TimeSinceDespawnStart = 0f;
 		_moveWhileDespawning = true;
 	}
-
-	//[Broadcast]
-	//public void DestroyBall()
-	//{
-	//	GameObject.Destroy();
-	//}
 
 	[Broadcast]
 	public void BumpedByPlayer()

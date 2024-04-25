@@ -176,8 +176,6 @@ public sealed class Manager : Component, Component.INetworkListener
 			GameNetworkSystem.CreateLobby();
 		}
 
-		//Network.SetOrphanedMode( NetworkOrphaned.Random );
-
 		if ( Networking.IsHost )
 			Network.TakeOwnership();
 
@@ -187,11 +185,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		TimeScale = 1f;
 		GamePhase = GamePhase.WaitingForPlayers;
 
-		//CreateShopItem( 0, new Vector2( -215f, -20f ), UpgradeType.MoveSpeed, numLevels: 1, price: 3 );
-		//CreateShopItem( 0, new Vector2( -215f, 20f ), UpgradeType.Volley, numLevels: 2, price: 4 );
-		//CreateShopItem( 0, new Vector2( -215f, -60f ), UpgradeType.Repel, numLevels: 1, price: 0 );
-
-		StartBuyPhase();
+		//StartBuyPhase();
 		//StartNewMatch();
 		//StartNewRound();
 	}
@@ -203,34 +197,30 @@ public sealed class Manager : Component, Component.INetworkListener
 		var playerObj = PlayerPrefab.Clone( new Vector3( 0f, 500f, 500f ) );
 		var player = playerObj.Components.Get<PlayerController>();
 
-		//var copter = copterObj.Components.Get<Copter>();
-		//copter.SetBaseColor( new Color( 0.07f, 0.16f, 0.83f ) );
-
-		//copterObj.Components.Create<CopterPlayer>();
 		var clothing = new ClothingContainer();
 		clothing.Deserialize( channel.GetUserData( "avatar" ) );
 		clothing.Apply( playerObj.Components.GetInChildren<SkinnedModelRenderer>() );
 
-		//player.IsSpectator = true;
+		player.IsSpectator = true;
 
-		if ( !DoesPlayerExist0 )
-		{
-			Player0 = player;
-			PlayerId0 = player.GameObject.Id;
-			DoesPlayerExist0 = true;
-			player.PlayerNum = 0;
-		}
-		else if ( !DoesPlayerExist1 )
-		{
-			Player1 = player;
-			PlayerId1 = player.GameObject.Id;
-			DoesPlayerExist1 = true;
-			player.PlayerNum = 1;
-		}
-		else
-		{
-			player.IsSpectator = true;
-		}
+		//if ( !DoesPlayerExist0 )
+		//{
+		//	Player0 = player;
+		//	PlayerId0 = player.GameObject.Id;
+		//	DoesPlayerExist0 = true;
+		//	player.PlayerNum = 0;
+		//}
+		//else if ( !DoesPlayerExist1 )
+		//{
+		//	Player1 = player;
+		//	PlayerId1 = player.GameObject.Id;
+		//	DoesPlayerExist1 = true;
+		//	player.PlayerNum = 1;
+		//}
+		//else
+		//{
+		//	player.IsSpectator = true;
+		//}
 
 		player.Transform.Position = player.GetClosestSpectatorPos(new Vector3( Game.Random.Float( -220f, 220f ), Game.Random.Float( 50f, 100f ), 0f ));
 
@@ -240,8 +230,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		//player.AdjustUpgradeLevel( UpgradeType.Scatter, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Replace, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
-		player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
-		player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
+		//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
+		//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Volley, 4 );
 		//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
@@ -252,17 +242,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		//player.AdjustUpgradeLevel( UpgradeType.Redirect, 2 );
 		//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 2 );
 
-		//if ( channel.IsHost )
-		//{
-		//	CopterGameManager.Instance.HostConnected();
-		//}
-
-		//SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
-		//SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 		//SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 		//SpawnMoneyTossed( channel, numLevels: 10, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * -1f + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
-		//SpawnMoneyTossed( channel, numLevels: 3, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * -1f + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
-		//SpawnMoneyTossed( channel, numLevels: 1, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * -1f + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
 		//SpawnPickupItem( channel, GetRandomPickupType(), Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 
 		//SpawnScoreText( 0, 0 );
@@ -415,9 +396,6 @@ public sealed class Manager : Component, Component.INetworkListener
 				}
 				break;
 		}
-
-		//CurrentScore = 4;
-		//_targetCenterLineOffset = Utils.Map( CurrentScore, -SCORE_NEEDED_TO_WIN, SCORE_NEEDED_TO_WIN, 95f, -95f );
 
 		CenterLineOffset = Utils.DynamicEaseTo( CenterLineOffset, _targetCenterLineOffset, 0.05f, Time.Delta );
 
