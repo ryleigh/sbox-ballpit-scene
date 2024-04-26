@@ -32,6 +32,8 @@ public sealed class FallingShadow : Component
 
 		if ( TimeSinceSpawn > Lifetime )
 		{
+			Manager.Instance.PlaySfx( "airstrike_explosion", Transform.Position );
+
 			Manager.Instance.SpawnExplosion( (Vector2)Transform.Position, Scale * 0.8f );
 
 			Manager.Instance.CameraController.Shake( 0.9f, Game.Random.Float( 0.2f, 0.25f ) );

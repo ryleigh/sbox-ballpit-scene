@@ -1,11 +1,11 @@
 {
   "UI": false,
-  "Volume": "3.40,1.00,0",
-  "Pitch": "0.95,1.15,1",
-  "Decibels": 70,
+  "Volume": "2.00,1.00,0",
+  "Pitch": "0.95,1.05,1",
+  "Decibels": 90,
   "SelectionMode": "Random",
   "Sounds": [
-    "sounds/scatter_use.vsnd"
+    "sounds/gather_use.vsnd"
   ],
   "Occlusion": true,
   "Reflections": true,

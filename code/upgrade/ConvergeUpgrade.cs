@@ -10,7 +10,7 @@ public class ConvergeUpgrade : Upgrade
 		var enemy = Manager.GetPlayer( Globals.GetOpponentPlayerNum( Player.PlayerNum ) );
 		var enemyPos = enemy?.Transform.Position ?? Vector3.Zero;
 
-		Manager.PlaySfx( "enemyPos", Player.Transform.Position );
+		Manager.PlaySfx( "converge_target", enemyPos );
 
 		foreach ( var ball in Scene.GetAllComponents<Ball>() )
 		{

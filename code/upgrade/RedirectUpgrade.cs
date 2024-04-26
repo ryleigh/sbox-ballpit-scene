@@ -3,6 +3,8 @@ using System;
 
 public class RedirectUpgrade : Upgrade
 {
+	public override string SfxUse => "redirect_use";
+
 	public override void Use()
 	{
 		base.Use();

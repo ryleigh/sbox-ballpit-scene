@@ -3,6 +3,8 @@ using System;
 
 public class GatherUpgrade : Upgrade
 {
+	public override string SfxUse => "gather_use";
+
 	public override void Use()
 	{
 		base.Use();

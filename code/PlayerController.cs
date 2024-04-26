@@ -183,12 +183,17 @@ public class PlayerController : Component, Component.ITriggerListener
 					if ( ball.IsDespawning )
 						continue;
 
+					var ballPos = ball.Transform.Position;
+
+					if ( (PlayerNum == 0 && ballPos.x > Manager.Instance.CenterLineOffset) || (PlayerNum == 1 && ballPos.x < Manager.Instance.CenterLineOffset) )
+						continue;
+
 					if ( ball.PlayerNum == PlayerNum )
 					{
 						if ( ball.TimeSinceBumped > 0.5f &&
-							(ball.Transform.Position - Transform.Position).WithZ( 0f ).LengthSquared < MathF.Pow( RadiusLarge + ball.Radius, 2f ) )
+							(ballPos - Transform.Position).WithZ( 0f ).LengthSquared < MathF.Pow( RadiusLarge + ball.Radius, 2f ) )
 						{
-							var dir = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal;
+							var dir = ((Vector2)ballPos - (Vector2)Transform.Position).Normal;
 
 							var currVel = ball.Velocity.Length;
 							var speed = Math.Max( currVel, Math.Min(GetTotalVelocity().Length, currVel * BUMP_SPEED_INCREASE_FACTOR_MAX ) );
@@ -201,7 +206,7 @@ public class PlayerController : Component, Component.ITriggerListener
 							ball.Velocity = dir * speed;
 
 							ball.BumpedByPlayer();
-							BumpOwnBall( (Vector2)ball.Transform.Position );
+							BumpOwnBall( (Vector2)ballPos );
 
 							ball.TimeSinceBumped = 0f;
 						}

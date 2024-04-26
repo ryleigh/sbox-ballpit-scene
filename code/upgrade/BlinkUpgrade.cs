@@ -3,6 +3,8 @@ using System;
 
 public class BlinkUpgrade : Upgrade
 {
+	public override string SfxUse => "";
+
 	public override void Use()
 	{
 		base.Use();
@@ -10,6 +12,6 @@ public class BlinkUpgrade : Upgrade
 		Player.Transform.Position = new Vector3( Manager.Instance.MouseWorldPos.x, Manager.Instance.MouseWorldPos.y, Player.Transform.Position.z );
 		Player.CheckBoundsPlaying();
 
-		Manager.Instance.PlaySfx( "bubble", Player.Transform.Position );
+		Manager.Instance.PlaySfx( "blink_target", Player.Transform.Position );
 	}
 }

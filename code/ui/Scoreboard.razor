@@ -46,7 +46,7 @@
 		@foreach(var player in Scene.GetAllComponents<PlayerController>().ToList().OrderByDescending(x => x.NumMatchWins))
 		{
 			var connection = player.Network.OwnerConnection;
-			var nameColor = (Manager.Instance.GetConnection(0) == connection ? Manager.Player0NameColor : (Manager.Instance.GetConnection(1) == connection ? Manager.Player1NameColor : new Color(1f, 1f, 1f)));
+			var nameColor = (Manager.Instance.GetConnection(0) == connection ? Manager.Player0NameColor : (Manager.Instance.GetConnection(1) == connection ? Manager.Player1NameColor : new Color(0.9f, 0.9f, 0.9f)));
 
 			string specialClass = "";
 			if(connection == Connection.Local)

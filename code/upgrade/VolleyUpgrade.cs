@@ -3,6 +3,8 @@ using System;
 
 public class VolleyUpgrade : Upgrade
 {
+	public override string SfxUse => "volley_use";
+
 	public override void Use()
 	{
 		base.Use();

@@ -31,7 +31,7 @@ public class Explosion : Component
 	{
 		Renderer.Tint = Color.Lerp( _colorA, _colorB, Utils.FastSin(TimeSinceSpawn * 32f) ).WithAlpha( Utils.Map( TimeSinceSpawn, 0f, Lifetime, 9999f, 0f, EasingType.ExpoOut ) );
 		
-		Transform.Scale = Utils.Map( TimeSinceSpawn, 0f, Lifetime, Scale, Scale * 1.25f, EasingType.QuadIn ) * Utils.MapReturn( TimeSinceSpawn, 0f, 0.1f, 1.3f, 0.7f, EasingType.QuadOut);
+		Transform.Scale = Utils.Map( TimeSinceSpawn, Lifetime * 0.5f, Lifetime, Scale, Scale * 0.95f, EasingType.QuadIn ) * Utils.MapReturn( TimeSinceSpawn, 0f, 0.1f, 1.3f, 0.7f, EasingType.QuadOut);
 
 		if ( !_hasRepelledBalls && TimeSinceSpawn > 0.05f )
 		{

@@ -235,15 +235,18 @@ public sealed class Manager : Component, Component.INetworkListener
 		//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
 		//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
-		//player.AdjustUpgradeLevel( UpgradeType.Volley, 4 );
+		//player.AdjustUpgradeLevel( UpgradeType.Volley, 9 );
 		//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
 		//player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
 		//player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
 		//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );
 		//player.AdjustUpgradeLevel( UpgradeType.Dash, 8 );
-		//player.AdjustUpgradeLevel( UpgradeType.Blink, 2 );
-		//player.AdjustUpgradeLevel( UpgradeType.Redirect, 2 );
-		//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 2 );
+		//player.AdjustUpgradeLevel( UpgradeType.Blink, 9 );
+		//player.AdjustUpgradeLevel( UpgradeType.Converge, 9 );
+		//player.AdjustUpgradeLevel( UpgradeType.Gather, 9 );
+		//player.AdjustUpgradeLevel( UpgradeType.Redirect, 9 );
+		//player.AdjustUpgradeLevel( UpgradeType.Slowmo, 9 );
+		//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 9 );
 
 		//SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 		//SpawnMoneyTossed( channel, numLevels: 10, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * -1f + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
@@ -775,7 +778,7 @@ public sealed class Manager : Component, Component.INetworkListener
 					Math.Clamp( pos.y, -Y_LIMIT + BUFFER, Y_LIMIT - BUFFER )
 				);
 
-				SpawnFallingShadow( pos, scale: Game.Random.Float( 0.35f, 0.6f ) );
+				SpawnFallingShadow( pos, scale: Game.Random.Float( 0.35f, 0.9f ) );
 
 				strike.timeSinceLastStrike = 0f;
 				strike.delay = Game.Random.Float( 0.5f, 2f );
@@ -1004,6 +1007,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		DestroyShopStuff();
 		DestroyPickups();
 		DestroyTutorialText();
+
+		BarrierLeft.Enabled = false;
+		BarrierRight.Enabled = false;
 
 		GamePhase = GamePhase.WaitingForPlayers;
 	}
@@ -1432,7 +1438,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.MoreShopItems, "Shopper", "🛒", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 9, pricePerAmountMax: 16, isPassive: true );
 		CreateUpgrade( UpgradeType.ShorterBuyPhase, "Closing Early", "🔜", UpgradeRarity.Legendary, maxLevel: 1, amountMin: 1, amountMax: 1, pricePerAmountMin: 7, pricePerAmountMax: 15, isPassive: true );
 
-		CreateUpgrade( UpgradeType.Volley, "Balls", "🥏", UpgradeRarity.Common, maxLevel: 5, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 6 );
+		CreateUpgrade( UpgradeType.Volley, "Balls", "🥏", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 6 );
 		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
 		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", UpgradeRarity.Common, maxLevel: 18, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5 );
 		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", UpgradeRarity.Uncommon, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 6, pricePerAmountMax: 8 );
