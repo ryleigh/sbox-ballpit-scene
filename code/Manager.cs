@@ -419,6 +419,7 @@ public sealed class Manager : Component, Component.INetworkListener
 				if ( TimeSincePhaseChange > VICTORY_DELAY )
 				{
 					GamePhase = GamePhase.WaitingForPlayers;
+					CurrentScore = 0;
 					_targetCenterLineOffset = 0f;
 				}
 				break;
@@ -1135,37 +1136,46 @@ public sealed class Manager : Component, Component.INetworkListener
 			return;
 
 		var player = playerObj.Components.Get<PlayerController>();
-		player.SetSpectator( true );
-
-		player.Transform.Position = player.Transform.Position.WithZ( SPECTATOR_HEIGHT );
-		var targetPos = player.GetClosestSpectatorPos( player.Transform.Position );
-		playerObj.Components.Get<PlayerController>().Jump( targetPos );
 
 		var otherPlayer = GetPlayer( Globals.GetOpponentPlayerNum( player.PlayerNum ) );
-		if(otherPlayer != null)
+		if(otherPlayer != null && RoundNum > Game.Random.Int(2, 3))
 		{
-			if( (otherPlayer.PlayerNum == 0 && CurrentScore > 0) || (otherPlayer.PlayerNum == 1 && CurrentScore < 0))
-				player.AddMatchLoss();
+			Victory( otherPlayer.PlayerNum );
+
+			DespawnBallsRPC();
+			DestroyShopStuff();
+			DestroyPickups();
+			DestroyTutorialText();
+		}
+		else
+		{
+			player.SetSpectator( true );
+
+			player.Transform.Position = player.Transform.Position.WithZ( SPECTATOR_HEIGHT );
+			var targetPos = player.GetClosestSpectatorPos( player.Transform.Position );
+			playerObj.Components.Get<PlayerController>().Jump( targetPos );
+
+			if ( DoesPlayerExist0 && PlayerId0 == id )
+			{
+				DoesPlayerExist0 = false;
+				Player0 = null;
+				PlayerId0 = Guid.Empty;
+
+				if ( GamePhase != GamePhase.WaitingForPlayers )
+					StopCurrentMatch();
+			}
+			else if ( DoesPlayerExist1 && PlayerId1 == id )
+			{
+				DoesPlayerExist1 = false;
+				Player1 = null;
+				PlayerId1 = Guid.Empty;
+
+				if ( GamePhase != GamePhase.WaitingForPlayers )
+					StopCurrentMatch();
+			}
 		}
 
-		if ( DoesPlayerExist0 && PlayerId0 == id )
-		{
-			DoesPlayerExist0 = false;
-			Player0 = null;
-			PlayerId0 = Guid.Empty;
-
-			if ( GamePhase != GamePhase.WaitingForPlayers )
-				StopCurrentMatch();
-		}
-		else if ( DoesPlayerExist1 && PlayerId1 == id )
-		{
-			DoesPlayerExist1 = false;
-			Player1 = null;
-			PlayerId1 = Guid.Empty;
-
-			if ( GamePhase != GamePhase.WaitingForPlayers )
-				StopCurrentMatch();
-		}
+		//player.AddMatchLoss();
 	}
 
 	[Broadcast]
@@ -1189,9 +1199,9 @@ public sealed class Manager : Component, Component.INetworkListener
 			return;
 
 		if ( localPlayer.PlayerNum == 0 )
-			SpawnTutorialText( new Vector3( -120f, 40f, 180f ), "BUMP", $"{blue_circle}", 4f );
+			SpawnTutorialText( new Vector3( -120f, 50f, 180f ), "BUMP", $"{blue_circle}", 4f );
 		else
-			SpawnTutorialText( new Vector3( 120f, 40f, 180f ), "BUMP", $"{green_circle}", 4f );
+			SpawnTutorialText( new Vector3( 120f, 50f, 180f ), "BUMP", $"{green_circle}", 4f );
 			
 
 		await Task.Delay( 1200 );
@@ -1200,9 +1210,9 @@ public sealed class Manager : Component, Component.INetworkListener
 			return;
 
 		if ( localPlayer.PlayerNum == 0 )
-			SpawnTutorialText( new Vector3( -120f, -10f, 180f ), "AVOID", $"{green_circle}", 3f );
+			SpawnTutorialText( new Vector3( -120f, -50f, 180f ), "AVOID", $"{green_circle}", 3f );
 		else
-			SpawnTutorialText( new Vector3( 120f, -10f, 180f ), "AVOID", $"{blue_circle}", 3f );
+			SpawnTutorialText( new Vector3( 120f, -50f, 180f ), "AVOID", $"{blue_circle}", 3f );
 	}
 
 	[Broadcast]

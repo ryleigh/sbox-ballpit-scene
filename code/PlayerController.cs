@@ -151,6 +151,9 @@ public class PlayerController : Component, Component.ITriggerListener
 			else if ( Input.Pressed( "Slot9" ) )			SetSelectedActiveUpgrade( 8 );
 			else if ( Input.Pressed( "Slot0" ) )			SetSelectedActiveUpgrade( 9 );
 			else if ( Input.MouseWheel != Vector2.Zero )	AdjustSelectedActiveUpgrade( up: Input.MouseWheel.y < 0f );
+			
+			if(Input.EscapePressed)
+				Manager.Instance.PlayerForfeited( GameObject.Id );
 		}
 
 		if ( IsDead )
