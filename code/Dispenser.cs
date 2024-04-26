@@ -57,17 +57,18 @@ public sealed class Dispenser : Component
 
 			if( y < SHOOT_THRESHOLD && y > -SHOOT_THRESHOLD && Manager.Instance.GamePhase == GamePhase.RoundActive )
 			{
-				float delay = 
-					Utils.Map( Manager.Instance.RoundNum, 1, 10, 0.2f, 0f, EasingType.SineOut) 
-					+ Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, Utils.Map( Manager.Instance.RoundNum, 1, 8, 60f, 30f ), 0.5f, 0.25f );
+				float delay = Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, Utils.Map( Manager.Instance.RoundNum, 1, 8, 60f, 30f ), 0.5f, 0.25f ) 
+					* Utils.Map( Manager.Instance.TimeSincePhaseChange, 30f, 120f, 1f, 0.6f, EasingType.SineIn)
+					* Utils.Map( Manager.Instance.TimeSincePhaseChange, 120f, 360f, 1f, 0.2f, EasingType.Linear )
+					* Utils.Map( Manager.Instance.RoundNum, 1, 5, 1f, 0.8f, EasingType.Linear )
+					* Utils.Map( Manager.Instance.RoundNum, 1, 15, 1f, 0.8f, EasingType.Linear );
 
 				if ( TimeSinceShoot > delay )
 				{
-					var ballSpeed =
-						Utils.Map( Manager.Instance.RoundNum, 1, 16, 75f, 100f, EasingType.Linear )
-						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, Utils.Map( Manager.Instance.RoundNum, 1, 16, 250f, 140f ), 1f, Utils.Map( Manager.Instance.RoundNum, 1, 32, 1.5f, 3.5f ) )
-						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, 360f, 1f, 2.2f, EasingType.SineIn )
-						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, 120f, 1f, 1.25f, EasingType.Linear );
+					var ballSpeed = Utils.Map( Manager.Instance.RoundNum, 1, 16, 75f, 100f, EasingType.Linear )
+						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, Utils.Map( Manager.Instance.RoundNum, 1, 16, 220f, 100f ), 1f, Utils.Map( Manager.Instance.RoundNum, 1, 32, 1.5f, 3.5f ) )
+						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 0f, 120f, 1f, 1.4f, EasingType.SineIn )
+						* Utils.Map( Manager.Instance.TimeSincePhaseChange, 120f, 400f, 1f, 3f, EasingType.SineIn );
 
 					int playerNum;
 					switch(_dispenserPattern)

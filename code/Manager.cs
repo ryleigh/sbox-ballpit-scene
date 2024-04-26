@@ -8,6 +8,8 @@ public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterR
 public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, MoreShopItems, Endow, Fade, Barrier, Airstrike, ShorterBuyPhase, }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 
+public enum StartMode { Waiting, TestShop, TestActive }
+
 public struct UpgradeData
 {
 	public string name;
@@ -151,9 +153,13 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	[Sync] public float CurrRealTimeNow { get; set; }
 
+	public StartMode StartMode { get; set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
+
+		StartMode = StartMode.Waiting;
 
 		Instance = this;
 
@@ -188,9 +194,15 @@ public sealed class Manager : Component, Component.INetworkListener
 		TimeScale = 1f;
 		GamePhase = GamePhase.WaitingForPlayers;
 
-		//StartBuyPhase();
-		//StartNewMatch();
-		//StartNewRound();
+		if( StartMode == StartMode.TestShop)
+		{
+			StartBuyPhase();
+		}
+		else if(StartMode == StartMode.TestActive)
+		{
+			StartNewMatch();
+			StartNewRound();
+		}
 	}
 
 	public void OnActive( Connection channel )
@@ -204,26 +216,31 @@ public sealed class Manager : Component, Component.INetworkListener
 		clothing.Deserialize( channel.GetUserData( "avatar" ) );
 		clothing.Apply( playerObj.Components.GetInChildren<SkinnedModelRenderer>() );
 
-		player.IsSpectator = true;
-
-		//if ( !DoesPlayerExist0 )
-		//{
-		//	Player0 = player;
-		//	PlayerId0 = player.GameObject.Id;
-		//	DoesPlayerExist0 = true;
-		//	player.PlayerNum = 0;
-		//}
-		//else if ( !DoesPlayerExist1 )
-		//{
-		//	Player1 = player;
-		//	PlayerId1 = player.GameObject.Id;
-		//	DoesPlayerExist1 = true;
-		//	player.PlayerNum = 1;
-		//}
-		//else
-		//{
-		//	player.IsSpectator = true;
-		//}
+		if(StartMode == StartMode.Waiting)
+		{
+			player.IsSpectator = true;
+		}
+		else
+		{
+			if ( !DoesPlayerExist0 )
+			{
+				Player0 = player;
+				PlayerId0 = player.GameObject.Id;
+				DoesPlayerExist0 = true;
+				player.PlayerNum = 0;
+			}
+			else if ( !DoesPlayerExist1 )
+			{
+				Player1 = player;
+				PlayerId1 = player.GameObject.Id;
+				DoesPlayerExist1 = true;
+				player.PlayerNum = 1;
+			}
+			else
+			{
+				player.IsSpectator = true;
+			}
+		}
 
 		player.Transform.Position = player.GetClosestSpectatorPos(new Vector3( Game.Random.Float( -220f, 220f ), Game.Random.Float( 50f, 100f ), 0f ));
 
