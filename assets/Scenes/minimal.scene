@@ -350,7 +350,8 @@
           "Center": "0,0,0",
           "IsTrigger": false,
           "Scale": "50,50,50",
-          "Static": true
+          "Static": true,
+          "Surface": "surfaces/default.surface"
         }
       ]
     },
@@ -376,7 +377,8 @@
           "Center": "0,0,0",
           "IsTrigger": false,
           "Scale": "50,50,50",
-          "Static": false
+          "Static": false,
+          "Surface": "surfaces/default.surface"
         }
       ]
     },
@@ -401,7 +403,8 @@
           "Center": "0,0,0",
           "IsTrigger": false,
           "Scale": "50,50,50",
-          "Static": false
+          "Static": false,
+          "Surface": "surfaces/default.surface"
         },
         {
           "__type": "GutterBarrier",
@@ -438,7 +441,8 @@
           "Center": "0,0,0",
           "IsTrigger": false,
           "Scale": "50,50,50",
-          "Static": true
+          "Static": true,
+          "Surface": "surfaces/default.surface"
         }
       ]
     },
@@ -464,7 +468,8 @@
           "Center": "0,0,0",
           "IsTrigger": false,
           "Scale": "50,50,50",
-          "Static": false
+          "Static": false,
+          "Surface": "surfaces/default.surface"
         }
       ]
     },
@@ -489,7 +494,8 @@
           "Center": "0,0,0",
           "IsTrigger": false,
           "Scale": "50,50,50",
-          "Static": false
+          "Static": false,
+          "Surface": "surfaces/default.surface"
         },
         {
           "__type": "GutterBarrier",
@@ -526,7 +532,8 @@
           "Center": "0,0,0",
           "IsTrigger": false,
           "Scale": "50,50,50",
-          "Static": true
+          "Static": true,
+          "Surface": "surfaces/default.surface"
         }
       ]
     },
@@ -552,7 +559,8 @@
           "Center": "0,0,0",
           "IsTrigger": false,
           "Scale": "50,50,50",
-          "Static": true
+          "Static": true,
+          "Surface": "surfaces/default.surface"
         }
       ]
     },
@@ -569,7 +577,8 @@
           "Center": "0,0,-5",
           "IsTrigger": false,
           "Scale": "100,100,10",
-          "Static": true
+          "Static": true,
+          "Surface": "surfaces/default.surface"
         }
       ]
     },
@@ -1121,7 +1130,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-24T23:01:25.3027233-07:00",
+  "LastSaved": "2024-04-25T20:06:55.5516322-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

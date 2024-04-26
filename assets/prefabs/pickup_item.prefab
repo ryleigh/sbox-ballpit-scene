@@ -13,7 +13,8 @@
         "Center": "0,0,0",
         "IsTrigger": true,
         "Radius": 24,
-        "Static": false
+        "Static": false,
+        "Surface": "surfaces/default.surface"
       },
       {
         "__type": "PickupItem",

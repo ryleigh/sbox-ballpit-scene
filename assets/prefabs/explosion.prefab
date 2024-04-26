@@ -36,7 +36,8 @@
         "Center": "0,0,0",
         "IsTrigger": true,
         "Radius": 27,
-        "Static": false
+        "Static": false,
+        "Surface": "surfaces/default.surface"
       }
     ],
     "Children": []

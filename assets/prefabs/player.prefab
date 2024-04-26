@@ -27,7 +27,8 @@
         "IsTrigger": true,
         "Radius": 7,
         "Start": "0,0,0",
-        "Static": false
+        "Static": false,
+        "Surface": "surfaces/default.surface"
       },
       {
         "__type": "RagdollController",

@@ -22,7 +22,8 @@
         "Center": "0,0,0",
         "IsTrigger": true,
         "Radius": 32,
-        "Static": false
+        "Static": false,
+        "Surface": "surfaces/default.surface"
       },
       {
         "__type": "Ball",

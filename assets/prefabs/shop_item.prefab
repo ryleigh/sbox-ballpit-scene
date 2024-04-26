@@ -22,7 +22,8 @@
         "Center": "0,0,0",
         "IsTrigger": true,
         "Scale": "50,50,50",
-        "Static": false
+        "Static": false,
+        "Surface": "surfaces/default.surface"
       },
       {
         "__type": "ShopItem",
