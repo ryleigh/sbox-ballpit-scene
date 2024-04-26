@@ -312,7 +312,6 @@ public sealed class Manager : Component, Component.INetworkListener
 				}
 				break;
 			case GamePhase.RoundActive:
-				HandlePickups();
 				break;
 			case GamePhase.AfterRoundDelay:
 				TrophyIndicatorOpacity = Utils.Map( Utils.MapReturn( TimeSincePhaseChange, 0f, BETWEEN_ROUNDS_DELAY, 0f, 1f, EasingType.Linear ), 0f, 1f, 0f, 1f, EasingType.SineOut );
@@ -353,6 +352,8 @@ public sealed class Manager : Component, Component.INetworkListener
 					StartNewRound();
 				break;
 			case GamePhase.RoundActive:
+				HandlePickups();
+
 				if ( _airstrikes.Count > 0 )
 					HandleAirstrikes();
 
@@ -485,7 +486,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		GamePhase = GamePhase.RoundActive;
 		TimeSincePhaseChange = 0f;
 		_timeSincePickupSpawn = 0f;
-		_pickupSpawnDelay = Game.Random.Float( 14f, 22f ) * Utils.Map(RoundNum, 1, 20, 1f, 0.4f);
+		_pickupSpawnDelay = Game.Random.Float( 14f, 22f ) * Utils.Map(RoundNum, 1, 20, 1f, 0.25f);
 
 		Player0?.ResetRerollPrice();
 		Player1?.ResetRerollPrice();
@@ -734,7 +735,7 @@ public sealed class Manager : Component, Component.INetworkListener
 					SpawnMoneySineWave( connection, Game.Random.Int( 1, MathX.FloorToInt(Utils.Map(RoundNum, 0, 20, 2.2f, 10f, EasingType.QuadIn)) ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 
 				_timeSincePickupSpawn = 0f;
-				_pickupSpawnDelay = Game.Random.Float( 10f, 36f ) * Utils.Map( TimeSincePhaseChange, 0f, 320f, 1f, 0.4f, EasingType.SineIn ) * Utils.Map( RoundNum, 1, 30, 1f, 0.5f );
+				_pickupSpawnDelay = Game.Random.Float( 8f, 23f ) * Utils.Map( TimeSincePhaseChange, 0f, 150f, 1f, 0.33f, EasingType.SineIn ) * Utils.Map( RoundNum, 1, 30, 1f, 0.5f );
 			}
 		}
 	}
@@ -1196,7 +1197,15 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		var color = winningPlayerNum == 0 ? new Color( 0.5f, 0.5f, 1f ) : new Color( 0.4f, 1f, 0.4f );
 
-		SpawnFloaterText( new Vector3( 0f, 20f, 0f ), $"{name} WON THE ROUND", 3f, color, new Vector2( 0f, 10f ), deceleration: 2f, fontSize: 40f, startScale: 0.95f, endScale: 1.05f, isEmoji: false );
+		string punc;
+		var rand = Game.Random.Float( 0f, 1f );
+		if ( rand < 0.7f )		punc = "";
+		else if ( rand < 0.9f ) punc = "!";
+		else					punc = "...";
+		// todo: ?! sometimes, if losing player wins a round
+		// todo: make it the same on all clients
+
+		SpawnFloaterText( new Vector3( 0f, 20f, 0f ), $"{name} won the round{punc}", 3f, color, new Vector2( 0f, 10f ), deceleration: 2f, fontSize: 40f, startScale: 0.95f, endScale: 1.05f, isEmoji: false );
 	}
 
 	public void SpawnFloaterText( Vector3 pos, string text, float lifetime, Color color, Vector2 velocity, float deceleration, float fontSize, float startScale, float endScale, bool isEmoji  )
