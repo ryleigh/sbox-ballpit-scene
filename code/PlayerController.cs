@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 
+public enum PlayerStat { GoldenTicketActive, }
 public class PlayerController : Component, Component.ITriggerListener
 {
 	[Property] public CitizenAnimationHelper Animator { get; set; }
@@ -71,6 +72,9 @@ public class PlayerController : Component, Component.ITriggerListener
 	private float _currRenderOpacity;
 
 	public bool IsBarrierActive { get; set; }
+
+	[Sync] public NetDictionary<PlayerStat, float> Stats { get; set; } = new();
+	public float GetStat( PlayerStat stat ) => Stats.ContainsKey(stat) ? Stats[stat] : 0f;
 
 	protected override void OnAwake()
 	{
@@ -224,12 +228,12 @@ public class PlayerController : Component, Component.ITriggerListener
 					}
 				}
 			}
-		}
 
-		foreach(var pair in LocalUpgrades)
-		{
-			var upgrade = pair.Value;
-			upgrade.Update( Time.Delta );
+			foreach ( var pair in LocalUpgrades )
+			{
+				var upgrade = pair.Value;
+				upgrade.Update( Time.Delta );
+			}
 		}
 	}
 
@@ -289,7 +293,8 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( !ActiveUpgrades.ContainsKey( upgradeType ) )
 			return;
 
-		bool useableNow = Manager.Instance.GamePhase == GamePhase.RoundActive || Manager.Instance.CanUseUpgradeInBuyPhase( upgradeType );
+		UpgradeUseMode useMode = Manager.Instance.GetUpgradeUseMode( upgradeType );
+		bool useableNow = (Manager.Instance.GamePhase == GamePhase.RoundActive && useMode != UpgradeUseMode.OnlyBuyPhase) || (Manager.Instance.GamePhase == GamePhase.BuyPhase && useMode != UpgradeUseMode.OnlyActive);
 		if ( !useableNow )
 		{
 			Manager.Instance.PlaySfx( "bubble", Transform.Position, volume: 0.7f, pitch: Game.Random.Float(0.35f, 0.45f) );
@@ -791,7 +796,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		CurrRerollPrice = 1;
 		SelectedUpgradeType = UpgradeType.None;
 
-		//Money = 5;
+		Money = 555;
 	}
 
 	[Broadcast]

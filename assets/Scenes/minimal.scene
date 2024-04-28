@@ -113,6 +113,10 @@
         {
           "__type": "TutorialTextDisplay",
           "__guid": "b899458f-d029-4bf9-8e86-8535d17513b8"
+        },
+        {
+          "__type": "ArrowDisplay",
+          "__guid": "bd226fd4-33f2-4e32-9ab9-1e254c288623"
         }
       ]
     },
@@ -1130,7 +1134,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-25T20:06:55.5516322-07:00",
+  "LastSaved": "2024-04-27T23:45:03.4453783-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

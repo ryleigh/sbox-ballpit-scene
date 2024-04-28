@@ -5,8 +5,10 @@ using System.Numerics;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
-public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, MoreShopItems, Endow, Fade, Barrier, Airstrike, ShorterBuyPhase, }
+public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, MoreShopItems, Endow, Fade, Barrier, Airstrike, ShorterBuyPhase,
+ GoldenTicket, }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
+public enum UpgradeUseMode { OnlyActive, OnlyBuyPhase, Both }
 
 public enum StartMode { Waiting, TestShop, TestActive }
 
@@ -17,13 +19,13 @@ public struct UpgradeData
 	public UpgradeRarity rarity;
 	public int maxLevel;
 	public bool isPassive;
-	public bool useableInBuyPhase;
+	public UpgradeUseMode useMode;
 	public int amountMin;
 	public int amountMax;
 	public int pricePerAmountMin;
 	public int pricePerAmountMax;
 
-	public UpgradeData( string _name, string _icon, UpgradeRarity _rarity, int _maxLevel, int _amountMin, int _amountMax, int _pricePerAmountMin, int _pricePerAmountMax, bool _isPassive, bool _usableInBuyPhase )
+	public UpgradeData( string _name, string _icon, UpgradeRarity _rarity, int _maxLevel, int _amountMin, int _amountMax, int _pricePerAmountMin, int _pricePerAmountMax, bool _isPassive, UpgradeUseMode _useMode )
 	{
 		name = _name;
 		icon = _icon;
@@ -34,7 +36,7 @@ public struct UpgradeData
 		pricePerAmountMin = _pricePerAmountMin;
 		pricePerAmountMax = _pricePerAmountMax;
 		isPassive = _isPassive;
-		useableInBuyPhase = _usableInBuyPhase;
+		useMode = _useMode;
 	}
 }
 
@@ -185,7 +187,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		base.OnAwake();
 
-		StartMode = StartMode.TestActive;
+		StartMode = StartMode.TestShop;
 
 		Instance = this;
 
@@ -230,27 +232,28 @@ public sealed class Manager : Component, Component.INetworkListener
 		{
 			StartNewMatch();
 			StartNewRound();
+		}
 
-			foreach( var player in Scene.GetAllComponents<PlayerController>())
-			{
-				player.AdjustUpgradeLevel( UpgradeType.Scatter, 6 );
-				//player.AdjustUpgradeLevel( UpgradeType.Replace, 6 );
-				//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
-				//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
-				//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
-				//player.AdjustUpgradeLevel( UpgradeType.Volley, 9 );
-				//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
-				//player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
-				//player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
-				//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );
-				//player.AdjustUpgradeLevel( UpgradeType.Dash, 8 );
-				//player.AdjustUpgradeLevel( UpgradeType.Blink, 9 );
-				player.AdjustUpgradeLevel( UpgradeType.Converge, 9 );
-				player.AdjustUpgradeLevel( UpgradeType.Gather, 9 );
-				player.AdjustUpgradeLevel( UpgradeType.Redirect, 9 );
-				player.AdjustUpgradeLevel( UpgradeType.Slowmo, 9 );
-				//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 9 );
-			}
+		foreach ( var player in Scene.GetAllComponents<PlayerController>() )
+		{
+			//player.AdjustUpgradeLevel( UpgradeType.Scatter, 6 );
+			//player.AdjustUpgradeLevel( UpgradeType.Replace, 6 );
+			//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
+			//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
+			//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
+			//player.AdjustUpgradeLevel( UpgradeType.Volley, 9 );
+			//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
+			//player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
+			//player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
+			//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );
+			//player.AdjustUpgradeLevel( UpgradeType.Dash, 8 );
+			//player.AdjustUpgradeLevel( UpgradeType.Blink, 9 );
+			//player.AdjustUpgradeLevel( UpgradeType.Converge, 9 );
+			//player.AdjustUpgradeLevel( UpgradeType.Gather, 9 );
+			player.AdjustUpgradeLevel( UpgradeType.Redirect, 9 );
+			player.AdjustUpgradeLevel( UpgradeType.Slowmo, 9 );
+			player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 9 );
+			player.AdjustUpgradeLevel( UpgradeType.GoldenTicket, 9 );
 		}
 	}
 
@@ -592,6 +595,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void ForcePlayerExit(PlayerController player)
 	{
+		player.ClearStats();
+
 		player.SetSpectator( true );
 		player.Transform.Position = player.Transform.Position.WithZ( SPECTATOR_HEIGHT );
 		var targetPos = player.GetClosestSpectatorPos( player.Transform.Position );
@@ -635,37 +640,27 @@ public sealed class Manager : Component, Component.INetworkListener
 		{
 			CreateSkipButton( 0 );
 			CreateRerollButton( 0 );
-			CreateShopItems( playerNum: 0, numItems: Player0.NumShopItems + Player0.GetUpgradeLevel(UpgradeType.MoreShopItems) );
+			CreateShopItems( Player0 );
 		}
 
 		if ( DoesPlayerExist1 )
 		{
 			CreateSkipButton( 1 );
 			CreateRerollButton( 1 );
-			CreateShopItems( playerNum: 1, numItems: Player1.NumShopItems + Player1.GetUpgradeLevel( UpgradeType.MoreShopItems ) );
+			CreateShopItems( Player1 );
 		}
 	}
 
-	void CreateShopItems( int playerNum, int numItems )
+	void CreateShopItems( PlayerController player )
 	{
-		var player = GetPlayer( playerNum );
 		if ( player == null )
 			return;
 
-		int MAX_TRIES = 100;
+		var numItems = player.NumShopItems + player.GetUpgradeLevel( UpgradeType.MoreShopItems );
+
 		for ( int i = 0; i < numItems; i++ )
 		{
-			var rarity = GetRandomRarity();
-			var upgradeType = GetRandomUpgradeType( rarity );
-
-			int numTries = 0;
-			while(player.GetUpgradeLevel(upgradeType) >= GetMaxLevelForUpgrade(upgradeType) && numTries < MAX_TRIES )
-			{
-				rarity = GetRandomRarity();
-				upgradeType = GetRandomUpgradeType( rarity );
-				numTries++;
-			}
-			
+			var upgradeType = GetRandomShopUpgradeType( player );
 			int numLevels = GetRandomAmountForUpgrade( upgradeType );
 			int pricePerLevel = GetRandomPricePerAmountForUpgrade( upgradeType );
 			var price = numLevels * pricePerLevel;
@@ -674,8 +669,28 @@ public sealed class Manager : Component, Component.INetworkListener
 			if ( numLevels > 1 )
 				price = Math.Max( price - Game.Random.Int( 1, numLevels - 1 ), 1 );
 
-			CreateShopItem( playerNum, i, upgradeType, numLevels, price );
+			CreateShopItem( player.PlayerNum, i, upgradeType, numLevels, price );
 		}
+	}
+
+	UpgradeType GetRandomShopUpgradeType(PlayerController player)
+	{
+		var rarity = GetRandomRarity( player );
+		var upgradeType = GetRandomUpgradeType( rarity );
+
+		int numTries = 0;
+		int MAX_TRIES = 100;
+		while ( player.GetUpgradeLevel( upgradeType ) >= GetMaxLevelForUpgrade( upgradeType ) && numTries < MAX_TRIES )
+		{
+			rarity = GetRandomRarity( player );
+			upgradeType = GetRandomUpgradeType( rarity );
+			numTries++;
+		}
+
+		if ( upgradeType == UpgradeType.None )
+			upgradeType = UpgradeType.Volley;
+
+		return upgradeType;
 	}
 
 	void FinishBuyPhase()
@@ -895,7 +910,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		player.IncreaseRerollPrice();
 
-		CreateShopItems( playerNum, numItems: player.NumShopItems + player.GetUpgradeLevel(UpgradeType.MoreShopItems) );
+		CreateShopItems( player );
 		RespawnRerollButton( playerNum );
 	}
 
@@ -1198,6 +1213,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 		else
 		{
+			player.ClearStats();
+
 			player.SetSpectator( true );
 
 			player.Transform.Position = player.Transform.Position.WithZ( SPECTATOR_HEIGHT );
@@ -1382,6 +1399,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			case UpgradeType.Fade: return $"Ignore collision for 1 second";
 			case UpgradeType.Barrier: return $"Briefly block your gutter";
 			case UpgradeType.Airstrike: return $"Drop bombs near your cursor";
+			case UpgradeType.GoldenTicket: return $"Your shop only offers legendary items during this buy phase";
 		}
 
 		return "";
@@ -1471,12 +1489,12 @@ public sealed class Manager : Component, Component.INetworkListener
 		return true;
 	}
 
-	public bool CanUseUpgradeInBuyPhase( UpgradeType upgradeType )
+	public UpgradeUseMode GetUpgradeUseMode( UpgradeType upgradeType )
 	{
 		if ( UpgradeDatas.ContainsKey( upgradeType ) )
-			return UpgradeDatas[upgradeType].useableInBuyPhase;
+			return UpgradeDatas[upgradeType].useMode;
 
-		return false;
+		return UpgradeUseMode.OnlyActive;
 	}
 
 	public static Color GetColorForRarity( UpgradeRarity rarity, bool isTextColor = false )
@@ -1523,20 +1541,21 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.MoreShopItems, "Shopper", "🛒", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 9, pricePerAmountMax: 16, isPassive: true );
 		CreateUpgrade( UpgradeType.ShorterBuyPhase, "Closing Early", "🔜", UpgradeRarity.Legendary, maxLevel: 1, amountMin: 1, amountMax: 1, pricePerAmountMin: 7, pricePerAmountMax: 15, isPassive: true );
 
-		CreateUpgrade( UpgradeType.Volley, "Balls", "🥏", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 6 );
+		CreateUpgrade( UpgradeType.Volley, "Balls", "🤹", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 6 );
 		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
 		CreateUpgrade( UpgradeType.Repel, "Repel", "💥", UpgradeRarity.Common, maxLevel: 18, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5 );
 		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", UpgradeRarity.Uncommon, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 6, pricePerAmountMax: 8 );
-		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 4, useableInBuyPhase: true );
+		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 4, useMode: UpgradeUseMode.Both);
 		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", UpgradeRarity.Uncommon, maxLevel: 3, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5 );
 		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 1, pricePerAmountMax: 3 );
-		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 3, pricePerAmountMin: 1, pricePerAmountMax: 2, useableInBuyPhase: true );
+		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 3, pricePerAmountMin: 1, pricePerAmountMax: 2, useMode: UpgradeUseMode.Both );
 		CreateUpgrade( UpgradeType.Redirect, "Redirect", "⤴️", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7 );
 		CreateUpgrade( UpgradeType.Converge, "Converge", "📍", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 4, pricePerAmountMax: 6 );
 		CreateUpgrade( UpgradeType.Endow, "Endow", "💰", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 4, pricePerAmountMax: 6 );
 		CreateUpgrade( UpgradeType.Fade, "Fade", "👥", UpgradeRarity.Uncommon, maxLevel: 6, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 4 );
 		CreateUpgrade( UpgradeType.Barrier, "Barrier", "🚧", UpgradeRarity.Uncommon, maxLevel: 6, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
 		CreateUpgrade( UpgradeType.Airstrike, "Airstrike", "🚀", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 8, pricePerAmountMax: 12 );
+		CreateUpgrade( UpgradeType.GoldenTicket, "Golden Ticket", "🎟️", UpgradeRarity.Legendary, maxLevel: 1, amountMin: 1, amountMax: 1, pricePerAmountMin: 12, pricePerAmountMax: 15, useMode: UpgradeUseMode.OnlyBuyPhase );
 
 		foreach (var upgradeData in UpgradeDatas)
 		{
@@ -1562,8 +1581,11 @@ public sealed class Manager : Component, Component.INetworkListener
 		return UpgradeType.None;
 	}
 
-	public UpgradeRarity GetRandomRarity()
+	public UpgradeRarity GetRandomRarity(PlayerController player)
 	{
+		if ( player.GetStat( PlayerStat.GoldenTicketActive ) > 0f )
+			return UpgradeRarity.Legendary;
+
 		Dictionary<UpgradeRarity, float> weights = new Dictionary<UpgradeRarity, float>
 		{
 			{ UpgradeRarity.Common, 100f },
@@ -1593,9 +1615,9 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void CreateUpgrade(UpgradeType upgradeType, string name, string icon, UpgradeRarity rarity, int maxLevel, 
 		int amountMin, int amountMax, int pricePerAmountMin, int pricePerAmountMax,
-		bool isPassive = false, bool useableInBuyPhase = false)
+		bool isPassive = false, UpgradeUseMode useMode = UpgradeUseMode.OnlyActive)
 	{
-		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, rarity, maxLevel, amountMin, amountMax, pricePerAmountMin, pricePerAmountMax, isPassive, useableInBuyPhase));
+		UpgradeDatas.Add(upgradeType, new UpgradeData(name, icon, rarity, maxLevel, amountMin, amountMax, pricePerAmountMin, pricePerAmountMax, isPassive, useMode ) );
 	}
 
 	UpgradeType GetRandomPickupType()
@@ -1634,7 +1656,6 @@ public sealed class Manager : Component, Component.INetworkListener
 		return UpgradeType.Dash;
 	}
 
-	[Broadcast]
 	public void DisplayArrow(Vector2 pos, Vector2 dir, float lifetime, float speed, float deceleration, Color color)
 	{
 		Arrows.Add( new ArrowData(pos, dir, lifetime, speed, deceleration, color) );

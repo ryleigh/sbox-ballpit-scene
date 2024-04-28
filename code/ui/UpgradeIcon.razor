@@ -110,10 +110,13 @@
 	protected override int BuildHash()
 	{
 		var player = Manager.Instance.GetPlayer(PlayerNum);
+		if (player == null)
+			return 0;
+
 		var isHovered = Manager.Instance.HoveredUpgradeType == UpgradeType;
-		var isSelected = (player?.SelectedUpgradeType ?? UpgradeType.None) == UpgradeType;
+		var isSelected = (player.SelectedUpgradeType == UpgradeType);
 		var selectedHash = isSelected ? Time.Now : 0f;
-		var progress = (player != null && player.PassiveUpgradeProgress.ContainsKey(UpgradeType)) ? player.PassiveUpgradeProgress[UpgradeType] : 0f;
+		var progress = player.PassiveUpgradeProgress.ContainsKey(UpgradeType) ? player.PassiveUpgradeProgress[UpgradeType] : 0f;
 		var useScale = player.UpgradeUseTimes.ContainsKey(UpgradeType) && Manager.Instance.CurrRealTimeNow - player.UpgradeUseTimes[UpgradeType] < 0.75f
 			? Utils.Map(Manager.Instance.CurrRealTimeNow - player.UpgradeUseTimes[UpgradeType], 0f, 0.7f, 1.25f, 1f, EasingType.BounceOut)
 			: 1f;
