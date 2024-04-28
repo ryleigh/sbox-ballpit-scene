@@ -315,8 +315,21 @@ public class Ball : Component
 	}
 
 	[Broadcast]
-	public void SetVelocity( Vector2 velocity, float timeScale = 1f, float duration = 0f, EasingType easingType = EasingType.Linear )
+	public void SetVelocity( Vector2 velocity, float timeScale = 1f, float duration = 0f, EasingType easingType = EasingType.Linear, bool showArrow = true )
 	{
+		if(showArrow)
+		{
+			var ballPos = (Vector2)Transform.Position;
+			Manager.Instance.DisplayArrow(
+				pos: ballPos,
+				dir: velocity.Normal,
+				lifetime: Game.Random.Float( 0.45f, 0.55f ),
+				speed: Game.Random.Float( 85f, 95f ),
+				deceleration: Game.Random.Float( 2.6f, 3.4f ),
+				color: PlayerNum == 0 ? new Color( 0.4f, 0.4f, 1f ) : new Color( 0.4f, 1f, 0.4f )
+			);
+		}
+
 		if ( IsProxy )
 			return;
 

@@ -185,7 +185,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		base.OnAwake();
 
-		StartMode = StartMode.Waiting;
+		StartMode = StartMode.TestActive;
 
 		Instance = this;
 
@@ -230,6 +230,27 @@ public sealed class Manager : Component, Component.INetworkListener
 		{
 			StartNewMatch();
 			StartNewRound();
+
+			foreach( var player in Scene.GetAllComponents<PlayerController>())
+			{
+				player.AdjustUpgradeLevel( UpgradeType.Scatter, 6 );
+				//player.AdjustUpgradeLevel( UpgradeType.Replace, 6 );
+				//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
+				//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
+				//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
+				//player.AdjustUpgradeLevel( UpgradeType.Volley, 9 );
+				//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
+				//player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
+				//player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
+				//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );
+				//player.AdjustUpgradeLevel( UpgradeType.Dash, 8 );
+				//player.AdjustUpgradeLevel( UpgradeType.Blink, 9 );
+				player.AdjustUpgradeLevel( UpgradeType.Converge, 9 );
+				player.AdjustUpgradeLevel( UpgradeType.Gather, 9 );
+				player.AdjustUpgradeLevel( UpgradeType.Redirect, 9 );
+				player.AdjustUpgradeLevel( UpgradeType.Slowmo, 9 );
+				//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 9 );
+			}
 		}
 	}
 
@@ -274,24 +295,6 @@ public sealed class Manager : Component, Component.INetworkListener
 
 		player.ClearStats();
 		playerObj.NetworkSpawn( channel );
-
-		//player.AdjustUpgradeLevel( UpgradeType.Scatter, 6 );
-		//player.AdjustUpgradeLevel( UpgradeType.Replace, 6 );
-		//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
-		//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
-		//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
-		//player.AdjustUpgradeLevel( UpgradeType.Volley, 9 );
-		//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
-		//player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
-		//player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
-		//player.AdjustUpgradeLevel( UpgradeType.MoveSpeed, 4 );
-		//player.AdjustUpgradeLevel( UpgradeType.Dash, 8 );
-		//player.AdjustUpgradeLevel( UpgradeType.Blink, 9 );
-		//player.AdjustUpgradeLevel( UpgradeType.Converge, 9 );
-		//player.AdjustUpgradeLevel( UpgradeType.Gather, 9 );
-		//player.AdjustUpgradeLevel( UpgradeType.Redirect, 9 );
-		//player.AdjustUpgradeLevel( UpgradeType.Slowmo, 9 );
-		//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 9 );
 
 		//SpawnMoneySineWave( channel, Game.Random.Int( 1, 4 ), startAtTop: Game.Random.Int( 0, 1 ) == 0 );
 		//SpawnMoneyTossed( channel, numLevels: 10, new Vector2( CenterLineOffset, 130f ), new Vector2( 128f * -1f + Game.Random.Float( -5f, 5f ), Game.Random.Float( -64f, 15f ) ), time: Game.Random.Float( 0.6f, 0.85f ) );
