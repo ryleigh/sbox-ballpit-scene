@@ -43,8 +43,8 @@ public class ShopItem : Component
 	[Broadcast]
 	public void Init(UpgradeType upgradeType, int numLevels, int price, int playerNum)
 	{
-		if ( IsProxy )
-			return;
+		//if ( IsProxy )
+		//	return;
 
 		UpgradeType = upgradeType;
 		NumLevels = numLevels;

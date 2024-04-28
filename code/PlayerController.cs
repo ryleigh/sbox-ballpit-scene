@@ -286,6 +286,15 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public void TryUseItem(UpgradeType upgradeType)
 	{
+		Manager.Instance.DisplayArrow(
+			pos: Manager.Instance.MouseWorldPos,
+			dir: (Manager.Instance.MouseWorldPos - (Vector2)Transform.Position).Normal,
+			lifetime: 0.75f,
+			speed: 50f,
+			deceleration: 5f,
+			color: new Color( 0.5f, 0.5f, 1f )
+		);
+
 		if ( !ActiveUpgrades.ContainsKey( upgradeType ) )
 			return;
 

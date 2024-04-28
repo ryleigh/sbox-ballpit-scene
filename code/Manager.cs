@@ -38,6 +38,30 @@ public struct UpgradeData
 	}
 }
 
+public class ArrowData
+{
+	public Vector2 pos;
+	public float degrees;
+	public Vector2 dir;
+	public float spawnTime;
+	public float lifetime;
+	public float speed;
+	public float deceleration;
+	public Color color;
+
+	public ArrowData(Vector2 pos, Vector2 dir, float lifetime, float speed, float deceleration, Color color )
+	{
+		this.pos = pos;
+		this.dir = dir;
+		degrees = Utils.VectorToDegrees( dir );
+		spawnTime = RealTime.Now;
+		this.lifetime = lifetime;
+		this.speed = speed;
+		this.deceleration = deceleration;
+		this.color = color;
+	}
+}
+
 public sealed class Manager : Component, Component.INetworkListener
 {
 	public static Manager Instance { get; private set; }
@@ -155,6 +179,8 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public StartMode StartMode { get; set; }
 
+	public List<ArrowData> Arrows { get; private set; }
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -174,6 +200,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		_sideWallXScale = WallLeft.Transform.Scale.x;
 
 		GenerateUpgrades();
+
+		Arrows = new List<ArrowData>();
 	}
 
 	protected override void OnStart()
@@ -285,7 +313,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 
 		//Gizmo.Draw.Color = Color.White;
-		//Gizmo.Draw.Text( $"{_timeSincePickupSpawn} / {_pickupSpawnDelay}", new global::Transform( Vector3.Zero ) );
+		//Gizmo.Draw.Text( $"Arrows: {Arrows.Count()}", new global::Transform( Vector3.Zero ) );
 
 		SlidingGround.Transform.Position = new Vector3( CenterLineOffset, 0f, 0f );
 
@@ -355,6 +383,8 @@ public sealed class Manager : Component, Component.INetworkListener
 		if ( Input.Down( "Score" ) )
 			ShouldBounceTabIndicator = false;
 
+		HandleArrows();
+
 		if ( IsProxy )
 			return;
 
@@ -370,9 +400,7 @@ public sealed class Manager : Component, Component.INetworkListener
 				break;
 			case GamePhase.RoundActive:
 				HandlePickups();
-
-				if ( _airstrikes.Count > 0 )
-					HandleAirstrikes();
+				HandleAirstrikes();
 
 				break;
 			case GamePhase.AfterRoundDelay:
@@ -488,6 +516,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		_targetCenterLineOffset = 0f;
 		CurrentScore = 0;
 		_airstrikes.Clear();
+		Arrows.Clear();
 
 		GamePhase = GamePhase.StartingNewMatch;
 		TimeSincePhaseChange = 0f;
@@ -518,6 +547,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		GamePhase = GamePhase.AfterRoundDelay;
 		_hasIncrementedScore = false;
 		_airstrikes.Clear();
+		Arrows.Clear();
 	}
 
 	void Victory( int winningPlayerNum )
@@ -808,6 +838,21 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 	}
 
+	void HandleArrows()
+	{
+		for ( int i = Arrows.Count - 1; i >= 0; i-- )
+		{
+			var arrow = Arrows[i];
+
+			arrow.pos += arrow.dir * arrow.speed * RealTime.Delta;
+			arrow.speed *= (1f - arrow.deceleration * RealTime.Delta);
+
+			var elapsedTime = RealTime.Now - arrow.spawnTime;
+			if ( elapsedTime > arrow.lifetime )
+				Arrows.RemoveAt( i );
+		}
+	}
+
 	[Broadcast]
 	public void SpawnRepelEffect( Vector2 pos )
 	{
@@ -1015,6 +1060,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		_targetCenterLineOffset = 0f;
 		CurrentScore = 0;
 		_airstrikes.Clear();
+		Arrows.Clear();
 
 		Player0?.Respawn();
 		Player1?.Respawn();
@@ -1583,5 +1629,11 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 
 		return UpgradeType.Dash;
+	}
+
+	[Broadcast]
+	public void DisplayArrow(Vector2 pos, Vector2 dir, float lifetime, float speed, float deceleration, Color color)
+	{
+		Arrows.Add( new ArrowData(pos, dir, lifetime, speed, deceleration, color) );
 	}
 }

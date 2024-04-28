@@ -1,0 +1,29 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+
+<root>
+	@foreach(var arrow in Manager.Instance.Arrows)
+	{
+		var elapsedTime = RealTime.Now - arrow.spawnTime;
+		var screenPos = Scene.Camera.PointToScreenPixels(arrow.pos) * Panel.ScaleFromScreen;
+		
+		var opacity = Utils.Map(elapsedTime, 0f, 0.15f, 0f, 1f) * Utils.Map(elapsedTime, 0f, arrow.lifetime, 1f, 0f, EasingType.ExpoIn);
+		var scale = Utils.Map(elapsedTime, 0f, arrow.lifetime, 1f, 1.2f, EasingType.Linear);
+
+		<div class="text" style="left: @(screenPos.x - 200)px; top: @(screenPos.y - 40)px; opacity:@(opacity); 
+			color:@(arrow.color.Rgba);
+			transform: scale( @(scale) ) rotate( @(-arrow.degrees) );">
+			➜
+		</div>
+	}
+</root>
+
+@code
+{
+	protected override int BuildHash()
+	{
+		var numItems = Manager.Instance.Arrows.Count();
+		return System.HashCode.Combine(numItems > 0 ? Time.Now : 0f);
+	}
+}

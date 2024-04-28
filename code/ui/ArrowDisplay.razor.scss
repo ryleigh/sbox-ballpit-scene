@@ -1,0 +1,24 @@
+ArrowDisplay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+
+	.text {
+		position: absolute;
+		width: 400px;
+		height: 80px;
+		color: #fff;
+		text-align: center;
+		justify-content: center;
+		align-items: center;
+		//background-color: #0000ff;
+		overflow: visible;
+		font-family: "Proxima Soft";
+		font-weight: 800;
+		//text-shadow: -8px 8px 6px #000000ee;
+		text-stroke: 12px black;
+		font-size: 60px;
+	}
+}
