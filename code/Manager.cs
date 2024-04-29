@@ -6,7 +6,7 @@ using System.Numerics;
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
 public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, MoreShopItems, Endow, Fade, Barrier, Airstrike, ShorterBuyPhase,
- GoldenTicket, }
+ GoldenTicket, BlackHole, }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 public enum UpgradeUseMode { OnlyActive, OnlyBuyPhase, Both }
 
@@ -241,7 +241,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
 			//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
 			//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
-			//player.AdjustUpgradeLevel( UpgradeType.Volley, 9 );
+			player.AdjustUpgradeLevel( UpgradeType.Volley, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
 			//player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
 			//player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
@@ -250,10 +250,11 @@ public sealed class Manager : Component, Component.INetworkListener
 			//player.AdjustUpgradeLevel( UpgradeType.Blink, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.Converge, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.Gather, 9 );
-			player.AdjustUpgradeLevel( UpgradeType.Redirect, 9 );
-			player.AdjustUpgradeLevel( UpgradeType.Slowmo, 9 );
-			player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 9 );
-			player.AdjustUpgradeLevel( UpgradeType.GoldenTicket, 9 );
+			//player.AdjustUpgradeLevel( UpgradeType.Redirect, 9 );
+			//player.AdjustUpgradeLevel( UpgradeType.Slowmo, 9 );
+			//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 9 );
+			//player.AdjustUpgradeLevel( UpgradeType.GoldenTicket, 9 );
+			player.AdjustUpgradeLevel( UpgradeType.BlackHole, 9 );
 		}
 	}
 
@@ -1415,6 +1416,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			case UpgradeType.Barrier: return $"Briefly block your gutter";
 			case UpgradeType.Airstrike: return $"Drop bombs near your cursor";
 			case UpgradeType.GoldenTicket: return $"Your shop only offers legendary items during this buy phase";
+			case UpgradeType.BlackHole: return $"All balls move toward center and increase speed";
 		}
 
 		return "";
@@ -1571,6 +1573,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.Barrier, "Barrier", "🚧", UpgradeRarity.Uncommon, maxLevel: 6, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
 		CreateUpgrade( UpgradeType.Airstrike, "Airstrike", "🚀", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 8, pricePerAmountMax: 12 );
 		CreateUpgrade( UpgradeType.GoldenTicket, "Golden Ticket", "🎟️", UpgradeRarity.Legendary, maxLevel: 1, amountMin: 1, amountMax: 1, pricePerAmountMin: 12, pricePerAmountMax: 15, useMode: UpgradeUseMode.OnlyBuyPhase );
+		CreateUpgrade( UpgradeType.BlackHole, "Black Hole", "🌌", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 10, pricePerAmountMax: 11 );
 
 		foreach (var upgradeData in UpgradeDatas)
 		{

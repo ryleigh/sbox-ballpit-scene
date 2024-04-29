@@ -99,8 +99,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	protected override void OnUpdate()
 	{
-		Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
-		Gizmo.Draw.Text( $"GoldenTicket: {GetStat(PlayerStat.GoldenTicketActive)}", new global::Transform( Transform.Position ) );
+		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
+		//Gizmo.Draw.Text( $"GoldenTicket: {GetStat(PlayerStat.GoldenTicketActive)}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity );
 
