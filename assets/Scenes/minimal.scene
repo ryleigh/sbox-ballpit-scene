@@ -61,6 +61,10 @@
             "_type": "gameobject",
             "prefab": "prefabs/reroll_button.prefab"
           },
+          "RingVfxPrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/ring_vfx.prefab"
+          },
           "ShopItemPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/shop_item.prefab"
@@ -323,8 +327,7 @@
         },
         {
           "__type": "Sandbox.Highlight",
-          "__guid": "36816886-1e41-4675-80ed-da637c23aa9f",
-          "__enabled": false
+          "__guid": "36816886-1e41-4675-80ed-da637c23aa9f"
         },
         {
           "__type": "CameraController",
@@ -1134,7 +1137,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-27T23:45:03.4453783-07:00",
+  "LastSaved": "2024-04-28T23:18:36.1243776-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

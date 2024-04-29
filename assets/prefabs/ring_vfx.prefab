@@ -1,0 +1,50 @@
+{
+  "RootObject": {
+    "__guid": "87f0931a-8202-44f0-ae29-02620c416089",
+    "Name": "Sphere",
+    "Position": "-57.46989,0,2",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "Components": [
+      {
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "3e73002c-ddb8-489a-a8ff-87d58c4da4c9",
+        "BodyGroups": 18446744073709551615,
+        "Model": "models/dev/sphere.vmdl",
+        "RenderType": "On",
+        "Tint": "1,1,1,0"
+      },
+      {
+        "__type": "Sandbox.HighlightOutline",
+        "__guid": "4f48f5eb-5c06-4823-81cd-983c33fd0847",
+        "Color": "1,1,1,0",
+        "InsideColor": "0,0,0,0",
+        "InsideObscuredColor": "0,0,0,0",
+        "ObscuredColor": "0,0,0,0.4",
+        "Width": 0.6
+      },
+      {
+        "__type": "RingVfx",
+        "__guid": "59671154-d794-4b3b-9871-7b425f4e5586",
+        "Outline": {
+          "_type": "component",
+          "component_id": "4f48f5eb-5c06-4823-81cd-983c33fd0847",
+          "go": "87f0931a-8202-44f0-ae29-02620c416089",
+          "component_type": "HighlightOutline"
+        },
+        "Renderer": {
+          "_type": "component",
+          "component_id": "3e73002c-ddb8-489a-a8ff-87d58c4da4c9",
+          "go": "87f0931a-8202-44f0-ae29-02620c416089",
+          "component_type": "ModelRenderer"
+        }
+      }
+    ]
+  },
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "ResourceVersion": 1,
+  "__version": 1,
+  "__references": []
+}

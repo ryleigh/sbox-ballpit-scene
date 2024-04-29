@@ -78,6 +78,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject MoneyPickupPrefab { get; set; }
 	[Property] public GameObject ExplosionPrefab { get; set; }
 	[Property] public GameObject RepelEffectPrefab { get; set; }
+	[Property] public GameObject RingVfxPrefab { get; set; }
 	[Property] public GameObject FallingShadowPrefab { get; set; }
 	[Property] public GameObject BallExplosionParticles { get; set; }
 	[Property] public GameObject BallGutterParticles { get; set; }
@@ -1696,5 +1697,13 @@ public sealed class Manager : Component, Component.INetworkListener
 		Player1?.OnGamePhaseChange( GamePhase, phase );
 
 		GamePhase = phase;
+	}
+
+	[Broadcast]
+	public void SpawnRingVfx( Vector2 pos, float lifetime, Color colorStart, Color colorEnd, float radiusStart, float radiusEnd, float outlineWidthStart, float outlineWidthEnd, EasingType easingType )
+	{
+		var ringObj = RingVfxPrefab.Clone( new Vector3( pos.x, pos.y, 5f ) );
+		var ring = ringObj.Components.Get<RingVfx>();
+		ring.Init( lifetime, colorStart, colorEnd, radiusStart, radiusEnd, outlineWidthStart, outlineWidthEnd, easingType );
 	}
 }
