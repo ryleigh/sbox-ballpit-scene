@@ -343,6 +343,10 @@ public sealed class Manager : Component, Component.INetworkListener
 				Scene.TimeScale = Utils.Map( _realTimeSinceSlowmoStarted, 0f, _slowmoTime, _slowmoTimeScale, 1f, _slowmoEasingType );
 			}
 		}
+		else
+		{
+			Scene.TimeScale = 1f;
+		}
 
 		HoveredObject = null;
 		var camera = Scene.GetAllComponents<CameraComponent>().FirstOrDefault();
@@ -918,20 +922,20 @@ public sealed class Manager : Component, Component.INetworkListener
 		RespawnRerollButton( playerNum );
 	}
 
-	[Broadcast]
-	public void RerollShopItems(int playerNum, bool increasePrice)
-	{
-		DestroyShopItems( playerNum );
+	//[Broadcast]
+	//public void RerollShopItemsLegendary(int playerNum )
+	//{
+	//	if ( IsProxy )
+	//		return;
 
-		var player = GetPlayer( playerNum );
-		if ( player == null )
-			return;
+	//	DestroyShopItems( playerNum );
 
-		if( increasePrice )
-			player.IncreaseRerollPrice();
+	//	var player = GetPlayer( playerNum );
+	//	if ( player == null )
+	//		return;
 
-		CreateShopItems( player );
-	}
+	//	CreateShopItems( player );
+	//}
 
 	async void RespawnRerollButton( int playerNum )
 	{
@@ -1419,7 +1423,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			case UpgradeType.Fade: return $"Ignore collision for 1 second";
 			case UpgradeType.Barrier: return $"Briefly block your gutter";
 			case UpgradeType.Airstrike: return $"Drop bombs near your cursor";
-			case UpgradeType.GoldenTicket: return $"Your shop only offers legendary items during this buy phase";
+			case UpgradeType.GoldenTicket: return $"During this buy phase, your rerolled items will be legendary";
 			case UpgradeType.BlackHole: return $"All balls move toward center and increase speed";
 		}
 
@@ -1622,7 +1626,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			{ UpgradeRarity.Uncommon, 58f },
 			{ UpgradeRarity.Rare, 27f },
 			{ UpgradeRarity.Epic, 16f },
-			{ UpgradeRarity.Legendary, 3f },
+			{ UpgradeRarity.Legendary, 43f },
 		};
 
 		var total = 0f;

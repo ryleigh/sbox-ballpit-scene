@@ -8,7 +8,7 @@ public class GoldenTicketUpgrade : Upgrade
 		base.Use();
 
 		Player.SetStat( PlayerStat.GoldenTicketActive, 1f );
-		Manager.Instance.RerollShopItems( Player.PlayerNum, increasePrice: false );
+		//Manager.Instance.RerollShopItemsLegendary( Player.PlayerNum );
 	}
 
 	public override void OnGamePhaseChange( GamePhase oldPhase, GamePhase newPhase )

@@ -296,7 +296,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public void TryUseItem(UpgradeType upgradeType)
 	{
-		//Manager.Instance.SpawnRingVfx( Manager.Instance.MouseWorldPos, 0.25f, Color.White, Color.Black.WithAlpha(0f), 10f, 30f, 0.5f, 1f, EasingType.QuadOut );
+		//Manager.Instance.SpawnRingVfx( Manager.Instance.MouseWorldPos, 0.25f, Color.White, Color.Blue, 10f, 30f, 0.5f, 1f, EasingType.QuadOut );
 
 		if ( !ActiveUpgrades.ContainsKey( upgradeType ) )
 			return;

@@ -39,7 +39,7 @@ public class RingVfx : Component
 		{
 			var progress = Utils.Map( TimeSinceSpawn, 0f, _lifetime, 0f, 1f, _easingType );
 
-			var opacityMult = Utils.Map( TimeSinceSpawn, 0f, 0.1f, 0f, 1f, EasingType.Linear ) * Utils.Map( TimeSinceSpawn, 0f, _lifetime, 1f, 0f, EasingType.QuadIn );
+			var opacityMult = Utils.Map( TimeSinceSpawn, 0f, 0.1f, 0f, 1f, EasingType.Linear ) * Utils.Map( TimeSinceSpawn, _lifetime - 0.1f, _lifetime, 1f, 0f, EasingType.Linear );
 			Outline.Color = Color.Lerp( _colorStart.WithAlpha(_colorStart.a * opacityMult), _colorEnd.WithAlpha(_colorEnd.a * opacityMult ), progress );
 			Outline.ObscuredColor = Outline.Color;
 
