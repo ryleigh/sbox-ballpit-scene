@@ -452,7 +452,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			case GamePhase.Victory:
 				if ( TimeSincePhaseChange > VICTORY_DELAY )
 				{
-					GamePhase = GamePhase.WaitingForPlayers;
+					SetGamePhase( GamePhase.WaitingForPlayers );
 					CurrentScore = 0;
 					_targetCenterLineOffset = 0f;
 				}
@@ -524,7 +524,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		_airstrikes.Clear();
 		Arrows.Clear();
 
-		GamePhase = GamePhase.StartingNewMatch;
+		SetGamePhase( GamePhase.StartingNewMatch );
 		TimeSincePhaseChange = 0f;
 		_numSecondsLeftInPhase = (int)START_NEW_MATCH_DELAY;
 
@@ -536,7 +536,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	void StartNewRound()
 	{
 		RoundNum++;
-		GamePhase = GamePhase.RoundActive;
+		SetGamePhase( GamePhase.RoundActive );
 		TimeSincePhaseChange = 0f;
 		_timeSincePickupSpawn = 0f;
 		_pickupSpawnDelay = Game.Random.Float( 14f, 22f ) * Utils.Map(RoundNum, 1, 20, 1f, 0.25f);
@@ -550,7 +550,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	void FinishRound()
 	{
 		DespawnBallsRPC();
-		GamePhase = GamePhase.AfterRoundDelay;
+		SetGamePhase( GamePhase.AfterRoundDelay );
 		_hasIncrementedScore = false;
 		_airstrikes.Clear();
 		Arrows.Clear();
@@ -589,7 +589,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			}
 		}
 
-		GamePhase = GamePhase.Victory;
+		SetGamePhase( GamePhase.Victory );
 		WinningPlayerName = GetPlayer( winningPlayerNum ).GameObject.Network.OwnerConnection.DisplayName;
 	}
 
@@ -624,7 +624,7 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	void StartBuyPhase()
 	{
-		GamePhase = GamePhase.BuyPhase;
+		SetGamePhase( GamePhase.BuyPhase );
 		BuyPhaseDuration = 30f - (Player0?.GetUpgradeLevel( UpgradeType.ShorterBuyPhase ) ?? 0) * 10f - (Player1?.GetUpgradeLevel( UpgradeType.ShorterBuyPhase ) ?? 0) * 10f;
 		TimeSincePhaseChange = 0f;
 
@@ -914,6 +914,21 @@ public sealed class Manager : Component, Component.INetworkListener
 		RespawnRerollButton( playerNum );
 	}
 
+	[Broadcast]
+	public void RerollShopItems(int playerNum, bool increasePrice)
+	{
+		DestroyShopItems( playerNum );
+
+		var player = GetPlayer( playerNum );
+		if ( player == null )
+			return;
+
+		if( increasePrice )
+			player.IncreaseRerollPrice();
+
+		CreateShopItems( player );
+	}
+
 	async void RespawnRerollButton( int playerNum )
 	{
 		await Task.Delay( 1000 );
@@ -1094,7 +1109,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		BarrierLeft.Enabled = false;
 		BarrierRight.Enabled = false;
 
-		GamePhase = GamePhase.WaitingForPlayers;
+		SetGamePhase( GamePhase.WaitingForPlayers );
 	}
 
 	[Broadcast]
@@ -1659,5 +1674,13 @@ public sealed class Manager : Component, Component.INetworkListener
 	public void DisplayArrow(Vector2 pos, Vector2 dir, float lifetime, float speed, float deceleration, Color color)
 	{
 		Arrows.Add( new ArrowData(pos, dir, lifetime, speed, deceleration, color) );
+	}
+
+	void SetGamePhase(GamePhase phase)
+	{
+		Player0?.OnGamePhaseChange( GamePhase, phase );
+		Player1?.OnGamePhaseChange( GamePhase, phase );
+
+		GamePhase = phase;
 	}
 }

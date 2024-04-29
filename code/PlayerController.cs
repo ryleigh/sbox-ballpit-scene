@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using Sandbox.Citizen;
+using Sandbox.Services;
 using Sandbox.UI;
 using System.Numerics;
 using System.Threading;
@@ -75,6 +76,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	[Sync] public NetDictionary<PlayerStat, float> Stats { get; set; } = new();
 	public float GetStat( PlayerStat stat ) => Stats.ContainsKey(stat) ? Stats[stat] : 0f;
+	[Broadcast] public void SetStat(PlayerStat stat, float value) => Stats[stat] = value;
+	[Broadcast] public void ClearStat( PlayerStat stat ) { if ( Stats.ContainsKey( stat ) ) { Stats.Remove( stat ); } }
 
 	protected override void OnAwake()
 	{
@@ -96,8 +99,8 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	protected override void OnUpdate()
 	{
-		//Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
-		//Gizmo.Draw.Text( $"{str}", new global::Transform( Transform.Position ) );
+		Gizmo.Draw.Color = Color.White.WithAlpha( 0.95f );
+		Gizmo.Draw.Text( $"GoldenTicket: {GetStat(PlayerStat.GoldenTicketActive)}", new global::Transform( Transform.Position ) );
 
 		Animator.WithVelocity( Velocity );
 
@@ -954,6 +957,15 @@ public class PlayerController : Component, Component.ITriggerListener
 			_isFading = false;
 			IsIntangible = false;
 			SetRenderOpacityRPC( 1f );
+		}
+	}
+
+	public void OnGamePhaseChange( GamePhase oldPhase, GamePhase newPhase )
+	{
+		foreach ( var pair in LocalUpgrades )
+		{
+			var upgrade = pair.Value;
+			upgrade.OnGamePhaseChange( oldPhase, newPhase );
 		}
 	}
 

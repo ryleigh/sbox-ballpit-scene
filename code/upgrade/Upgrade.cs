@@ -46,4 +46,9 @@ public class Upgrade
 	{
 
 	}
+
+	public virtual void OnGamePhaseChange(GamePhase oldPhase, GamePhase newPhase)
+	{
+
+	}
 }
