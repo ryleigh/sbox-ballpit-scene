@@ -47,7 +47,7 @@ public class Explosion : Component
 				{
 					var speed = ball.Velocity.Length * 1.1f;
 					var dir = ((Vector2)ball.Transform.Position - (Vector2)Transform.Position).Normal;
-					ball.SetVelocity( dir * speed, timeScale: 0f, duration: Game.Random.Float(0.13f, 0.2f), EasingType.ExpoIn, showArrow: false );
+					ball.SetVelocity( dir * speed, timeScale: 0f, duration: Game.Random.Float(0.13f, 0.2f), EasingType.ExpoIn, showArrow: true );
 				}
 			}
 

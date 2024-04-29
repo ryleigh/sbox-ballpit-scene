@@ -177,6 +177,8 @@ public class MoneyPickup : Component
 						_isTossed = false;
 						CanBePickedUp = true;
 						IsFlying = false;
+
+						Manager.Instance.PlaySfx( "bubble", Transform.Position, volume: 0.6f, pitch: Game.Random.Float( 0.8f, 0.85f ) );
 					}
 					else
 					{

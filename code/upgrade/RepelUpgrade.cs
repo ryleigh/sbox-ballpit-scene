@@ -23,7 +23,7 @@ public class RepelUpgrade : Upgrade
 			{
 				var speed = ball.Velocity.Length * 1.15f;
 				var dir = ((Vector2)ball.Transform.Position - (Vector2)Player.Transform.Position).Normal;
-				ball.SetVelocity( dir * speed, timeScale: 0f, duration: 0.1f, EasingType.ExpoIn, showArrow: false );
+				ball.SetVelocity( dir * speed, timeScale: 0f, duration: 0.25f, EasingType.ExpoIn, showArrow: true );
 			}
 		}
 	}

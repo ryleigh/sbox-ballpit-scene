@@ -344,7 +344,7 @@ public class Ball : Component
 			Manager.Instance.DisplayArrow(
 				pos: ballPos,
 				dir: velocity.Normal,
-				lifetime: Game.Random.Float( 0.45f, 0.55f ),
+				lifetime: duration * Game.Random.Float( 0.95f, 1.05f ),
 				speed: Game.Random.Float( 85f, 95f ),
 				deceleration: Game.Random.Float( 2.6f, 3.4f ),
 				color: PlayerNum == 0 ? new Color( 0.6f, 0.6f, 1f ) : new Color( 0.4f, 1f, 0.4f )

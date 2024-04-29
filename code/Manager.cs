@@ -241,7 +241,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			//player.AdjustUpgradeLevel( UpgradeType.Scatter, 6 );
 			//player.AdjustUpgradeLevel( UpgradeType.Replace, 6 );
 			//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
-			//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
+			player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
 			//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
 			//player.AdjustUpgradeLevel( UpgradeType.Cleave, 5 );
 			//player.AdjustUpgradeLevel( UpgradeType.Volley, 9 );
@@ -255,7 +255,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			//player.AdjustUpgradeLevel( UpgradeType.Gather, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.Redirect, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.Slowmo, 9 );
-			player.AdjustUpgradeLevel( UpgradeType.Backstab, 5 );
+			//player.AdjustUpgradeLevel( UpgradeType.Backstab, 5 );
 			//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.GoldenTicket, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.BlackHole, 9 );
@@ -1631,7 +1631,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			{ UpgradeRarity.Uncommon, 58f },
 			{ UpgradeRarity.Rare, 27f },
 			{ UpgradeRarity.Epic, 16f },
-			{ UpgradeRarity.Legendary, 43f },
+			{ UpgradeRarity.Legendary, 3f },
 		};
 
 		var total = 0f;
