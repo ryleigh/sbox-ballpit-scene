@@ -77,7 +77,6 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject PickupItemPrefab { get; set; }
 	[Property] public GameObject MoneyPickupPrefab { get; set; }
 	[Property] public GameObject ExplosionPrefab { get; set; }
-	[Property] public GameObject RepelEffectPrefab { get; set; }
 	[Property] public GameObject RingVfxPrefab { get; set; }
 	[Property] public GameObject FallingShadowPrefab { get; set; }
 	[Property] public GameObject BallExplosionParticles { get; set; }
@@ -189,7 +188,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		base.OnAwake();
 
-		StartMode = StartMode.TestShop;
+		StartMode = StartMode.TestActive;
 
 		Instance = this;
 
@@ -878,12 +877,6 @@ public sealed class Manager : Component, Component.INetworkListener
 			if ( elapsedTime > arrow.lifetime )
 				Arrows.RemoveAt( i );
 		}
-	}
-
-	[Broadcast]
-	public void SpawnRepelEffect( Vector2 pos )
-	{
-		RepelEffectPrefab.Clone( new Vector3( pos.x, pos.y, 0f ) );
 	}
 
 	[Broadcast]
