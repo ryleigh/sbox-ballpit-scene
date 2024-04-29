@@ -296,7 +296,7 @@ public class PlayerController : Component, Component.ITriggerListener
 
 	public void TryUseItem(UpgradeType upgradeType)
 	{
-		//Manager.Instance.SpawnRingVfx( Manager.Instance.MouseWorldPos, 0.25f, Color.White, Color.Blue, 10f, 30f, 0.5f, 1f, EasingType.QuadOut );
+		//Manager.Instance.SpawnRingVfx( Manager.Instance.MouseWorldPos, 0.7f, Color.Blue.WithAlpha( 0.75f ), Color.Blue.WithAlpha(0f), 5f, 500f, 1f, 2f, Color.Blue.WithAlpha( 0.7f ), Color.Blue.WithAlpha(0f), EasingType.QuadOut );
 
 		if ( !ActiveUpgrades.ContainsKey( upgradeType ) )
 			return;
@@ -974,6 +974,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		}
 	}
 
+	[Broadcast]
 	public void OnGamePhaseChange( GamePhase oldPhase, GamePhase newPhase )
 	{
 		foreach ( var pair in LocalUpgrades )

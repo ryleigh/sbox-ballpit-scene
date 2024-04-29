@@ -9,6 +9,6 @@ public class SlowmoUpgrade : Upgrade
 	{
 		base.Use();
 
-		Manager.SlowmoRPC( 0.2f, 2.5f, EasingType.ExpoIn );
+		Manager.SlowmoRPC( (Vector2)Player.Transform.Position, 0.2f, 2.5f, EasingType.ExpoIn );
 	}
 }

@@ -1,5 +1,5 @@
 {
-  "__guid": "9f832399-4887-46b0-8f21-2ee284f538e2",
+  "__guid": "d8891246-accf-46b0-84a1-657884b0a70d",
   "GameObjects": [
     {
       "__guid": "c155d476-e3e0-4db6-832b-8bc2675a5ff2",
@@ -179,7 +179,7 @@
     {
       "__guid": "3c1bff51-07c9-4229-88d3-b2fa65222b6f",
       "Name": "bleachers",
-      "Position": "-284.4013,-0.05786896,80",
+      "Position": "-284.4013,-0.05786896,120",
       "Scale": "0.9637875,2.973863,1",
       "Enabled": true,
       "NetworkMode": 2,
@@ -198,7 +198,7 @@
     {
       "__guid": "45cf1ed1-1383-41de-bb95-ed23733d24c2",
       "Name": "bleachers (1)",
-      "Position": "284.401,-0.05786896,80",
+      "Position": "284.401,-0.05786896,120",
       "Scale": "0.9635918,2.973863,1",
       "Enabled": true,
       "NetworkMode": 2,
@@ -217,7 +217,7 @@
     {
       "__guid": "03f432b7-49ab-4841-98eb-26875137ade5",
       "Name": "bleachers (2)",
-      "Position": "0,164.9621,80",
+      "Position": "0,164.9621,120",
       "Scale": "6.338237,0.8217655,1.199364",
       "Enabled": true,
       "NetworkMode": 2,
@@ -236,7 +236,7 @@
     {
       "__guid": "e317f223-9408-4249-8b5d-d75ed94f617d",
       "Name": "bleachers (3)",
-      "Position": "0,-164.962,80",
+      "Position": "0,-164.962,120",
       "Scale": "5.890082,0.8205014,1",
       "Enabled": true,
       "NetworkMode": 2,
@@ -339,7 +339,7 @@
       "__guid": "244b9dbc-1bfc-433b-83d8-c98806a4ef57",
       "Name": "wall",
       "Position": "-235,0,0",
-      "Scale": "0.05,4.95,2.99",
+      "Scale": "0.05,4.95,4.7",
       "Enabled": true,
       "NetworkMode": 2,
       "Components": [
@@ -363,10 +363,91 @@
       ]
     },
     {
+      "__guid": "adeed76a-8fe9-490b-a503-186c2fd7b006",
+      "Name": "wall (1)",
+      "Position": "235,0,0",
+      "Scale": "0.05,4.95,4.7",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "1b7d0926-0f13-4845-881d-0ca1c36ac36b",
+          "BodyGroups": 18446744073709551615,
+          "Model": "models/dev/box.vmdl",
+          "RenderType": "Off",
+          "Tint": "0,0,0,1"
+        },
+        {
+          "__type": "Sandbox.BoxCollider",
+          "__guid": "b7647085-44b3-4268-b487-db3c3597ca5b",
+          "Center": "0,0,0",
+          "IsTrigger": false,
+          "Scale": "50,50,50",
+          "Static": true,
+          "Surface": "surfaces/default.surface"
+        }
+      ]
+    },
+    {
+      "__guid": "7337425d-603a-4591-9fe0-fee4b34d8939",
+      "Name": "wall (2)",
+      "Position": "0,-122.8541,0",
+      "Scale": "9.45,0.05,4.7",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "3d012adf-0596-420c-afb2-710e9d048e50",
+          "BodyGroups": 18446744073709551615,
+          "Model": "models/dev/box.vmdl",
+          "RenderType": "Off",
+          "Tint": "0,0,0,1"
+        },
+        {
+          "__type": "Sandbox.BoxCollider",
+          "__guid": "2d6ad031-7469-41bc-800e-316611eaed6a",
+          "Center": "0,0,0",
+          "IsTrigger": false,
+          "Scale": "50,50,50",
+          "Static": true,
+          "Surface": "surfaces/default.surface"
+        }
+      ]
+    },
+    {
+      "__guid": "84da3e36-97bc-4c95-b72b-2c94165916b9",
+      "Name": "wall (3)",
+      "Position": "0,122.854,0",
+      "Scale": "9.45,0.05,4.7",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "53696897-a3c8-45da-a1e1-9b33d17f9557",
+          "BodyGroups": 18446744073709551615,
+          "Model": "models/dev/box.vmdl",
+          "RenderType": "Off",
+          "Tint": "0,0,0,1"
+        },
+        {
+          "__type": "Sandbox.BoxCollider",
+          "__guid": "c227d366-6cb4-41a5-84f5-dc6896ec4634",
+          "Center": "0,0,0",
+          "IsTrigger": false,
+          "Scale": "50,50,50",
+          "Static": true,
+          "Surface": "surfaces/default.surface"
+        }
+      ]
+    },
+    {
       "__guid": "5bcfadd0-3533-47ae-bd63-5d9a6594be02",
       "Name": "wall_green",
       "Position": "-232.8196,0,0",
-      "Scale": "0.05,4.95,2.99",
+      "Scale": "0.05,4.95,4.68",
       "Enabled": true,
       "NetworkMode": 2,
       "Components": [
@@ -393,7 +474,7 @@
       "__guid": "dfb53710-7619-4007-9dac-e2fe97f15dcc",
       "Name": "barrier_left",
       "Position": "-231.5,0,-2.5",
-      "Scale": "0.05,4.95,2.99",
+      "Scale": "0.05,4.95,4.68",
       "NetworkMode": 2,
       "Components": [
         {
@@ -427,37 +508,10 @@
       ]
     },
     {
-      "__guid": "adeed76a-8fe9-490b-a503-186c2fd7b006",
-      "Name": "wall (1)",
-      "Position": "235,0,0",
-      "Scale": "0.05,4.95,2.99",
-      "Enabled": true,
-      "NetworkMode": 2,
-      "Components": [
-        {
-          "__type": "Sandbox.ModelRenderer",
-          "__guid": "1b7d0926-0f13-4845-881d-0ca1c36ac36b",
-          "BodyGroups": 18446744073709551615,
-          "Model": "models/dev/box.vmdl",
-          "RenderType": "Off",
-          "Tint": "0,0,0,1"
-        },
-        {
-          "__type": "Sandbox.BoxCollider",
-          "__guid": "b7647085-44b3-4268-b487-db3c3597ca5b",
-          "Center": "0,0,0",
-          "IsTrigger": false,
-          "Scale": "50,50,50",
-          "Static": true,
-          "Surface": "surfaces/default.surface"
-        }
-      ]
-    },
-    {
       "__guid": "7567ac62-ee13-4f31-b15e-104725a78dae",
       "Name": "wall_blue",
       "Position": "232.82,0,0",
-      "Scale": "0.05,4.95,2.99",
+      "Scale": "0.05,4.95,4.68",
       "Enabled": true,
       "NetworkMode": 2,
       "Components": [
@@ -484,7 +538,7 @@
       "__guid": "f51bce49-d888-468d-9bdc-a8963d64c5e3",
       "Name": "barrier_right",
       "Position": "231.5,0,-2.5",
-      "Scale": "0.05,4.95,2.99",
+      "Scale": "0.05,4.95,4.68",
       "NetworkMode": 2,
       "Components": [
         {
@@ -514,60 +568,6 @@
             "go": "f51bce49-d888-468d-9bdc-a8963d64c5e3",
             "component_type": "ModelRenderer"
           }
-        }
-      ]
-    },
-    {
-      "__guid": "7337425d-603a-4591-9fe0-fee4b34d8939",
-      "Name": "wall (2)",
-      "Position": "0,-122.8541,0",
-      "Scale": "9.45,0.05,3",
-      "Enabled": true,
-      "NetworkMode": 2,
-      "Components": [
-        {
-          "__type": "Sandbox.ModelRenderer",
-          "__guid": "3d012adf-0596-420c-afb2-710e9d048e50",
-          "BodyGroups": 18446744073709551615,
-          "Model": "models/dev/box.vmdl",
-          "RenderType": "Off",
-          "Tint": "0,0,0,1"
-        },
-        {
-          "__type": "Sandbox.BoxCollider",
-          "__guid": "2d6ad031-7469-41bc-800e-316611eaed6a",
-          "Center": "0,0,0",
-          "IsTrigger": false,
-          "Scale": "50,50,50",
-          "Static": true,
-          "Surface": "surfaces/default.surface"
-        }
-      ]
-    },
-    {
-      "__guid": "84da3e36-97bc-4c95-b72b-2c94165916b9",
-      "Name": "wall (3)",
-      "Position": "0,122.854,0",
-      "Scale": "9.45,0.05,3",
-      "Enabled": true,
-      "NetworkMode": 2,
-      "Components": [
-        {
-          "__type": "Sandbox.ModelRenderer",
-          "__guid": "53696897-a3c8-45da-a1e1-9b33d17f9557",
-          "BodyGroups": 18446744073709551615,
-          "Model": "models/dev/box.vmdl",
-          "RenderType": "Off",
-          "Tint": "0,0,0,1"
-        },
-        {
-          "__type": "Sandbox.BoxCollider",
-          "__guid": "c227d366-6cb4-41a5-84f5-dc6896ec4634",
-          "Center": "0,0,0",
-          "IsTrigger": false,
-          "Scale": "50,50,50",
-          "Static": true,
-          "Surface": "surfaces/default.surface"
         }
       ]
     },
@@ -1137,7 +1137,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-29T00:00:06.4943035-07:00",
+  "LastSaved": "2024-04-29T02:48:00.8001658-07:00",
   "ResourceVersion": 1,
   "__version": 1,
   "__references": []

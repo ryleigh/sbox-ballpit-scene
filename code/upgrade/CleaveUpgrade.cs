@@ -36,7 +36,8 @@ public class CleaveUpgrade : Upgrade
 
 		TimeSinceRedirect = 0f;
 
-		Manager.Instance.SpawnRingVfx( playerPos, Game.Random.Float(0.2f, 0.25f), Color.White, Color.White.WithAlpha(0f), RADIUS * 0.33f, RADIUS * 0.8f, outlineWidthStart: 1.5f, outlineWidthEnd: 1f, EasingType.ExpoOut );
+		Manager.Instance.SpawnRingVfxRPC( playerPos, Game.Random.Float(0.2f, 0.25f), Color.White, Color.White.WithAlpha(0f), RADIUS * 0.33f, RADIUS * 0.8f, outlineWidthStart: 1.5f, outlineWidthEnd: 1f,
+			colorInsideStart: Color.Transparent, colorInsideEnd: Color.Transparent, EasingType.ExpoOut );
 
 		Manager.Instance.PlaySfx( "bubble", Player.Transform.Position, volume: 0.9f, pitch: Game.Random.Float( 1.2f, 1.3f ) );
 	}

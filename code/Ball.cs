@@ -53,11 +53,16 @@ public class Ball : Component
 			return;
 	}
 
-	public void SetRadius( float radius)
+	public void Init( int playerNum, int currentSide, float radius, Vector2 velocity )
 	{
+		PlayerNum = playerNum;
+		CurrentSide = currentSide;
+
 		Radius = radius;
 		var scale = radius * (0.25f / 8f);
 		Transform.LocalScale = _localScaleStart = new Vector3( scale );
+
+		Velocity = velocity;
 	}
 
 	protected override void OnUpdate()
@@ -273,6 +278,22 @@ public class Ball : Component
 			Manager.Instance.TimeSinceLeftWallRebound = 0f;
 		else
 			Manager.Instance.TimeSinceRightWallRebound = 0f;
+
+		if ( IsProxy )
+			return;
+
+		var player = Manager.Instance.GetPlayer( PlayerNum );
+		if ( player == null )
+			return;
+
+		var backstabChance = player.GetUpgradeLevel( UpgradeType.Backstab ) > 0f ? BackstabUpgrade.GetChance( player.GetUpgradeLevel( UpgradeType.Backstab ) ) : 0f;
+		if (Game.Random.Float(0f, 1f) < backstabChance )
+		{
+			var enemy = Manager.Instance.GetPlayer(Globals.GetOpponentPlayerNum(PlayerNum));
+			Vector2 enemyPos = enemy != null ? (Vector2)enemy.Transform.Position : Vector2.Zero;
+			var dir = (enemyPos - (Vector2)Transform.Position).Normal;
+			SetVelocity( dir * Velocity.Length, timeScale: 0f, duration: 0.5f, EasingType.QuadIn );
+		}
 	}
 
 	[Broadcast]

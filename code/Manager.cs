@@ -7,7 +7,7 @@ using System.Reflection.Emit;
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
 public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, MoreShopItems, Endow, Fade, Barrier, Airstrike, ShorterBuyPhase,
- GoldenTicket, BlackHole, Cleave }
+ GoldenTicket, BlackHole, Cleave, Backstab }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 public enum UpgradeUseMode { OnlyActive, OnlyBuyPhase, Both }
 
@@ -99,7 +99,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	public const float BALL_HEIGHT_SELF = 45f;
 	public const float BALL_HEIGHT_OPPONENT = 55f;
 
-	public const float SPECTATOR_HEIGHT = 80f;
+	public const float SPECTATOR_HEIGHT = 120f;
 
 	public PlayerController Player0 { get; set; }
 	public PlayerController Player1 { get; set; }
@@ -243,7 +243,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
 			//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
 			//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
-			player.AdjustUpgradeLevel( UpgradeType.Cleave, 5 );
+			//player.AdjustUpgradeLevel( UpgradeType.Cleave, 5 );
 			//player.AdjustUpgradeLevel( UpgradeType.Volley, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
 			//player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
@@ -255,6 +255,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			//player.AdjustUpgradeLevel( UpgradeType.Gather, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.Redirect, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.Slowmo, 9 );
+			player.AdjustUpgradeLevel( UpgradeType.Backstab, 5 );
 			//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.GoldenTicket, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.BlackHole, 9 );
@@ -960,32 +961,24 @@ public sealed class Manager : Component, Component.INetworkListener
 		var ballObj = BallPrefab.Clone( new Vector3( pos.x, pos.y, height ) );
 		var ball = ballObj.Components.Get<Ball>();
 
-		ball.Velocity = velocity;
-		ball.SetRadius( radius );
-
 		//Log.Info( $"SpawnBall - connection: {connection}" );
 
 		//ballObj.NetworkSpawn( GetConnection( playerNum ) );
 		//ballObj.NetworkSpawn();
 
 		ball.Color = (playerNum == 0 ? ColorPlayer0 : ColorPlayer1);
-		ball.PlayerNum = playerNum;
-
 		int side = pos.x > 0f ? 1 : 0;
-		ball.CurrentSide = side;
+
+		ball.Init( playerNum, side, radius, velocity );
 
 		ballObj.Network.SetOwnerTransfer( OwnerTransfer.Takeover );
 		ballObj.Network.SetOrphanedMode( NetworkOrphaned.Destroy );
 
 		var connection = GetConnection( side );
 		if ( connection != null )
-		{
 			ballObj.NetworkSpawn( connection );
-		}
 		else
-		{
 			ballObj.NetworkSpawn();
-		}
 
 		//Log.Info( $"--- spawned {ballObj.Name} side: {side} connection: {ballObj.Network.OwnerConnection?.Id.ToString().Substring( 0, 6 ) ?? "..."}" );
 	}
@@ -1121,9 +1114,12 @@ public sealed class Manager : Component, Component.INetworkListener
 	}
 
 	[Broadcast]
-	public void SlowmoRPC( float timeScale, float time, EasingType easingType )
+	public void SlowmoRPC( Vector2 playerPos, float timeScale, float time, EasingType easingType )
 	{
 		Slowmo( timeScale, time, easingType );
+		var colorStart = new Color( 0.25f, 0f, 1f );
+		var colorEnd = new Color( 0.4f, 0.3f, 1f );
+		SpawnRingVfx( playerPos, 0.5f, colorStart.WithAlpha( 1f ), colorEnd.WithAlpha( 0.3f ), 1f, 400f, 1f, 1f, colorStart.WithAlpha( 0.6f ), colorEnd.WithAlpha( 0f ), EasingType.QuadOut );
 	}
 
 	public void Slowmo( float timeScale, float time, EasingType easingType )
@@ -1408,6 +1404,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			case UpgradeType.MoreShopItems: return $"Your shop offers {level} more {(level == 1 ? "item" : "items")}";
 			case UpgradeType.ShorterBuyPhase: return $"Buy phase duration reduced by 10s";
 			case UpgradeType.Cleave: return $"Bumping has {Math.Round( CleaveUpgrade.GetChance( level ) * 100f )}% chance to redirect your nearby balls";
+			case UpgradeType.Backstab: return $"On gutter rebound your balls have {Math.Round( BackstabUpgrade.GetChance( level ) * 100f )}% chance to target enemy";
 
 			case UpgradeType.Volley: return $"Launch 5 balls forward";
 			case UpgradeType.Gather: return $"Your balls target you";
@@ -1475,6 +1472,13 @@ public sealed class Manager : Component, Component.INetworkListener
 				strings.Add( DESCRIPTION_ARROW, DEFAULT_COLOR );
 				strings.Add( $"{Math.Round( CleaveUpgrade.GetChance( newLevel ) * 100f )}%", NEW_COLOR );
 				strings.Add( "chance to redirect your nearby balls", DEFAULT_COLOR );
+				break;
+			case UpgradeType.Backstab:
+				strings.Add( "On gutter rebound your balls have", DEFAULT_COLOR );
+				strings.Add( $"{Math.Round( BackstabUpgrade.GetChance( oldLevel ) * 100f )}%", OLD_COLOR );
+				strings.Add( DESCRIPTION_ARROW, DEFAULT_COLOR );
+				strings.Add( $"{Math.Round( BackstabUpgrade.GetChance( newLevel ) * 100f )}%", NEW_COLOR );
+				strings.Add( "chance to target enemy", DEFAULT_COLOR );
 				break;
 		}
 
@@ -1573,6 +1577,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.MoreShopItems, "Shopper", "🛒", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 9, pricePerAmountMax: 16, isPassive: true );
 		CreateUpgrade( UpgradeType.ShorterBuyPhase, "Closing Early", "🔜", UpgradeRarity.Legendary, maxLevel: 1, amountMin: 1, amountMax: 1, pricePerAmountMin: 7, pricePerAmountMax: 15, isPassive: true );
 		CreateUpgrade( UpgradeType.Cleave, "Cleave", "🪓", UpgradeRarity.Rare, maxLevel: 6, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 6, isPassive: true );
+		CreateUpgrade( UpgradeType.Backstab, "Backstab", "🗡️", UpgradeRarity.Epic, maxLevel: 6, amountMin: 1, amountMax: 1, pricePerAmountMin: 6, pricePerAmountMax: 8, isPassive: true );
 
 		CreateUpgrade( UpgradeType.Volley, "Balls", "🤹", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 6 );
 		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
@@ -1580,7 +1585,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.Replace, "Replace", "☯️", UpgradeRarity.Uncommon, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 6, pricePerAmountMax: 8 );
 		CreateUpgrade( UpgradeType.Blink, "Blink", "✨", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 4, useMode: UpgradeUseMode.Both);
 		CreateUpgrade( UpgradeType.Scatter, "Scatter", "🌪️", UpgradeRarity.Uncommon, maxLevel: 3, amountMin: 1, amountMax: 2, pricePerAmountMin: 2, pricePerAmountMax: 5 );
-		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 1, pricePerAmountMax: 3 );
+		CreateUpgrade( UpgradeType.Slowmo, "Slowmo", "⌛️", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 1, pricePerAmountMax: 3, useMode: UpgradeUseMode.Both );
 		CreateUpgrade( UpgradeType.Dash, "Dash", "💨", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 3, pricePerAmountMin: 1, pricePerAmountMax: 2, useMode: UpgradeUseMode.Both );
 		CreateUpgrade( UpgradeType.Redirect, "Redirect", "⤴️", UpgradeRarity.Rare, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7 );
 		CreateUpgrade( UpgradeType.Converge, "Converge", "📍", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 4, pricePerAmountMax: 6 );
@@ -1703,11 +1708,20 @@ public sealed class Manager : Component, Component.INetworkListener
 		GamePhase = phase;
 	}
 
-	[Broadcast]
-	public void SpawnRingVfx( Vector2 pos, float lifetime, Color colorStart, Color colorEnd, float radiusStart, float radiusEnd, float outlineWidthStart, float outlineWidthEnd, EasingType easingType )
+	public void SpawnRingVfx( Vector2 pos, float lifetime, Color colorStart, Color colorEnd, float radiusStart, float radiusEnd, float outlineWidthStart, float outlineWidthEnd,
+		Color colorInsideStart, Color colorInsideEnd, EasingType easingType )
 	{
-		var ringObj = RingVfxPrefab.Clone( new Vector3( pos.x, pos.y, 5f ) );
+		var ringObj = RingVfxPrefab.Clone( new Vector3( pos.x, pos.y, 100f ) );
 		var ring = ringObj.Components.Get<RingVfx>();
-		ring.Init( lifetime, colorStart, colorEnd, radiusStart, radiusEnd, outlineWidthStart, outlineWidthEnd, easingType );
+		ring.Init( lifetime, colorStart, colorEnd, radiusStart, radiusEnd, outlineWidthStart, outlineWidthEnd, colorInsideStart, colorInsideEnd, easingType );
+	}
+
+	[Broadcast]
+	public void SpawnRingVfxRPC( Vector2 pos, float lifetime, Color colorStart, Color colorEnd, float radiusStart, float radiusEnd, float outlineWidthStart, float outlineWidthEnd, 
+		Color colorInsideStart, Color colorInsideEnd, EasingType easingType )
+	{
+		var ringObj = RingVfxPrefab.Clone( new Vector3( pos.x, pos.y, 100f ) );
+		var ring = ringObj.Components.Get<RingVfx>();
+		ring.Init( lifetime, colorStart, colorEnd, radiusStart, radiusEnd, outlineWidthStart, outlineWidthEnd, colorInsideStart, colorInsideEnd, easingType );
 	}
 }

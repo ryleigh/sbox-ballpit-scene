@@ -18,6 +18,7 @@ public class BarrierUpgrade : Upgrade
 	}
 
 	// todo: handle when someone forfeits/leaves lobby while barrier active
+	// todo: handle when someone joins and barrier is active during snapshot?
 	async void BarrierAsync()
 	{
 		Player.IsBarrierActive = true;
