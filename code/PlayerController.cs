@@ -216,7 +216,10 @@ public class PlayerController : Component, Component.ITriggerListener
 							ball.Velocity = dir * speed;
 
 							ball.BumpedByPlayer();
-							BumpOwnBall( (Vector2)ballPos );
+
+							BumpOwnBall( ball );
+
+							BumpOwnBallRPC( (Vector2)ballPos );
 
 							ball.TimeSinceBumped = 0f;
 						}
@@ -395,8 +398,17 @@ public class PlayerController : Component, Component.ITriggerListener
 		}
 	}
 
+	void BumpOwnBall(Ball ball)
+	{
+		foreach ( var pair in LocalUpgrades )
+		{
+			var upgrade = pair.Value;
+			upgrade.BumpOwnBall(ball);
+		}
+	}
+
 	[Broadcast]
-	public void BumpOwnBall( Vector2 pos )
+	public void BumpOwnBallRPC( Vector2 pos )
 	{
 		Sound.Play( "impact-thump", new Vector3(pos.x, pos.y, Globals.SFX_HEIGHT ) );
 	}

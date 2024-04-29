@@ -34,15 +34,22 @@
 	}
 
 	<div class="description">
-		@if(IsShopItem && isPassive && manager.GetPlayer(PlayerNum) != null && playerLevel > 0 && playerLevel < maxLevel)
+		@if(IsShopItem && isPassive && manager.GetPlayer(PlayerNum) != null && playerLevel > 0)
 		{
-			var newLevel = Math.Min(playerLevel + Level, maxLevel);
-
-			var strings = manager.GetImprovementDescriptionForUpgrade(UpgradeType, playerLevel, newLevel);
-
-			@foreach(var pair in strings) 
+			if(playerLevel < maxLevel) 
 			{
-				<div style="color:@((pair.Value).Rgba); font-size:@(pair.Key == Manager.DESCRIPTION_ARROW ? 13f : 16f);">@(pair.Key)</div>
+				var newLevel = Math.Min(playerLevel + Level, maxLevel);
+
+				var strings = manager.GetImprovementDescriptionForUpgrade(UpgradeType, playerLevel, newLevel);
+
+				@foreach(var pair in strings)
+				{
+					<div style="color:@((pair.Value).Rgba); font-size:@(pair.Key == Manager.DESCRIPTION_ARROW ? 13f : 16f);">@(pair.Key)</div>
+				}
+			}
+			else 
+			{
+				<div style="color:#990000;">@($"Already max level!")</div>
 			}
 		}
 		else 

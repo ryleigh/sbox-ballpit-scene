@@ -51,4 +51,9 @@ public class Upgrade
 	{
 
 	}
+
+	public virtual void BumpOwnBall(Ball ball)
+	{
+
+	}
 }

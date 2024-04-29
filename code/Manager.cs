@@ -2,11 +2,12 @@
 using Sandbox.Network;
 using Sandbox.UI;
 using System.Numerics;
+using System.Reflection.Emit;
 
 public enum GamePhase { WaitingForPlayers, StartingNewMatch, RoundActive, AfterRoundDelay, BuyPhase, Victory }
 
 public enum UpgradeType { None, MoveSpeed, Volley, Gather, Repel, Replace, Blink, Scatter, Slowmo, Dash, Redirect, BumpStrength, Converge, Autoball, MoreShopItems, Endow, Fade, Barrier, Airstrike, ShorterBuyPhase,
- GoldenTicket, BlackHole, }
+ GoldenTicket, BlackHole, Cleave }
 public enum UpgradeRarity { Common, Uncommon, Rare, Epic, Legendary }
 public enum UpgradeUseMode { OnlyActive, OnlyBuyPhase, Both }
 
@@ -241,7 +242,8 @@ public sealed class Manager : Component, Component.INetworkListener
 			//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
 			//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
 			//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
-			player.AdjustUpgradeLevel( UpgradeType.Volley, 9 );
+			player.AdjustUpgradeLevel( UpgradeType.Cleave, 5 );
+			//player.AdjustUpgradeLevel( UpgradeType.Volley, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.Barrier, 6 );
 			//player.AdjustUpgradeLevel( UpgradeType.Endow, 3 );
 			//player.AdjustUpgradeLevel( UpgradeType.Autoball, 4 );
@@ -254,7 +256,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			//player.AdjustUpgradeLevel( UpgradeType.Slowmo, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.BumpStrength, 9 );
 			//player.AdjustUpgradeLevel( UpgradeType.GoldenTicket, 9 );
-			player.AdjustUpgradeLevel( UpgradeType.BlackHole, 9 );
+			//player.AdjustUpgradeLevel( UpgradeType.BlackHole, 9 );
 		}
 	}
 
@@ -1400,6 +1402,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			case UpgradeType.Autoball: return $"Release a ball every {(float)Math.Round( AutoballUpgrade.GetDelay( level ), 1 )}s";
 			case UpgradeType.MoreShopItems: return $"Your shop offers {level} more {(level == 1 ? "item" : "items")}";
 			case UpgradeType.ShorterBuyPhase: return $"Buy phase duration reduced by 10s";
+			case UpgradeType.Cleave: return $"Bumping has {Math.Round( CleaveUpgrade.GetChance( level ) * 100f )}% chance to redirect your nearby balls";
 
 			case UpgradeType.Volley: return $"Launch 5 balls forward";
 			case UpgradeType.Gather: return $"Your balls target you";
@@ -1428,7 +1431,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		var DEFAULT_COLOR = new Color( 0.15f, 0.15f, 0.15f );
 		var OLD_COLOR = new Color( 0.7f, 0f, 0f);
-		var NEW_COLOR = new Color( 0f, 0.64f, 0f );
+		var NEW_COLOR = new Color( 0f, 0.62f, 0f );
 
 		Dictionary<string, Color> strings = new();
 
@@ -1460,6 +1463,13 @@ public sealed class Manager : Component, Component.INetworkListener
 				strings.Add( DESCRIPTION_ARROW, DEFAULT_COLOR );
 				strings.Add( $"{newLevel}", NEW_COLOR );
 				strings.Add( "more items", DEFAULT_COLOR );
+				break;
+			case UpgradeType.Cleave:
+				strings.Add( "Bumping has", DEFAULT_COLOR );
+				strings.Add( $"{Math.Round( CleaveUpgrade.GetChance( oldLevel ) * 100f )}%", OLD_COLOR );
+				strings.Add( DESCRIPTION_ARROW, DEFAULT_COLOR );
+				strings.Add( $"{Math.Round( CleaveUpgrade.GetChance( newLevel ) * 100f )}%", NEW_COLOR );
+				strings.Add( "chance to redirect your nearby balls", DEFAULT_COLOR );
 				break;
 		}
 
@@ -1557,6 +1567,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		CreateUpgrade( UpgradeType.Autoball, "Autoball", "⏲️", UpgradeRarity.Rare, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 7, isPassive: true );
 		CreateUpgrade( UpgradeType.MoreShopItems, "Shopper", "🛒", UpgradeRarity.Epic, maxLevel: 3, amountMin: 1, amountMax: 1, pricePerAmountMin: 9, pricePerAmountMax: 16, isPassive: true );
 		CreateUpgrade( UpgradeType.ShorterBuyPhase, "Closing Early", "🔜", UpgradeRarity.Legendary, maxLevel: 1, amountMin: 1, amountMax: 1, pricePerAmountMin: 7, pricePerAmountMax: 15, isPassive: true );
+		CreateUpgrade( UpgradeType.Cleave, "Cleave", "🪓", UpgradeRarity.Rare, maxLevel: 6, amountMin: 1, amountMax: 1, pricePerAmountMin: 5, pricePerAmountMax: 6, isPassive: true );
 
 		CreateUpgrade( UpgradeType.Volley, "Balls", "🤹", UpgradeRarity.Common, maxLevel: 9, amountMin: 1, amountMax: 2, pricePerAmountMin: 3, pricePerAmountMax: 6 );
 		CreateUpgrade( UpgradeType.Gather, "Gather", "🧲", UpgradeRarity.Uncommon, maxLevel: 9, amountMin: 1, amountMax: 1, pricePerAmountMin: 3, pricePerAmountMax: 5 );
