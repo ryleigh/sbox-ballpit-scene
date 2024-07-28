@@ -11,6 +11,9 @@ public sealed class RagdollController : Component
 	{
 		Physics.Enabled = true;
 
+		if ( Physics.PhysicsGroup == null )
+			return;
+
 		foreach ( var body in Physics.PhysicsGroup.Bodies )
 		{
 			body.ApplyImpulseAt( position, force * 200f );

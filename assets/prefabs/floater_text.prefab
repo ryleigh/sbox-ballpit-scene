@@ -1,0 +1,21 @@
+{
+  "RootObject": {
+    "__guid": "0072539b-8be5-4d04-86a9-fc1d329fe01f",
+    "Flags": 0,
+    "Name": "floater_text",
+    "Position": "0,0,-50",
+    "Enabled": true,
+    "Components": [
+      {
+        "__type": "FloaterText",
+        "__guid": "ea7b7d21-40ff-4a37-8ed0-1e977e3e1810"
+      }
+    ]
+  },
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "ResourceVersion": 1,
+  "__references": [],
+  "__version": 1
+}

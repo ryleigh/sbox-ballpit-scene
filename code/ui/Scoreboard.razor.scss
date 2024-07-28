@@ -36,11 +36,12 @@ Scoreboard {
 	}
 
 	.section {
+		//position: relative;
 		white-space: pre;
 		background-color: #00000066;
 		border-radius: 10px;
 		margin: 6px;
-		padding: 2px;
+		padding: 4px;
 		justify-content: flex-start;
 		align-items: center;
 		//text-align: left;
@@ -48,6 +49,7 @@ Scoreboard {
 	}
 
 	.emoji {
+		position: relative;
 		font-family: W10Emoji;
 		font-size: 22px;
 		font-weight: 600;
@@ -55,6 +57,7 @@ Scoreboard {
 	}
 
 	.spacer {
+		position: relative;
 		opacity: 0;
 		height: 40px;
 	}
@@ -77,6 +80,7 @@ Scoreboard {
 	}
 
 	.version {
+		position: relative;
 		top: -15px;
 		right: -10px;
 		font-size: 26px;

@@ -3,6 +3,7 @@
   "GameObjects": [
     {
       "__guid": "c155d476-e3e0-4db6-832b-8bc2675a5ff2",
+      "Flags": 0,
       "Name": "Manager",
       "Position": "-79.17239,54.31364,-161.3666",
       "Enabled": true,
@@ -41,6 +42,10 @@
             "_type": "gameobject",
             "prefab": "prefabs/falling_shadow.prefab"
           },
+          "FloaterTextPrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/floater_text.prefab"
+          },
           "MoneyPickupPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/money_pickup.prefab"
@@ -52,10 +57,6 @@
           "PlayerPrefab": {
             "_type": "gameobject",
             "prefab": "prefabs/player.prefab"
-          },
-          "RepelEffectPrefab": {
-            "_type": "gameobject",
-            "prefab": "prefabs/repel_effect.prefab"
           },
           "RerollButtonPrefab": {
             "_type": "gameobject",
@@ -126,11 +127,11 @@
     },
     {
       "__guid": "bfc59c12-1ed2-4f91-8956-a95a315eac3c",
+      "Flags": 0,
       "Name": "Sun",
       "Rotation": "0.2628342,-0.6741447,-0.2507316,-0.6431024",
       "Tags": "light_directional,light",
       "Enabled": true,
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.DirectionalLight",
@@ -145,14 +146,14 @@
     },
     {
       "__guid": "00344a8c-fa5e-45ae-b12a-10bb781a1dc3",
+      "Flags": 0,
       "Name": "2D Skybox",
       "Tags": "skybox",
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.SkyBox2D",
           "__guid": "c54fa58d-597f-45b8-9b68-fbd8520166d5",
-          "SkyMaterial": "materials/models/solids/black.vmat",
+          "SkyMaterial": "materials/skybox/skybox_day_01.vmat",
           "Tint": "1,1,1,1"
         },
         {
@@ -178,11 +179,11 @@
     },
     {
       "__guid": "3c1bff51-07c9-4229-88d3-b2fa65222b6f",
+      "Flags": 0,
       "Name": "bleachers",
       "Position": "-284.4013,-0.05786896,120",
       "Scale": "0.9637875,2.973863,1",
       "Enabled": true,
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
@@ -197,11 +198,11 @@
     },
     {
       "__guid": "45cf1ed1-1383-41de-bb95-ed23733d24c2",
+      "Flags": 0,
       "Name": "bleachers (1)",
       "Position": "284.401,-0.05786896,120",
       "Scale": "0.9635918,2.973863,1",
       "Enabled": true,
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
@@ -216,11 +217,11 @@
     },
     {
       "__guid": "03f432b7-49ab-4841-98eb-26875137ade5",
+      "Flags": 0,
       "Name": "bleachers (2)",
       "Position": "0,164.9621,120",
       "Scale": "6.338237,0.8217655,1.199364",
       "Enabled": true,
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
@@ -235,11 +236,11 @@
     },
     {
       "__guid": "e317f223-9408-4249-8b5d-d75ed94f617d",
+      "Flags": 0,
       "Name": "bleachers (3)",
       "Position": "0,-164.962,120",
       "Scale": "5.890082,0.8205014,1",
       "Enabled": true,
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
@@ -254,11 +255,11 @@
     },
     {
       "__guid": "3ee1c9f4-07be-4e0b-8b23-67bee2d8ec8a",
+      "Flags": 0,
       "Name": "Camera",
       "Position": "0,0,250",
       "Rotation": "-0.5,0.5,0.5,0.5",
       "Enabled": true,
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.CameraComponent",
@@ -315,9 +316,13 @@
         {
           "__type": "Sandbox.Tonemapping",
           "__guid": "92251529-0b5c-4168-b93e-5f5d0da3c3d3",
+          "__version": 1,
+          "ExposureBias": 2,
           "ExposureCompensation": 0,
+          "ExposureMethod": "RGB",
           "MaximumExposure": 2,
           "MinimumExposure": 1,
+          "Mode": "Legacy",
           "Rate": 1
         },
         {
@@ -337,11 +342,11 @@
     },
     {
       "__guid": "244b9dbc-1bfc-433b-83d8-c98806a4ef57",
+      "Flags": 0,
       "Name": "wall",
       "Position": "-235,0,0",
       "Scale": "0.05,4.95,4.7",
       "Enabled": true,
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
@@ -364,11 +369,11 @@
     },
     {
       "__guid": "adeed76a-8fe9-490b-a503-186c2fd7b006",
+      "Flags": 0,
       "Name": "wall (1)",
       "Position": "235,0,0",
       "Scale": "0.05,4.95,4.7",
       "Enabled": true,
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
@@ -391,11 +396,11 @@
     },
     {
       "__guid": "7337425d-603a-4591-9fe0-fee4b34d8939",
+      "Flags": 0,
       "Name": "wall (2)",
       "Position": "0,-122.8541,0",
       "Scale": "9.45,0.05,4.7",
       "Enabled": true,
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
@@ -418,11 +423,11 @@
     },
     {
       "__guid": "84da3e36-97bc-4c95-b72b-2c94165916b9",
+      "Flags": 0,
       "Name": "wall (3)",
       "Position": "0,122.854,0",
       "Scale": "9.45,0.05,4.7",
       "Enabled": true,
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
@@ -445,11 +450,11 @@
     },
     {
       "__guid": "5bcfadd0-3533-47ae-bd63-5d9a6594be02",
+      "Flags": 0,
       "Name": "wall_green",
       "Position": "-232.8196,0,0",
       "Scale": "0.05,4.95,4.68",
       "Enabled": true,
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
@@ -472,10 +477,10 @@
     },
     {
       "__guid": "dfb53710-7619-4007-9dac-e2fe97f15dcc",
+      "Flags": 0,
       "Name": "barrier_left",
       "Position": "-231.5,0,-2.5",
       "Scale": "0.05,4.95,4.68",
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
@@ -509,11 +514,11 @@
     },
     {
       "__guid": "7567ac62-ee13-4f31-b15e-104725a78dae",
+      "Flags": 0,
       "Name": "wall_blue",
       "Position": "232.82,0,0",
       "Scale": "0.05,4.95,4.68",
       "Enabled": true,
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
@@ -536,10 +541,10 @@
     },
     {
       "__guid": "f51bce49-d888-468d-9bdc-a8963d64c5e3",
+      "Flags": 0,
       "Name": "barrier_right",
       "Position": "231.5,0,-2.5",
       "Scale": "0.05,4.95,4.68",
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.ModelRenderer",
@@ -573,10 +578,10 @@
     },
     {
       "__guid": "6ad70641-3c6c-4402-9c85-9a4969af4764",
+      "Flags": 0,
       "Name": "ground_collider",
       "Scale": "6.041263,3.000001,5",
       "Enabled": true,
-      "NetworkMode": 2,
       "Components": [
         {
           "__type": "Sandbox.BoxCollider",
@@ -591,17 +596,17 @@
     },
     {
       "__guid": "a6c7246a-4f7b-44dd-927a-0190c61f1bdb",
+      "Flags": 0,
       "Name": "sliding_ground",
       "Enabled": true,
-      "NetworkMode": 2,
       "Children": [
         {
           "__guid": "4067312c-8821-4d1c-b426-a6d2964821c8",
+          "Flags": 0,
           "Name": "ground_middle",
           "Position": "0,0,2.916336",
           "Scale": "0.2165779,3.000001,5",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -616,11 +621,11 @@
         },
         {
           "__guid": "63c8989c-3142-4b73-8966-1a8f68902970",
+          "Flags": 0,
           "Name": "ground_1",
           "Position": "261.236,-0.05786896,1",
           "Scale": "5,2.437423,1",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -635,11 +640,11 @@
         },
         {
           "__guid": "06f0daeb-00a6-4572-8ec7-75d54d735b6a",
+          "Flags": 0,
           "Name": "ground_0",
           "Position": "-261.2357,-0.05786896,1",
           "Scale": "5,2.438,1",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -654,11 +659,11 @@
         },
         {
           "__guid": "3c2490ef-54a0-49bb-8f13-490e40aa51d1",
+          "Flags": 0,
           "Name": "middle_line",
           "Position": "-11,0,-2",
           "Scale": "0.015,4.9,0.2",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -673,11 +678,11 @@
         },
         {
           "__guid": "e772f55c-4f22-49c2-939f-db86e1829670",
+          "Flags": 0,
           "Name": "middle_line (1)",
           "Position": "11,0,-2",
           "Scale": "0.015,4.9,0.2",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -692,6 +697,7 @@
         },
         {
           "__guid": "f233e7d1-dc91-4bc0-88ac-7003c697d4cd",
+          "Flags": 0,
           "Name": "dispenser",
           "Position": "0,113,40",
           "Scale": "0.3207256,0.3652692,0.7030009",
@@ -716,18 +722,18 @@
     },
     {
       "__guid": "c2386b7a-d229-48ca-b7e5-54673a6ef069",
+      "Flags": 0,
       "Name": "ground lines top left",
       "Position": "0,0,1",
       "Enabled": true,
-      "NetworkMode": 2,
       "Children": [
         {
           "__guid": "e264b0ae-da9c-4b9b-bb4b-9a9b9495a69e",
+          "Flags": 0,
           "Name": "line (4)",
           "Position": "-94.5,141.9564,0",
           "Scale": "0.05,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -741,11 +747,11 @@
         },
         {
           "__guid": "1b122006-bc82-488b-a08d-a1cf50658ded",
+          "Flags": 0,
           "Name": "line (3)",
           "Position": "-76.4,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -759,11 +765,11 @@
         },
         {
           "__guid": "784ad59f-362d-4ba3-a030-c0286e3e7a75",
+          "Flags": 0,
           "Name": "line (2)",
           "Position": "-57.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -777,11 +783,11 @@
         },
         {
           "__guid": "c1888b12-2220-46cc-b154-d60ffe5c28c7",
+          "Flags": 0,
           "Name": "line (1)",
           "Position": "-38.6,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -795,11 +801,11 @@
         },
         {
           "__guid": "736d7296-51d9-4855-bdfa-de56cc055b19",
+          "Flags": 0,
           "Name": "line",
           "Position": "-19.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -815,19 +821,19 @@
     },
     {
       "__guid": "7f154fb8-1c84-4b0d-ab0b-c68d25a77aba",
+      "Flags": 0,
       "Name": "ground lines top right",
       "Position": "0,0,1",
       "Rotation": "0,1,0,0.0000001947072",
       "Enabled": true,
-      "NetworkMode": 2,
       "Children": [
         {
           "__guid": "38407f01-98b6-4960-9099-7f5845c1702a",
+          "Flags": 0,
           "Name": "line (4)",
           "Position": "-94.5,141.9564,0",
           "Scale": "0.05,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -841,11 +847,11 @@
         },
         {
           "__guid": "0775254a-6ef6-4b7e-957a-b4356b0850e8",
+          "Flags": 0,
           "Name": "line (3)",
           "Position": "-76.4,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -859,11 +865,11 @@
         },
         {
           "__guid": "8944b0ce-21ce-4c68-a2bd-a4e892a95ff4",
+          "Flags": 0,
           "Name": "line (2)",
           "Position": "-57.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -877,11 +883,11 @@
         },
         {
           "__guid": "57ca2e55-166e-4836-bd46-6f7791ed759c",
+          "Flags": 0,
           "Name": "line (1)",
           "Position": "-38.6,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -895,11 +901,11 @@
         },
         {
           "__guid": "2fe219c8-d218-4657-a92f-bfe181d0e433",
+          "Flags": 0,
           "Name": "line",
           "Position": "-19.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -915,19 +921,19 @@
     },
     {
       "__guid": "39fc342d-f749-4ecb-8907-da3fde772047",
+      "Flags": 0,
       "Name": "ground lines bot left",
       "Position": "0,0,1",
       "Rotation": "1,0.0000001947072,-0.0000001947072,0.00000000000003791089",
       "Enabled": true,
-      "NetworkMode": 2,
       "Children": [
         {
           "__guid": "ee030d21-fdc7-43a0-9a47-926557c9d604",
+          "Flags": 0,
           "Name": "line (4)",
           "Position": "-94.5,141.9564,0",
           "Scale": "0.05,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -941,11 +947,11 @@
         },
         {
           "__guid": "0ace1e6d-b2e4-4efd-98cb-a32dad115786",
+          "Flags": 0,
           "Name": "line (3)",
           "Position": "-76.4,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -959,11 +965,11 @@
         },
         {
           "__guid": "78188917-4d19-4d27-a23d-0b3504927ff4",
+          "Flags": 0,
           "Name": "line (2)",
           "Position": "-57.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -977,11 +983,11 @@
         },
         {
           "__guid": "a3ae1ed3-5033-4b89-ac8a-033c2a2dc63a",
+          "Flags": 0,
           "Name": "line (1)",
           "Position": "-38.6,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -995,11 +1001,11 @@
         },
         {
           "__guid": "44518966-cb28-46ba-a2eb-6381a7968cfb",
+          "Flags": 0,
           "Name": "line",
           "Position": "-19.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -1015,19 +1021,19 @@
     },
     {
       "__guid": "02b923af-7db1-49d7-9a8e-5f5cace3a863",
+      "Flags": 0,
       "Name": "ground lines bot right",
       "Position": "0,0,1",
       "Rotation": "0.0000003894144,-0.000000000000000000006776264,-1,0.0000001947072",
       "Enabled": true,
-      "NetworkMode": 2,
       "Children": [
         {
           "__guid": "d8d14c78-dba6-416a-82f9-af908d2a74a2",
+          "Flags": 0,
           "Name": "line (4)",
           "Position": "-94.5,141.9564,0",
           "Scale": "0.05,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -1041,11 +1047,11 @@
         },
         {
           "__guid": "295e3916-fb36-435c-934f-2aa134aa64f6",
+          "Flags": 0,
           "Name": "line (3)",
           "Position": "-76.4,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -1059,11 +1065,11 @@
         },
         {
           "__guid": "86b866f8-c679-4c0d-8ce6-ccd7e6a44f5d",
+          "Flags": 0,
           "Name": "line (2)",
           "Position": "-57.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -1077,11 +1083,11 @@
         },
         {
           "__guid": "f089b407-f0e4-490c-837b-0c6c854cac9c",
+          "Flags": 0,
           "Name": "line (1)",
           "Position": "-38.6,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -1095,11 +1101,11 @@
         },
         {
           "__guid": "255ee016-a1c5-4a22-8c11-a987a9e71238",
+          "Flags": 0,
           "Name": "line",
           "Position": "-19.3,143.8564,0",
           "Scale": "0.02,1,0.01",
           "Enabled": true,
-          "NetworkMode": 2,
           "Components": [
             {
               "__type": "Sandbox.ModelRenderer",
@@ -1116,9 +1122,9 @@
   ],
   "SceneProperties": {
     "FixedUpdateFrequency": 50,
-    "Lerping": true,
     "MaxFixedUpdates": 5,
     "NetworkFrequency": 60,
+    "NetworkInterpolation": true,
     "ThreadedAnimation": true,
     "TimeScale": 1,
     "UseFixedUpdate": true,
@@ -1137,8 +1143,7 @@
   },
   "Title": "minimal",
   "Description": "",
-  "LastSaved": "2024-04-29T02:48:00.8001658-07:00",
   "ResourceVersion": 1,
-  "__version": 1,
-  "__references": []
+  "__references": [],
+  "__version": 1
 }

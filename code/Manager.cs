@@ -86,6 +86,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	[Property] public GameObject WallRight { get; set; }
 	[Property] public GameObject BarrierLeft { get; set; }
 	[Property] public GameObject BarrierRight { get; set; }
+	[Property] public GameObject FloaterTextPrefab { get; set; }
+	[Property] public GameObject TutorialTextPrefab { get; set; }
 
 	[Property, Sync] public Color ColorPlayer0 { get; set; }
 	[Property, Sync] public Color ColorPlayer1 { get; set; }
@@ -188,7 +190,7 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		base.OnAwake();
 
-		StartMode = StartMode.TestActive;
+		StartMode = StartMode.TestShop;
 
 		Instance = this;
 
@@ -240,7 +242,7 @@ public sealed class Manager : Component, Component.INetworkListener
 			//player.AdjustUpgradeLevel( UpgradeType.Scatter, 6 );
 			//player.AdjustUpgradeLevel( UpgradeType.Replace, 6 );
 			//player.AdjustUpgradeLevel( UpgradeType.Fade, 6 );
-			player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
+			//player.AdjustUpgradeLevel( UpgradeType.Repel, 20 );
 			//player.AdjustUpgradeLevel( UpgradeType.Airstrike, 6 );
 			//player.AdjustUpgradeLevel( UpgradeType.Cleave, 5 );
 			//player.AdjustUpgradeLevel( UpgradeType.Volley, 9 );
@@ -1315,18 +1317,15 @@ public sealed class Manager : Component, Component.INetworkListener
 
 	public void SpawnFloaterText( Vector3 pos, string text, float lifetime, Color color, Vector2 velocity, float deceleration, float fontSize, float startScale, float endScale, bool isEmoji  )
 	{
-		var textObj = new GameObject();
-		textObj.Transform.Position = pos;
-		var floaterText = textObj.Components.Create<FloaterText>();
+		var textObj = FloaterTextPrefab.Clone( pos );
+		var floaterText = textObj.Components.Get<FloaterText>();
 		floaterText.Init( text, lifetime, color, velocity, deceleration, fontSize, startScale, endScale, isEmoji );
 	}
 
 	public void SpawnTutorialText( Vector3 pos, string text0, string text1, float lifetime )
 	{
-		var textObj = new GameObject();
-		textObj.Transform.Position = pos;
-		var tutorialText = textObj.Components.Create<TutorialText>();
-
+		var textObj = TutorialTextPrefab.Clone( pos );
+		var tutorialText = textObj.Components.Get<TutorialText>();
 		tutorialText.Init( text0, text1, lifetime );
 	}
 

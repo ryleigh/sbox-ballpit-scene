@@ -1,0 +1,21 @@
+{
+  "RootObject": {
+    "__guid": "aee61799-00cd-4512-a613-b187106ff9c5",
+    "Flags": 0,
+    "Name": "tutorial_text",
+    "Position": "0,0,-50",
+    "Enabled": true,
+    "Components": [
+      {
+        "__type": "TutorialText",
+        "__guid": "14b48282-0c46-4984-a92c-5139d6234ef5"
+      }
+    ]
+  },
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "ResourceVersion": 1,
+  "__references": [],
+  "__version": 1
+}
