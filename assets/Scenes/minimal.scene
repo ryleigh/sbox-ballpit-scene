@@ -78,6 +78,10 @@
             "_type": "gameobject",
             "go": "a6c7246a-4f7b-44dd-927a-0190c61f1bdb"
           },
+          "TutorialTextPrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/tutorial_text.prefab"
+          },
           "WallLeft": {
             "_type": "gameobject",
             "go": "5bcfadd0-3533-47ae-bd63-5d9a6594be02"
