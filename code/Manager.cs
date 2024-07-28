@@ -190,7 +190,8 @@ public sealed class Manager : Component, Component.INetworkListener
 	{
 		base.OnAwake();
 
-		StartMode = StartMode.TestShop;
+		StartMode = StartMode.Waiting;
+		//StartMode = StartMode.TestShop;
 
 		Instance = this;
 

@@ -813,7 +813,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		CurrRerollPrice = 1;
 		SelectedUpgradeType = UpgradeType.None;
 
-		Money = 555;
+		//Money = 555;
 	}
 
 	[Broadcast]
