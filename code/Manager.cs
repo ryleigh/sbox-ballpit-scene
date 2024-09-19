@@ -424,7 +424,7 @@ public sealed class Manager : Component, Component.INetworkListener
 				if ( !_hasIncrementedScore && TimeSincePhaseChange > BETWEEN_ROUNDS_DELAY / 2f )
 				{
 					ChangeScore( _roundWinnerPlayerNum );
-					_targetCenterLineOffset = Utils.Map( CurrentScore, -SCORE_NEEDED_TO_WIN, SCORE_NEEDED_TO_WIN, 95f, -95f );
+					_targetCenterLineOffset = Utils.Map( CurrentScore, -SCORE_NEEDED_TO_WIN, SCORE_NEEDED_TO_WIN, -95f, 95f );
 					_hasIncrementedScore = true;
 
 					DestroyPickups();
