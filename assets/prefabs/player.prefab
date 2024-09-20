@@ -1,10 +1,10 @@
 {
   "RootObject": {
     "__guid": "eb3cf097-24d1-4e70-9765-a54127e686d4",
+    "Flags": 0,
     "Name": "player",
     "Tags": "player",
     "Enabled": true,
-    "NetworkMode": 2,
     "Components": [
       {
         "__type": "PlayerController",
@@ -33,6 +33,10 @@
       {
         "__type": "RagdollController",
         "__guid": "3bc0a806-97de-4f5a-9963-9da38872005d",
+        "Model": {
+          "_type": "gameobject",
+          "go": "ed64ab18-9173-493a-9e53-ec1ab86b8b77"
+        },
         "Physics": {
           "_type": "component",
           "component_id": "89a46053-3eae-4b06-8f62-58604a12a27a",
@@ -44,9 +48,9 @@
     "Children": [
       {
         "__guid": "ed64ab18-9173-493a-9e53-ec1ab86b8b77",
+        "Flags": 0,
         "Name": "model",
         "Enabled": true,
-        "NetworkMode": 2,
         "Components": [
           {
             "__type": "Sandbox.SkinnedModelRenderer",
@@ -54,8 +58,16 @@
             "BodyGroups": 341,
             "CreateBoneObjects": false,
             "Model": "models/citizen/citizen.vmdl",
+            "Morphs": {},
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
             "RenderType": "On",
-            "Tint": "1,1,1,1"
+            "Tint": "1,1,1,1",
+            "UseAnimGraph": true
           },
           {
             "__type": "Sandbox.Citizen.CitizenAnimationHelper",
@@ -78,6 +90,7 @@
             "__enabled": false,
             "Locking": {},
             "Model": "models/citizen/citizen.vmdl",
+            "MotionEnabled": true,
             "Renderer": {
               "_type": "component",
               "component_id": "ce4d230e-6e71-4ff1-aaac-87e75b2f53e7",
@@ -90,18 +103,25 @@
       },
       {
         "__guid": "2a110a60-b52f-45c2-8da4-8d3027a1828a",
+        "Flags": 0,
         "Name": "chat",
         "Position": "0,-20,100",
         "Rotation": "-0.5,-0.5,-0.5,0.5",
         "Enabled": true,
-        "NetworkMode": 2,
         "Components": [
           {
             "__type": "Sandbox.WorldPanel",
             "__guid": "c9302be2-73f8-4052-9f30-ca2225e120e0",
             "HorizontalAlign": "Center",
+            "InteractionRange": 1000,
             "LookAtCamera": false,
             "PanelSize": "700,200",
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
             "RenderScale": 2,
             "VerticalAlign": "Center"
           },
@@ -113,18 +133,25 @@
       },
       {
         "__guid": "c8a5d5ff-53c9-4f90-8549-b2ba59f2c073",
+        "Flags": 0,
         "Name": "chat_output",
         "Position": "0,25,100",
         "Rotation": "-0.5,-0.5,-0.5,0.5",
         "Enabled": true,
-        "NetworkMode": 2,
         "Components": [
           {
             "__type": "Sandbox.WorldPanel",
             "__guid": "cf6f1a9b-26a9-4a62-ba8d-61fd93f4e4ad",
             "HorizontalAlign": "Center",
+            "InteractionRange": 1000,
             "LookAtCamera": false,
             "PanelSize": "700,512",
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
             "RenderScale": 2,
             "VerticalAlign": "Center"
           },
@@ -136,18 +163,25 @@
       },
       {
         "__guid": "af5a23ab-6362-4791-a21c-7be9cd8f2823",
+        "Flags": 0,
         "Name": "nametag",
         "Position": "0,-20,100",
         "Rotation": "-0.5,-0.5,-0.5,0.5",
         "Enabled": true,
-        "NetworkMode": 2,
         "Components": [
           {
             "__type": "Sandbox.WorldPanel",
             "__guid": "647c7b25-f003-441b-8372-7b82c5144e57",
             "HorizontalAlign": "Center",
+            "InteractionRange": 1000,
             "LookAtCamera": false,
             "PanelSize": "2000,200",
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
             "RenderScale": 2,
             "VerticalAlign": "Center"
           },
@@ -157,12 +191,14 @@
           }
         ]
       }
-    ]
+    ],
+    "__variables": []
   },
   "ShowInMenu": false,
   "MenuPath": null,
   "MenuIcon": null,
+  "DontBreakAsTemplate": false,
   "ResourceVersion": 1,
-  "__version": 1,
-  "__references": []
+  "__references": [],
+  "__version": 1
 }

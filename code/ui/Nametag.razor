@@ -8,7 +8,7 @@
 
 <root style="opacity:@(Opacity);">
 	@{
-		var owner = GameObject.Network.OwnerConnection;
+		var owner = GameObject.Network.Owner;
 		var player = GameObject.Parent.Components.Get<PlayerController>();
 		var numWins = player?.NumMatchWins ?? 0;
 		var numLosses = player?.NumMatchLosses ?? 0;

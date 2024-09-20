@@ -191,6 +191,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		base.OnAwake();
 
 		StartMode = StartMode.Waiting;
+		//StartMode = StartMode.TestActive;
 		//StartMode = StartMode.TestShop;
 
 		Instance = this;
@@ -480,9 +481,9 @@ public sealed class Manager : Component, Component.INetworkListener
 		string str = "";
 		foreach ( var player in Scene.GetAllComponents<PlayerController>() )
 		{
-			str += $"{player.Network.OwnerConnection.DisplayName}";
+			str += $"{player.Network.Owner.DisplayName}";
 			str += $"{(player.Network.IsOwner ? " (local)" : "")}";
-			str += $"{(player.Network.OwnerConnection.IsHost ? " (host)" : "")}";
+			str += $"{(player.Network.Owner.IsHost ? " (host)" : "")}";
 			str += $"{(player.IsDead ? " 💀" : "")}";
 
 			if ( DoesPlayerExist0 && player.GameObject.Id == PlayerId0 )
@@ -601,7 +602,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		}
 
 		SetGamePhase( GamePhase.Victory );
-		WinningPlayerName = GetPlayer( winningPlayerNum ).GameObject.Network.OwnerConnection.DisplayName;
+		WinningPlayerName = GetPlayer( winningPlayerNum ).GameObject.Network.Owner.DisplayName;
 	}
 
 	void ForcePlayerExit(PlayerController player)
@@ -976,7 +977,7 @@ public sealed class Manager : Component, Component.INetworkListener
 		else
 			ballObj.NetworkSpawn();
 
-		//Log.Info( $"--- spawned {ballObj.Name} side: {side} connection: {ballObj.Network.OwnerConnection?.Id.ToString().Substring( 0, 6 ) ?? "..."}" );
+		//Log.Info( $"--- spawned {ballObj.Name} side: {side} connection: {ballObj.Network.Owner?.Id.ToString().Substring( 0, 6 ) ?? "..."}" );
 	}
 
 	[Broadcast]
@@ -1027,9 +1028,9 @@ public sealed class Manager : Component, Component.INetworkListener
 	public Connection GetConnection( int playerNum )
 	{
 		if ( playerNum == 0 && DoesPlayerExist0 )
-			return Scene.Directory.FindByGuid( PlayerId0 ).Network.OwnerConnection;
+			return Scene.Directory.FindByGuid( PlayerId0 ).Network.Owner;
 		else if ( playerNum == 1 && DoesPlayerExist1 )
-			return Scene.Directory.FindByGuid( PlayerId1 ).Network.OwnerConnection;
+			return Scene.Directory.FindByGuid( PlayerId1 ).Network.Owner;
 
 		return null;
 	}

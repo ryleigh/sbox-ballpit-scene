@@ -234,8 +234,8 @@ public class Ball : Component
 			return;
 
 		var connection = Manager.Instance.GetConnection( side );
-		//Log.Info( $"{GameObject.Name} isHost: {(Network.OwnerConnection?.IsHost.ToString() ?? "...")} isOwner: {Network.IsOwner} SetSide: {CurrentSide}->{side} curr: {Network.OwnerConnection?.Id.ToString().Substring( 0, 6 ) ?? "..."} , switching to: {connection?.Id.ToString().Substring( 0, 6 ) ?? "..."}" );
-		
+		//Log.Info( $"{GameObject.Name} isHost: {(Network.Owner?.IsHost.ToString() ?? "...")} isOwner: {Network.IsOwner} SetSide: {CurrentSide}->{side} curr: {Network.Owner?.Id.ToString().Substring( 0, 6 ) ?? "..."} , switching to: {connection?.Id.ToString().Substring( 0, 6 ) ?? "..."}" );
+
 		CurrentSide = side;
 
 		if ( connection != null )

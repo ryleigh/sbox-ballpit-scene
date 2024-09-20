@@ -506,7 +506,7 @@ public class PlayerController : Component, Component.ITriggerListener
 		if ( IsDead || Manager.Instance.GamePhase != GamePhase.RoundActive )
 			return;
 
-		if(HP <= 1)
+		if (HP <= 1)
 		{
 			Sound.Play( "die", Transform.Position.WithZ( Globals.SFX_HEIGHT ) );
 		}
